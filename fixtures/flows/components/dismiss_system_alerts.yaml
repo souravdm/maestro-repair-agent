@@ -1,0 +1,11 @@
+appId: com.cvs.app
+---
+# Injected by the repair agent when a non-app package owns the top of the tree.
+- runFlow:
+    when:
+      visible:
+        text: "Allow|OK|Continue|Not Now|Don't Allow"
+    commands:
+      - tapOn:
+          text: "Allow|OK|Continue"
+          optional: true

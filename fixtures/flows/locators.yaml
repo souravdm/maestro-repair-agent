@@ -1,0 +1,10 @@
+REFILL:
+  TITLE: refill_title
+  RX_FIELD: rx_number_field
+  SUBMIT: submit_refill_button
+  CANCEL: cancel_button
+LOGIN:
+  EMAIL: login_email_field
+  SUBMIT:
+    shared: login_submit
+    ios: login_submit_ios

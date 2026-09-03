@@ -1,0 +1,7 @@
+{"attributes":{"class":"Window","bounds":{"x":0,"y":0,"width":390,"height":844}},"children":[
+ {"attributes":{"class":"FlutterView","resource-id":"flutter_view","bounds":{"x":0,"y":0,"width":390,"height":844}},"children":[
+  {"attributes":{"class":"Text","text":"Refill Prescription","resource-id":"refill_title","bounds":{"x":16,"y":80,"width":300,"height":32}},"children":[]},
+  {"attributes":{"class":"TextField","resource-id":"rx_number_field","hintText":"Rx number","bounds":{"x":16,"y":140,"width":358,"height":48}},"children":[]},
+  {"attributes":{"class":"Button","resource-id":"refill_submit_button","text":"Submit","enabled":"true","bounds":{"x":16,"y":220,"width":358,"height":48}},"children":[]},
+  {"attributes":{"class":"Button","resource-id":"cancel_button","text":"Cancel","enabled":"true","bounds":{"x":16,"y":280,"width":358,"height":48}},"children":[]}
+ ]}]}

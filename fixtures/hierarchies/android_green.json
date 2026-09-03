@@ -1,0 +1,7 @@
+{"attributes":{"class":"android.widget.FrameLayout","bounds":"[0,0][1080,2340]"},"children":[
+ {"attributes":{"class":"io.flutter.embedding.android.FlutterView","resource-id":"flutter_view","bounds":"[0,0][1080,2340]"},"children":[
+  {"attributes":{"class":"android.widget.TextView","text":"Refill Prescription","resource-id":"refill_title","bounds":"[44,220][880,308]"},"children":[]},
+  {"attributes":{"class":"android.widget.EditText","resource-id":"rx_number_field","bounds":"[44,388][1036,520]"},"children":[]},
+  {"attributes":{"class":"android.widget.Button","resource-id":"submit_refill_button","text":"Submit","enabled":"true","bounds":"[44,610][1036,742]"},"children":[]},
+  {"attributes":{"class":"android.widget.Button","resource-id":"cancel_button","text":"Cancel","enabled":"true","bounds":"[44,780][1036,912]"},"children":[]}
+ ]}]}

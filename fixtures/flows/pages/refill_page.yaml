@@ -1,0 +1,8 @@
+appId: com.cvs.app
+---
+- assertVisible:
+    id: "refill_title"
+- inputText: "${RX_NUMBER}"
+- tapOn:
+    id: "submit_refill_button"
+    timeout: 10000

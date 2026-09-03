@@ -1,0 +1,71 @@
+# Wiring the repair agent into an existing CircleCI Maestro job.
+# The agent runs only on failure and only after both platforms have reported,
+# because the cross-platform result is its cheapest classifier.
+
+jobs:
+  maestro-ios:
+    macos: { xcode: "16.2.0" }
+    steps:
+      - checkout
+      - run:
+          name: Run Maestro (iOS)
+          command: |
+            maestro --device "$SIM_UDID" test \
+              --format junit --output artifacts/ios/report.xml \
+              --debug-output artifacts/ios/debug \
+              flows/
+          when: always
+      - run:
+          name: Collect failure bundle
+          when: on_fail
+          command: |
+            python3 -m agent.cli collect \
+              --debug-output artifacts/ios/debug \
+              --junit artifacts/ios/report.xml \
+              --platform ios --device "$SIM_UDID" \
+              --bundle-id "$APP_BUNDLE_ID" \
+              --registry flows/locators.yaml \
+              --dart-root lib --arb lib/l10n/app_en.arb \
+              --base-ref "origin/$CIRCLE_BRANCH~1" \
+              --green-same "$(python3 -m agent.cli last-green --flow "$FLOW" --platform ios)" \
+              --green-other artifacts/android/green_hierarchy.json \
+              --other-platform-result "$OTHER_PLATFORM_RESULT" \
+              --other-platform-commit "$OTHER_PLATFORM_COMMIT" \
+              -o artifacts/ios/bundle.json
+      - store_artifacts: { path: artifacts/ios }
+      - persist_to_workspace: { root: artifacts, paths: ["ios"] }
+
+  repair:
+    macos: { xcode: "16.2.0" }
+    steps:
+      - checkout
+      - attach_workspace: { at: artifacts }
+      - run:
+          name: Triage (free tier only, no model)
+          command: |
+            python3 -m agent.cli triage --bundle artifacts/ios/bundle.json --no-llm --json \
+              | tee artifacts/triage.json
+      - run:
+          name: Repair and verify
+          command: |
+            python3 -m agent.cli repair --bundle artifacts/ios/bundle.json \
+              --apply --device "$SIM_UDID" \
+              --min-confidence 0.75 --max-blast-radius 25 --json \
+              | tee artifacts/repair.json
+      - run:
+          name: Open PR if a verified patch exists
+          command: |
+            if jq -e '.verified_green == true' artifacts/repair.json > /dev/null; then
+              git checkout -b "repair/$(jq -r .fingerprint artifacts/repair.json)"
+              git commit -am "test(repair): $(jq -r .action artifacts/repair.json)"
+              gh pr create --fill --label auto-repair
+            fi
+      - store_artifacts: { path: artifacts }
+
+workflows:
+  mobile-e2e:
+    jobs:
+      - maestro-ios
+      - maestro-android
+      - repair:
+          requires: [maestro-ios, maestro-android]   # both results, always

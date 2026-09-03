@@ -1,0 +1,6 @@
+appId: com.cvs.app
+# @route: /pharmacy/refill
+---
+- launchApp
+- runFlow:
+    file: pages/refill_page.yaml

@@ -1,0 +1,7 @@
+{"attributes":{"class":"Window","bounds":{"x":0,"y":0,"width":390,"height":844}},"children":[
+ {"attributes":{"class":"Alert","package":"com.apple.springboard","text":"Allow Notifications?","bounds":{"x":40,"y":300,"width":310,"height":200}},"children":[
+   {"attributes":{"class":"Button","text":"Allow","package":"com.apple.springboard","bounds":{"x":200,"y":450,"width":140,"height":44}},"children":[]}
+ ]},
+ {"attributes":{"class":"FlutterView","resource-id":"flutter_view","package":"com.cvs.app","bounds":{"x":0,"y":0,"width":390,"height":844}},"children":[
+   {"attributes":{"class":"Button","resource-id":"submit_refill_button","text":"Submit","enabled":"true","bounds":{"x":16,"y":220,"width":358,"height":48}},"children":[]}
+ ]}]}
