@@ -1,0 +1,37 @@
+# Repair agent configuration. Every threshold here is a cost/safety dial.
+paths:
+  flow_root: flows
+  registry: flows/locators.yaml
+  dart_root: lib
+  arb: lib/l10n/app_en.arb
+  pubspec: pubspec.yaml
+  cache: .repair-agent/fix_cache.json
+  history: .repair-agent/history.json
+
+gates:
+  # Below this, the agent proposes for review instead of applying.
+  min_confidence: 0.75
+  # A registry change touching more flows than this needs a human.
+  max_blast_radius: 25
+  # Never auto-merge; a verified patch opens a PR.
+  auto_merge: false
+
+llm:
+  enabled: true
+  model: claude-sonnet-4-6
+  # Hard ceiling on the escalation prompt. If the slice does not fit, prune
+  # harder rather than paying for a bigger context.
+  max_prompt_tokens: 4000
+  # Actions the model is never allowed to originate.
+  forbidden_actions: [file_app_bug, fix_infra, mark_flaky]
+
+logs:
+  window_seconds: 30
+  ios_predicate_subsystem: com.cvs.app
+  android_tag: flutter
+
+instrumentation:
+  # Emitted by instrumentation/repair_agent_probe.dart
+  nav_marker: "[NAV]"
+  semantics_marker: "[SEMANTICS]"
+  flags_marker: "[FLAGS]"

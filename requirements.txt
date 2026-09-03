@@ -1,0 +1,1 @@
+PyYAML>=6.0    # optional: locator registry parsing falls back gracefully
