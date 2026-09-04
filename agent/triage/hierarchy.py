@@ -252,10 +252,19 @@ class Tree:
     def semantics_looks_dead(self) -> bool:
         """Flutter on iOS builds semantics lazily. An almost-empty tree with no
         ids and no text is an infra problem, not a missing element."""
-        if len(self.nodes) > 25:
-            return False
-        meaningful = sum(1 for n in self.nodes if n.id or n.text)
-        return meaningful == 0   # deliberately strict: one stray label is not proof
+        return self.addressable_count() == 0
+
+    def addressable_count(self) -> int:
+        """Nodes a locator could actually target."""
+        return sum(1 for n in self.nodes if (n.id or n.text) and n.has_area)
+
+    def semantics_looks_sparse(self, floor: int = 8) -> bool:
+        """A rendered screen with fewer than `floor` addressable nodes is not a
+        screen with a missing widget — it is a screen that is not publishing its
+        semantics. Distinct from a fully dead tree, and far more common in
+        practice: WebView/platform-view hosted flows, ExcludeSemantics wrappers,
+        and screens built before the semantics tree was requested all land here."""
+        return 0 < self.addressable_count() < floor
 
 
 # ---------------------------------------------------------------- pruning

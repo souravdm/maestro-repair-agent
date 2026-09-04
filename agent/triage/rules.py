@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import difflib
 import re
-from typing import Callable, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from ..models import (
     Action,
@@ -159,6 +159,73 @@ def r06_semantics_dead(t: TriageInput) -> Optional[Verdict]:
             patch_hint={"remedy": "enable_semantics_at_launch", "node_count": len(t.failing)},
         )
     return None
+
+
+def r06b_semantics_sparse(t: TriageInput) -> Optional[Verdict]:
+    """Screen renders but publishes almost nothing addressable.
+
+    Judged by ratio against a comparator, never an absolute floor — a legitimately
+    minimal screen (spinner, empty state) must not be misclassified. Comparators in
+    order of preference: the previous step's tree from the same run (always present
+    in --debug-output, needs no green baseline), then a green tree either platform.
+
+    With no comparator this rule declines: it cannot know whether three nodes is a
+    collapse or a correct empty state. The observation is attached to the escalation
+    instead, by r19.
+    """
+    if t.failing is None or not t.b.step.selector.value:
+        return None
+    if t.failing.match(t.b.step.selector.kind, t.b.step.selector.value):
+        return None   # element is there; a different rule owns this
+
+    comparator, source = None, ""
+    for cand, label in (
+        (t.prev_step, "the previous step in this run"),
+        (t.green_same, "the last green run"),
+        (t.green_other, "the other platform"),
+    ):
+        if cand is not None and cand.addressable_count() >= 12:
+            comparator, source = cand, label
+            break
+    if comparator is None:
+        return None
+
+    here, there = t.failing.addressable_count(), comparator.addressable_count()
+    if here >= max(4, 0.3 * there):
+        return None
+
+    hosts = {h.lower() for h in t.b.inventories.platform_view_hosts}
+    host_hit = next(
+        (n.cls for n in t.failing.nodes
+         if hosts and any(h in f"{n.cls} {n.id}".lower() for h in hosts)),
+        None,
+    )
+    both = t.b.context.other_platform_result == OtherPlatformResult.FAILED_SAME_STEP
+
+    return Verdict(
+        rule="r06b_semantics_sparse",
+        action=Action.FIX_INFRA,
+        confidence=0.85 if both else 0.7,
+        rationale=(
+            f"Screen exposes {here} addressable node(s) against {there} in {source}. "
+            "The selector cannot resolve because this screen is not publishing "
+            "semantics, not because the widget is missing"
+            + (f" (platform-view host '{host_hit}' present)" if host_hit else "")
+            + (" — and the same step fails on the other platform, so the cause is shared"
+               if both else "")
+            + "."
+        ),
+        patch_hint={
+            "addressable_here": here,
+            "addressable_comparator": there,
+            "comparator": source,
+            "platform_view_host": host_hit,
+            "remedy": ("wrap_platform_view_with_semantics" if host_hit
+                       else "add_semantics_identifiers_to_screen"),
+            "route": (t.b.logs.route_stack[-1:] or [None])[0],
+        },
+        requires_rerun=False,
+    )
 
 
 def r07_no_branch_matched(t: TriageInput) -> Optional[Verdict]:
@@ -441,12 +508,27 @@ def r18_build_mismatch(t: TriageInput) -> Optional[Verdict]:
 
 def r19_escalate(t: TriageInput) -> Optional[Verdict]:
     d = t.diff
+    hint: Dict[str, Any] = {"diff_counts": d.summary() if d else {}}
+    note = ""
+    if t.failing is not None:
+        n = t.failing.addressable_count()
+        hint["addressable_nodes"] = n
+        hint["comparator_available"] = any(
+            c is not None and c.addressable_count() >= 12
+            for c in (t.prev_step, t.green_same, t.green_other)
+        )
+        if n < 8 and not hint["comparator_available"]:
+            note = (
+                f" The failing screen exposes only {n} addressable node(s) and there is no "
+                "comparator tree to judge that against — archive per-step hierarchies so this "
+                "becomes decidable without a model."
+            )
     return Verdict(
         rule="r19_escalate",
         action=Action.ESCALATE_LLM,
         confidence=0.0,
-        rationale="No deterministic rule matched; sending a pruned slice to the model.",
-        patch_hint={"diff_counts": d.summary() if d else {}},
+        rationale="No deterministic rule matched; sending a pruned slice to the model." + note,
+        patch_hint=hint,
     )
 
 
@@ -458,6 +540,7 @@ LADDER: List[Rule] = [
     r18_build_mismatch,
     r05_unresolved_template,
     r06_semantics_dead,
+    r06b_semantics_sparse,
     r07_no_branch_matched,
     r08_system_alert,
     r17_flake,
