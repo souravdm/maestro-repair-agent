@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="305.199" timestamp="2026-09-05T08:13:27">
+    <testcase id="H100 | Benefits | Claims | TC011 - Submit Claim Other Reason" name="H100 | Benefits | Claims | TC011 - Submit Claim Other Reason" classname="H100 | Benefits | Claims | TC011 - Submit Claim Other Reason" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC011_submitClaimOtherReason.yaml" time="305.126" timestamp="2026-09-05T08:13:27" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, submission, reason-other"/>
+      </properties>
+      <failure>Element not found: Text matching regex: (?i).*(Days supply).*</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
