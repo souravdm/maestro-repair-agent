@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="360.16" timestamp="2026-09-05T08:43:53">
+    <testcase id="H100 | Benefits | Claims | TC001 - Submit Medical Claim" name="H100 | Benefits | Claims | TC001 - Submit Medical Claim" classname="H100 | Benefits | Claims | TC001 - Submit Medical Claim" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC001_submitMedicalClaim.yaml" time="360.071" timestamp="2026-09-05T08:43:53" status="ERROR">
+      <failure>Assertion is false: "We put better health in your pocket.|Terms &amp; conditions|Let's get you started in Health100™|Welcome to Health100™|Sign in or create an account|Sign in|Not now|Find care" is visible</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

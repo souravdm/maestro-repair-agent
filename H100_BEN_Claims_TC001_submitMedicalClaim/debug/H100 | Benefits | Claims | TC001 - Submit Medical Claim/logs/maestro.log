@@ -1,0 +1,119 @@
+08:43:53.890 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:43:53.892 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:43:53.892 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/CommonScreen.js RUNNING
+08:43:55.061 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:43:55.062 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:43:55.062 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:43:55.063 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/CommonScreen.js COMPLETED
+08:43:55.063 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:43:55.070 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:43:55.070 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:43:55.079 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:43:55.080 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:43:55.086 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:43:55.087 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:43:55.088 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:43:55.090 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:43:55.090 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:43:55.670 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:43:55.670 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:43:56.296 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:43:56.296 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Benefits/Base/NavigateToBenefitsScreen.yaml RUNNING
+08:43:56.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:43:56.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:43:56.302 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:43:56.305 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:43:56.305 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/CommonScreen.js RUNNING
+08:43:56.311 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:43:56.312 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:43:56.312 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:43:56.312 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/CommonScreen.js COMPLETED
+08:43:56.312 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:43:56.319 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:43:56.319 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/PriorAuthScreen.js RUNNING
+08:43:56.327 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/PriorAuthScreen.js COMPLETED
+08:43:56.327 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../config/credentials-loader.js RUNNING
+08:43:56.363 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: ✓ Environment detected: QA
+08:43:56.377 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Environment: QA
+08:43:56.378 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Loaded user: DEAN_FANT
+08:43:56.378 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Email: dean@qa2.com
+08:43:56.379 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: DOB: 05301982
+08:43:56.379 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../config/credentials-loader.js COMPLETED
+08:43:56.380 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:43:56.383 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:43:56.383 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:43:56.384 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:43:56.384 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:43:56.384 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:43:56.855 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:43:56.855 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:43:57.539 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:43:57.539 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Common/launchAndSetup.yaml RUNNING
+08:43:57.542 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:43:57.543 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:43:57.544 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/CommonScreen.js RUNNING
+08:43:57.547 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:43:57.547 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:43:57.547 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:43:57.547 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/CommonScreen.js COMPLETED
+08:43:57.547 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Account/LoginScreen.js RUNNING
+08:43:57.549 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Account/LoginScreen.js COMPLETED
+08:43:57.549 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/SystemPermissionsScreen.js RUNNING
+08:43:57.552 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/SystemPermissionsScreen.js COMPLETED
+08:43:57.552 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Account/OnboardingScreen.js RUNNING
+08:43:57.553 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Account/OnboardingScreen.js COMPLETED
+08:43:57.553 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/UpdateManagerScreen.js RUNNING
+08:43:57.554 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/UpdateManagerScreen.js COMPLETED
+08:43:57.555 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "${APP_ID}" RUNNING
+08:48:26.158 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.apps.aicore.service.BIND_SERVICE for app com.health100.launchers: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.apps.aicore.service.BIND_SERVICE
+	at com.android.server.wm.Task$$ExternalSyntheticBUOutline2.m(R8$$SyntheticClass:0)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:1072)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:119)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:970)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:875)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:837)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:590)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:654)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:619)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2762)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:319)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:40)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7041)
+	at android.os.Binder.shellCommand(Binder.java:1054)
+	at android.os.Binder.onTransact(Binder.java:914)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4744)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7025)
+	at android.os.Binder.execTransactInternal(Binder.java:1328)
+	at android.os.Binder.execTransact(Binder.java:1282)
+
+08:48:26.421 [ INFO] maestro.Maestro.launchApp$lambda$5: Launching app com.health100.launchers
+08:48:26.421 [ INFO] maestro.Maestro.launchApp$lambda$5: Stopping com.health100.launchers app during launch
+08:48:26.818 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "${APP_ID}" COMPLETED
+08:48:26.819 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:48:26.820 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:48:26.820 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:48:26.821 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:48:27.176 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:48:27.176 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:48:27.703 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:48:27.703 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 3000} RUNNING
+08:48:27.710 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 3000} COMPLETED
+08:48:27.710 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.general_updateManager.notNowBtn}" is visible RUNNING
+08:48:34.838 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:48:34.839 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.general_updateManager.notNowBtn}" is visible SKIPPED
+08:48:34.839 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:48:34.841 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:48:34.841 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care" is visible RUNNING
+08:49:51.641 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:49:51.644 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:49:52.014 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care" is visible FAILED
+08:49:52.017 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:49:52.017 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:49:52.240 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Common/launchAndSetup.yaml FAILED
+08:49:52.240 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: Assertion is false: "We put better health in your pocket.|Terms & conditions|Let's get you started in Health100™|Welcome to Health100™|Sign in or create an account|Sign in|Not now|Find care" is visible
+08:49:52.241 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:49:52.241 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:49:52.586 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Benefits/Base/NavigateToBenefitsScreen.yaml FAILED
