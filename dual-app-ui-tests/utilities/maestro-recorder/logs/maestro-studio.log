@@ -1,0 +1,6 @@
+[31m[1mUnknown options: '--port', '9999', '--no-window'[21m[39m[0m
+Usage: [1mmaestro studio[21m[0m [[33m-h[39m[0m] [[33m--[no-]ansi[39m[0m]
+Launch Maestro Studio
+  [33m-h[39m[0m, [33m--help[39m[0m   Display help message
+      [33m--[no-]a[39m[0m[33mnsi, --[no-]color[39m[0m
+               Enable / disable colors and ansi output

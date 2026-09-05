@@ -1,0 +1,32 @@
+[hierarchy-shim] listening on port 9999 (platform: ios) — warming tree...
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: Command failed: maestro hierarchy 2>/dev/null
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: Unexpected non-whitespace character after JSON at position 92887 (line 1825 column 2)
+[hierarchy-shim] tree refresh failed: Unexpected non-whitespace character after JSON at position 92887 (line 1825 column 2)
+[hierarchy-shim] tree refresh failed: Command failed: maestro hierarchy 2>/dev/null
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] listening on port 9999 (platform: ios) — warming tree...
+[hierarchy-shim] listening on port 9999 (platform: ios) — warming tree...
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: Unexpected non-whitespace character after JSON at position 42668 (line 989 column 2)
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: Command failed: maestro hierarchy 2>/dev/null
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
+[hierarchy-shim] tree refresh failed: spawnSync /bin/sh ETIMEDOUT
