@@ -1,0 +1,160 @@
+# HAIO Chatbot - Insurance & Formulary Questions (Single Session)
+# Validates HAIO responds with accurate formulary tier, step therapy, coverage limit,
+# and quantity restriction guidance
+#
+# Scenarios (8 questions):
+#   1.  Why was my medication suddenly not covered?
+#   2.  What does step therapy mean for my prescription?
+#   3.  My plan requires me to try a different drug first — can I appeal?
+#   4.  What is a formulary exception and how do I request one?
+#   5.  My medication moved to a higher tier — what are my options?
+#   6.  Does my HSA cover over-the-counter medications?
+#   7.  What is a quantity limit and why does it apply to my prescription?
+#   8.  How do I find out what tier my medication is on?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC065 - Chatbot Insurance Formulary"
+tags:
+  - haio
+  - chatbot
+  - formulary
+  - insurance
+  - pharmacy
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# INSURANCE & FORMULARY - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Why was my medication suddenly not covered?
+# Expected: Bot explains formulary removal, tier change, or exclusion causes
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why was my medication suddenly not covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_MedNotCovered"
+      EXPECTED_KEYWORDS: "formulary|tier|excluded|covered|plan|change|alternative|generic|appeal"
+
+# --------------------------------------------------------------------------
+# Q2: What does step therapy mean for my prescription?
+# Expected: Bot explains step therapy as a prior-to-brand protocol requirement
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What does step therapy mean for my prescription?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_StepTherapy"
+      EXPECTED_KEYWORDS: "step therapy|generic|preferred|brand|try first|protocol|plan|prior auth"
+
+# --------------------------------------------------------------------------
+# Q3: My plan requires me to try a different drug first — can I appeal?
+# Expected: Bot explains step therapy exception/appeal process with clinical failure criteria
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My plan requires me to try a different drug first — can I appeal?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_StepTherapyAppeal"
+      EXPECTED_KEYWORDS: "appeal|step therapy|exception|clinical failure|tried|prescriber|plan|approval"
+
+# --------------------------------------------------------------------------
+# Q4: What is a formulary exception and how do I request one?
+# Expected: Bot explains formulary exception process and medical necessity documentation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a formulary exception and how do I request one?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_FormularyException"
+      EXPECTED_KEYWORDS: "formulary exception|request|medical necessity|non-formulary|prescriber|plan|letter"
+
+# --------------------------------------------------------------------------
+# Q5: My medication moved to a higher tier — what are my options?
+# Expected: Bot explains formulary tier change appeal and generic/alternative options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My medication moved to a higher tier — what are my options?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_TierChange"
+      EXPECTED_KEYWORDS: "tier|higher|appeal|exception|alternative|generic|cost|formulary|options"
+
+# --------------------------------------------------------------------------
+# Q6: Does my HSA cover over-the-counter medications?
+# Expected: Bot explains CARES Act OTC HSA eligibility
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my HSA cover over-the-counter medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_HSAforOTC"
+      EXPECTED_KEYWORDS: "HSA|OTC|over-the-counter|CARES Act|eligible|tax|purchase|medication|qualified"
+
+# --------------------------------------------------------------------------
+# Q7: What is a quantity limit and why does it apply to my prescription?
+# Expected: Bot explains quantity limit rationale (clinical dosing, safety, abuse prevention)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a quantity limit and why does it apply to my prescription?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_QuantityLimit"
+      EXPECTED_KEYWORDS: "quantity limit|QL|dosing|safety|plan|days supply|approval|exceed|exception"
+
+# --------------------------------------------------------------------------
+# Q8: How do I find out what tier my medication is on?
+# Expected: Bot directs to formulary lookup tool or explains how to check drug tier
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I find out what tier my medication is on?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_FindDrugTier"
+      EXPECTED_KEYWORDS: "tier|formulary|lookup|drug|find|plan|app|check|website|medication"

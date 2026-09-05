@@ -1,0 +1,218 @@
+# HAIO Chatbot - Deductible, Cost & Billing Clarity Questions (Single Session)
+# Validates HAIO responds correctly to cost-sharing, billing, HSA/FSA, and out-of-pocket queries
+#
+# Scenarios (12 questions):
+#   1.  Why did I get a bill after my insurance paid?
+#   2.  What is my out-of-pocket maximum?
+#   3.  How much will this procedure cost me?
+#   4.  I got a surprise bill — is that allowed?
+#   5.  Can I use my HSA for this expense?
+#   6.  What happens if I go out-of-network?
+#   7.  How much of my deductible have I used so far this year?
+#   8.  If I have a $2,000 procedure today, what will I actually pay?
+#   9.  Does my deductible reset on January 1st or my plan anniversary?
+#   10. Do my prescription costs count toward my deductible?
+#   11. If my spouse and I are on the same plan, do we share a deductible?
+#   12. What happens to my deductible if I switch plans mid-year?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC040 - Chatbot Cost And Billing"
+tags:
+  - haio
+  - chatbot
+  - cost-billing
+  - deductible
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# COST & BILLING - 12 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Why did I get a bill after my insurance paid?
+# Expected: Bot explains EOB, balance billing, and patient responsibility
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why did I get a bill after my insurance paid?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_BillAfterInsurance"
+      EXPECTED_KEYWORDS: "bill|EOB|patient responsibility|deductible|coinsurance|copay|balance"
+
+# --------------------------------------------------------------------------
+# Q2: What is my out-of-pocket maximum?
+# Expected: Bot returns member's current OOP max from plan data
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is my out-of-pocket maximum?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_OOPMax"
+      EXPECTED_KEYWORDS: "out-of-pocket|maximum|\\$|plan|benefit|limit|spending"
+
+# --------------------------------------------------------------------------
+# Q3: How much will this procedure cost me?
+# Expected: Bot requests procedure details or explains cost estimator tool
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much will this procedure cost me?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_ProcedureCost"
+      EXPECTED_KEYWORDS: "procedure|cost|deductible|coinsurance|estimate|plan|benefit|prior auth"
+
+# --------------------------------------------------------------------------
+# Q4: I got a surprise bill — is that allowed?
+# Expected: Bot explains No Surprises Act protections and appeal options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I got a surprise bill — is that allowed?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SurpriseBill"
+      EXPECTED_KEYWORDS: "surprise bill|No Surprises Act|balance bill|protection|appeal|dispute|law"
+
+# --------------------------------------------------------------------------
+# Q5: Can I use my HSA for this expense?
+# Expected: Bot explains HSA-eligible expenses and IRS-qualified spending
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I use my HSA for this expense?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_HSAEligible"
+      EXPECTED_KEYWORDS: "HSA|eligible|expense|qualified|IRS|tax|account|medical"
+
+# --------------------------------------------------------------------------
+# Q6: What happens if I go out-of-network?
+# Expected: Bot explains higher cost-sharing and balance billing risk
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What happens if I go out-of-network?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_OutOfNetwork"
+      EXPECTED_KEYWORDS: "out-of-network|higher|cost|deductible|balance bill|plan|coverage|reimbursement"
+
+# --------------------------------------------------------------------------
+# Q7: How much of my deductible have I used so far this year?
+# Expected: Bot returns member's year-to-date deductible accumulation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much of my deductible have I used so far this year?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_DeductibleYTD"
+      EXPECTED_KEYWORDS: "deductible|met|remaining|\\$|year|plan|benefit|used"
+
+# --------------------------------------------------------------------------
+# Q8: If I have a $2,000 procedure today, what will I actually pay?
+# Expected: Bot provides estimated patient responsibility based on cost-sharing
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "If I have a $2,000 procedure today, what will I actually pay?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_ProcedureCostEstimate"
+      EXPECTED_KEYWORDS: "deductible|coinsurance|\\$|pay|out-of-pocket|estimate|procedure|plan"
+
+# --------------------------------------------------------------------------
+# Q9: Does my deductible reset on January 1st or my plan anniversary?
+# Expected: Bot clarifies plan year reset date for member's specific plan
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my deductible reset on January 1st or my plan anniversary?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_DeductibleReset"
+      EXPECTED_KEYWORDS: "deductible|reset|January|plan year|anniversary|renewal|benefit"
+
+# --------------------------------------------------------------------------
+# Q10: Do my prescription costs count toward my deductible?
+# Expected: Bot explains whether Rx spend accumulates toward medical deductible
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do my prescription costs count toward my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q10_RxDeductible"
+      EXPECTED_KEYWORDS: "prescription|deductible|count|accumulate|plan|drug|benefit|cost"
+
+# --------------------------------------------------------------------------
+# Q11: If my spouse and I are on the same plan, do we share a deductible?
+# Expected: Bot explains individual vs family deductible thresholds
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "If my spouse and I are on the same plan, do we share a deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q11_FamilyDeductible"
+      EXPECTED_KEYWORDS: "family|deductible|individual|spouse|share|plan|threshold|benefit"
+
+# --------------------------------------------------------------------------
+# Q12: What happens to my deductible if I switch plans mid-year?
+# Expected: Bot explains deductible reset and carryover rules when changing plans
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What happens to my deductible if I switch plans mid-year?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q12_MidYearSwitch"
+      EXPECTED_KEYWORDS: "deductible|switch|mid-year|reset|new plan|carryover|benefit|credit"

@@ -1,0 +1,116 @@
+# HAIO Chatbot - Emergency Guidance Questions (Single Session)
+# Validates HAIO correctly identifies life-threatening emergency scenarios,
+# provides first-aid guidance, and escalates to 911 / ER as appropriate
+#
+# Scenarios (5 questions):
+#   1.  What are the signs of a heart attack?
+#   2.  My family member is having trouble breathing — what do I do?
+#   3.  How do I know if a wound needs stitches?
+#   4.  What are the symptoms of a stroke?
+#   5.  Should I call 911 or drive to the ER?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC058 - Chatbot Emergency Guidance"
+tags:
+  - haio
+  - chatbot
+  - emergency
+  - guidance
+  - clinical
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# EMERGENCY GUIDANCE - 5 Scenarios
+# Each must surface 911/ER escalation cue prominently
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What are the signs of a heart attack?
+# Expected: Bot lists FAST-variant symptoms and urges calling 911 immediately
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are the signs of a heart attack?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-emergency-crisis-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_HeartAttackSigns"
+      EXPECTED_KEYWORDS: "chest|pain|discomfort|symptoms|side|upper|signs|call"
+
+# --------------------------------------------------------------------------
+# Q2: My family member is having trouble breathing — what do I do?
+# Expected: Bot instructs caller to call 911 and provide calm presence guidance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My family member is having trouble breathing — what do I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-emergency-crisis-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_BreathingDifficulty"
+      EXPECTED_KEYWORDS: "emergency|please|call|911|trouble|breathing|serious|medical"
+
+# --------------------------------------------------------------------------
+# Q3: How do I know if a wound needs stitches?
+# Expected: Bot provides wound assessment criteria (depth, length, gaping, location)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I know if a wound needs stitches?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_WoundNeedsStitches"
+      EXPECTED_KEYWORDS: "wound|stitches|cut|bleeding|generally|requires|medical|evaluation"
+
+# --------------------------------------------------------------------------
+# Q4: What are the symptoms of a stroke?
+# Expected: Bot provides FAST acronym and urgent 911 escalation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are the symptoms of a stroke?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-emergency-crisis-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_StrokeSymptoms"
+      EXPECTED_KEYWORDS: "symptoms|sudden|call|trouble|one|911|balance|loss"
+
+# --------------------------------------------------------------------------
+# Q5: Should I call 911 or drive to the ER?
+# Expected: Bot explains why 911 is preferred for life-threatening emergencies
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Should I call 911 or drive to the ER?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-emergency-crisis-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_911VsER"
+      EXPECTED_KEYWORDS: "call|911|provide|care|emergency|unsure|whether|best"

@@ -1,0 +1,42 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC026 - Multi Record Inline Avs Detail"
+tags:
+  - haio
+  - multi-avs
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Select one record from multi-result list -> inline single AVS detail
+# User Journey: Login -> AI Home -> Show recent -> Select one visit ->
+#               Inline single summary (card heading, card text, follow-up question)
+# Figma ref: section "MVP 2-26 - Multi-Record Summary",
+#            frames: "Single summary - display" + "Inline single AVS detail"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my recent visits"
+
+# Verify multi-record list then select one record
+- runFlow: ../../subflows/HAIO/multi-record/verify-multi-record-selection.yaml
+- runFlow: ../../subflows/HAIO/multi-record/verify-single-avs-inline.yaml

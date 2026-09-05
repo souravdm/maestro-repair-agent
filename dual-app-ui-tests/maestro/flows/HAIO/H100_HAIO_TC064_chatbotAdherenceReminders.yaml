@@ -1,0 +1,145 @@
+# HAIO Chatbot - Medication Adherence & Reminders Questions (Single Session)
+# Validates HAIO responds with helpful adherence strategies, missed-dose guidance,
+# refill reminder setup, and multi-medication management tips
+#
+# Scenarios (7 questions):
+#   1.  I keep forgetting to take my medication — can you help?
+#   2.  What happens if I miss a dose?
+#   3.  Can you remind me to refill my prescription before I run out?
+#   4.  I stopped taking my medication — should I restart it?
+#   5.  Is it okay to stop taking this medication if I feel better?
+#   6.  How do I manage taking multiple medications at different times?
+#   7.  What is a pill organizer and do I need one?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC064 - Chatbot Adherence Reminders"
+tags:
+  - haio
+  - chatbot
+  - adherence
+  - reminders
+  - pharmacy
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# ADHERENCE & REMINDERS - 7 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: I keep forgetting to take my medication — can you help?
+# Expected: Bot suggests reminders, pill organizer, and app-based adherence tools
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I keep forgetting to take my medication — can you help?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_ForgettingMed"
+      EXPECTED_KEYWORDS: "help|prescriptions|medication|looking|assistance|managing|like|discuss"
+
+# --------------------------------------------------------------------------
+# Q2: What happens if I miss a dose?
+# Expected: Bot provides general missed-dose guidance (take ASAP unless next dose near)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What happens if I miss a dose?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_MissedDose"
+      EXPECTED_KEYWORDS: "medication|missed|dose|drugs|generally|take|soon|remember"
+
+# --------------------------------------------------------------------------
+# Q3: Can you remind me to refill my prescription before I run out?
+# Expected: Bot explains refill reminder setup in app or via auto-refill enrollment
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can you remind me to refill my prescription before I run out?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_RefillReminder"
+      EXPECTED_KEYWORDS: "assist|health|prescriptions|pharmacy|plan|benefits|setting|reminders"
+
+# --------------------------------------------------------------------------
+# Q4: I stopped taking my medication — should I restart it?
+# Expected: Bot urges consultation with prescriber before restarting, explains risks
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I stopped taking my medication — should I restart it?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_StoppedMedication"
+      EXPECTED_KEYWORDS: "medication|restart|drugs|side|effects|doctor|whether|safely"
+
+# --------------------------------------------------------------------------
+# Q5: Is it okay to stop taking this medication if I feel better?
+# Expected: Bot explains why completing full course matters (antibiotics, antidepressants, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is it okay to stop taking this medication if I feel better?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_StopIfFeelBetter"
+      EXPECTED_KEYWORDS: "medication|stopping|symptoms|effects|drugs|medications|drug|early"
+
+# --------------------------------------------------------------------------
+# Q6: How do I manage taking multiple medications at different times?
+# Expected: Bot provides poly-pharmacy scheduling tips and medication list management
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I manage taking multiple medications at different times?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_MultiMedSchedule"
+      EXPECTED_KEYWORDS: "medication|help|pharmacist|taken|daily|list|schedule|track"
+
+# --------------------------------------------------------------------------
+# Q7: What is a pill organizer and do I need one?
+# Expected: Bot explains pill organizer types and who benefits most
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a pill organizer and do I need one?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-adherence-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_PillOrganizer"
+      EXPECTED_KEYWORDS: "different|pill|organizer|week|times|find|medications|pills"

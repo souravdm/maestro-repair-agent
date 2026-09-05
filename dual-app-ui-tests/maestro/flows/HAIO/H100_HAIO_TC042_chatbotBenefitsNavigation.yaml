@@ -1,0 +1,144 @@
+# HAIO Chatbot - Benefits Navigation Questions (Single Session)
+# Validates HAIO responds correctly to benefit lookup questions spanning
+# preventive, dental, vision, therapy, and fertility coverage
+#
+# Scenarios (7 questions):
+#   1.  What preventive services are free under my plan?
+#   2.  Do I have dental and vision coverage?
+#   3.  Does my plan cover physical therapy?
+#   4.  How many therapy sessions does my plan cover per year?
+#   5.  Is weight loss surgery covered?
+#   6.  Does my plan cover fertility treatments?
+#   7.  Are hearing aids covered?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC042 - Chatbot Benefits Navigation"
+tags:
+  - haio
+  - chatbot
+  - benefits-navigation
+  - benefits
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# BENEFITS NAVIGATION - 7 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What preventive services are free under my plan?
+# Expected: Bot lists ACA-mandated free preventive services
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What preventive services are free under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_FreePreventive"
+      EXPECTED_KEYWORDS: "preventive|free|covered|ACA|annual|physical|screening|vaccine"
+
+# --------------------------------------------------------------------------
+# Q2: Do I have dental and vision coverage?
+# Expected: Bot confirms dental/vision inclusion and directs to details or finder
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I have dental and vision coverage?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_DentalVision"
+      EXPECTED_KEYWORDS: "dental|vision|covered|plan|benefit|exam|allowance"
+
+# --------------------------------------------------------------------------
+# Q3: Does my plan cover physical therapy?
+# Expected: Bot confirms PT coverage, visit limits, and any prior auth needs
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover physical therapy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_PhysicalTherapy"
+      EXPECTED_KEYWORDS: "physical therapy|covered|plan|visit|limit|prior auth|benefit"
+
+# --------------------------------------------------------------------------
+# Q4: How many therapy sessions does my plan cover per year?
+# Expected: Bot returns annual session limit for mental health and PT
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How many therapy sessions does my plan cover per year?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_TherapySessions"
+      EXPECTED_KEYWORDS: "therapy|sessions|per year|limit|mental health|covered|plan|benefit"
+
+# --------------------------------------------------------------------------
+# Q5: Is weight loss surgery covered?
+# Expected: Bot explains bariatric coverage, BMI criteria, and prior auth
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is weight loss surgery covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_WeightLossSurgery"
+      EXPECTED_KEYWORDS: "weight loss|bariatric|surgery|covered|BMI|prior auth|criteria|plan"
+
+# --------------------------------------------------------------------------
+# Q6: Does my plan cover fertility treatments?
+# Expected: Bot explains fertility benefit, IVF coverage, and cycle limits
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover fertility treatments?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_FertilityTreatments"
+      EXPECTED_KEYWORDS: "fertility|IVF|covered|treatment|benefit|cycle|plan|prior auth"
+
+# --------------------------------------------------------------------------
+# Q7: Are hearing aids covered?
+# Expected: Bot explains hearing aid benefit, dollar allowance, and frequency
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Are hearing aids covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_HearingAidsCovered"
+      EXPECTED_KEYWORDS: "hearing aid|covered|plan|benefit|\\$|allowance|limit|frequency"

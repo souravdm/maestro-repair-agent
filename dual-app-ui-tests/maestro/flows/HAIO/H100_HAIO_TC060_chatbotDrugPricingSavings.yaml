@@ -1,0 +1,152 @@
+# HAIO Chatbot - Drug Pricing & Savings Questions (Single Session)
+# Validates HAIO responds with accurate pricing information, GoodRx comparison,
+# copay assistance, and mail-order savings guidance
+#
+# Scenarios (8 questions):
+#   1.  Why did the price of my medication change this month?
+#   2.  Can I use GoodRx with my insurance?
+#   3.  What is the cash price vs insurance price for this drug?
+#   4.  Are there manufacturer coupons available for my medication?
+#   5.  Which pharmacy has the lowest price for my prescription?
+#   6.  How do I apply a copay assistance card?
+#   7.  Is there a patient assistance program for this medication?
+#   8.  Would switching to mail order save me money?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC060 - Chatbot Drug Pricing Savings"
+tags:
+  - haio
+  - chatbot
+  - drug-pricing
+  - savings
+  - pharmacy
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# DRUG PRICING & SAVINGS - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Why did the price of my medication change this month?
+# Expected: Bot explains tier change, plan year reset, or formulary update causes
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why did the price of my medication change this month?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "price|change|tier|formulary|deductible|plan year|medication|cost"
+
+# --------------------------------------------------------------------------
+# Q2: Can I use GoodRx with my insurance?
+# Expected: Bot explains GoodRx vs insurance comparison and when each is cheaper
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I use GoodRx with my insurance?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "GoodRx|insurance|compare|lower|cash|discount|coupon|plan|use"
+
+# --------------------------------------------------------------------------
+# Q3: What is the cash price vs insurance price for this drug?
+# Expected: Bot compares cash price and insurance negotiated price or directs to estimator
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is the cash price versus the insurance price for this drug?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "cash price|insurance|compare|\\$|drug|estimator|GoodRx|lower|plan"
+
+# --------------------------------------------------------------------------
+# Q4: Are there manufacturer coupons available for my medication?
+# Expected: Bot explains manufacturer copay cards and eligibility restrictions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Are there manufacturer coupons available for my medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "manufacturer|coupon|copay card|brand|eligible|assistance|\\$|program"
+
+# --------------------------------------------------------------------------
+# Q5: Which pharmacy has the lowest price for my prescription?
+# Expected: Bot directs to drug pricing comparison tool or explains formulary preferred pharmacy
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Which pharmacy has the lowest price for my prescription?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "pharmacy|lowest|price|compare|preferred|CVS|mail order|plan|\\$"
+
+# --------------------------------------------------------------------------
+# Q6: How do I apply a copay assistance card?
+# Expected: Bot explains BIN/PCN/Group entry process at pharmacy counter
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I apply a copay assistance card?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "copay|assistance card|BIN|PCN|group|pharmacy|apply|savings|manufacturer"
+
+# --------------------------------------------------------------------------
+# Q7: Is there a patient assistance program for this medication?
+# Expected: Bot explains manufacturer PAP eligibility and how to apply
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a patient assistance program for this medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "patient assistance|PAP|manufacturer|program|income|free|reduced|apply|medication"
+
+# --------------------------------------------------------------------------
+# Q8: Would switching to mail order save me money?
+# Expected: Bot compares retail vs mail order cost based on plan formulary
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Would switching to mail order save me money?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "mail order|save|cost|retail|90-day|\\$|plan|medication|cheaper"

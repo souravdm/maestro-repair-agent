@@ -1,0 +1,118 @@
+# HAIO Intent: Prior Authorization - Single Session
+# All 11 prior auth questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC012 - Intent Prior Auth"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PRIOR AUTHORIZATION INTENT - 11 Questions
+# ============================================================================
+
+# Q1: What's the status of my prior authorization? — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the status of my prior authorization?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View prior authorizations"
+      EXPECTED_HEADER: "Prior Authorizations"
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: Has my PA been approved?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Has my PA been approved?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q3: Check my prior auth status
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Check my prior auth status"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q4: When will my prior authorization be approved?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When will my prior authorization be approved?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q5: How do I submit a prior authorization?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I submit a prior authorization?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q6: What's needed for my PA?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's needed for my PA?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q7: Why was my prior authorization denied?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why was my prior authorization denied?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q8: Can I appeal my PA denial?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I appeal my PA denial?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q9: How long does a prior auth take?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How long does a prior auth take?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q10: Do I need prior authorization for this medication?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I need prior authorization for this medication?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# Q11: Track my prior authorization — Click CTA and verify navigation
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Track my prior authorization"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View prior authorizations"
+      EXPECTED_HEADER: "Prior Authorizations"

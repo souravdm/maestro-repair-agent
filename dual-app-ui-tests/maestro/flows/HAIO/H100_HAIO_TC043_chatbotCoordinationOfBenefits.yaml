@@ -1,0 +1,114 @@
+# HAIO Chatbot - Coordination of Benefits (COB) Questions (Single Session)
+# Validates HAIO responds correctly to dual-coverage, primary/secondary payer,
+# and Medicare/employer coordination scenarios
+#
+# Scenarios (5 questions):
+#   1.  I have coverage through my employer and my spouse's plan — how does that work?
+#   2.  Which plan pays first when I have two insurance plans?
+#   3.  Can I use both plans to cover my out-of-pocket costs?
+#   4.  My child is on both my plan and my ex-spouse's plan — how is that coordinated?
+#   5.  If I have Medicare and employer coverage, which one is primary?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC043 - Chatbot Coordination Of Benefits"
+tags:
+  - haio
+  - chatbot
+  - coordination-of-benefits
+  - cob
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# COORDINATION OF BENEFITS - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: I have coverage through my employer and my spouse's plan — how does that work?
+# Expected: Bot explains primary/secondary payer determination and COB rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I have coverage through my employer and my spouse's plan — how does that work?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-coordination-of-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_DualCoverage"
+      EXPECTED_KEYWORDS: "primary|secondary|coordination|benefits|COB|payer|plan|spouse"
+
+# --------------------------------------------------------------------------
+# Q2: Which plan pays first when I have two insurance plans?
+# Expected: Bot explains primary payer rules (birthday rule, employer size, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Which plan pays first when I have two insurance plans?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-coordination-of-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_PrimaryPayer"
+      EXPECTED_KEYWORDS: "primary|pays first|COB|coordination|payer|birthday rule|plan"
+
+# --------------------------------------------------------------------------
+# Q3: Can I use both plans to cover my out-of-pocket costs?
+# Expected: Bot explains crossover benefits and how secondary plan reduces OOP
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I use both plans to cover my out-of-pocket costs?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-coordination-of-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_DualOOP"
+      EXPECTED_KEYWORDS: "out-of-pocket|both plans|secondary|crossover|coordination|COB|reduce|cost"
+
+# --------------------------------------------------------------------------
+# Q4: My child is on both my plan and my ex-spouse's plan — how is that coordinated?
+# Expected: Bot explains birthday rule for dependent children in COB
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My child is on both my plan and my ex-spouse's plan — how is that coordinated?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-coordination-of-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_ChildDualCoverage"
+      EXPECTED_KEYWORDS: "child|birthday rule|COB|coordination|dependent|primary|secondary|ex-spouse"
+
+# --------------------------------------------------------------------------
+# Q5: If I have Medicare and employer coverage, which one is primary?
+# Expected: Bot explains Medicare Secondary Payer rules and employer size threshold
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "If I have Medicare and employer coverage, which one is primary?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-coordination-of-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_MedicareCOB"
+      EXPECTED_KEYWORDS: "Medicare|employer|primary|secondary|COB|coordination|20 employees|payer"

@@ -1,0 +1,114 @@
+# HAIO Chatbot - Nutrition & Lifestyle Questions (Single Session)
+# Validates HAIO responds with evidence-based dietary guidance,
+# caloric targets, hydration, and lifestyle modification advice
+#
+# Scenarios (5 questions):
+#   1.  What should I eat before and after a workout?
+#   2.  How many calories should I be eating to lose weight?
+#   3.  Is intermittent fasting safe for diabetics?
+#   4.  What are high-protein foods that aren't meat?
+#   5.  How much water should I drink daily?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC055 - Chatbot Nutrition Lifestyle"
+tags:
+  - haio
+  - chatbot
+  - nutrition
+  - lifestyle
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# NUTRITION & LIFESTYLE - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What should I eat before and after a workout?
+# Expected: Bot recommends pre-workout carbs and post-workout protein with timing guidance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What should I eat before and after a workout?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-nutrition-lifestyle-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_WorkoutNutrition"
+      EXPECTED_KEYWORDS: "protein|carbohydrates|workout|amount|examples|include|hours|best"
+
+# --------------------------------------------------------------------------
+# Q2: How many calories should I be eating to lose weight?
+# Expected: Bot explains caloric deficit principles and recommends dietitian consult
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How many calories should I be eating to lose weight?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-nutrition-lifestyle-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_CaloriesForWeightLoss"
+      EXPECTED_KEYWORDS: "weight|500|caloric|calories|daily|loss|per|needs"
+
+# --------------------------------------------------------------------------
+# Q3: Is intermittent fasting safe for diabetics?
+# Expected: Bot explains risks of hypoglycemia with IF and recommends provider approval
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is intermittent fasting safe for diabetics?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-nutrition-lifestyle-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_IFAndDiabetes"
+      EXPECTED_KEYWORDS: "medications|fasting|diabetes|intermittent|benefits|insulin|risks|blood"
+
+# --------------------------------------------------------------------------
+# Q4: What are high-protein foods that aren't meat?
+# Expected: Bot lists plant-based and dairy protein sources
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are high-protein foods that aren't meat?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-nutrition-lifestyle-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_PlantProtein"
+      EXPECTED_KEYWORDS: "protein|seeds|food|sources|eggs|grains|many|excellent"
+
+# --------------------------------------------------------------------------
+# Q5: How much water should I drink daily?
+# Expected: Bot provides general hydration guidelines and individual factors
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much water should I drink daily?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-nutrition-lifestyle-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_DailyWaterIntake"
+      EXPECTED_KEYWORDS: "water|daily|adult|cups|liters|total|fluids|per"

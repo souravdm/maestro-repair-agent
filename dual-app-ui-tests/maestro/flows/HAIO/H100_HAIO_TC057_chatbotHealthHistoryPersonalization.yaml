@@ -1,0 +1,114 @@
+# HAIO Chatbot - Health History & Personalization Questions (Single Session)
+# Validates HAIO leverages member health data to surface personalized insights,
+# risk assessments, and goal tracking
+#
+# Scenarios (5 questions):
+#   1.  Based on my history, what should I be monitoring closely?
+#   2.  Am I at higher risk for heart disease given my family history?
+#   3.  How has my weight changed over the last 6 months?
+#   4.  What patterns do you see in my glucose readings?
+#   5.  Am I hitting my health goals this month?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC057 - Chatbot Health History Personalization"
+tags:
+  - haio
+  - chatbot
+  - health-history
+  - personalization
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# HEALTH HISTORY & PERSONALIZATION - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Based on my history, what should I be monitoring closely?
+# Expected: Bot surfaces personalized monitoring recommendations based on conditions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Based on my history, what should I be monitoring closely?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-health-history-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_MonitoringRecommendations"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|provide|medical"
+
+# --------------------------------------------------------------------------
+# Q2: Am I at higher risk for heart disease given my family history?
+# Expected: Bot assesses Framingham-style risk factors from available member data
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Am I at higher risk for heart disease given my family history?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-health-history-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_HeartDiseaseRisk"
+      EXPECTED_KEYWORDS: "diagnosed|heart|disease|age|risk|help|having|parent"
+
+# --------------------------------------------------------------------------
+# Q3: How has my weight changed over the last 6 months?
+# Expected: Bot surfaces weight trend data if available in member health record
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How has my weight changed over the last 6 months?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-health-history-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_WeightTrend"
+      EXPECTED_KEYWORDS: "health|please|wasn|able|retrieve|data|right|now"
+
+# --------------------------------------------------------------------------
+# Q4: What patterns do you see in my glucose readings?
+# Expected: Bot analyzes glucose trend data if available (fasting, post-meal patterns)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What patterns do you see in my glucose readings?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-health-history-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_GlucosePatterns"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|analyze|patterns"
+
+# --------------------------------------------------------------------------
+# Q5: Am I hitting my health goals this month?
+# Expected: Bot reviews goal progress vs targets set in health profile
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Am I hitting my health goals this month?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-health-history-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_HealthGoalProgress"
+      EXPECTED_KEYWORDS: "health|please|wasn|able|retrieve|data|right|now"

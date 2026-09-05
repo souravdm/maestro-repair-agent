@@ -1,0 +1,56 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC030 - Vertical Chat Greeting Avs Expand"
+tags:
+  - haio
+  - framework
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Vertical chat framework — greeting lockup -> quick replies -> AVS response
+#       card -> card expansion sheet
+# User Journey: Login -> AI Home -> Verify vertical layout greeting ->
+#               Send message -> AVS card -> Tap expand -> Expanded card sheet
+# Figma ref: section "MVP 2-26 - Framework - Vertical VS Horizontal Experience",
+#            frame "Vertical chat"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Verify vertical chat greeting lockup
+- assertVisible: ${output.haio_ai_home.greetingLockup}
+- assertVisible: ${output.haio_ai_home.greetingSubcopy}
+
+# Verify quick reply chips are visible
+- assertVisible: "${output.haio_ai_home.quickReplyTrackSymptoms}|${output.haio_ai_home.quickReplyHealthVisit}"
+
+- takeScreenshot: TC030_HAIO_Vertical_Chat_Greeting
+
+# Select a quick reply to trigger AVS response
+- runFlow:
+    file: ../../subflows/HAIO/interactions/select-quick-reply.yaml
+
+# Verify AVS card renders
+- runFlow: ../../subflows/HAIO/avs/verify-after-visit-summary.yaml
+
+# Expand the card to verify expansion sheet
+- tapOn: ${output.haio_avs_chat.avSummaryExpandBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.haio_avs_chat.avSummaryExpandedMedications}
+- takeScreenshot: TC030_HAIO_Vertical_Chat_AVS_Expanded

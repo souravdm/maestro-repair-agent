@@ -1,0 +1,42 @@
+# TC007: HAIO - Benefit Landing Intent - Plan Overview
+# Tests HAIO's response to "What's my health plan?" question
+# Expected: Bot provides guidance to view plan and benefits
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC005 - Benefit Landing Plan Overview"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+# Step 1: Run login flow with notification handling
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+    
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+# Step 2: Dismiss overlays
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Step 3: Navigate to HAIO
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Step 4: Verify HAIO home screen
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# Step 5: Send benefit landing question
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my health plan?"
+
+# Step 6: Verify benefit landing response
+- runFlow: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml

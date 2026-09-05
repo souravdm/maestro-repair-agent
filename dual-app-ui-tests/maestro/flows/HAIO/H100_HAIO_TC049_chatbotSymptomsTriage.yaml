@@ -1,0 +1,114 @@
+# HAIO Chatbot - Symptoms & Triage Questions (Single Session)
+# Validates HAIO responds with appropriate urgency levels, care setting guidance,
+# and escalates emergency symptoms correctly (emergency crisis flow)
+#
+# Scenarios (5 questions):
+#   1.  I have a headache and fever — do I need to see a doctor?
+#   2.  My chest feels tight when I climb stairs — is that normal?
+#   3.  I've had this cough for 3 weeks — should I be worried?
+#   4.  What could cause pain on my lower right side?
+#   5.  Is it normal to feel dizzy when I stand up quickly?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC049 - Chatbot Symptoms Triage"
+tags:
+  - haio
+  - chatbot
+  - symptoms
+  - triage
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# SYMPTOMS & TRIAGE - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: I have a headache and fever — do I need to see a doctor?
+# Expected: Bot assesses urgency and recommends care setting (home care / urgent care / ER)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I have a headache and fever — do I need to see a doctor?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_HeadacheFever"
+      EXPECTED_KEYWORDS: "emergency|care|experiencing|neck|stiffness|confusion|severe|sensitivity"
+
+# --------------------------------------------------------------------------
+# Q2: My chest feels tight when I climb stairs — is that normal?
+# Expected: Bot flags as potentially cardiac, recommends provider evaluation urgently
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My chest feels tight when I climb stairs — is that normal?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_ChestTightness"
+      EXPECTED_KEYWORDS: "heart|call|emergency|blood|medications|symptoms|911|nearest"
+
+# --------------------------------------------------------------------------
+# Q3: I've had this cough for 3 weeks — should I be worried?
+# Expected: Bot flags persistent cough as warranting provider evaluation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I've had this cough for 3 weeks — should I be worried?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_PersistentCough"
+      EXPECTED_KEYWORDS: "coughing|blood|experiencing|shortness|breath|having|drenching|night"
+
+# --------------------------------------------------------------------------
+# Q4: What could cause pain on my lower right side?
+# Expected: Bot explains possible causes (appendix, muscle, GI) and escalation criteria
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What could cause pain on my lower right side?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_LowerRightPain"
+      EXPECTED_KEYWORDS: "urgent|acute|emergency|experiencing|high|fever|repeated|vomiting"
+
+# --------------------------------------------------------------------------
+# Q5: Is it normal to feel dizzy when I stand up quickly?
+# Expected: Bot explains orthostatic hypotension and recommends hydration / provider review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is it normal to feel dizzy when I stand up quickly?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_OrthostaticDizziness"
+      EXPECTED_KEYWORDS: "side|actually|fainted|experiencing|chest|pain|shortness|breath"

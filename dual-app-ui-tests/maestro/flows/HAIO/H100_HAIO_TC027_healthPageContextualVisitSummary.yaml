@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC027 - Health Page Contextual Visit Summary"
+tags:
+  - haio
+  - health
+  - contextual
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Health tab contextual visit summary card
+# User Journey: Login -> Health tab -> Contextual visit summary card ->
+#               Verify medications, diagnosis, vaccines, provider, facility
+# Figma ref: section "MVP 2-26 - Health Page - Contextual Visit Summary"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate into the Health tab
+- runFlow: ../../subflows/HAIO/navigation/navigate-from-health-page.yaml
+
+# Verify contextual visit summary card renders with core fields
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avSummaryCardHeading}"
+    timeout: 25000
+
+- assertVisible: ${output.haio_avs_chat.avSummaryCardProvider}
+- assertVisible: ${output.haio_avs_chat.avSummaryExpandedMedications}
+- assertVisible: ${output.haio_avs_chat.avSummaryExpandedDiagnosis}
+- takeScreenshot: TC027_HAIO_Contextual_Visit_Summary

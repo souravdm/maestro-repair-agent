@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC029 - Assistant Onboarding Guest"
+tags:
+  - haio
+  - onboarding
+  - guest
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/AssistantOnboardingScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+---
+# =============================================================================
+# E2E: Guest scenario — verify AI education screen shows guest messaging
+#       and records connect is not accessible
+# User Journey: Launch as guest -> Tap assistant FAB -> Education screen (guest) ->
+#               Verify login CTA shown, records connect unavailable
+# Figma ref: section "MVP 2-26 - Assistant Onboarding & Records Connect Variations",
+#            frame "Education V2 GUEST"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Try to access AI Home as guest
+- tapOn:
+    text: "${output.haio_ai_home.assistantFab}"
+
+# Verify guest education screen
+- runFlow: ../../subflows/HAIO/onboarding/skip-or-view-guest-education.yaml

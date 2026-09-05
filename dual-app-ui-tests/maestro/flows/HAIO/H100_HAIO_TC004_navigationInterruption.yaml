@@ -1,0 +1,70 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC004 - Navigation Interruption"
+tags:
+  - haio
+  - navigation
+  - negative
+  - interruption
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# NEGATIVE TEST: Test interrupted navigation and back navigation
+# User Journey: Login -> Open HAIO -> Start chat -> Navigate away -> Return -> Verify state
+# =============================================================================
+
+# Launch app and login
+- waitForAnimationToEnd
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Navigate to HAIO
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Load screen objects
+- runScript: ../../screens/HAIO/HomeScreen.js
+- runScript: ../../screens/HAIO/ChatScreen.js
+- runScript: ../../screens/Common/CommonScreen.js
+
+# Start a chat interaction
+- tapOn: ${output.haio_home.chatInputField}
+- inputText: "What are my recent doctor visits?"
+
+# Before sending, navigate away (interrupt the flow)
+- tapOn: ${output.haio_home.backBtn}
+- waitForAnimationToEnd
+
+# Verify we're back on home screen or main app
+- assertVisible: "${output.common_navigation.homeTab}|${output.common_navigation.accountBtn}"
+
+# Test 2: Start chat, send message, navigate away during response loading
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message
+- tapOn: ${output.haio_home.chatInputField}
+- inputText: "Show me my prescriptions"
+- tapOn: ${output.haio_chat.sendBtn}
+- extendedWaitUntil:
+    visible: "${output.haio_chat.myPrescriptionBtn}"
+    timeout: 20000
+
+# Immediately navigate away (don't wait for response)
+- tapOn: ${output.haio_home.backBtn}
+- waitForAnimationToEnd
+
+# Return to HAIO
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify chat history is preserved or new chat starts
+- assertVisible: "${output.haio_home.chatInputField}|${output.haio_chat.followUpQuestion}"
+- waitForAnimationToEnd
+
+# Navigate back before fully loading
+- tapOn: ${output.haio_home.backBtn}

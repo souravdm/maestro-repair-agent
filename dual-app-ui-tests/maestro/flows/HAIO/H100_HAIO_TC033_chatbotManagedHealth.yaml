@@ -1,0 +1,159 @@
+# HAIO Chatbot - Managed Health / Clinical Questions (Single Session)
+# Validates HAIO responds correctly to preventive care, disease management,
+# and clinical wellness queries
+#
+# Scenarios (8 questions):
+#   1.  Preventive screenings recommendation by age
+#   2.  Track blood pressure readings
+#   3.  Recommended A1C target for diabetics
+#   4.  Explanation of care gaps and how to close them
+#   5.  Enrollment in disease management program
+#   6.  Vaccinations for adults over 50
+#   7.  Connect fitness tracker to health record
+#   8.  Healthy blood sugar ranges
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC033 - Chatbot Managed Health"
+tags:
+  - haio
+  - chatbot
+  - managed-health
+  - clinical
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# MANAGED HEALTH QUESTIONS - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Preventive screenings by age group
+# Expected: Bot lists age-appropriate screenings (mammogram, colonoscopy, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What preventive screenings are recommended for my age group?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_PreventiveScreenings"
+      EXPECTED_KEYWORDS: "screening|preventive|age|provide|accurate|recommendations|need|know"
+
+# --------------------------------------------------------------------------
+# Q2: Track blood pressure readings
+# Expected: Bot explains how to log readings or points to health tracking
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I track my blood pressure readings?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_TrackBloodPressure"
+      EXPECTED_KEYWORDS: "health|please|wasn|able|retrieve|data|right|now"
+
+# --------------------------------------------------------------------------
+# Q3: Recommended A1C target for diabetics
+# Expected: Bot provides clinical A1C target range (e.g., <7% for most adults)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the recommended A1C target for diabetics?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_A1CTarget"
+      EXPECTED_KEYWORDS: "less|adults|goal|health|non-pregnant|diabetes|general|target"
+
+# --------------------------------------------------------------------------
+# Q4: Care gap explanation and how to close it
+# Expected: Bot explains care gaps and suggests closing actions (e.g., schedule visit)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can you explain what a care gap is and how to close it?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_CareGap"
+      EXPECTED_KEYWORDS: "care|gap|recommended|guidelines|health|test|provider|preventive"
+
+# --------------------------------------------------------------------------
+# Q5: Enroll in disease management program
+# Expected: Bot explains program options or directs to enrollment
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I enroll in a disease management program?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_DiseaseManagement"
+      EXPECTED_KEYWORDS: "disease management|program|enroll|health|condition|diabetes|hypertension"
+
+# --------------------------------------------------------------------------
+# Q6: Vaccinations for adults over 50
+# Expected: Bot lists recommended vaccines (flu, shingles, pneumonia, COVID, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What vaccinations are recommended for adults over 50?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_Vaccinations50Plus"
+      EXPECTED_KEYWORDS: "recommended|vaccine|shingles|adults|vaccines|starting|age|doses"
+
+# --------------------------------------------------------------------------
+# Q7: Connect fitness tracker to health record
+# Expected: Bot explains connection steps or health data integration options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I connect my fitness tracker to my health record?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_FitnessTracker"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|connecting|fitness"
+
+# --------------------------------------------------------------------------
+# Q8: Healthy blood sugar ranges
+# Expected: Bot provides clinical fasting/post-meal glucose ranges
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are healthy blood sugar ranges?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_BloodSugarRanges"
+      EXPECTED_KEYWORDS: "diabetes|hours|adults|ranges|eating|two|less|130"

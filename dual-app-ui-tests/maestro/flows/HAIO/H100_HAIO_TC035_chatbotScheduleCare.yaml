@@ -1,0 +1,144 @@
+# HAIO Chatbot - Schedule / Care Navigation Questions (Single Session)
+# Validates HAIO responds correctly to appointment scheduling, provider
+# navigation, and care coordination queries
+#
+# Scenarios (7 questions):
+#   1.  Schedule appointment with PCP
+#   2.  Book a telehealth visit for today
+#   3.  Earliest urgent care slot near me
+#   4.  Reschedule lab appointment
+#   5.  See a dermatologist without a referral
+#   6.  What to bring to first specialist visit
+#   7.  Cancel upcoming appointment
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC035 - Chatbot Schedule Care"
+tags:
+  - haio
+  - chatbot
+  - schedule-care
+  - appointments
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# SCHEDULE CARE QUESTIONS - 7 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Schedule appointment with PCP
+# Expected: Bot provides scheduling steps or deep-links to appointment booking
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I schedule an appointment with my PCP?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_SchedulePCP"
+      EXPECTED_KEYWORDS: "care|got|needs"
+
+# --------------------------------------------------------------------------
+# Q2: Book a telehealth visit for today
+# Expected: Bot confirms telehealth availability and offers to initiate booking
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I book a telehealth visit for today?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_TelehealthToday"
+      EXPECTED_KEYWORDS: "telehealth|appointment|today|available|virtual|visit|book"
+
+# --------------------------------------------------------------------------
+# Q3: Earliest urgent care slot near me
+# Expected: Bot surfaces location-based urgent care availability
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the earliest available urgent care slot near me?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_UrgentCareSlot"
+      EXPECTED_KEYWORDS: "urgent care|appointment|available|near|location|slot|walk-in"
+
+# --------------------------------------------------------------------------
+# Q4: Reschedule lab appointment
+# Expected: Bot provides rescheduling steps or directs to appointment management
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I reschedule my lab appointment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_RescheduleLab"
+      EXPECTED_KEYWORDS: "don|upcoming|visits|cancel"
+
+# --------------------------------------------------------------------------
+# Q5: See a dermatologist without a referral
+# Expected: Bot explains referral requirements for the user's plan
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I see a dermatologist without a referral?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_DermatologistReferral"
+      EXPECTED_KEYWORDS: "dermatologist|referral|specialist|appointment|plan|PCP|self-referral"
+
+# --------------------------------------------------------------------------
+# Q6: What to bring to first specialist visit
+# Expected: Bot lists preparation checklist (ID, insurance card, medical records, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What do I need to bring to my first specialist visit?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_SpecialistVisitPrep"
+      EXPECTED_KEYWORDS: "help|respond|request|today"
+
+# --------------------------------------------------------------------------
+# Q7: Cancel upcoming appointment
+# Expected: Bot provides cancellation steps or deep-links to appointment management
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I cancel an upcoming appointment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_CancelAppointment"
+      EXPECTED_KEYWORDS: "don|upcoming|visits|cancel"

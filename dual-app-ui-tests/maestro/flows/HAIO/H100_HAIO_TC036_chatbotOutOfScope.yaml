@@ -1,0 +1,190 @@
+# HAIO Chatbot - Out-of-Scope Questions (Single Session)
+# Validates HAIO correctly refuses requests outside the healthcare domain
+# and redirects users back to supported topics
+#
+# Scenarios (10 questions):
+#   1.  Restaurant recommendation near doctor's office
+#   2.  Cover letter writing assistance
+#   3.  Weekend weather forecast
+#   4.  Joke request
+#   5.  Sports result (Super Bowl)
+#   6.  Tax help
+#   7.  Python scripting request
+#   8.  Stock investment advice
+#   9.  Language translation request
+#   10. Movie plot summary (Inception)
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC036 - Chatbot Out Of Scope"
+tags:
+  - haio
+  - chatbot
+  - out-of-scope
+  - negative
+  - refusal
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# OUT-OF-SCOPE QUESTIONS - 10 Scenarios
+# Bot should refuse gracefully and redirect to health topics
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Restaurant recommendation near doctor's office
+# Expected: Bot declines and redirects to healthcare assistance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the best restaurant near my doctor's office?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_Restaurant"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|restaurant|recommendations"
+
+# --------------------------------------------------------------------------
+# Q2: Cover letter writing assistance
+# Expected: Bot declines and redirects to healthcare assistance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can you help me write a cover letter?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_CoverLetter"
+      EXPECTED_KEYWORDS: "help|health|pharmacy|plan|benefits|outside|concerns|visit"
+
+# --------------------------------------------------------------------------
+# Q3: Weekend weather forecast
+# Expected: Bot declines with standard out-of-scope message
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the weather forecast for this weekend?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_WeatherForecast"
+      EXPECTED_KEYWORDS: "help|health|pharmacy|plan|benefits|outside|concerns|visit"
+
+# --------------------------------------------------------------------------
+# Q4: Joke request
+# Expected: Bot declines and stays focused on health topics
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Tell me a joke."
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_JokeRequest"
+      EXPECTED_KEYWORDS: "health|pharmacy|plan|benefits|help|wish|concerns|visit"
+
+# --------------------------------------------------------------------------
+# Q5: Sports result (Super Bowl)
+# Expected: Bot declines and redirects to health topics
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Who won the Super Bowl last year?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_SuperBowl"
+      EXPECTED_KEYWORDS: "help|health|pharmacy|plan|benefits|outside|concerns|visit"
+
+# --------------------------------------------------------------------------
+# Q6: Tax help
+# Expected: Bot declines non-healthcare financial advice
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can you help me with my taxes?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_TaxHelp"
+      EXPECTED_KEYWORDS: "health|prescriptions|pharmacy|plan|benefits|help|tax|assistance"
+
+# --------------------------------------------------------------------------
+# Q7: Python scripting request
+# Expected: Bot declines coding/technical requests outside health scope
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Write me a Python script to scrape a website."
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_PythonScript"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|outside|concerns"
+
+# --------------------------------------------------------------------------
+# Q8: Stock investment advice
+# Expected: Bot declines financial/investment advice
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What stock should I buy right now?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_StockAdvice"
+      EXPECTED_KEYWORDS: "help|health|pharmacy|plan|benefits|happy|financial|advice"
+
+# --------------------------------------------------------------------------
+# Q9: Language translation request
+# Expected: Bot declines translation requests outside health domain
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Translate this sentence into French for me."
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_TranslationRequest"
+      EXPECTED_KEYWORDS: "services|assist|health|prescriptions|pharmacy|plan|benefits|translation"
+
+# --------------------------------------------------------------------------
+# Q10: Movie plot summary (Inception)
+# Expected: Bot declines entertainment requests and redirects to health
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the plot of Inception?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-out-of-scope-response.yaml
+    env:
+      SCENARIO_NAME: "Q10_MoviePlot"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|outside|concerns"

@@ -1,0 +1,264 @@
+# HAIO Chatbot - Understanding Their Coverage Questions (Single Session)
+# Validates HAIO responds correctly to plan coverage, network, referral,
+# deductible, and specialty benefit queries
+#
+# Scenarios (15 questions):
+#   1.  What does my plan actually cover?
+#   2.  Is my doctor in-network?
+#   3.  Do I need a referral to see a specialist?
+#   4.  What is my deductible and how much have I met so far?
+#   5.  Does my plan cover mental health visits?
+#   6.  Is telehealth covered under my plan?
+#   7.  What's the difference between copay and coinsurance?
+#   8.  Is my annual physical covered at no cost?
+#   9.  Does my plan cover ambulance services?
+#   10. Is acupuncture covered under my plan?
+#   11. Does my plan cover hearing aids?
+#   12. Is chiropractic care covered and how many visits?
+#   13. Does my plan cover bariatric surgery?
+#   14. Is speech therapy covered for my child?
+#   15. Does my plan cover international travel emergencies?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC038 - Chatbot Understanding Coverage"
+tags:
+  - haio
+  - chatbot
+  - coverage
+  - benefits
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# UNDERSTANDING COVERAGE - 15 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What does my plan actually cover?
+# Expected: High-level summary of covered services or link to benefits summary
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What does my plan actually cover?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_PlanCoverage"
+      EXPECTED_KEYWORDS: "plan|cover|benefit|service|medical|preventive|hospital"
+
+# --------------------------------------------------------------------------
+# Q2: Is my doctor in-network?
+# Expected: Bot guides to provider directory search or confirms network status
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my doctor in-network?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_DoctorInNetwork"
+      EXPECTED_KEYWORDS: "in-network|network|provider|directory|doctor|find|search"
+
+# --------------------------------------------------------------------------
+# Q3: Do I need a referral to see a specialist?
+# Expected: Bot explains HMO/PPO referral rules based on plan type
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I need a referral to see a specialist?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_ReferralRequired"
+      EXPECTED_KEYWORDS: "referral|specialist|HMO|PPO|primary care|plan|required"
+
+# --------------------------------------------------------------------------
+# Q4: What is my deductible and how much have I met so far?
+# Expected: Bot returns current deductible amount and met-to-date figure
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is my deductible and how much have I met so far?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_DeductibleProgress"
+      EXPECTED_KEYWORDS: "deductible|met|remaining|\\$|plan year|benefit|amount"
+
+# --------------------------------------------------------------------------
+# Q5: Does my plan cover mental health visits?
+# Expected: Bot confirms mental health parity and visit coverage details
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover mental health visits?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_MentalHealthVisits"
+      EXPECTED_KEYWORDS: "mental health|covered|behavioral|parity|visit|plan|benefit"
+
+# --------------------------------------------------------------------------
+# Q6: Is telehealth covered under my plan?
+# Expected: Bot confirms telehealth coverage and applicable copay
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is telehealth covered under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_TelehealthCoverage"
+      EXPECTED_KEYWORDS: "telehealth|covered|virtual|visit|copay|plan|benefit"
+
+# --------------------------------------------------------------------------
+# Q7: What's the difference between my copay and coinsurance?
+# Expected: Bot explains copay vs coinsurance with examples
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the difference between my copay and coinsurance?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_CopayVsCoinsurance"
+      EXPECTED_KEYWORDS: "copay|coinsurance|fixed|percent|cost|difference|deductible"
+
+# --------------------------------------------------------------------------
+# Q8: Is my annual physical covered at no cost?
+# Expected: Bot confirms preventive care coverage with no cost-sharing
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my annual physical covered at no cost?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_AnnualPhysical"
+      EXPECTED_KEYWORDS: "annual|physical|preventive|covered|no cost|free|ACA|wellness"
+
+# --------------------------------------------------------------------------
+# Q9: Does my plan cover ambulance services?
+# Expected: Bot confirms emergency ambulance coverage and any cost-sharing
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover ambulance services?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_AmbulanceCoverage"
+      EXPECTED_KEYWORDS: "ambulance|covered|emergency|plan|cost|benefit|transport"
+
+# --------------------------------------------------------------------------
+# Q10: Is acupuncture covered under my plan?
+# Expected: Bot confirms acupuncture coverage status and any visit limits
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is acupuncture covered under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q10_AcupunctureCoverage"
+      EXPECTED_KEYWORDS: "acupuncture|covered|plan|visit|benefit|limit|alternative"
+
+# --------------------------------------------------------------------------
+# Q11: Does my plan cover hearing aids?
+# Expected: Bot explains hearing aid coverage and any dollar or device limits
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover hearing aids?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q11_HearingAids"
+      EXPECTED_KEYWORDS: "hearing aid|covered|plan|benefit|limit|\\$|allowance"
+
+# --------------------------------------------------------------------------
+# Q12: Is chiropractic care covered and how many visits?
+# Expected: Bot confirms coverage and annual visit limit
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is chiropractic care covered and how many visits do I get?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q12_ChiropracticVisits"
+      EXPECTED_KEYWORDS: "chiropractic|covered|visit|limit|plan|benefit|per year"
+
+# --------------------------------------------------------------------------
+# Q13: Does my plan cover bariatric surgery?
+# Expected: Bot explains bariatric coverage, eligibility criteria, and prior auth
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover bariatric surgery?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q13_BariatricSurgery"
+      EXPECTED_KEYWORDS: "bariatric|surgery|covered|prior auth|authorization|BMI|plan|criteria"
+
+# --------------------------------------------------------------------------
+# Q14: Is speech therapy covered for my child?
+# Expected: Bot confirms pediatric speech therapy coverage and session limits
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is speech therapy covered for my child?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q14_SpeechTherapy"
+      EXPECTED_KEYWORDS: "access|plan|benefits|unable|coverage|doctor|appointment|firstname"
+
+# --------------------------------------------------------------------------
+# Q15: Does my plan cover international travel emergencies?
+# Expected: Bot explains emergency international coverage and limitations
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover international travel emergencies?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q15_InternationalEmergency"
+      EXPECTED_KEYWORDS: "international|travel|emergency|covered|plan|abroad|benefit|out-of-network"

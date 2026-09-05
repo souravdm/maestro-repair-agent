@@ -1,0 +1,114 @@
+# HAIO Chatbot - Medication Education Questions (Single Session)
+# Validates HAIO responds with accurate drug information, interaction warnings,
+# and appropriate pharmacist/provider escalation recommendations
+#
+# Scenarios (5 questions):
+#   1.  What are the side effects of metformin?
+#   2.  Can I take ibuprofen with my blood pressure medication?
+#   3.  I ran out of my medication — what should I do?
+#   4.  Why do I need to take this medication with food?
+#   5.  Is it safe to take melatonin with my current prescriptions?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC051 - Chatbot Medication Education"
+tags:
+  - haio
+  - chatbot
+  - medication-education
+  - clinical
+  - pharmacy
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# MEDICATION EDUCATION - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What are the side effects of metformin?
+# Expected: Bot provides common side effects and serious warning signs
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are the side effects of metformin?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_MetforminSideEffects"
+      EXPECTED_KEYWORDS: "side|effects|help|common|symptoms|metformin|usually|temporary"
+
+# --------------------------------------------------------------------------
+# Q2: Can I take ibuprofen with my blood pressure medication?
+# Expected: Bot flags NSAID/antihypertensive interaction and recommends pharmacist consult
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I take ibuprofen with my blood pressure medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_IbuprofenBP"
+      EXPECTED_KEYWORDS: "medications|ibuprofen|blood|pressure|interactions|like|strain|drug"
+
+# --------------------------------------------------------------------------
+# Q3: I ran out of my medication — what should I do?
+# Expected: Bot advises on emergency refill options and urges not to abruptly stop
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I ran out of my medication — what should I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_OutOfMedication"
+      EXPECTED_KEYWORDS: "prescriptions|refill|looks|like|ready|right|now|check"
+
+# --------------------------------------------------------------------------
+# Q4: Why do I need to take this medication with food?
+# Expected: Bot explains GI absorption and stomach irritation rationale
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why do I need to take this medication with food?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_MedWithFood"
+      EXPECTED_KEYWORDS: "stomach|medication|ibuprofen|food|taking|referring|metformin|helps"
+
+# --------------------------------------------------------------------------
+# Q5: Is it safe to take melatonin with my current prescriptions?
+# Expected: Bot explains melatonin interaction risks and recommends pharmacist review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is it safe to take melatonin with my current prescriptions?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_MelatoninInteraction"
+      EXPECTED_KEYWORDS: "medications|melatonin|blood|information|cannot|prescriptions|currently|taking"

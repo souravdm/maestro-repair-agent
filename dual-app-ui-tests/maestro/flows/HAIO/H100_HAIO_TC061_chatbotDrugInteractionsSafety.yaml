@@ -1,0 +1,175 @@
+# HAIO Chatbot - Drug Interactions & Safety Questions (Single Session)
+# Validates HAIO responds with accurate interaction warnings, contraindications,
+# food/drug interactions, and pregnancy/breastfeeding safety guidance
+#
+# Scenarios (9 questions):
+#   1.  Is it safe to take these two medications together?
+#   2.  Can I drink alcohol while taking this medication?
+#   3.  What foods should I avoid while on this medication?
+#   4.  Can I cut or crush this pill?
+#   5.  What should I do if I accidentally double-dosed?
+#   6.  Is this medication safe during pregnancy?
+#   7.  Can I take this medication while breastfeeding?
+#   8.  How long until this medication starts working?
+#   9.  What should I do if I have an allergic reaction?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC061 - Chatbot Drug Interactions Safety"
+tags:
+  - haio
+  - chatbot
+  - drug-interactions
+  - safety
+  - pharmacy
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# DRUG INTERACTIONS & SAFETY - 9 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Is it safe to take these two medications together?
+# Expected: Bot flags potential interaction and recommends pharmacist review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is it safe to take these two medications together?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_TwoMedsInteraction"
+      EXPECTED_KEYWORDS: "drug|interactions|medications|check|ensure|safety|need|know"
+
+# --------------------------------------------------------------------------
+# Q2: Can I drink alcohol while taking this medication?
+# Expected: Bot flags alcohol-drug interaction risks (sedation, GI, hepatotoxicity)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I drink alcohol while taking this medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_AlcoholInteraction"
+      EXPECTED_KEYWORDS: "drugs|side|effects|medication|combining|alcohol|certain|cause"
+
+# --------------------------------------------------------------------------
+# Q3: What foods should I avoid while on this medication?
+# Expected: Bot explains drug-food interactions (grapefruit, dairy, tyramine, vitamin K, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What foods should I avoid while on this medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_FoodDrugInteraction"
+      EXPECTED_KEYWORDS: "different|medications|drug|medication|interact|foods|must|know"
+
+# --------------------------------------------------------------------------
+# Q4: Can I cut or crush this pill?
+# Expected: Bot explains extended-release / enteric-coated restrictions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I cut or crush this pill?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_CrushPill"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q5: What should I do if I accidentally double-dosed?
+# Expected: Bot provides dose management guidance and escalation criteria
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What should I do if I accidentally double-dosed?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_DoubleDose"
+      EXPECTED_KEYWORDS: "symptoms|emergency|care|call|drug|medication|having|severe"
+
+# --------------------------------------------------------------------------
+# Q6: Is this medication safe during pregnancy?
+# Expected: Bot explains FDA pregnancy categories and urges OB consultation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this medication safe during pregnancy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_PregnancySafety"
+      EXPECTED_KEYWORDS: "pregnancy|safe|FDA|category|OB|teratogenic|consult|doctor|risk"
+
+# --------------------------------------------------------------------------
+# Q7: Can I take this medication while breastfeeding?
+# Expected: Bot explains LactMed / transfer into breast milk and recommends provider
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I take this medication while breastfeeding?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_BreastfeedingSafety"
+      EXPECTED_KEYWORDS: "medication|safe|drug|medications|baby|doctor|pharmacist|prescriptions"
+
+# --------------------------------------------------------------------------
+# Q8: How long until this medication starts working?
+# Expected: Bot provides expected onset timeline for common drug classes
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How long until this medication starts working?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_MedicationOnset"
+      EXPECTED_KEYWORDS: "medication|drug|health|doctor|pharmacist|treatment|prescriptions|emergency"
+
+# --------------------------------------------------------------------------
+# Q9: What should I do if I have an allergic reaction?
+# Expected: Bot explains mild vs anaphylaxis response and 911 escalation for severe cases
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What should I do if I have an allergic reaction to my medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_AllergicReaction"
+      EXPECTED_KEYWORDS: "care|medications|skin|difficulty|breathing|call|symptoms|doctor"

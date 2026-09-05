@@ -1,0 +1,189 @@
+# HAIO Chatbot - Insurance Plan Benefits Questions (Single Session)
+# Validates HAIO responds correctly to plan coverage, cost-sharing,
+# and benefits-related queries
+#
+# Scenarios (10 questions):
+#   1.  Plan year deductible
+#   2.  Out-of-network specialist coverage
+#   3.  Telehealth cost under plan
+#   4.  Copay for primary care vs specialist
+#   5.  Out-of-pocket maximum progress
+#   6.  Mental health visit coverage
+#   7.  Procedure coverage check
+#   8.  HSA vs FSA difference
+#   9.  Find in-network provider
+#   10. Chiropractic visit coverage
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC034 - Chatbot Insurance Benefits"
+tags:
+  - haio
+  - chatbot
+  - insurance
+  - benefits
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# INSURANCE BENEFITS QUESTIONS - 10 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Plan year deductible
+# Expected: Bot returns deductible amount or directs to benefits summary
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my deductible for this plan year?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_Deductible"
+      EXPECTED_KEYWORDS: "deductible|plan|year|benefit|amount|met|remaining"
+
+# --------------------------------------------------------------------------
+# Q2: Out-of-network specialist coverage
+# Expected: Bot explains OON coverage level or recommends in-network alternatives
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I have out-of-network coverage for specialists?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_OONSpecialist"
+      EXPECTED_KEYWORDS: "out-of-network|coverage|specialist|network|plan|cost|benefit"
+
+# --------------------------------------------------------------------------
+# Q3: Telehealth cost under plan
+# Expected: Bot confirms telehealth coverage and any applicable copay
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is telehealth included in my plan at no cost?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_TelehealthCost"
+      EXPECTED_KEYWORDS: "telehealth|covered|plan|cost|virtual|visit|copay"
+
+# --------------------------------------------------------------------------
+# Q4: Copay comparison — primary care vs specialist
+# Expected: Bot returns copay amounts for both provider types
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my copay for a primary care visit vs. specialist?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_CopayComparison"
+      EXPECTED_KEYWORDS: "copay|primary care|specialist|cost|visit|\\$"
+
+# --------------------------------------------------------------------------
+# Q5: Out-of-pocket maximum progress
+# Expected: Bot returns current OOP spend vs. plan maximum
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much of my out-of-pocket maximum have I met?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_OOPMaxProgress"
+      EXPECTED_KEYWORDS: "out-of-pocket|maximum|met|\\$|spending|benefit|remaining"
+
+# --------------------------------------------------------------------------
+# Q6: Mental health visit coverage
+# Expected: Bot confirms mental health parity and coverage details
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover mental health visits?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_MentalHealthCoverage"
+      EXPECTED_KEYWORDS: "mental health|covered|plan|visit|behavioral|parity|benefit"
+
+# --------------------------------------------------------------------------
+# Q7: Procedure coverage check
+# Expected: Bot provides coverage guidance or prompts for more detail
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this procedure covered under my current benefits?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_ProcedureCoverage"
+      EXPECTED_KEYWORDS: "covered|procedure|benefit|plan|prior auth|authorization|coverage"
+
+# --------------------------------------------------------------------------
+# Q8: HSA vs FSA difference
+# Expected: Bot explains both account types, eligibility, and rollover rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the difference between my HSA and FSA?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_HSAvsfsA"
+      EXPECTED_KEYWORDS: "HSA|FSA|savings|account|rollover|benefit|healthcare|tax"
+
+# --------------------------------------------------------------------------
+# Q9: Find in-network provider
+# Expected: Bot directs to provider search or explains in-network lookup
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I find an in-network provider?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_InNetworkProvider"
+      EXPECTED_KEYWORDS: "in-network|provider|find|network|directory|plan|search"
+
+# --------------------------------------------------------------------------
+# Q10: Chiropractic visit coverage
+# Expected: Bot confirms chiropractic coverage status under plan
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Are chiropractic visits covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-insurance-benefits-response.yaml
+    env:
+      SCENARIO_NAME: "Q10_ChiropracticCoverage"
+      EXPECTED_KEYWORDS: "chiropractic|covered|plan|benefit|visit|copay|limit"

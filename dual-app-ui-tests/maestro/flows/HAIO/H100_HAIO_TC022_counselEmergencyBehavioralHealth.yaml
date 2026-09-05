@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC022 - Counsel Emergency Behavioral Health"
+tags:
+  - haio
+  - counsel
+  - escalation
+  - emergency
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/CounselScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Counsel agent flow 2 — behavioral health emergency escalation
+# User Journey: Login -> AI Home -> Symptom input -> Behavioral health escalation ->
+#               Verify disclaimer, crisis line, scheduling sheet
+# Figma ref: section "MVP-2-26 - Counsel Sub Agent Escalations",
+#            "Counsel agent flow 2: Emergency escalation - behavioral health"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Submit behavioral health symptom to activate counsel sub-agent
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I'm feeling very anxious and having thoughts of self-harm"
+
+# Verify counsel sub-agent activates
+- runFlow: ../../subflows/HAIO/counsel/verify-counsel-symptom-entry.yaml
+
+# Verify behavioral health emergency escalation card
+- assertVisible: ${output.haio_counsel.behavioralHealthEscalationMsg}
+- assertVisible: ${output.haio_counsel.behavioralHealthCrisisLine}
+- takeScreenshot: TC022_HAIO_Behavioral_Health_Escalation
+
+# Verify escalation card + scheduling sheet
+- runFlow: ../../subflows/HAIO/counsel/trigger-emergency-escalation.yaml

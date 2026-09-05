@@ -1,0 +1,311 @@
+# HAIO Intent: Benefit Landing - Single Session
+# All benefit landing questions in one session with single login
+# Updated: Dynamic keyword assertions per question type
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC007 - Intent Benefit Landing"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# BENEFIT LANDING INTENT - Questions with Dynamic Assertions
+# ============================================================================
+
+# Q1: What's my health plan?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my health plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "health plan|Aetna|coverage|Medical"
+
+# Q2: What insurance do I have?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What insurance do I have?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "insurance|Aetna|coverage|plan"
+
+# Q3: Show me my benefits
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my benefits"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "benefits|coverage|deductible|out-of-pocket"
+
+# Q4: What's covered under my plan?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's covered under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "covered|coverage|plan|benefits"
+
+# Q5: What type of plan do I have?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What type of plan do I have?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "plan|type|PPO|HMO|Aetna"
+
+# Q6: Am I on a Caremark plan?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Am I on a Caremark plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "Caremark|pharmacy|prescription|plan"
+
+# Q7: Do I have Aetna coverage?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I have Aetna coverage?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "Aetna|coverage|yes|plan"
+
+# Q8: What's my plan name?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my plan name?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "plan name|Aetna|PPO|HMO"
+
+# Q9: What's my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "deductible|\\$[0-9]"
+
+# Q10: How much is my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much is my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "deductible|\\$[0-9]"
+
+# Q11: Have I met my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Have I met my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "deductible|met|remaining|used|\\$[0-9]"
+
+# Q12: How much have I spent toward my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much have I spent toward my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "spent|used|deductible|\\$[0-9]"
+
+# Q13: How much more until I meet my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much more until I meet my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "remaining|left|deductible|\\$[0-9]"
+
+# Q14: What's my remaining deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my remaining deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "remaining|deductible|\\$[0-9]"
+
+# Q15: When does my deductible reset?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When does my deductible reset?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "reset|January|year|deductible"
+
+# Q16: Is my deductible family or individual?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my deductible family or individual?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "family|individual|deductible"
+
+# Q17: What's my out-of-pocket maximum?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my out-of-pocket maximum?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "out-of-pocket|maximum|\\$[0-9]"
+
+# Q18: How much have I spent out of pocket?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much have I spent out of pocket?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "spent|used|out-of-pocket|\\$[0-9]"
+
+# Q19: How close am I to my out-of-pocket max?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How close am I to my out-of-pocket max?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "out-of-pocket|remaining|used|\\$[0-9]"
+
+# Q20: What counts toward my out-of-pocket maximum?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What counts toward my out-of-pocket maximum?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "out-of-pocket|counts|copay|coinsurance|deductible"
+
+# Q21: When does my out-of-pocket reset?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When does my out-of-pocket reset?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "reset|January|year|out-of-pocket"
+
+# Q22: Is my out-of-pocket max family or individual?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my out-of-pocket max family or individual?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "family|individual|out-of-pocket"
+
+# Q23: What spending has gone towards my deductible?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What spending has gone towards my deductible?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "spending|deductible|used|\\$[0-9]"
+
+# Q24: How are prescriptions covered?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How are prescriptions covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "prescription|pharmacy|copay|tier|covered"
+
+# Q25: Is this drug a flat copay or coinsurance?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this drug a flat copay or coinsurance?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "copay|coinsurance|drug|prescription"
+
+# Q26: What tier is my prescription in?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What tier is my prescription in?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "tier|prescription|formulary"
+
+# Q27: What's the difference between a copay and coinsurance?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the difference between a copay and coinsurance?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "copay|coinsurance|fixed|percentage"
+
+# Q28: When do I pay coinsurance instead of a copay?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When do I pay coinsurance instead of a copay?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "copay|coinsurance|deductible|pay"

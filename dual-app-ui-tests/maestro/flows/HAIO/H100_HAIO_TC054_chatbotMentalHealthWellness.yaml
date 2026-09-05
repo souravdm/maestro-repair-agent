@@ -1,0 +1,115 @@
+# HAIO Chatbot - Mental Health & Wellness Questions (Single Session)
+# Validates HAIO responds empathetically with evidence-based coping strategies,
+# resource referrals, and appropriate crisis escalation
+#
+# Scenarios (5 questions):
+#   1.  I've been feeling anxious and can't sleep — what can I do?
+#   2.  How do I know if what I'm feeling is depression?
+#   3.  What are some quick stress relief techniques I can use at work?
+#   4.  Can lack of sleep affect my physical health?
+#   5.  I've been feeling overwhelmed — should I talk to someone?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC054 - Chatbot Mental Health Wellness"
+tags:
+  - haio
+  - chatbot
+  - mental-health-wellness
+  - behavioral-health
+  - clinical
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# MENTAL HEALTH & WELLNESS - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: I've been feeling anxious and can't sleep — what can I do?
+# Expected: Bot provides CBT techniques, sleep hygiene tips, and therapy referral
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I've been feeling anxious and can't sleep — what can I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_AnxietySleep"
+      EXPECTED_KEYWORDS: "symptoms|chronic|sorry|hear|feeling|anxious|having|trouble"
+
+# --------------------------------------------------------------------------
+# Q2: How do I know if what I'm feeling is depression?
+# Expected: Bot lists PHQ-9 symptoms and strongly recommends provider evaluation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I know if what I'm feeling is depression?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_DepressionSymptoms"
+      EXPECTED_KEYWORDS: "loss|interest|symptoms|depression|typically|involves|persistent|low"
+
+# --------------------------------------------------------------------------
+# Q3: What are some quick stress relief techniques I can use at work?
+# Expected: Bot provides breathing exercises, mindfulness, and movement breaks
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are some quick stress relief techniques I can use at work?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_WorkStressRelief"
+      EXPECTED_KEYWORDS: "quick|taking|techniques|include|deep|breaths|like|4-7-8"
+
+# --------------------------------------------------------------------------
+# Q4: Can lack of sleep affect my physical health?
+# Expected: Bot explains sleep-physical health connections (immune, cardiac, metabolic)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can lack of sleep affect my physical health?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SleepPhysicalHealth"
+      EXPECTED_KEYWORDS: "chronic|sleep|medications|yes|loss|weaken|immune|system"
+
+# --------------------------------------------------------------------------
+# Q5: I've been feeling overwhelmed — should I talk to someone?
+# Expected: Bot validates feelings, encourages therapy, and provides access resources
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I've been feeling overwhelmed — should I talk to someone?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_OverwhelmedSupport"
+      EXPECTED_KEYWORDS: "care|health|symptoms|doctor|mental|emergency|call|yourself"

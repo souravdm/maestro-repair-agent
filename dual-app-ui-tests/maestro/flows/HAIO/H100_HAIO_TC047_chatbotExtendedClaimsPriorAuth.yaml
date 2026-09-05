@@ -1,0 +1,236 @@
+# HAIO Chatbot - Extended Claims & Prior Authorization Questions (Single Session)
+# Validates HAIO responds correctly to the full range of claims lifecycle,
+# denial management, appeal rights, and prior authorization process queries
+#
+# Scenarios (14 questions):
+#   1.  When was my last claim?
+#   2.  What was my last claim?
+#   3.  What was my last medical claim?
+#   4.  What was my last dental claim?
+#   5.  What was my last pharmacy claim?
+#   6.  My claim was denied — what exactly does that mean and what do I do?
+#   7.  How long do I have to appeal a denied claim?
+#   8.  What is an external appeal and when can I request one?
+#   9.  My appeal was denied — are there any other options?
+#   10. Can you help me understand why this specific service was not covered?
+#   11. What documentation do I need to submit for a successful appeal?
+#   12. Do I need prior authorization for this procedure?
+#   13. How long does prior authorization take?
+#   14. What documents do I need to submit for reimbursement?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC047 - Chatbot Extended Claims Prior Auth"
+tags:
+  - haio
+  - chatbot
+  - claims
+  - prior-auth
+  - appeals
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# EXTENDED CLAIMS & PRIOR AUTH - 14 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: When was my last claim?
+# Expected: Bot returns date of most recent processed claim
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When was my last claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "claim|date|Processed|recent|sorry|access"
+
+# --------------------------------------------------------------------------
+# Q2: What was my last claim?
+# Expected: Bot surfaces the most recent claim summary
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What was my last claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "claim|Processed|\\$|recent|service|provider|sorry|access"
+
+# --------------------------------------------------------------------------
+# Q3: What was my last medical claim?
+# Expected: Bot filters to most recent medical (non-dental, non-pharmacy) claim
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What was my last medical claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "medical|claim|Processed|\\$|service|provider|sorry|access"
+
+# --------------------------------------------------------------------------
+# Q4: What was my last dental claim?
+# Expected: Bot returns most recent dental claim or explains dental is not available
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What was my last dental claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "dental|claim|Processed|\\$|service|provider|sorry|access|not available"
+
+# --------------------------------------------------------------------------
+# Q5: What was my last pharmacy claim?
+# Expected: Bot returns most recent pharmacy/Rx claim
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What was my last pharmacy claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "pharmacy|prescription|claim|Processed|\\$|medication|sorry|access"
+
+# --------------------------------------------------------------------------
+# Q6: My claim was denied — what exactly does that mean and what do I do?
+# Expected: Bot explains denial reasons and actionable next steps including appeal
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My claim was denied — what exactly does that mean and what do I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "denied|appeal|reason|next steps|review|coverage|plan|EOB"
+
+# --------------------------------------------------------------------------
+# Q7: How long do I have to appeal a denied claim?
+# Expected: Bot cites 180-day appeal window (ACA standard)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How long do I have to appeal a denied claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "appeal|180 days|deadline|time limit|denied|claim|plan"
+
+# --------------------------------------------------------------------------
+# Q8: What is an external appeal and when can I request one?
+# Expected: Bot explains IRO process after internal appeal exhaustion
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is an external appeal and when can I request one?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "external appeal|IRO|independent|review|internal|exhausted|denied|rights"
+
+# --------------------------------------------------------------------------
+# Q9: My appeal was denied — are there any other options?
+# Expected: Bot explains state insurance commissioner, external review, and ombudsman
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My appeal was denied — are there any other options?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "appeal|denied|external review|state|commissioner|ombudsman|options|escalate"
+
+# --------------------------------------------------------------------------
+# Q10: Can you help me understand why this specific service was not covered?
+# Expected: Bot explains coverage exclusion reason or prompts for claim details
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can you help me understand why this specific service was not covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "service|not covered|reason|exclusion|plan|benefit|denied|EOB"
+
+# --------------------------------------------------------------------------
+# Q11: What documentation do I need to submit for a successful appeal?
+# Expected: Bot lists required appeal documentation (medical records, letter, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What documentation do I need to submit for a successful appeal?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "documentation|appeal|medical records|letter|physician|submit|denial|required"
+
+# --------------------------------------------------------------------------
+# Q12: Do I need prior authorization for this procedure?
+# Expected: Bot explains PA requirements or directs to PA lookup
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I need prior authorization for this procedure?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "prior authorization|PA|required|procedure|plan|approval|submit"
+
+# --------------------------------------------------------------------------
+# Q13: How long does prior authorization take?
+# Expected: Bot explains standard PA turnaround times (urgent vs routine)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How long does prior authorization take?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "prior authorization|business days|urgent|routine|72 hours|14 days|PA|turnaround"
+
+# --------------------------------------------------------------------------
+# Q14: What documents do I need to submit for reimbursement?
+# Expected: Bot lists required reimbursement submission documents
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What documents do I need to submit for reimbursement?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "reimbursement|submit|receipt|itemized|claim form|plan|documentation|EOB"

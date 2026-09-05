@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC019 - Chatbot Entry Subpage Contextual"
+tags:
+  - haio
+  - entry
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Launch AI assistant from a Health sub-page contextual entry point
+# User Journey: Login -> Health Tab -> Sub-page -> Tap contextual AI entry ->
+#               Verify bottom nav morphs to input bar
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate into Health tab
+- runFlow: ../../subflows/HAIO/navigation/navigate-from-health-page.yaml
+
+# Verify bottom nav has morphed to chat input
+- assertVisible: ${output.haio_ai_home.morphedInputField}
+
+- takeScreenshot: TC019_HAIO_Subpage_Contextual_Entry

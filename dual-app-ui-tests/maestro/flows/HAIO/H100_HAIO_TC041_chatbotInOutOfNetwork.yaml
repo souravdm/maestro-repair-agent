@@ -1,0 +1,130 @@
+# HAIO Chatbot - In-Network vs Out-of-Network Questions (Single Session)
+# Validates HAIO responds correctly to network status, cost differentials,
+# exceptions, balance billing, and referral chain scenarios
+#
+# Scenarios (6 questions):
+#   1.  My preferred doctor just went out-of-network — what are my options?
+#   2.  Can I get an out-of-network exception for a specialist I've been seeing for years?
+#   3.  What is the difference in cost if I go out-of-network for this procedure?
+#   4.  Is this hospital in-network for my plan?
+#   5.  What is a balance bill and can my provider do that to me?
+#   6.  If my in-network doctor refers me to an out-of-network specialist, am I covered?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC041 - Chatbot In Out Of Network"
+tags:
+  - haio
+  - chatbot
+  - network
+  - in-network
+  - out-of-network
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# IN-NETWORK vs OUT-OF-NETWORK - 6 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: My preferred doctor just went out-of-network — what are my options?
+# Expected: Bot explains transition-of-care, continuity of care, or in-network alternatives
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My preferred doctor just went out-of-network — what are my options?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_DoctorWentOON"
+      EXPECTED_KEYWORDS: "out-of-network|options|transition|continuity|in-network|alternative|exception"
+
+# --------------------------------------------------------------------------
+# Q2: Can I get an out-of-network exception for a specialist I've been seeing for years?
+# Expected: Bot explains continuity of care exception process and appeal steps
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get an out-of-network exception for a specialist I've been seeing for years?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_OONException"
+      EXPECTED_KEYWORDS: "exception|out-of-network|continuity|specialist|request|appeal|plan"
+
+# --------------------------------------------------------------------------
+# Q3: What is the difference in cost if I go out-of-network for this procedure?
+# Expected: Bot explains cost differential and higher patient responsibility OON
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is the difference in cost if I go out-of-network for this procedure?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_OONCostDiff"
+      EXPECTED_KEYWORDS: "out-of-network|cost|difference|deductible|coinsurance|higher|plan|procedure"
+
+# --------------------------------------------------------------------------
+# Q4: Is this hospital in-network for my plan?
+# Expected: Bot guides to provider directory or explains hospital network lookup
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this hospital in-network for my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_HospitalNetwork"
+      EXPECTED_KEYWORDS: "hospital|in-network|network|plan|directory|find|verify|provider"
+
+# --------------------------------------------------------------------------
+# Q5: What is a balance bill and can my provider do that to me?
+# Expected: Bot explains balance billing, No Surprises Act protections, and member rights
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a balance bill and can my provider do that to me?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_BalanceBill"
+      EXPECTED_KEYWORDS: "balance bill|No Surprises Act|out-of-network|protection|law|rights|dispute"
+
+# --------------------------------------------------------------------------
+# Q6: If my in-network doctor refers me to an out-of-network specialist, am I covered?
+# Expected: Bot explains inadvertent OON referral protections and coverage rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "If my in-network doctor refers me to an out-of-network specialist, am I covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-network-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_OONReferral"
+      EXPECTED_KEYWORDS: "referral|out-of-network|specialist|covered|protection|in-network rate|plan|inadvertent"

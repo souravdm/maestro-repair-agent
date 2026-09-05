@@ -1,0 +1,114 @@
+# HAIO Chatbot - Medication Disposal & Safety Questions (Single Session)
+# Validates HAIO responds with accurate safe disposal methods, take-back programs,
+# storage guidance, and child safety information
+#
+# Scenarios (5 questions):
+#   1.  How do I safely dispose of expired medications?
+#   2.  Is there a drug take-back program near me?
+#   3.  How do I store medications safely if I have children at home?
+#   4.  Can I flush unused medications down the toilet?
+#   5.  My medication got wet — is it still effective?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC067 - Chatbot Disposal Safety"
+tags:
+  - haio
+  - chatbot
+  - disposal
+  - medication-safety
+  - pharmacy
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# DISPOSAL & SAFETY - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: How do I safely dispose of expired medications?
+# Expected: Bot recommends take-back programs, drug deactivation pouches, or trash mixing
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I safely dispose of expired medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_ExpiredDisposal"
+      EXPECTED_KEYWORDS: "medications|drug|prescription|take-back|prevent|accidental|ingestion|many"
+
+# --------------------------------------------------------------------------
+# Q2: Is there a drug take-back program near me?
+# Expected: Bot directs to DEA take-back locator or CVS Safe Medication Disposal kiosks
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a drug take-back program near me?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_TakeBackProgram"
+      EXPECTED_KEYWORDS: "unable|help|health|pharmacy|sorry|answer|question|general"
+
+# --------------------------------------------------------------------------
+# Q3: How do I store medications safely if I have children at home?
+# Expected: Bot recommends child-resistant caps, locked storage, and high shelves
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I store medications safely if I have children at home?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_ChildSafeStorage"
+      EXPECTED_KEYWORDS: "medications|children|medication|keep|store|reach|high|cabinet"
+
+# --------------------------------------------------------------------------
+# Q4: Can I flush unused medications down the toilet?
+# Expected: Bot explains FDA flush list exceptions and general no-flush guidance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I flush unused medications down the toilet?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_FlushMedication"
+      EXPECTED_KEYWORDS: "medications|drug|medicines|flushing|local|water|list|dangerous"
+
+# --------------------------------------------------------------------------
+# Q5: My medication got wet — is it still effective?
+# Expected: Bot advises replacing water-damaged medication and consulting pharmacist
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My medication got wet — is it still effective?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_WetMedication"
+      EXPECTED_KEYWORDS: "medication|take|wet|safety|pharmacist|doctor|generally|gotten"

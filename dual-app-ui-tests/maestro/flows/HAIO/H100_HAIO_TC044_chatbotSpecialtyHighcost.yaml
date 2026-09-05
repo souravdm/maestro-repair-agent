@@ -1,0 +1,130 @@
+# HAIO Chatbot - Specialty & High-Cost Scenario Questions (Single Session)
+# Validates HAIO responds with comprehensive, empathetic coverage guidance
+# for complex, high-cost care situations including cancer, transplants, and hospital stays
+#
+# Scenarios (6 questions):
+#   1.  I was just diagnosed with cancer — walk me through what my plan covers for treatment
+#   2.  My doctor is recommending a clinical trial — is that covered?
+#   3.  I need a bone marrow transplant — how does my plan handle that?
+#   4.  I'm being admitted to the hospital tomorrow — what will my total exposure be?
+#   5.  My child needs intensive behavioral therapy — how much does my plan cover?
+#   6.  I need home health care after surgery — what's covered and for how long?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC044 - Chatbot Specialty Highcost"
+tags:
+  - haio
+  - chatbot
+  - specialty
+  - high-cost
+  - benefits
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# SPECIALTY & HIGH-COST SCENARIOS - 6 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: I was just diagnosed with cancer — walk me through what my plan covers
+# Expected: Bot provides comprehensive oncology coverage overview and resources
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I was just diagnosed with cancer — can you walk me through what my plan covers for treatment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_CancerCoverage"
+      EXPECTED_KEYWORDS: "cancer|treatment|covered|chemotherapy|prior auth|oncology|plan|benefit"
+
+# --------------------------------------------------------------------------
+# Q2: My doctor is recommending a clinical trial — is that covered?
+# Expected: Bot explains clinical trial coverage mandate under ACA
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My doctor is recommending a clinical trial — is that covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_ClinicalTrial"
+      EXPECTED_KEYWORDS: "clinical trial|covered|ACA|routine care|plan|benefit|approved|prior auth"
+
+# --------------------------------------------------------------------------
+# Q3: I need a bone marrow transplant — how does my plan handle that?
+# Expected: Bot explains transplant coverage, pre-approval, and center-of-excellence
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a bone marrow transplant — how does my plan handle that?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_BoneMarrowTransplant"
+      EXPECTED_KEYWORDS: "transplant|covered|prior auth|center of excellence|plan|benefit|pre-approval"
+
+# --------------------------------------------------------------------------
+# Q4: I'm being admitted to the hospital tomorrow — what will my total exposure be?
+# Expected: Bot estimates patient responsibility based on deductible, coinsurance, and OOP max
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I'm being admitted to the hospital tomorrow — what will my total out-of-pocket exposure be?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_HospitalAdmission"
+      EXPECTED_KEYWORDS: "deductible|coinsurance|out-of-pocket|hospital|admission|\\$|plan|estimate"
+
+# --------------------------------------------------------------------------
+# Q5: My child needs intensive behavioral therapy — how much does my plan cover?
+# Expected: Bot explains ABA/behavioral therapy coverage, session limits, and prior auth
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My child needs intensive behavioral therapy — how much does my plan cover?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_BehavioralTherapy"
+      EXPECTED_KEYWORDS: "behavioral|therapy|ABA|covered|child|plan|prior auth|session|benefit"
+
+# --------------------------------------------------------------------------
+# Q6: I need home health care after surgery — what's covered and for how long?
+# Expected: Bot explains home health benefit, visit limits, and skilled vs custodial distinction
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need home health care after surgery — what's covered and for how long?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_HomeHealthCare"
+      EXPECTED_KEYWORDS: "home health|covered|skilled|visit|limit|surgery|plan|benefit|prior auth"

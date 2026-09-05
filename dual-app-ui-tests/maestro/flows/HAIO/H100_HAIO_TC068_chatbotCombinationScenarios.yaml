@@ -1,0 +1,104 @@
+# HAIO Chatbot - Combination Scenarios (Single Session)
+# Validates HAIO handles multi-intent questions that span coverage, cost, clinical,
+# and prior auth domains simultaneously — the most complex real-world queries
+#
+# Scenarios (4 questions):
+#   1.  Ozempic: coverage + cost + savings programs (triple-intent)
+#   2.  Insulin biosimilar: clinical + formulary + cost (triple-intent)
+#   3.  6-medication review: interactions + cheapest plan tier (dual-intent)
+#   4.  Specialty drug prior auth: initiation + timeline (dual-intent)
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC068 - Chatbot Combination Scenarios"
+tags:
+  - haio
+  - chatbot
+  - combination
+  - multi-intent
+  - complex
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# COMBINATION SCENARIOS - 4 Complex Multi-Intent Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Ozempic — coverage + cost + savings programs (triple-intent)
+# Expected: Bot addresses formulary coverage, member-specific cost estimate,
+#           AND manufacturer/PAP savings programs in one cohesive response
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I was just prescribed Ozempic — is it covered, what will it cost me, and are there any savings programs available?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_OzempicTripleIntent"
+      EXPECTED_KEYWORDS: "Ozempic|covered|formulary|cost|copay|savings|assistance|prior auth|tier|manufacturer"
+
+# --------------------------------------------------------------------------
+# Q2: Insulin biosimilar — clinical + formulary + cost (triple-intent)
+# Expected: Bot confirms therapeutic equivalence of biosimilar, formulary tier,
+#           and cost differential vs brand insulin
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My insulin costs went up — can my doctor prescribe a biosimilar that's on a lower tier?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-highcost-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_InsulinBiosimilar"
+      EXPECTED_KEYWORDS: "insulin|biosimilar|tier|formulary|equivalent|cost|lower|prescriber|interchangeable"
+
+# --------------------------------------------------------------------------
+# Q3: 6-medication review — interactions + cheapest plan tier (dual-intent)
+# Expected: Bot surfaces any critical interactions AND identifies lowest-cost tier
+#           options for all 6 drugs from member's formulary
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I take 6 medications — can you review them for interactions and tell me which ones are cheapest through my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-drug-interactions-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_SixMedReview"
+      EXPECTED_KEYWORDS: "help|medication|interactions|plan|reviewing|sounds|like|pressing"
+
+# --------------------------------------------------------------------------
+# Q4: Specialty drug prior auth — initiation + timeline (dual-intent)
+# Expected: Bot explains how to start the PA process AND provides realistic
+#           approval timeline for specialty drugs
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My specialty drug requires prior authorization — can you start that process and tell me how long it will take?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SpecialtyPAInitiation"
+      EXPECTED_KEYWORDS: "prior auth|PA|specialty|start|process|prescriber|submit|days|approval|timeline"

@@ -1,0 +1,115 @@
+# HAIO Chatbot - Appointments & Care Navigation Questions (Single Session)
+# Validates HAIO responds with practical care coordination guidance, visit preparation,
+# and appropriate care-setting recommendations
+#
+# Scenarios (5 questions):
+#   1.  Do I need a specialist or can my primary care doctor handle this?
+#   2.  What should I tell my doctor about these symptoms?
+#   3.  How do I prepare for my upcoming bloodwork?
+#   4.  What questions should I ask my cardiologist?
+#   5.  Is this something I should go to urgent care or the ER for?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC056 - Chatbot Care Navigation"
+tags:
+  - haio
+  - chatbot
+  - care-navigation
+  - appointments
+  - clinical
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# CARE NAVIGATION - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Do I need a specialist or can my primary care doctor handle this?
+# Expected: Bot provides clinical criteria for specialist referral vs PCP management
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Do I need a specialist or can my primary care doctor handle this?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_SpecialistVsPCP"
+      EXPECTED_KEYWORDS: "care|doctor|wellness|primary|blood|emergency|extreme|based"
+
+# --------------------------------------------------------------------------
+# Q2: What should I tell my doctor about these symptoms?
+# Expected: Bot coaches member on SBAR-style symptom communication
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What should I tell my doctor about these symptoms?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_DoctorSymptomComm"
+      EXPECTED_KEYWORDS: "information|symptoms|details|doctor|want|make|sure|right"
+
+# --------------------------------------------------------------------------
+# Q3: How do I prepare for my upcoming bloodwork?
+# Expected: Bot explains fasting requirements, hydration, and what to avoid
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I prepare for my upcoming bloodwork?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_BloodworkPrep"
+      EXPECTED_KEYWORDS: "test|fasting|blood|ask|doctor|tests|plain|water"
+
+# --------------------------------------------------------------------------
+# Q4: What questions should I ask my cardiologist?
+# Expected: Bot provides evidence-based question checklist for cardiology visit
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What questions should I ask my cardiologist?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-schedule-care-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_CardiologistQuestions"
+      EXPECTED_KEYWORDS: "ask|heart|symptoms|risk|blood|pressure|cholesterol|need"
+
+# --------------------------------------------------------------------------
+# Q5: Is this something I should go to urgent care or the ER for?
+# Expected: Bot provides clear triage criteria distinguishing urgent care from ER
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this something I should go to urgent care or the ER for?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-symptoms-triage-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_UrgentCareVsER"
+      EXPECTED_KEYWORDS: "care|urgent|symptoms|emergency|immediately|chest|pain|shortness"

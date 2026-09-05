@@ -1,0 +1,114 @@
+# HAIO Chatbot - Lab Results & Vitals Questions (Single Session)
+# Validates HAIO responds with relevant lab interpretation, reference ranges,
+# and appropriate follow-up guidance
+#
+# Scenarios (5 questions):
+#   1.  My cholesterol came back at 210 — is that bad?
+#   2.  What does a high creatinine level mean?
+#   3.  My heart rate has been 95 at rest — is that concerning?
+#   4.  What should my blood pressure be at my age?
+#   5.  My hemoglobin is low — could I be anemic?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC052 - Chatbot Lab Results Vitals"
+tags:
+  - haio
+  - chatbot
+  - lab-results
+  - vitals
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# LAB RESULTS & VITALS - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: My cholesterol came back at 210 — is that bad?
+# Expected: Bot interprets borderline-high total cholesterol and advises doctor follow-up
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My cholesterol came back at 210 — is that bad?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-lab-results-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_Cholesterol210"
+      EXPECTED_KEYWORDS: "cholesterol|total|high|210|level|considered|borderline|alone"
+
+# --------------------------------------------------------------------------
+# Q2: What does a high creatinine level mean?
+# Expected: Bot explains creatinine as kidney function marker and follow-up guidance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What does a high creatinine level mean?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-lab-results-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_HighCreatinine"
+      EXPECTED_KEYWORDS: "creatinine|kidneys|blood|medications|drugs|waste|levels|kidney"
+
+# --------------------------------------------------------------------------
+# Q3: My heart rate has been 95 at rest — is that concerning?
+# Expected: Bot interprets high-normal resting HR and recommends provider evaluation
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My heart rate has been 95 at rest — is that concerning?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-lab-results-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_HeartRate95"
+      EXPECTED_KEYWORDS: "heart|symptoms|urgent|100|resting|rate|beats|per"
+
+# --------------------------------------------------------------------------
+# Q4: What should my blood pressure be at my age?
+# Expected: Bot provides age-appropriate BP targets and hypertension thresholds
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What should my blood pressure be at my age?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-lab-results-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_BPTarget"
+      EXPECTED_KEYWORDS: "health|blood|pressure|systolic|diastolic|higher|120|adults"
+
+# --------------------------------------------------------------------------
+# Q5: My hemoglobin is low — could I be anemic?
+# Expected: Bot interprets low hemoglobin as possible anemia and recommends iron/B12 follow-up
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My hemoglobin is low — could I be anemic?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-lab-results-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_LowHemoglobin"
+      EXPECTED_KEYWORDS: "hemoglobin|low|yes|primary|definition|anemia|protein|red"

@@ -1,0 +1,144 @@
+# HAIO Chatbot - Mail Order Pharmacy Questions (Single Session)
+# Validates HAIO responds with accurate mail order enrollment, delivery timing,
+# tracking, and eligibility guidance
+#
+# Scenarios (7 questions):
+#   1.  How do I sign up for mail order pharmacy?
+#   2.  How long does mail order delivery take?
+#   3.  Can all medications be sent through mail order?
+#   4.  What happens if my mail order medication is lost or damaged?
+#   5.  Can I get a 90-day supply through mail order?
+#   6.  Is mail order cheaper than retail pharmacy for my plan?
+#   7.  How do I track my mail order shipment?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC063 - Chatbot Mail Order Pharmacy"
+tags:
+  - haio
+  - chatbot
+  - mail-order
+  - pharmacy
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# MAIL ORDER PHARMACY - 7 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: How do I sign up for mail order pharmacy?
+# Expected: Bot explains enrollment steps via app, web, or phone
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I sign up for mail order pharmacy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_MailOrderSignUp"
+      EXPECTED_KEYWORDS: "mail order|sign up|enroll|app|online|phone|Caremark|pharmacy|register"
+
+# --------------------------------------------------------------------------
+# Q2: How long does mail order delivery take?
+# Expected: Bot explains standard 3-5 business day delivery and expedited options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How long does mail order delivery take?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_MailOrderDeliveryTime"
+      EXPECTED_KEYWORDS: "prescriptions|information|get|take|action|current|in-process|check"
+
+# --------------------------------------------------------------------------
+# Q3: Can all medications be sent through mail order?
+# Expected: Bot explains controlled substance restrictions and specialty exclusions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can all medications be sent through mail order?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_MailOrderEligibility"
+      EXPECTED_KEYWORDS: "medications|mail|order|cannot|drug|call|pharmacy|details"
+
+# --------------------------------------------------------------------------
+# Q4: What happens if my mail order medication is lost or damaged?
+# Expected: Bot explains replacement process and claim filing for lost shipment
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What happens if my mail order medication is lost or damaged in shipping?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_LostDamagedMedication"
+      EXPECTED_KEYWORDS: "help|prescription|delivery|assist|better|process"
+
+# --------------------------------------------------------------------------
+# Q5: Can I get a 90-day supply through mail order?
+# Expected: Bot confirms 90-day supply availability and cost savings vs 30-day
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get a 90-day supply through mail order?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_MailOrder90Day"
+      EXPECTED_KEYWORDS: "plan|benefits|supply|mail|order|let|check|see"
+
+# --------------------------------------------------------------------------
+# Q6: Is mail order cheaper than retail pharmacy for my plan?
+# Expected: Bot compares plan-specific retail vs mail order cost-sharing
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is mail order cheaper than retail pharmacy for my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_MailOrderVsRetail"
+      EXPECTED_KEYWORDS: "mail order|retail|cheaper|cost|plan|save|copay|\\$|compare|prefer"
+
+# --------------------------------------------------------------------------
+# Q7: How do I track my mail order shipment?
+# Expected: Bot explains tracking link access via app or website
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I track my mail order shipment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mail-order-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_TrackMailOrder"
+      EXPECTED_KEYWORDS: "prescriptions|information|get|take|action|current|in-process|check"

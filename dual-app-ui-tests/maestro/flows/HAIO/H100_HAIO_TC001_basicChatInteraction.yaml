@@ -1,0 +1,60 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC001 - Basic Chat Interaction"
+tags:
+  - haio
+  - chat
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# POSITIVE TEST: Successful basic chat interaction with HAIO
+# User Journey: Login -> Open HAIO -> Send message -> Receive response -> Verify
+# =============================================================================
+- runFlow:
+    file: ../../subflows/Common/launchApp.yaml
+- runFlow:
+    file: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+
+# Step 2: Handle any post-login overlays before verification
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to HAIO
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify home screen elements
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.greetingMsg}
+- scrollUntilVisible:
+    element: ${output.haio_home.chatInputField}
+    direction: DOWN
+    timeout: 5000
+- assertVisible: ${output.haio_home.chatInputField}
+
+# Send a test message
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are my recent visits?"
+
+# Verify response received
+- assertVisible: ${output.haio_chat.recentVisitsHeading}
+
+# Verify quick reply options are available
+- assertVisible: ${output.haio_chat.endChatBtn}
+- tapOn: ${output.haio_chat.endChatBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.haio_chat.endChatAlertHeader}
+- assertVisible: ${output.haio_chat.noBtn}
+- assertVisible: ${output.haio_chat.yesBtn}
+- tapOn: ${output.haio_chat.yesBtn}

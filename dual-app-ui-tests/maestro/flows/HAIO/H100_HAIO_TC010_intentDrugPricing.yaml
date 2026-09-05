@@ -1,0 +1,111 @@
+# HAIO Intent: Drug Pricing - Single Session
+# All 10 drug pricing questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC010 - Intent Drug Pricing"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# DRUG PRICING INTENT - 10 Questions
+# ============================================================================
+
+# Q1: How much will my medication cost? — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much will my medication cost?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "Check medications"
+      EXPECTED_HEADER: "Drug Pricing"
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: What's the price of my prescription?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the price of my prescription?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q3: Check drug prices
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Check drug prices"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q4: Is there a cheaper alternative?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a cheaper alternative?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q5: What's the cost of this drug?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the cost of this drug?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q6: How much is my copay?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much is my copay?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q7: Compare medication prices
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Compare medication prices"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q8: What's the generic version cost?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the generic version cost?"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q9: Show me drug pricing
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me drug pricing"
+- runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+
+# Q10: What tier is my medication? — Click CTA and verify navigation
+# - runFlow:
+#     file: ../../subflows/HAIO/interactions/send-message.yaml
+#     env:
+#       MESSAGE: "What tier is my medication?"
+# - runFlow: ../../subflows/HAIO/intents/verify-drug-pricing-response.yaml
+# - runFlow:
+#     file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+#     env:
+#       CTA_TEXT: "Check medications"
+#       EXPECTED_HEADER: "Drug Pricing"

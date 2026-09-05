@@ -1,0 +1,74 @@
+# HAIO Intent: DMR (Prescription Reimbursement) - Single Session
+# All 5 reimbursement questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC009 - Intent Dmr"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# DMR (REIMBURSEMENT) INTENT - 5 Questions
+# ============================================================================
+
+# Q1: How do I get reimbursed for prescriptions? — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I get reimbursed for prescriptions?"
+- runFlow: ../../subflows/HAIO/intents/verify-dmr-response.yaml
+
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "Submit Reimbursement Claim"
+      EXPECTED_HEADER: "Add claim details"
+- tapOn: ${output.haio_home.backBtn}
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: Submit a prescription reimbursement
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Submit a prescription reimbursement"
+- runFlow: ../../subflows/HAIO/intents/verify-dmr-response.yaml
+
+# Q3: I paid out of pocket, how do I get my money back?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I paid out of pocket, how do I get my money back?"
+- runFlow: ../../subflows/HAIO/intents/verify-dmr-response.yaml
+
+# Q4: Where do I send my receipts?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where do I send my receipts?"
+- runFlow: ../../subflows/HAIO/intents/verify-dmr-response.yaml
+
+# Q5: What's the status of my reimbursement? — Click CTA and verify navigation
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the status of my reimbursement?"
+- runFlow: ../../subflows/HAIO/intents/verify-dmr-response.yaml
+

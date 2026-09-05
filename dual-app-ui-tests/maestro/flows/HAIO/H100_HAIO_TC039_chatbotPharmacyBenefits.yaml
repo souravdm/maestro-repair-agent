@@ -1,0 +1,128 @@
+# HAIO Chatbot - Prescriptions & Pharmacy Benefits Questions (Single Session)
+# Validates HAIO responds correctly to formulary, coverage, cost, and pharmacy network queries
+#
+# Scenarios (6 questions):
+#   1.  Is my medication covered under my plan?
+#   2.  Why did my prescription cost more this month?
+#   3.  What tier is my drug on my formulary?
+#   4.  Can I get a 90-day supply to save money?
+#   5.  Is there a generic version of my medication that's covered?
+#   6.  Which pharmacy is in-network for my plan?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC039 - Chatbot Pharmacy Benefits"
+tags:
+  - haio
+  - chatbot
+  - pharmacy-benefits
+  - formulary
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PRESCRIPTIONS & PHARMACY BENEFITS - 6 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Is my medication covered under my plan?
+# Expected: Bot confirms coverage status or prompts for drug name to look up
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my medication covered under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_MedCovered"
+      EXPECTED_KEYWORDS: "covered|formulary|plan|medication|tier|prescription|benefit"
+
+# --------------------------------------------------------------------------
+# Q2: Why did my prescription cost more this month?
+# Expected: Bot explains tier changes, deductible reset, or formulary updates
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Why did my prescription cost more this month?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-cost-billing-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_RxCostIncrease"
+      EXPECTED_KEYWORDS: "cost|tier|formulary|deductible|plan year|medication|change|benefit"
+
+# --------------------------------------------------------------------------
+# Q3: What tier is my drug on my formulary?
+# Expected: Bot explains formulary tiers or prompts for drug name
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What tier is my drug on my formulary?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_FormularyTier"
+      EXPECTED_KEYWORDS: "tier|formulary|drug|generic|preferred|plan|cost|covered"
+
+# --------------------------------------------------------------------------
+# Q4: Can I get a 90-day supply to save money?
+# Expected: Bot explains 90-day eligibility and cost savings
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get a 90-day supply of my medication to save money?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_90DaySavings"
+      EXPECTED_KEYWORDS: "unable|help|health|pharmacy|sorry|answer|question|general"
+
+# --------------------------------------------------------------------------
+# Q5: Is there a generic version of my medication that's covered?
+# Expected: Bot explains generic availability and formulary coverage
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a generic version of my medication that's covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_GenericAvailable"
+      EXPECTED_KEYWORDS: "generic|covered|formulary|equivalent|medication|brand|cost|tier"
+
+# --------------------------------------------------------------------------
+# Q6: Which pharmacy is in-network for my plan?
+# Expected: Bot lists in-network pharmacy chains or directs to pharmacy finder
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Which pharmacy is in-network for my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_InNetworkPharmacy"
+      EXPECTED_KEYWORDS: "in-network|pharmacy|CVS|network|plan|find|preferred|directory"

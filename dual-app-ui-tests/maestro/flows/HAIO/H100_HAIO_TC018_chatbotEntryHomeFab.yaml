@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC018 - Chatbot Entry Home Fab"
+tags:
+  - haio
+  - entry
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Launch AI assistant via global FAB on Health Home
+# User Journey: Login -> Health Home -> Tap FAB -> Verify greeting lockup + quick replies
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Health AI Home via FAB
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Verify greeting lockup content
+- assertVisible: ${output.haio_ai_home.healthAssistantTitle}
+- assertVisible: ${output.haio_ai_home.greetingLockup}
+- assertVisible: ${output.haio_ai_home.chatInputField}
+
+# Verify at least one quick reply chip is visible
+- assertVisible: "${output.haio_ai_home.quickReplyTrackSymptoms}|${output.haio_ai_home.quickReplyHealthVisit}|${output.haio_ai_home.quickReplyProactiveCare}"
+
+- takeScreenshot: TC018_HAIO_Home_FAB_Entry

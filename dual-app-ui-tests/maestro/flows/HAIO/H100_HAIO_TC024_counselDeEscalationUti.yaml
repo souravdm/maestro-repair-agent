@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC024 - Counsel De Escalation Uti"
+tags:
+  - haio
+  - counsel
+  - de-escalation
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/CounselScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Counsel agent flow 4 — UTI de-escalation
+# User Journey: Login -> AI Home -> UTI symptom input -> Escalation -> De-escalation ->
+#               SLA disclaimer scrolled to bottom
+# Figma ref: section "MVP-2-26 - Counsel Sub Agent Escalations",
+#            "Counsel agent flow 4: Emergency > De-escalation - UTI"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Submit UTI symptom
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I think I have a urinary tract infection, it burns when I urinate"
+
+# Verify counsel sub-agent activates
+- runFlow: ../../subflows/HAIO/counsel/verify-counsel-symptom-entry.yaml
+
+# Verify UTI-specific de-escalation response and disclaimer
+- assertVisible: ${output.haio_counsel.utiDeEscalationMsg}
+- assertVisible: ${output.haio_counsel.utiSelfCareMsg}
+- takeScreenshot: TC024_HAIO_UTI_De_Escalation
+
+- runFlow: ../../subflows/HAIO/counsel/verify-de-escalation-response.yaml

@@ -1,0 +1,115 @@
+# HAIO Chatbot - Preventive Care & Screenings Questions (Single Session)
+# Validates HAIO responds with age-appropriate and risk-based preventive
+# care recommendations and screening schedules
+#
+# Scenarios (5 questions):
+#   1.  When should I get my next colonoscopy?
+#   2.  What vaccines do I need as an adult?
+#   3.  How often should I get a mammogram?
+#   4.  Am I due for any screenings based on my age and history?
+#   5.  What cancer screenings should someone with my family history prioritize?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC053 - Chatbot Preventive Care"
+tags:
+  - haio
+  - chatbot
+  - preventive-care
+  - screenings
+  - clinical
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PREVENTIVE CARE & SCREENINGS - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: When should I get my next colonoscopy?
+# Expected: Bot applies age/risk-based colonoscopy guideline (45+, 10-year intervals)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When should I get my next colonoscopy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_ColonoscopySchedule"
+      EXPECTED_KEYWORDS: "screening|years|results|generally|colorectal|cancer|starts|age"
+
+# --------------------------------------------------------------------------
+# Q2: What vaccines do I need as an adult?
+# Expected: Bot lists CDC-recommended adult vaccines (flu, COVID, shingles, pneumonia, Tdap, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What vaccines do I need as an adult?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_AdultVaccines"
+      EXPECTED_KEYWORDS: "age|adults|health|recommended|against|prevent|protect|doses"
+
+# --------------------------------------------------------------------------
+# Q3: How often should I get a mammogram?
+# Expected: Bot explains annual vs biennial mammogram recommendations by age/risk
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How often should I get a mammogram?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_MammogramFrequency"
+      EXPECTED_KEYWORDS: "screening|breast|mammograms|medical|cancer|doctor|recommend|like"
+
+# --------------------------------------------------------------------------
+# Q4: Am I due for any screenings based on my age and history?
+# Expected: Bot uses member health data to surface personalized screening recommendations
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Am I due for any screenings based on my age and history?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_PersonalizedScreenings"
+      EXPECTED_KEYWORDS: "health|currently|records|file|listing|gender|male|history"
+
+# --------------------------------------------------------------------------
+# Q5: What cancer screenings should someone with my family history prioritize?
+# Expected: Bot explains hereditary risk screening (BRCA, Lynch syndrome, colon, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What cancer screenings should someone with my family history prioritize?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_FamilyHistoryScreenings"
+      EXPECTED_KEYWORDS: "details|family|diagnosis|history|file|share|cancers|run"

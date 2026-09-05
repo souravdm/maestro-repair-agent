@@ -1,0 +1,115 @@
+# HAIO Chatbot - Chronic Condition Management Questions (Single Session)
+# Validates HAIO responds with evidence-based guidance on diabetes, hypertension,
+# and ongoing condition self-management
+#
+# Scenarios (5 questions):
+#   1.  My blood sugar is 220 right now — what should I do?
+#   2.  I missed my blood pressure medication this morning — should I take it now?
+#   3.  What foods should I avoid with Type 2 diabetes?
+#   4.  How do I know if my A1C is trending in the right direction?
+#   5.  Can stress affect my blood sugar levels?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC050 - Chatbot Chronic Condition Management"
+tags:
+  - haio
+  - chatbot
+  - chronic-condition
+  - diabetes
+  - hypertension
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# CHRONIC CONDITION MANAGEMENT - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: My blood sugar is 220 right now — what should I do?
+# Expected: Bot gives immediate guidance and escalates if symptomatic
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My blood sugar is 220 right now — what should I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_HighBloodSugar"
+      EXPECTED_KEYWORDS: "emergency|care|experiencing|nausea|vomiting|abdominal|pain|extreme"
+
+# --------------------------------------------------------------------------
+# Q2: I missed my blood pressure medication this morning — should I take it now?
+# Expected: Bot advises on missed-dose guidelines for antihypertensives
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I missed my blood pressure medication this morning — should I take it now?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_MissedBPMed"
+      EXPECTED_KEYWORDS: "medication|take|drug|name|blood|pressure|time|usually"
+
+# --------------------------------------------------------------------------
+# Q3: What foods should I avoid with Type 2 diabetes?
+# Expected: Bot lists high-GI foods, refined carbs, and sugary drinks to avoid
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What foods should I avoid with Type 2 diabetes?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_DiabeticDiet"
+      EXPECTED_KEYWORDS: "blood|sugar|keep|levels|foods|sugary|drinks|regular"
+
+# --------------------------------------------------------------------------
+# Q4: How do I know if my A1C is trending in the right direction?
+# Expected: Bot explains A1C target ranges and monitoring frequency
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I know if my A1C is trending in the right direction?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_A1CTrend"
+      EXPECTED_KEYWORDS: "test|plan|a1c|average|blood|sugar|percentage|trend"
+
+# --------------------------------------------------------------------------
+# Q5: Can stress affect my blood sugar levels?
+# Expected: Bot explains cortisol-driven blood sugar elevation in stress response
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can stress affect my blood sugar levels?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-managed-health-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_StressBloodSugar"
+      EXPECTED_KEYWORDS: "stress|blood|sugar|hormones|affect|levels|body|glucose"

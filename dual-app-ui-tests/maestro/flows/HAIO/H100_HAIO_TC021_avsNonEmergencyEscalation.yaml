@@ -1,0 +1,41 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC021 - Avs Non Emergency Escalation"
+tags:
+  - haio
+  - avs
+  - escalation
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: AVS chat reaches non-emergency escalation; verify CTA and store hours sheet
+# User Journey: Login -> AI Home -> AVS Chat -> Non-Emergency Escalation ->
+#               Store Hours bottom sheet
+# Figma ref: section "MVP-2-26 - After Visit Summary", frame "Non-Emergency Escalation"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to speak to someone about my health issue"
+
+# Trigger non-emergency escalation and verify store hours sheet
+- runFlow: ../../subflows/HAIO/avs/trigger-non-emergency-escalation.yaml

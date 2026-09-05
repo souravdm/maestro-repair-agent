@@ -1,0 +1,144 @@
+# HAIO Chatbot - Wellness & Incentive Program Questions (Single Session)
+# Validates HAIO responds correctly to gym discounts, rewards programs, nurse hotlines,
+# EAP access, and fitness tracker reimbursement queries
+#
+# Scenarios (7 questions):
+#   1.  Does my plan offer gym membership discounts?
+#   2.  How do I earn wellness rewards points?
+#   3.  What programs does my plan offer for managing diabetes?
+#   4.  Is there a nurse hotline I can call?
+#   5.  Does my employer offer an EAP — what does it cover?
+#   6.  Can I get reimbursed for a fitness tracker?
+#   7.  Does my plan have a wellness portal or app?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC048 - Chatbot Wellness Incentives"
+tags:
+  - haio
+  - chatbot
+  - wellness
+  - incentives
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# WELLNESS & INCENTIVE PROGRAMS - 7 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Does my plan offer gym membership discounts?
+# Expected: Bot confirms gym discount programs (SilverSneakers, fitness reimbursement, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan offer gym membership discounts?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_GymDiscount"
+      EXPECTED_KEYWORDS: "gym|discount|fitness|SilverSneakers|membership|plan|benefit|reimbursement"
+
+# --------------------------------------------------------------------------
+# Q2: How do I earn wellness rewards points?
+# Expected: Bot explains rewards activities and point redemption process
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I earn wellness rewards points?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_WellnessRewards"
+      EXPECTED_KEYWORDS: "help|health|prescriptions|pharmacy|plan|benefits|something|set"
+
+# --------------------------------------------------------------------------
+# Q3: What programs does my plan offer for managing diabetes?
+# Expected: Bot describes diabetes management programs and enrollment
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What programs does my plan offer for managing diabetes?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_DiabetesProgram"
+      EXPECTED_KEYWORDS: "diabetes|management|program|enroll|care|coaching|plan|benefit"
+
+# --------------------------------------------------------------------------
+# Q4: Is there a nurse hotline I can call?
+# Expected: Bot provides nurse advice line contact information
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a nurse hotline I can call?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_NurseHotline"
+      EXPECTED_KEYWORDS: "emergency|nurse|health|insurance|call|911|chat|doesn"
+
+# --------------------------------------------------------------------------
+# Q5: Does my employer offer an EAP — what does it cover?
+# Expected: Bot explains EAP scope (counseling, financial, legal, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my employer offer an EAP — what does it cover?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_EAP"
+      EXPECTED_KEYWORDS: "EAP|employee assistance|counseling|sessions|free|confidential|benefit|mental health"
+
+# --------------------------------------------------------------------------
+# Q6: Can I get reimbursed for a fitness tracker?
+# Expected: Bot explains fitness device reimbursement limits and how to submit
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get reimbursed for a fitness tracker?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_FitnessTrackerReimburse"
+      EXPECTED_KEYWORDS: "fitness tracker|reimbursed|\\$|submit|plan|wellness|benefit|device"
+
+# --------------------------------------------------------------------------
+# Q7: Does my plan have a wellness portal or app?
+# Expected: Bot explains member wellness portal, app features, and access instructions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan have a wellness portal or app?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-wellness-incentives-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_WellnessPortal"
+      EXPECTED_KEYWORDS: "wellness|portal|app|member|access|health|program|plan"

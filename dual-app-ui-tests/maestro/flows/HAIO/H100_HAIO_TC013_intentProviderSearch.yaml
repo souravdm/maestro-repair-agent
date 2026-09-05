@@ -1,0 +1,85 @@
+# HAIO Intent: Provider Search - Single Session
+# All 7 provider search questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC013 - Intent Provider Search"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PROVIDER SEARCH INTENT - 7 Questions
+# ============================================================================
+
+# Q1: Find a doctor near me — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find a doctor near me"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "Find care"
+      EXPECTED_HEADER: "Provider Search"
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: Is my doctor in-network?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my doctor in-network?"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+
+# Q3: What providers are covered?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What providers are covered?"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+
+# Q4: Find a specialist
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find a specialist"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+
+# Q5: Where can I see a doctor?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where can I see a doctor?"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+
+# Q6: What hospitals are in my network?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What hospitals are in my network?"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml
+
+# Q7: Is this provider covered? — Click CTA and verify navigation
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this provider covered?"
+- runFlow: ../../subflows/HAIO/intents/verify-provider-search-response.yaml

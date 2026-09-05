@@ -1,0 +1,42 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC025 - Multi Record Show Recent"
+tags:
+  - haio
+  - multi-avs
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Multi-record summary — show recent visits list
+# User Journey: Login -> Health AI Home -> "show recent" message ->
+#               Bot thinking state -> Multiple result selection list
+# Figma ref: section "MVP 2-26 - Multi-Record Summary (e.g. Multi AVS)"
+#            frames: "Show recent - thinking" + "Show recent - multiple result selection"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Trigger multi-record show recent flow
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my recent visits"
+
+# Verify multi-record selection list loads correctly
+- runFlow: ../../subflows/HAIO/multi-record/verify-multi-record-selection.yaml

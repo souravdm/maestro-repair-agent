@@ -1,0 +1,59 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC002 - Quick Reply Interaction"
+tags:
+  - haio
+  - quick-reply
+  - positive
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# POSITIVE TEST: Use quick reply buttons for faster interaction
+# User Journey: Login -> Open HAIO -> Tap quick reply -> Receive response
+# =============================================================================
+- waitForAnimationToEnd
+
+# Launch app and login (launchAndSetup handles clearState per platform)
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+# Navigate to HAIO
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Load screen objects
+- runScript: ../../screens/HAIO/HomeScreen.js
+- runScript: ../../screens/HAIO/ChatScreen.js
+
+# Verify quick reply buttons are visible
+- assertVisible: ${output.haio_home.trackSymptomsBtn}
+- assertVisible: ${output.haio_home.proactiveCareBtn}
+- assertVisible: ${output.haio_home.healthVisitBtn}
+
+# Test quick reply: Track symptoms
+- runFlow:
+    file: ../../subflows/HAIO/interactions/select-quick-reply.yaml
+    env:
+      QUICK_REPLY: ${output.haio_home.trackSymptomsBtn}
+
+# Verify response received
+- assertVisible: "${output.haio_chat.followUpQuestion}|${output.haio_chat.recentVisitsHeading}"
+
+# Start new chat
+- tapOn: ${output.haio_chat.newChatBtn}
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+
+# Test quick reply: Proactive care
+- runFlow:
+    file: ../../subflows/HAIO/interactions/select-quick-reply.yaml
+    env:
+      QUICK_REPLY: ${output.haio_home.proactiveCareBtn}
+
+# Verify response received
+- assertVisible: "${output.haio_chat.followUpQuestion}|${output.haio_chat.recentVisitsHeading}"
+

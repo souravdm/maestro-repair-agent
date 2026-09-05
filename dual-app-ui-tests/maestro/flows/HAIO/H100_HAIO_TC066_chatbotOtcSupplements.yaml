@@ -1,0 +1,130 @@
+# HAIO Chatbot - Over-The-Counter & Supplements Questions (Single Session)
+# Validates HAIO responds with accurate OTC safety guidance, supplement-drug interactions,
+# FSA eligibility, and brand vs generic education
+#
+# Scenarios (6 questions):
+#   1.  What OTC pain reliever is safe with my current medications?
+#   2.  Is this supplement safe to take with my prescriptions?
+#   3.  Can I use my FSA for OTC medications?
+#   4.  What is the difference between brand and generic medications?
+#   5.  Are herbal supplements regulated the same as medications?
+#   6.  Should I tell my doctor about the supplements I take?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC066 - Chatbot Otc Supplements"
+tags:
+  - haio
+  - chatbot
+  - otc
+  - supplements
+  - pharmacy
+  - clinical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# OTC & SUPPLEMENTS - 6 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What OTC pain reliever is safe with my current medications?
+# Expected: Bot assesses common OTC interactions (ibuprofen with blood thinners, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What OTC pain reliever is safe with my current medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_SafePainReliever"
+      EXPECTED_KEYWORDS: "medication|help|pain|medications|currently|prescription|drugs|records"
+
+# --------------------------------------------------------------------------
+# Q2: Is this supplement safe to take with my prescriptions?
+# Expected: Bot explains common supplement-drug interactions and recommends pharmacist review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is this supplement safe to take with my prescriptions?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_SupplementInteraction"
+      EXPECTED_KEYWORDS: "medication|interactions|prescription|medications|currently|prescriptions|side|effects"
+
+# --------------------------------------------------------------------------
+# Q3: Can I use my FSA for OTC medications?
+# Expected: Bot confirms CARES Act FSA OTC eligibility and which items qualify
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I use my FSA for OTC medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_FSAforOTC"
+      EXPECTED_KEYWORDS: "FSA|OTC|over-the-counter|CARES Act|eligible|use|medication|qualified|purchase"
+
+# --------------------------------------------------------------------------
+# Q4: What is the difference between brand and generic medications?
+# Expected: Bot explains bioequivalence, FDA standards, and cost difference
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is the difference between brand and generic medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_BrandVsGeneric"
+      EXPECTED_KEYWORDS: "generic|medications|ingredients|drugs|brand-name|benefits|active|dosage"
+
+# --------------------------------------------------------------------------
+# Q5: Are herbal supplements regulated the same as medications?
+# Expected: Bot explains DSHEA vs FDA drug approval differences
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Are herbal supplements regulated the same as medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_HerbalRegulation"
+      EXPECTED_KEYWORDS: "fda|supplements|herbal|medications|approval|prescription|medication|sold"
+
+# --------------------------------------------------------------------------
+# Q6: Should I tell my doctor about the supplements I take?
+# Expected: Bot strongly affirms disclosure to prevent interactions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Should I tell my doctor about the supplements I take?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-otc-supplements-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_DeclareSupplements"
+      EXPECTED_KEYWORDS: "supplements|medications|health|blood|tests|healthcare|take|drug"

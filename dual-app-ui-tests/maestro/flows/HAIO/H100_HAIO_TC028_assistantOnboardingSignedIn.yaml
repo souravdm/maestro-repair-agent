@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC028 - Assistant Onboarding Signed In"
+tags:
+  - haio
+  - onboarding
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/AssistantOnboardingScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: First-launch onboarding for signed-in user
+# User Journey: Login (fresh state) -> Education screen -> Push notification
+#               enrollment -> Records connect -> Verify completion
+# Figma ref: section "MVP 2-26 - Assistant Onboarding & Records Connect Variations"
+# NOTE: Use a dedicated test user with cleared onboarding state to avoid state bleed
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to AI Home (onboarding triggers on first launch)
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Complete full onboarding sequence
+- runFlow: ../../subflows/HAIO/onboarding/complete-assistant-onboarding.yaml

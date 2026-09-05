@@ -1,0 +1,159 @@
+# HAIO Chatbot - Prescription Management Questions (Single Session)
+# Validates HAIO responds correctly to the full prescription lifecycle:
+# transfers, renewals, auto-refills, tracking, expiration, and early refills
+#
+# Scenarios (8 questions):
+#   1.  How do I transfer my prescription to a new pharmacy?
+#   2.  My prescription expired — what do I do?
+#   3.  Can I get an early refill on my medication?
+#   4.  How do I set up automatic refills?
+#   5.  My doctor sent a prescription — where is it?
+#   6.  Can I split my prescription between two pharmacies?
+#   7.  How do I request a prescription renewal without an office visit?
+#   8.  My prescription shows 0 refills remaining — what now?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC059 - Chatbot Prescription Management"
+tags:
+  - haio
+  - chatbot
+  - prescription-management
+  - pharmacy
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PRESCRIPTION MANAGEMENT - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: How do I transfer my prescription to a new pharmacy?
+# Expected: Bot provides step-by-step transfer instructions and what info to bring
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I transfer my prescription to a new pharmacy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_TransferPharmacy"
+      EXPECTED_KEYWORDS: "pharmacy|transfer|prescriptions|cvs|easily|another|need|non-cvs"
+
+# --------------------------------------------------------------------------
+# Q2: My prescription expired — what do I do?
+# Expected: Bot advises contacting prescriber for renewal and any bridge supply options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My prescription expired — what do I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_ExpiredRx"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q3: Can I get an early refill on my medication?
+# Expected: Bot explains early refill windows, travel exceptions, and plan rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get an early refill on my medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_EarlyRefill"
+      EXPECTED_KEYWORDS: "let|take|another|look"
+
+# --------------------------------------------------------------------------
+# Q4: How do I set up automatic refills?
+# Expected: Bot explains auto-refill enrollment at pharmacy or via app
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I set up automatic refills?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_AutoRefillSetup"
+      EXPECTED_KEYWORDS: "refill|having|trouble|processing|request|right|now|please"
+
+# --------------------------------------------------------------------------
+# Q5: My doctor sent a prescription — where is it?
+# Expected: Bot explains e-prescribing routing and how to locate pending Rx
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My doctor sent a prescription — where is it?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_FindERx"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q6: Can I split my prescription between two pharmacies?
+# Expected: Bot explains partial fill rules and pharmacy transfer process
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I split my prescription between two pharmacies?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_SplitRx"
+      EXPECTED_KEYWORDS: "unable|help|health|pharmacy|sorry|answer|question|general"
+
+# --------------------------------------------------------------------------
+# Q7: How do I request a prescription renewal without an office visit?
+# Expected: Bot explains telehealth renewal, portal messaging, and pharmacy-initiated renewal
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I request a prescription renewal without an office visit?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_RxRenewalNoVisit"
+      EXPECTED_KEYWORDS: "refill|having|trouble|processing|request|right|now|please"
+
+# --------------------------------------------------------------------------
+# Q8: My prescription shows 0 refills remaining — what now?
+# Expected: Bot instructs to contact prescriber or pharmacist to request renewal
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My prescription shows 0 refills remaining — what now?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_ZeroRefills"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"

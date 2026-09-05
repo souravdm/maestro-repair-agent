@@ -1,0 +1,187 @@
+# HAIO Chatbot - Prescription Questions (Single Session)
+# Validates HAIO responds correctly to all prescription-related queries
+#
+# Scenarios (10 questions):
+#   1.  Prescription order status
+#   2.  Transfer prescription to different pharmacy
+#   3.  90-day supply request
+#   4.  Medication side effects (metformin)
+#   5.  Request refill for blood pressure medication
+#   6.  Prescription plan coverage check
+#   7.  Brand-name vs generic difference (Lipitor)
+#   8.  Prescription pickup readiness
+#   9.  Set up automatic refills for maintenance medications
+#   10. Formulary tier 1 medications
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC032 - Chatbot Prescriptions"
+tags:
+  - haio
+  - chatbot
+  - prescriptions
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# PRESCRIPTION QUESTIONS - 10 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Prescription order status
+# Expected: Bot returns status, ready/in-progress info, or pharmacy link
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the status of my prescription order?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_OrderStatus"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q2: Transfer prescription to a different pharmacy
+# Expected: Bot explains transfer process or directs to pharmacy feature
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I transfer a prescription to a different pharmacy?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_TransferRx"
+      EXPECTED_KEYWORDS: "prescriptions|cvs|transferable|right|now"
+
+# --------------------------------------------------------------------------
+# Q3: 90-day supply request
+# Expected: Bot explains eligibility or directs to pharmacy options
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I get a 90-day supply of my medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_90DaySupply"
+      EXPECTED_KEYWORDS: "90-day|supply|days|medication|prescription|mail"
+
+# --------------------------------------------------------------------------
+# Q4: Medication side effects (metformin)
+# Expected: Bot provides clinical side effect information or refers to pharmacist
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What are the side effects of metformin?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SideEffectsMetformin"
+      EXPECTED_KEYWORDS: "medication|side|help|blood|levels|effects|stomach|lactic"
+
+# --------------------------------------------------------------------------
+# Q5: Refill request for blood pressure medication
+# Expected: Bot provides refill instructions or directs to pharmacy
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I request a refill for my blood pressure medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_RefillBloodPressure"
+      EXPECTED_KEYWORDS: "refill|having|trouble|processing|request|right|now|please"
+
+# --------------------------------------------------------------------------
+# Q6: Prescription coverage check
+# Expected: Bot confirms coverage status or directs to formulary/benefits
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my prescription covered under my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_RxCoverage"
+      EXPECTED_KEYWORDS: "covered|formulary|plan|prescription|benefit|tier"
+
+# --------------------------------------------------------------------------
+# Q7: Brand-name vs generic difference (Lipitor)
+# Expected: Bot explains generic/brand equivalency and potential cost savings
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the difference between brand-name and generic Lipitor?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_BrandVsGeneric"
+      EXPECTED_KEYWORDS: "generic|brand-name|lipitor|atorvastatin|inactive|ingredients|different|version"
+
+# --------------------------------------------------------------------------
+# Q8: Prescription pickup readiness
+# Expected: Bot returns ready status or estimated time
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When will my prescription be ready for pickup?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_PickupReadiness"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q9: Set up automatic refills for maintenance medications
+# Expected: Bot explains auto-refill enrollment or directs to pharmacy settings
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I set up automatic refills for my maintenance medications?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q9_AutoRefill"
+      EXPECTED_KEYWORDS: "prescriptions|information|get|take|action|current|in-process|check"
+
+# --------------------------------------------------------------------------
+# Q10: Formulary tier 1 medications
+# Expected: Bot explains formulary tiers or links to formulary lookup
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What medications are on the formulary tier 1?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-prescription-response.yaml
+    env:
+      SCENARIO_NAME: "Q10_FormularyTier1"
+      EXPECTED_KEYWORDS: "formulary|tier|medication|covered|plan|generic"

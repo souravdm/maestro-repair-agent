@@ -1,0 +1,83 @@
+# HAIO Intent: ID Card - Single Session
+# All 6 ID card questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC011 - Intent Id Card"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# ID CARD INTENT - 6 Questions
+# ============================================================================
+
+# Q1: Show me my ID card — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my ID card"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View insurance card"
+      EXPECTED_HEADER: "Member IDs"
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: Where is my insurance card?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where is my insurance card?"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+
+# Q3: I need my member ID
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need my member ID"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+
+# Q4: Can I see my digital insurance card?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I see my digital insurance card?"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+
+# Q5: What's my member number?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my member number?"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+
+# Q6: How do I access my ID card? — Click CTA and verify navigation
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I access my ID card?"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View insurance card"
+      EXPECTED_HEADER: "Member IDs"

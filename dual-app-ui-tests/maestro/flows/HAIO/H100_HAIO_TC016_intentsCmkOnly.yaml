@@ -1,0 +1,103 @@
+# HAIO Intents: CMK-Only User (TUVALU) - Single Session
+# Tests all 8 intents for a Caremark-only user
+# DMR, Drug Pricing, and Provider Search are disabled for this user type
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC016 - Intents Cmk Only"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: TUVALU_COUNTRY
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# INTENT TESTS - CMK Only User (TUVALU)
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# BENEFIT LANDING — Enabled
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my health plan?"
+- runFlow: ../../subflows/HAIO/intents/verify-benefit-landing-response.yaml
+
+# --------------------------------------------------------------------------
+# CLAIMS — Enabled
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where are my claims?"
+- runFlow: ../../subflows/HAIO/intents/verify-claims-response.yaml
+
+# --------------------------------------------------------------------------
+# DMR (Reimbursement) — Disabled for CMK-only
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I get reimbursed for prescriptions?"
+- runFlow: ../../subflows/HAIO/intents/verify-no-access-response.yaml
+
+# --------------------------------------------------------------------------
+# DRUG PRICING — Disabled for CMK-only
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much will my medication cost?"
+- runFlow: ../../subflows/HAIO/intents/verify-no-access-response.yaml
+
+# --------------------------------------------------------------------------
+# ID CARD — Enabled
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my ID card"
+- runFlow: ../../subflows/HAIO/intents/verify-id-card-response.yaml
+
+# --------------------------------------------------------------------------
+# PRIOR AUTHORIZATION — Enabled
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the status of my prior authorization?"
+- runFlow: ../../subflows/HAIO/intents/verify-prior-auth-response.yaml
+
+# --------------------------------------------------------------------------
+# PROVIDER SEARCH — Disabled for CMK-only
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find a doctor near me"
+- runFlow: ../../subflows/HAIO/intents/verify-no-access-response.yaml
+
+# --------------------------------------------------------------------------
+# YTD SUMMARY — Enabled
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much have I spent on prescriptions this year?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml

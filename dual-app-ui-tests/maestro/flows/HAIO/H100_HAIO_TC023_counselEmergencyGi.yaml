@@ -1,0 +1,51 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC023 - Counsel Emergency Gi"
+tags:
+  - haio
+  - counsel
+  - escalation
+  - emergency
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/CounselScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Counsel agent flow 3 — GI emergency escalation
+# User Journey: Login -> AI Home -> GI symptom input -> Emergency escalation ->
+#               Verify escalation card, disclaimer, scheduling sheet
+# Figma ref: section "MVP-2-26 - Counsel Sub Agent Escalations",
+#            "Counsel agent flow 3: Emergency escalation - GI"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Submit GI symptom
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I have severe stomach pain and cannot stop vomiting"
+
+# Verify counsel sub-agent activates
+- runFlow: ../../subflows/HAIO/counsel/verify-counsel-symptom-entry.yaml
+
+# Verify GI-specific emergency escalation
+- assertVisible: ${output.haio_counsel.giEscalationMsg}
+- takeScreenshot: TC023_HAIO_GI_Emergency_Escalation
+
+# Verify escalation card + scheduling sheet
+- runFlow: ../../subflows/HAIO/counsel/trigger-emergency-escalation.yaml

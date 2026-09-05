@@ -1,0 +1,111 @@
+# HAIO Intent: Claims - Single Session
+# All claims questions in one session with single login
+# Updated: Dynamic keyword assertions per question type
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC008 - Intent Claims"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# CLAIMS INTENT - Questions with Dynamic Assertions
+# ============================================================================
+
+# Q1: Check my claim status (returns access denied)
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Check my claim status"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "sorry|access|feature|help"
+
+# Q2: Where are my claims? (returns access denied)
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where are my claims?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "sorry|access|feature|help"
+
+# Q3: What's the status of my medical claim?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the status of my medical claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "claim|status|Processed|Denied|sorry|access"
+
+# Q4: Show me my recent claims
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my recent claims"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "claim|Processed|Denied|\\$[0-9]|sorry|access"
+
+# Q5: How do I track a claim?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I track a claim?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "track|claim|status|sorry|access"
+
+# Q6: View my claim history (returns actual claims data)
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "View my claim history"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "Processed|Denied|Claim|\\$[0-9]|Dublin|Cathy Berry"
+
+# Q7: What claims have been processed? (returns actual claims data)
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What claims have been processed?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "Processed|Claim|\\$[0-9]|Dublin|Cathy Berry"
+
+# Q8: Check claim details
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Check claim details"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-claims-response.yaml
+    env:
+      EXPECTED_KEYWORDS: "claim|details|Processed|Denied|sorry|access"

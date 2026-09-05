@@ -1,0 +1,115 @@
+# HAIO Chatbot - Mental Health Parity Questions (Single Session)
+# Validates HAIO responds with accurate parity rules, appeal guidance,
+# and access-to-care information for mental health and substance use treatment
+#
+# Scenarios (5 questions):
+#   1.  Is my mental health coverage the same as my medical coverage?
+#   2.  My plan approved 10 therapy sessions but my therapist says I need 20 — what can I do?
+#   3.  Does my plan cover inpatient psychiatric care?
+#   4.  Is residential treatment for substance abuse covered?
+#   5.  Can I see an out-of-network therapist if there are no in-network providers near me?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC045 - Chatbot Mental Health Parity"
+tags:
+  - haio
+  - chatbot
+  - mental-health
+  - parity
+  - behavioral-health
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# MENTAL HEALTH PARITY - 5 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: Is my mental health coverage the same as my medical coverage?
+# Expected: Bot confirms parity under MHPAEA and equal cost-sharing rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is my mental health coverage the same as my medical coverage?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_ParityCheck"
+      EXPECTED_KEYWORDS: "mental health|parity|MHPAEA|medical|equal|coverage|benefit|same"
+
+# --------------------------------------------------------------------------
+# Q2: My plan approved 10 therapy sessions but my therapist says I need 20 — what can I do?
+# Expected: Bot explains appeal process and medical necessity review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My plan approved 10 therapy sessions but my therapist says I need 20 — what can I do?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_SessionAppeal"
+      EXPECTED_KEYWORDS: "appeal|sessions|medical necessity|therapy|denied|review|extend|plan"
+
+# --------------------------------------------------------------------------
+# Q3: Does my plan cover inpatient psychiatric care?
+# Expected: Bot confirms inpatient psychiatric coverage and any prior auth needs
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Does my plan cover inpatient psychiatric care?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_InpatientPsychiatric"
+      EXPECTED_KEYWORDS: "inpatient|psychiatric|covered|plan|prior auth|mental health|benefit|hospital"
+
+# --------------------------------------------------------------------------
+# Q4: Is residential treatment for substance abuse covered?
+# Expected: Bot confirms substance use disorder coverage under parity rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is residential treatment for substance abuse covered?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SubstanceAbuseTreatment"
+      EXPECTED_KEYWORDS: "residential|substance abuse|covered|treatment|parity|plan|prior auth|benefit"
+
+# --------------------------------------------------------------------------
+# Q5: Can I see an out-of-network therapist if there are no in-network providers near me?
+# Expected: Bot explains network adequacy exception and reimbursement at in-network rate
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I see an out-of-network therapist if there are no in-network providers near me?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-mental-health-parity-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_NetworkAdequacy"
+      EXPECTED_KEYWORDS: "out-of-network|therapist|network adequacy|exception|in-network rate|access|plan|mental health"

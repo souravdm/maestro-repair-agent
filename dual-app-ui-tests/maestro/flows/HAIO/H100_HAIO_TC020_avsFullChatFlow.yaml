@@ -1,0 +1,58 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC020 - Avs Full Chat Flow"
+tags:
+  - haio
+  - avs
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../screens/HAIO/AVSChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: After Visit Summary full sequence
+# User Journey: Login -> AI Home -> Agent Initial Chat -> AV Summary (state 4) ->
+#               AV Summary (state 5 expanded) -> NBA card -> AV Trend card
+# Figma ref: section "MVP-2-26 - After Visit Summary"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Health AI Home
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-ai-home.yaml
+
+# Ask about recent visit to trigger AVS flow
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my recent visit summary"
+
+# Step 1: Verify agent initial chat greeting
+- runFlow: ../../subflows/HAIO/avs/verify-avs-agent-initial-chat.yaml
+
+# Step 2: Verify AVS summary card (state 4 — collapsed)
+- runFlow: ../../subflows/HAIO/avs/verify-after-visit-summary.yaml
+
+# Step 3: Expand card to state 5 — full detail
+- tapOn: ${output.haio_avs_chat.avSummaryExpandBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.haio_avs_chat.avSummaryExpandedMedications}
+- assertVisible: ${output.haio_avs_chat.avSummaryExpandedDiagnosis}
+- takeScreenshot: TC020_HAIO_AVS_Expanded
+
+# Step 4: Verify NBA card
+- runFlow: ../../subflows/HAIO/avs/verify-avs-nba.yaml
+
+# Step 5: Verify AV Trend card
+- runFlow: ../../subflows/HAIO/avs/verify-avs-trend.yaml

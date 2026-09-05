@@ -1,0 +1,59 @@
+appId: ${APP_ID}
+tags:
+  - homescreen
+onFlowStart:
+  - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+
+- repeat:
+    times: ${NUMBER_OF_ACTIONS}
+
+    commands:
+      - runScript: getNextAction.js
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'TAP'}
+          commands:
+            - tapOn:
+                text: ".+"
+                index: ${output.adhoc.tapIndex}
+                optional: true
+
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'SWIPE' && output.adhoc.swipeDirection == 'UP'}
+          commands:
+            - swipe:
+                direction: UP
+
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'SWIPE' && output.adhoc.swipeDirection == 'DOWN'}
+          commands:
+            - swipe:
+                direction: DOWN
+
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'SWIPE' && output.adhoc.swipeDirection == 'LEFT'}
+          commands:
+            - swipe:
+                direction: LEFT
+
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'SWIPE' && output.adhoc.swipeDirection == 'RIGHT'}
+          commands:
+            - swipe:
+                direction: RIGHT
+
+      - runFlow:
+          when:
+            true: ${output.adhoc.action == 'BACK'}
+          commands:
+            - pressKey: Back

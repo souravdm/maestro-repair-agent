@@ -1,0 +1,104 @@
+# HAIO Intent: YTD Summary (Year-to-Date Spending) - Single Session
+# All 9 YTD summary questions in one session with single login
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC014 - Intent Ytd Summary"
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# YTD SUMMARY INTENT - 9 Questions
+# ============================================================================
+
+# Q1: How much have I spent on prescriptions this year? — Click CTA and verify navigation, then return
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much have I spent on prescriptions this year?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View YTD Spending"
+      EXPECTED_HEADER: "Pharmacy Spending"
+- runFlow: ../../subflows/HAIO/intents/return-to-haio-from-destination.yaml
+
+# Q2: What's my year-to-date prescription spending?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my year-to-date prescription spending?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q3: How much have I paid out of pocket for medications?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How much have I paid out of pocket for medications?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q4: Show my total pharmacy costs for this year
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show my total pharmacy costs for this year"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q5: What's my prescription spending so far?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's my prescription spending so far?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q6: I need my prescription costs for taxes
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need my prescription costs for taxes"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q7: Can I see my pharmacy expenses for last year?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I see my pharmacy expenses for last year?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q8: Where can I find my prescription spending summary?
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Where can I find my prescription spending summary?"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+
+# Q9: I need a record of my medication costs — Click CTA and verify navigation
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a record of my medication costs"
+- runFlow: ../../subflows/HAIO/intents/verify-ytd-summary-response.yaml
+- runFlow:
+    file: ../../subflows/HAIO/intents/click-cta-and-verify-navigation.yaml
+    env:
+      CTA_TEXT: "View YTD Spending"
+      EXPECTED_HEADER: "Pharmacy Spending"

@@ -1,0 +1,159 @@
+# HAIO Chatbot - Specialty Pharmacy Questions (Single Session)
+# Validates HAIO responds with accurate specialty drug guidance covering
+# prior auth, cold chain, patient assistance, injection storage, and disposal
+#
+# Scenarios (8 questions):
+#   1.  What is a specialty pharmacy and do I need one?
+#   2.  My medication requires cold storage — how is it shipped?
+#   3.  How do I get started on a specialty medication?
+#   4.  What is the prior authorization process for my specialty drug?
+#   5.  My specialty medication was denied — what are my options?
+#   6.  How do I store my injectable medication at home?
+#   7.  Is there a specialty pharmacy in my plan's network?
+#   8.  How do I dispose of unused specialty medications safely?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC062 - Chatbot Specialty Pharmacy"
+tags:
+  - haio
+  - chatbot
+  - specialty-pharmacy
+  - pharmacy
+  - prior-auth
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# SPECIALTY PHARMACY - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: What is a specialty pharmacy and do I need one?
+# Expected: Bot explains specialty pharmacy role and which drugs require it
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a specialty pharmacy and do I need one?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_SpecialtyPharmacyExplained"
+      EXPECTED_KEYWORDS: "specialty|pharmacy|medications|chronic|like|drugs|doctor|drug"
+
+# --------------------------------------------------------------------------
+# Q2: My medication requires cold storage — how is it shipped?
+# Expected: Bot explains cold chain shipping, insulated packaging, and delivery window
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My medication requires cold storage — how is it shipped?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_ColdChainShipping"
+      EXPECTED_KEYWORDS: "prescriptions|eligible|medications|cannot|drug|call|pharmacy|details"
+
+# --------------------------------------------------------------------------
+# Q3: How do I get started on a specialty medication?
+# Expected: Bot walks through PA, specialty pharmacy enrollment, and copay assistance steps
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I get started on a specialty medication?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_SpecialtyOnboarding"
+      EXPECTED_KEYWORDS: "order|prescription|orders|check|pharmacy|help|open|right"
+
+# --------------------------------------------------------------------------
+# Q4: What is the prior authorization process for my specialty drug?
+# Expected: Bot explains PA submission timeline, clinical criteria, and payer review
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is the prior authorization process for my specialty drug?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_SpecialtyPA"
+      EXPECTED_KEYWORDS: "prior authorization|PA|specialty|submit|prescriber|clinical|approve|days|criteria"
+
+# --------------------------------------------------------------------------
+# Q5: My specialty medication was denied — what are my options?
+# Expected: Bot explains appeal, step therapy exception, and manufacturer assistance
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My specialty medication was denied — what are my options?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_SpecialtyDenied"
+      EXPECTED_KEYWORDS: "denied|appeal|step therapy|exception|manufacturer|patient assistance|options|specialty"
+
+# --------------------------------------------------------------------------
+# Q6: How do I store my injectable medication at home?
+# Expected: Bot provides refrigeration guidelines, light exposure, and handling tips
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I store my injectable medication at home?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_InjectableStorage"
+      EXPECTED_KEYWORDS: "medications|specific|storage|must|kept|medication|pharmacist|drug"
+
+# --------------------------------------------------------------------------
+# Q7: Is there a specialty pharmacy in my plan's network?
+# Expected: Bot confirms network specialty pharmacy and how to access it
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Is there a specialty pharmacy in my plan's network?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-specialty-pharmacy-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_NetworkSpecialtyPharmacy"
+      EXPECTED_KEYWORDS: "specialty pharmacy|network|plan|find|preferred|CVS Specialty|Caremark|access"
+
+# --------------------------------------------------------------------------
+# Q8: How do I dispose of unused specialty medications safely?
+# Expected: Bot explains take-back programs, DEA guidelines, and sharps disposal
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I dispose of unused specialty medications safely?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-disposal-safety-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_SpecialtyDisposal"
+      EXPECTED_KEYWORDS: "specialty|drug|pharmacy|medication|use|medications|option|take-back"

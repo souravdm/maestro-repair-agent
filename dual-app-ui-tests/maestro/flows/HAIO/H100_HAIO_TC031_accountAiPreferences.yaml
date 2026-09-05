@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | HAIO | TC031 - Account Ai Preferences"
+tags:
+  - haio
+  - account
+  - preferences
+  - e2e
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/AssistantAccountScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# =============================================================================
+# E2E: Account -> AI settings section -> preferences toggle, health info screens
+# User Journey: Login -> Account -> AI settings -> Preferences toggle ->
+#               Health info (allergies, conditions, diagnostic results, labs)
+# Figma ref: section "MVP Fast Follow - Assistant Account Manifestations"
+# =============================================================================
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow: ../../subflows/Account/authentication/login.yaml
+
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account
+- runFlow: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Verify AI settings section and complete preferences check
+- runFlow: ../../subflows/HAIO/account/verify-account-ai-preferences.yaml

@@ -1,0 +1,159 @@
+# HAIO Chatbot - Enrollment & Plan Change Questions (Single Session)
+# Validates HAIO responds correctly to open enrollment timing, qualifying life events,
+# dependent changes, and plan comparison queries
+#
+# Scenarios (8 questions):
+#   1.  When is open enrollment?
+#   2.  Can I change my plan outside of open enrollment?
+#   3.  What is a qualifying life event?
+#   4.  How do I add a dependent to my plan?
+#   5.  What's the difference between an HMO and PPO?
+#   6.  Which plan makes more sense given my health conditions?
+#   7.  I just got a new job — when does my coverage start?
+#   8.  What happens if I miss open enrollment?
+
+appId: ${APP_ID}
+name: "H100 | HAIO | TC046 - Chatbot Enrollment Plan Changes"
+tags:
+  - haio
+  - chatbot
+  - enrollment
+  - plan-changes
+  - benefits
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/HAIO/HomeScreen.js
+  - runScript: ../../screens/HAIO/ChatScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ============================================================================
+# ONE-TIME SETUP - Login and navigate to HAIO
+# ============================================================================
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Verify HAIO is ready
+- assertVisible: ${output.haio_home.healthAssistantTitle}
+- assertVisible: ${output.haio_home.chatInputField}
+
+# ============================================================================
+# ENROLLMENT & PLAN CHANGES - 8 Scenarios
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Q1: When is open enrollment?
+# Expected: Bot provides open enrollment window dates or directs to employer HR
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "When is open enrollment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q1_OpenEnrollmentDate"
+      EXPECTED_KEYWORDS: "open enrollment|date|window|November|December|annual|employer|HR"
+
+# --------------------------------------------------------------------------
+# Q2: Can I change my plan outside of open enrollment?
+# Expected: Bot explains special enrollment period requirements
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Can I change my plan outside of open enrollment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q2_OutsideOE"
+      EXPECTED_KEYWORDS: "special enrollment|qualifying life event|QLE|outside|change|plan|period"
+
+# --------------------------------------------------------------------------
+# Q3: What is a qualifying life event?
+# Expected: Bot explains QLE examples (marriage, birth, job loss, etc.)
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What is a qualifying life event?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q3_QLE"
+      EXPECTED_KEYWORDS: "qualifying life event|QLE|marriage|birth|job loss|divorce|special enrollment"
+
+# --------------------------------------------------------------------------
+# Q4: How do I add a dependent to my plan?
+# Expected: Bot provides steps to add dependent within 30 days of QLE
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "How do I add a dependent to my plan?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q4_AddDependent"
+      EXPECTED_KEYWORDS: "help|plan|assist|appointment|directly|adding|dependent|however"
+
+# --------------------------------------------------------------------------
+# Q5: What's the difference between an HMO and PPO?
+# Expected: Bot explains network restrictions, referral requirements, and cost tradeoffs
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What's the difference between an HMO and PPO?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q5_HMOvsPPO"
+      EXPECTED_KEYWORDS: "HMO|PPO|referral|network|primary care|out-of-network|plan|flexible"
+
+# --------------------------------------------------------------------------
+# Q6: Which plan makes more sense given my health conditions?
+# Expected: Bot helps compare plan options based on member usage patterns
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Which plan makes more sense given my health conditions?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q6_PlanComparison"
+      EXPECTED_KEYWORDS: "health|help|prescriptions|pharmacy|plan|benefits|provide|advice"
+
+# --------------------------------------------------------------------------
+# Q7: I just got a new job — when does my coverage start?
+# Expected: Bot explains typical employer coverage start date rules
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I just got a new job — when does my coverage start?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q7_NewJobCoverage"
+      EXPECTED_KEYWORDS: "coverage|start|new job|employer|waiting period|30 days|first day|HR"
+
+# --------------------------------------------------------------------------
+# Q8: What happens if I miss open enrollment?
+# Expected: Bot explains COBRA, marketplace options, and hardship exemptions
+# --------------------------------------------------------------------------
+- runFlow:
+    file: ../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "What happens if I miss open enrollment?"
+- runFlow:
+    file: ../../subflows/HAIO/intents/verify-enrollment-response.yaml
+    env:
+      SCENARIO_NAME: "Q8_MissedOE"
+      EXPECTED_KEYWORDS: "miss|open enrollment|COBRA|marketplace|special enrollment|uninsured|next year"
