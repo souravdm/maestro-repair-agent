@@ -1,4 +1,0 @@
-appId: ${APP_ID}
----
-- runFlow:
-    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC012_submitCompoundDrugClaim.yaml
