@@ -1,0 +1,44 @@
+# Benefits Plan Variations Test Suite
+# Comprehensive test suite for all plan variations and consent scenarios
+# Run with: bash scripts/testing/test.sh .maestro/apps/health100/suites/benefits-plan-variations-suite.yaml
+
+appId: ${APP_ID}
+---
+# ============================================
+# PLAN VARIATION FLOWS
+# ============================================
+
+# Dashboard - Plan Variations
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC001_landingCaremarkAetnaAllConsents.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC002_landingCaremarkOnlyConsented.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC003_landingAetnaOnly.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC004_tabSwitchingAllTabs.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC005_singleTabPharmacy.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC006_dualTabsMedicalDental.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC007_FABAllPlans.yaml
+
+# ============================================
+# CONSENT FLOWS
+# ============================================
+
+# Consent Scenarios
+- runFlow: ../../../flows/Benefits/Consent/H100_BEN_Consent_TC001_caremarkPharmacyAccess.yaml
+- runFlow: ../../../flows/Benefits/Consent/H100_BEN_Consent_TC002_caremarkAetnaPartial.yaml
+- runFlow: ../../../flows/Benefits/Consent/H100_BEN_Consent_TC003_skipAndReturn.yaml
+- runFlow: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC004_tabSwitchingAllTabs.yaml
+
+# ============================================
+# PLAN-SPECIFIC FEATURE FLOWS
+# ============================================
+
+# Claims - Plan-Specific
+- runFlow: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC001_submitMedicalClaim.yaml
+
+# Spending - Plan-Specific
+# - runFlow: ../../../flows/Benefits/Spending/TC003_Spending_plan_specific_categories.yaml
+
+# Drug Pricing - Caremark Only
+- runFlow: ../../../flows/Benefits/DrugPricing/H100_BEN_DrugPricing_TC002_caremarkOnlyAccess.yaml
+
+# Prior Auth - Plan-Specific
+- runFlow: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC002_planSpecificTypes.yaml

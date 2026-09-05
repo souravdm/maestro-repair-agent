@@ -1,0 +1,37 @@
+# Benefits IDCard Test suite
+
+appId: ${APP_ID}
+---
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC001_guestMode.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC002_cardOpen.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC003_cardClose.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC004_viewCardDetails.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC005_cardViewAetnaDetailsScroll.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC006_aetnaDetailsDependent.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC007_aetnaZoomCard.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC008_shareCard.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC009_viewPrescriptionCard.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC010_viewPrescriptionCardDetails.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC011_viewPrescriptionPickUpcard.yaml

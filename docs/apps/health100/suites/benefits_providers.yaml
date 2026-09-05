@@ -1,0 +1,37 @@
+# Benefits Complete Test Suite
+# All Benefits features test flows including plan variations, consent, and features
+# Run with: bash scripts/test.sh .maestro/apps/health100/suites/benefits-complete-suite.yaml
+
+appId: ${APP_ID}
+---
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC001_landingUi.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC002_search.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC003_popularSearches.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC004_searchLandingUi.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC005_searchDetails.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC006_getDirections.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC007_familyMembers.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC008_careInfoElements.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC009_notVisibleForCmo.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC010_popularSearchesAetnaOnly.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/Providers/H100_BEN_Providers_TC011_detailScreenValidation.yaml

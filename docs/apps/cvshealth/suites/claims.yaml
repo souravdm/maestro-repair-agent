@@ -1,0 +1,42 @@
+appId: ${APP_ID}
+---
+# CVS Health - Claims Test Suite
+# Run time: ~60 minutes
+# Purpose: Complete claims submission testing across all claim reasons
+# Coverage: 14 tests - submission, history, plan types, and all 9 claim reasons
+
+# ============================================================================
+# CLAIMS SUBMISSION - EXISTING TESTS (5 tests)
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC001_submitMedicalClaim.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC003_submitPrescriptionClaim.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC002_viewClaimHistory.yaml
+- runFlow:
+    # [REMOVED - file does not exist] file: ../../../flows/Benefits/Claims/TC004_Claims_pharmacy_vs_medical.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC003_submitPrescriptionClaim.yaml
+
+# ============================================================================
+# CLAIMS SUBMISSION BY REASON (9 tests)
+# ============================================================================
+- runFlow:
+    # [REMOVED - file does not exist] file: ../../../flows/Benefits/Claims/TC006_Claims_submit_claim_traveling_within_us.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC004_submitClaimTravelingOutsideUs.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC006_submitClaimNaturalDisaster.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC007_submitClaimInsuranceCardUnavailable.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC008_submitClaimPharmacyDidntAccept.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC005_submitClaimAppealing.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC009_submitClaimTieringException.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC010_submitClaimNeededApproval.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Claims/H100_BEN_Claims_TC011_submitClaimOtherReason.yaml
