@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="311.153" timestamp="2026-09-05T08:03:56">
+    <testcase id="H100 | Benefits | Claims | TC009 - Submit Claim Tiering Exception" name="H100 | Benefits | Claims | TC009 - Submit Claim Tiering Exception" classname="H100 | Benefits | Claims | TC009 - Submit Claim Tiering Exception" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC009_submitClaimTieringException.yaml" time="311.103" timestamp="2026-09-05T08:03:56" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, submission, reason-tiering-exception"/>
+      </properties>
+      <failure>Element not found: Text matching regex: (?i).*(Days supply).*</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
