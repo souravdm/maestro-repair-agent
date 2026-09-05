@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+---
+# Navigate the Counsel Health WebView to create a Counsel account.
+# Follows the "Import my information" path by default.
+
+- runScript: ../../../screens/Smart_Sch/CounselHealthScreen.js
+
+# Wait for the import info button to appear (WebView load is network-dependent)
+- extendedWaitUntil:
+    visible: ${output.counsel_health.importInfoBtn}
+    timeout: 30000
+
+- waitForAnimationToEnd
+
+# Select "Import my information" to pre-populate account details
+- tapOn: ${output.counsel_health.importInfoBtn}
+
+- waitForAnimationToEnd
+
+# Tap "Create account" if the button is presented after import (may not appear in all flows)
+- tapOn:
+    text: ${output.counsel_health.createAccountBtn}
+    optional: true
+
+- waitForAnimationToEnd
+
+- takeScreenshot: SS_Counsel_Account_Created

@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+---
+# Navigate from app home to the Haio Smart Scheduler chat entry point.
+# Reuses the existing navigate-to-haio.yaml, then verifies the scheduling greeting is visible.
+
+- runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+
+# Reuse existing HAIO navigation subflow
+- runFlow: ../../HAIO/navigation/navigate-to-haio.yaml
+
+- waitForAnimationToEnd
+
+# Dismiss any overlays that may appear on entry
+- runFlow: ../../Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+# Verify the scheduling greeting is visible (optional: true since greeting text may vary)
+- assertVisible:
+    text: ${output.smart_scheduler.greetingMsg}
+    optional: true
+
+- takeScreenshot: SS_Scheduler_Entry

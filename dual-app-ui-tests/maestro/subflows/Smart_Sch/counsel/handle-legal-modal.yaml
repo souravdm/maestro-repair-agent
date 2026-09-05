@@ -1,0 +1,25 @@
+appId: ${APP_ID}
+---
+# Handle the Counsel Health legal / privacy consent modal by accepting it.
+# Uses a conditional runFlow so the step is skipped if the modal is not present.
+
+- runScript: ../../../screens/Smart_Sch/CounselHealthScreen.js
+
+# Only proceed if the legal modal header is visible
+- runFlow:
+    when:
+      visible: ${output.counsel_health.legalModalHeader}
+    commands:
+      - waitForAnimationToEnd
+
+      # Assert HIPAA disclosure text is present (informational — optional)
+      - assertVisible:
+          text: ${output.counsel_health.hipaaText}
+          optional: true
+
+      # Accept the legal terms to proceed
+      - tapOn: ${output.counsel_health.acceptLegalBtn}
+
+      - waitForAnimationToEnd
+
+- takeScreenshot: SS_Counsel_Legal_Accepted

@@ -1,0 +1,10 @@
+# Subflow: View and verify modern cart elements
+# Source: Migrated from XCUITest ModernCartSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/ModernCartScreen.js
+
+# Verify key cart elements
+- assertVisible: ${output.shop_modernCart.orderSummaryLabel}
+- assertVisible: ${output.shop_modernCart.estimatedTotalLabel}
+- assertVisible: ${output.shop_modernCart.checkOutBtn}

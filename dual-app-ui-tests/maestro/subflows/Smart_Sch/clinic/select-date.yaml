@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+---
+# Select the first available appointment date from the date selector.
+
+- runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+
+# Wait for the date selector to appear (network-dependent)
+- extendedWaitUntil:
+    visible: ${output.clinic_selection.dateSelectorHeader}
+    timeout: 20000
+
+- waitForAnimationToEnd
+
+# Tap the first available date option
+- tapOn:
+    text: ${output.clinic_selection.dateOption}
+    index: 0
+    optional: false
+
+- waitForAnimationToEnd

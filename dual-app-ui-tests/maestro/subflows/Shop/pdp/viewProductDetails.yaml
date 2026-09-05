@@ -1,0 +1,10 @@
+# Subflow: View product detail page
+# Source: Migrated from XCUITest PDPSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/PDPScreen.js
+
+# Verify PDP elements
+- assertVisible: ${output.shop_pdp.productTitle}
+- assertVisible: ${output.shop_pdp.priceLabel}
+- assertVisible: ${output.shop_pdp.addToCartBtn}

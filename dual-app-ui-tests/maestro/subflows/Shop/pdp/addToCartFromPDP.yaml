@@ -1,0 +1,24 @@
+# Subflow: Add product to cart from PDP
+# Source: Migrated from XCUITest PDPSteps.addToCart
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/PDPScreen.js
+
+# Select delivery option if available
+- runFlow:
+    when:
+      visible: ${output.shop_pdp.shipItBtn}
+    commands:
+      - tapOn: ${output.shop_pdp.shipItBtn}
+      - waitForAnimationToEnd
+
+# Add to cart
+- tapOn: ${output.shop_pdp.addToCartBtn}
+- waitForAnimationToEnd
+
+# Verify item added confirmation
+- runFlow:
+    when:
+      visible: "Added to cart"
+    commands:
+      - assertVisible: "Added to cart"

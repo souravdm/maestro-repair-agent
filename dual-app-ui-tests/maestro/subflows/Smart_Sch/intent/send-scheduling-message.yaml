@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+---
+# Send a scheduling intent message in the Haio chat and wait for the bot response.
+# Accepts MESSAGE env var — e.g. MESSAGE: "I need to schedule a clinic visit"
+
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+
+# Delegate to the existing HAIO send-message subflow
+- runFlow:
+    file: ../../HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: ${MESSAGE}
+
+- waitForAnimationToEnd
+
+# Wait for typing indicator to disappear, confirming bot has responded
+- extendedWaitUntil:
+    notVisible: ${output.smart_scheduler.typingIndicator}
+    timeout: 45000
+
+- waitForAnimationToEnd

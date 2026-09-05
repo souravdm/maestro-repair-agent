@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+---
+# Select the first available time slot for the chosen appointment date.
+
+- runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+
+# Wait for time slots to load (network-dependent)
+- extendedWaitUntil:
+    visible: ${output.clinic_selection.timeSlotHeader}
+    timeout: 20000
+
+- waitForAnimationToEnd
+
+# Tap the first available time slot
+- tapOn:
+    text: ${output.clinic_selection.timeSlot}
+    index: 0
+    optional: false
+
+- waitForAnimationToEnd

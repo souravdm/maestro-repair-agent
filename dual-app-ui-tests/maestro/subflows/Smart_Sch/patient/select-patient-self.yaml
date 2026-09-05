@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+---
+# Select "For myself" on the patient selection screen.
+
+- runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+
+# Wait for the patient selection screen to load
+- extendedWaitUntil:
+    visible: ${output.patient_selection.patientSelectionHeader}
+    timeout: 20000
+
+- waitForAnimationToEnd
+
+# Tap the "For myself" option
+- tapOn: ${output.patient_selection.forMyselfOption}
+
+- waitForAnimationToEnd

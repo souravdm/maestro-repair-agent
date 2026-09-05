@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+---
+# Tap a quick reply chip in the scheduling chat.
+# Accepts REPLY_TEXT env var — partial text of the chip to tap (case-insensitive match).
+# Examples: REPLY_TEXT: "Find care", REPLY_TEXT: "update preferences"
+
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+
+- waitForAnimationToEnd
+
+# Tap the quick reply chip using a case-insensitive partial text match
+- tapOn:
+    text: "(?i).*${REPLY_TEXT}.*"
+    optional: false
+
+- waitForAnimationToEnd

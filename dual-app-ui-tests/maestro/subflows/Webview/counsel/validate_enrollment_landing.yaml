@@ -1,0 +1,10 @@
+# This screen and subsequent flows are owned by a third-party vendor in Counsel Health
+
+appId: ${APP_ID}
+name: Validate Enrollment Landing for Counsel
+onFlowStart:
+  - runScript: ../../../screens/Webview/counsel.js
+---
+- assertVisible: ${output.counsel_enrollment.affordableCare}
+- assertVisible: ${output.counsel_enrollment.messagePhysicianNow}
+}

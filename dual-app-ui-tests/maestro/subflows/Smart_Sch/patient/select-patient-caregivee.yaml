@@ -1,0 +1,32 @@
+appId: ${APP_ID}
+---
+# Select a caregivee as the patient on the patient selection screen.
+# Accepts CAREGIVEE_NAME env var — partial name used for a case-insensitive match.
+# If no match is found, falls back to tapping the first patient card in the list.
+
+- runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+
+# Wait for the patient selection screen to load
+- extendedWaitUntil:
+    visible: ${output.patient_selection.patientSelectionHeader}
+    timeout: 20000
+
+- waitForAnimationToEnd
+
+# Attempt to tap the caregivee by name (optional — may not always be present)
+- tapOn:
+    text: "(?i).*${CAREGIVEE_NAME}.*"
+    optional: true
+
+- waitForAnimationToEnd
+
+# Fallback: if named caregivee was not found, tap the first patient card in the list
+- runFlow:
+    when:
+      notVisible: "(?i).*${CAREGIVEE_NAME}.*"
+    commands:
+      - tapOn:
+          text: ${output.patient_selection.patientCard}
+          index: 0
+          optional: false
+      - waitForAnimationToEnd

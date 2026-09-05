@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+---
+# Select a clinic from the list returned by the scheduler.
+# Selects the first available clinic card regardless of name,
+# since Maestro does not support runtime branching on env var values.
+
+- runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+
+# Wait for the clinic list to load from the network
+- extendedWaitUntil:
+    visible: "Availability"
+    timeout: 30000
+
+- waitForAnimationToEnd
+
+# Tap the first available clinic card
+- tapOn:
+    text: ${output.clinic_selection.clinicCard}
+    index: 0
+    optional: false
+
+- waitForAnimationToEnd
+
+- takeScreenshot: SS_Clinic_Selected

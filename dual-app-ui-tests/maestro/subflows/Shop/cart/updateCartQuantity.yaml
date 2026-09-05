@@ -1,0 +1,9 @@
+# Subflow: Update item quantity in cart
+# Source: Migrated from XCUITest ModernCartSteps quantity methods
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/ModernCartScreen.js
+
+# Tap quantity button
+- tapOn: ${output.shop_modernCart.itemQuantityBtn}
+- waitForAnimationToEnd

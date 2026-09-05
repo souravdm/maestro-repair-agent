@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+---
+# View upcoming appointments and cancel one via the Haio scheduling chat.
+# Accepts APPT_REASON env var (optional — reason text if a cancellation reason prompt appears).
+
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+- runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+
+# Send cancellation intent message to the scheduling bot
+- runFlow:
+    file: ../intent/send-scheduling-message.yaml
+    env:
+      MESSAGE: "Cancel my appointment"
+
+- waitForAnimationToEnd
+
+# Wait for the upcoming appointments list to appear in the bot response
+- extendedWaitUntil:
+    visible: "(?i).*(upcoming visits|upcoming appointments).*"
+    timeout: 30000
+
+- waitForAnimationToEnd
+
+# Tap the first upcoming appointment entry to open the cancellation detail
+- tapOn:
+    text: "(?i).*upcoming.*"
+    index: 0
+    optional: false
+
+- waitForAnimationToEnd
+
+# Handle cancellation reason prompt if the app presents one
+- runFlow:
+    when:
+      visible: "(?i).*(reason|why are you cancelling).*"
+    commands:
+      - tapOn:
+          text: "(?i).*${APPT_REASON}.*"
+          optional: true
+      - waitForAnimationToEnd
+
+# Assert the cancelled confirmation message is visible
+- assertVisible:
+    text: ${output.appt_confirm.canceledMsg}
+    optional: true
+
+- takeScreenshot: SS_Appointment_Canceled

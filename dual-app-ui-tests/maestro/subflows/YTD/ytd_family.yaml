@@ -1,0 +1,9 @@
+
+appId: ${APP_ID}
+---
+
+- runScript: ../../screens/Benefits/DrugPricingScreen.js
+- assertVisible: ${output.benefits_drug_pricing.member}
+- tapOn: ${output.benefits_drug_pricing.member}
+- assertVisible: ${output.benefits_drug_pricing.kitts}
+- assertVisible: ${output.benefits_drug_pricing.nevis}

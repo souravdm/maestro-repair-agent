@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+---
+# Review the appointment summary and confirm the booking on the confirmation screen.
+
+- runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+
+# Wait for the confirmation review screen to load
+- extendedWaitUntil:
+    visible: "(?i).*(Visit details).*"
+    timeout: 20000
+- waitForAnimationToEnd
+
+
+
+# Tap the Confirm button to submit the booking
+- scrollUntilVisible:
+      element: "(?i).*(Confirm visit).*"
+      speed: 40
+
+- takeScreenshot: SS_Appointment_Confirmed

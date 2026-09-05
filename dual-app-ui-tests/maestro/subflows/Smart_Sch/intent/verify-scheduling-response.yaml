@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+---
+# Verify that the bot response contains expected keywords after a scheduling intent.
+# Accepts:
+#   EXPECTED_KEYWORDS — keyword(s) to assert visible in the response (e.g. "schedule|appointment|clinic")
+#   SCENARIO_NAME     — label used in the screenshot filename (e.g. "ClinicBooking")
+
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+
+- waitForAnimationToEnd
+
+# Assert the expected keyword(s) appear somewhere in the chat response
+- assertVisible:
+    text: "(?i).*(${EXPECTED_KEYWORDS}).*"
+    optional: false
+
+- takeScreenshot: SS_Response_${SCENARIO_NAME}

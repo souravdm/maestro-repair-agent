@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+---
+# Verify the NBA "Find care with scheduling tool" card is visible and tap it.
+# The card is always tapped when visible — use this subflow only when NBA tap is desired.
+
+- runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+
+- waitForAnimationToEnd
+
+# Assert the NBA card is present
+- assertVisible:
+    text: ${output.smart_scheduler.nbaFindCareBtn}
+    optional: false
+
+- takeScreenshot: SS_NBA_Card
+
+# Tap the NBA card to enter the scheduling flow
+- runFlow:
+    when:
+      visible: ${output.smart_scheduler.nbaFindCareBtn}
+    commands:
+      - tapOn: ${output.smart_scheduler.nbaFindCareBtn}
+      - waitForAnimationToEnd

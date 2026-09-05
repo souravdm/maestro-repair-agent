@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+---
+# Fill in new patient details on the patient details form.
+# Accepts env vars:
+#   PATIENT_FIRST  — first name
+#   PATIENT_LAST   — last name
+#   PATIENT_DOB    — date of birth in MMDDYYYY format
+#   PATIENT_GENDER — ignored at runtime; male option is selected by default
+
+- runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+
+# Wait for the form to be fully rendered
+- extendedWaitUntil:
+    visible: ${output.patient_selection.firstNameField}
+    timeout: 20000
+
+- waitForAnimationToEnd
+
+# Enter first name
+- tapOn: ${output.patient_selection.firstNameField}
+- clearText
+- inputText: ${PATIENT_FIRST}
+
+- waitForAnimationToEnd
+
+# Enter last name
+- tapOn: ${output.patient_selection.lastNameField}
+- clearText
+- inputText: ${PATIENT_LAST}
+
+- waitForAnimationToEnd
+
+# Enter date of birth (MMDDYYYY)
+- tapOn: ${output.patient_selection.dobField}
+- clearText
+- inputText: ${PATIENT_DOB}
+
+- waitForAnimationToEnd
+
+# Select gender — male option selected by default for test data consistency
+- tapOn:
+    text: ${output.patient_selection.genderMaleOption}
+    optional: true
+
+- waitForAnimationToEnd
+
+# Save the new patient record
+- tapOn: ${output.patient_selection.saveBtn}
+
+- waitForAnimationToEnd

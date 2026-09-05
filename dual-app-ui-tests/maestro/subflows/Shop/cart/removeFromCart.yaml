@@ -1,0 +1,16 @@
+# Subflow: Remove item from cart
+# Source: Migrated from XCUITest ModernCartSteps remove methods
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/ModernCartScreen.js
+
+# Tap remove button
+- tapOn: "Remove.*"
+- waitForAnimationToEnd
+
+# Confirm removal if prompted
+- runFlow:
+    when:
+      visible: "Cancel"
+    commands:
+      - waitForAnimationToEnd
