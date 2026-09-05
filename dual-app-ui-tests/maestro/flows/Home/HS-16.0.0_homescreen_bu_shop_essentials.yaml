@@ -1,0 +1,50 @@
+# BUSINESS LOGIC: Homescreen Business Unit: Shop Essentials
+# Validates: Shop Essentials business unit displays on homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Shop Essentials module visible on Shop tab
+#   - Product recommendations display
+#   - Navigation to Shop works correctly
+#   - Module appears in correct position
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+
+- scrollUntilVisible:
+      element:
+          text: "Shop CVS"
+- scrollUntilVisible:
+      element:
+          text: "Shop essentials"
+- scrollUntilVisible:
+      element:
+          text: "All products"
+- scrollUntilVisible:
+      element:
+          text: "Extra Big Deals"
+- scrollUntilVisible:
+      element:
+          text: "Photo deals"
+- tapOn: "All products"
+- assertVisible: "Shop"
+- assertVisible: "Search products and services.*"
+- assertVisible: "Cart.*"
+- pressKey: "Back"
+
+- tapOn: "Extra Big Deals"
+- assertVisible: "Extra Big Deals"
+
+- pressKey: "Back"
+- tapOn: "Photo deals"
+- assertVisible: "CVS Photo"

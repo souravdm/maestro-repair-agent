@@ -1,0 +1,30 @@
+# BUSINESS LOGIC: ANBA: SMS RX Opt In
+# Validates: SMS opt-in anba_rx_sms_optin displays for prescription updates
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - SMS opt-in NBA visible
+#   - Opt-in option available
+#   - Benefits of SMS updates shown
+#   - Tap action enables SMS
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/activity_nba_loaded.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_enrollInTextAlerts}
+- runFlow: ../../subflows/Pharmacy/validate_pharmacy_notifications.yaml

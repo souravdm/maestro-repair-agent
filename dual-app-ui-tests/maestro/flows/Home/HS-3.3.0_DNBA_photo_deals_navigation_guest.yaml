@@ -1,0 +1,25 @@
+# BUSINESS LOGIC: Discovery Zone expected Discovery NBAs
+# Validates: Discovery Zone Loads Photo Deals Discovery NBA
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Discovery zone header visible
+#   - Discovery NBAs load from Personalization Engine
+#   - Photo DNBA is displayed in Discover zone
+#   - Photo DNBA is tappable and navigable
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/discover_nba_loaded.yaml
+- runFlow:
+    file: ../../subflows/Home/click_dnba_card.yaml
+    env:
+      DNBA_CARD_TITLE: ${output.homescreen_discover.photoDeals}
+- assertVisible: "CVS Photo"

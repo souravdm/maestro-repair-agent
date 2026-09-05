@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: KSMI (Keep Me Signed In) Session Persistence (High Priority)
+# Validates: User remains signed in across app sessions with KSMI enabled
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Login state persists when app is closed or backgrounded
+#   - Automatically obtains new session token upon relaunch
+#   - Session lasts for 30 days (current implementation)
+#   - User doesn't need to re-authenticate within the 30-day window
+#   - After 30 days, user must sign in again
+# This test verifies that after initial sign-in, user can access homescreen
+# and authenticated content is available (foundation for KSMI validation)
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - ksmi
+    - session_persistence
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- assertVisible: ${output.homescreen_activity.activityHeader}

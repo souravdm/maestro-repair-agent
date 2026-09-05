@@ -1,0 +1,39 @@
+# BUSINESS LOGIC: Headspace Navigation
+# Validates: User can navigate to Headspace from homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Headspace tap navigates correctly
+#   - Headspace screen loads
+#   - Back navigation returns to homescreen
+#   - Integration works seamlessly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_healthInsights.header}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.headspaceSubtext}
+- tapOn: ${output.homescreen_healthInsights.headspaceSubtext}
+- assertVisible: ${output.homescreen_healthInsights.headspaceAudio}
+- assertVisible: ${output.homescreen_healthInsights.headspaceGuestPass}
+- assertVisible: ${output.homescreen_healthInsights.headspaceTryForFree}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_healthInsights.headspaceTranscript}
+- scrollUntilVisible:
+      element:
+          below:
+              text: ${output.homescreen_healthInsights.headspaceTranscript}

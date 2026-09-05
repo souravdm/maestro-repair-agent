@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: ANBA: Loyalty - ExtraCare Plus Expiring
+# Validates: ExtraCare Plus Expiring (anba_loy_ecplusexpiring) displays for users with expiring benefits
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - ExtraCare Plus Expiring ANBA displays in Activity module
+#   - Shows expiring benefit notifications
+#   - Provides expiration date information
+#   - Call-to-action to renew benefits
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - loyalty
+    - extracare
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: ANNABELLE_BOOK
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_loy_ecplusexpiring}

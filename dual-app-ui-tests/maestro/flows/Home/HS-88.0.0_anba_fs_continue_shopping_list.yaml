@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Fulfillment Status - Continue Shopping List
+# Validates: Continue Shopping List (anba_fs_continue_shopping_list) displays for users with saved lists
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Continue Shopping List ANBA displays in Activity module
+#   - Shows shopping list continuation prompt
+#   - Provides shopping list continuation action
+#   - Call-to-action to continue list
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - fulfillment_status
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WereWorkingOnIt
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_fs_continue_shopping_list}

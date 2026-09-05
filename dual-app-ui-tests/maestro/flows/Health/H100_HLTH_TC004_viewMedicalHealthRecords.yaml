@@ -1,0 +1,78 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC004 - View Medical Health Records"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - health
+  - health_records
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/AccountScreen.js
+
+# Test: Health Records Navigation and Display
+# Verifies health records screen elements and navigation
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Account screen to load
+- assertVisible: ${ACCOUNT_ICON}
+
+- tapOn: ${ACCOUNT_ICON}
+- assertVisible: ${ACCOUNT_TITLE}
+
+- tapOn: "Health Records"
+- assertVisible: "Health Records"
+
+# Verify Health Records sections
+- assertVisible: "Lab Results"
+- assertVisible: "Immunizations"
+- assertVisible: "Medications"
+- assertVisible: "Conditions"
+- assertVisible: "Allergies"
+
+# Test Lab Results navigation
+- tapOn: "Lab Results"
+- assertVisible: "Lab Results"
+- tapOn:
+    id: "back_button"
+
+# Test Immunizations navigation
+- tapOn: "Immunizations"
+- assertVisible: "Immunizations"
+- assertVisible: "Vaccine History"
+- tapOn:
+    id: "back_button"
+
+# Test Medications navigation
+- tapOn: "Medications"
+- assertVisible: "Medications"
+- tapOn:
+    id: "back_button"
+
+# Test Conditions navigation
+- tapOn: "Conditions"
+- assertVisible: "Conditions"
+- tapOn:
+    id: "back_button"
+
+# Test Allergies navigation
+- tapOn: "Allergies"
+- assertVisible: "Allergies"
+- tapOn:
+    id: "back_button"
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

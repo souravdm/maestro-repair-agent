@@ -1,0 +1,71 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC001 - Caremark User Benefits Flow"
+env:
+  USERNAME: ${CMK_USER_EMAIL}
+  PASSWORD: ${CMK_USER_PASSWORD}
+tags:
+  - health
+  - benefits
+  - cmk-user
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/LoginScreen.js
+
+# Test: Benefits Tab for CMK User
+
+# Wait for app to load
+- assertVisible: ${ACCOUNT_ICON}
+
+- tapOn: ${ACCOUNT_ICON}
+- tapOn: ${SIGN_IN_BTN}
+- tapOn: ${EMAIL_FIELD}
+- inputText: ${USERNAME}
+- tapOn: ${CONTINUE_BTN}
+- tapOn: ${PASSWORD_FIELD}
+- inputText: ${PASSWORD}
+- tapOn: ${SIGN_IN_SUBMIT}
+
+# Navigate to Benefits
+- tapOn: ${HEALTH_TAB}
+- assertVisible: ${BENEFITS_TITLE}
+- tapOn: ${BENEFITS_TITLE}
+
+# Verify Benefits landing screen elements
+- assertVisible: ${BENEFITS_TITLE}
+- assertVisible:
+    text: ".*Search.*"
+
+# Verify Pharmacy Plan Summary
+- scrollUntilVisible:
+    element:
+      text: ".*Pharmacy.*plan.*"
+    direction: DOWN
+- assertVisible:
+    text: ".*Pharmacy.*plan.*"
+
+# Verify Prior Authorizations
+- scrollUntilVisible:
+    element:
+      text: ".*Prior.*authorization.*"
+    direction: DOWN
+- assertVisible:
+    text: ".*Prior.*authorization.*"
+
+# Verify Search In-Network Pharmacy
+- scrollUntilVisible:
+    element:
+      text: ".*Search.*network.*pharmacy.*"
+    direction: DOWN
+- assertVisible:
+    text: ".*Search.*network.*pharmacy.*"
+
+# Verify Member ID
+- scrollUntilVisible:
+    element:
+      text: ".*Member.*ID.*"
+    direction: DOWN
+- assertVisible:
+    text: ".*Member.*ID.*"

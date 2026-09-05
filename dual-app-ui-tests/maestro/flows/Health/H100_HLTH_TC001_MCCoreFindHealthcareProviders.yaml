@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC001 - Mccore Find Healthcare Providers"
+tags:
+  - mccore
+  - find-care
+  - minuteclinic
+  - smoke
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+
+# Test: MinuteClinic Find Care
+
+# Wait for app to load
+- assertVisible: ${HOME_TAB}
+
+- assertVisible: ${HOME_TAB}
+
+# Navigate to Find Care
+- tapOn: ${HOME_TAB}
+- tapOn: ${FIND_CARE_TITLE}
+- assertVisible: ${FIND_CARE_TITLE}
+
+# Verify MinuteClinic services
+- assertVisible:
+    text: ".*MinuteClinic.*|.*Minute Clinic.*"
+- assertVisible:
+    text: ".*services.*|.*care.*"
+
+# Verify location search
+- assertVisible:
+    text: ".*location.*|.*near.*|.*zip.*"

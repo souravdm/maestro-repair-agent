@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC002 - External Records"
+tags:
+  - health
+  - regression
+  - migrated-xcuitest
+---
+# Flow: View external health records
+# Source: Migrated from XCUITest ExternalRecordsTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Navigate to health records then external records
+- runScript: ../../screens/Health/HealthLandingScreen.js
+- runScript: ../../screens/Health/ExternalRecordsScreen.js
+- runScript: ../../screens/Common/CommonScreen.js
+- tapOn: ${output.common_navigation.healthTab}
+- waitForAnimationToEnd
+- tapOn: ${output.health_landing.healthRecordsBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.health_externalRecords.externalRecordsTitle}

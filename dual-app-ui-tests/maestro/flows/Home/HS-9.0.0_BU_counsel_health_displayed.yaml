@@ -1,0 +1,40 @@
+# BUSINESS LOGIC: Counsel Health Business Unit Display
+# Validates: Counsel Health module displays with all required elements
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Counsel Health module visible on homescreen
+#   - Title displays correctly
+#   - Care consult description visible
+#   - Call-to-action button available
+#   - Business unit labels and information display
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: ReadyNotFilledRx
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- runFlow:
+    file: "../../subflows/Home/bu_module_displayed.yaml"
+    env:
+        BU_MODULE_HEADER: ${output.homescreen_counsel.title}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_counsel.businessUnitCta}
+- assertVisible: ${output.homescreen_counsel.businessUnitLabel}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_counsel.requestCareConsult}
+- assertVisible: ${output.homescreen_counsel.businessUnitOne}
+- assertVisible: ${output.homescreen_counsel.businessUnitTwo}
+- assertVisible: ${output.homescreen_counsel.businessUnitThree}

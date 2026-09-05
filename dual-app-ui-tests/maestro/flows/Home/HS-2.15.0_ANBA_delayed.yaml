@@ -1,0 +1,28 @@
+# BUSINESS LOGIC: ANBA: Delayed Status
+# Validates: Delayed prescription anba_rx_delayed displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Delayed status NBA appears
+#   - Appears as priority NBA (first)
+#   - Delay reason displays
+#   - Action to resolve displays
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: availableForRenewal
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_delayed}
+- runFlow: ../../subflows/Pharmacy/validate_order_screen.yaml

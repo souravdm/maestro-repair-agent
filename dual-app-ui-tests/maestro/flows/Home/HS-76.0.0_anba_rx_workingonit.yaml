@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Rx Status - Working On It
+# Validates: Rx Working On It (anba_rx_workingonit) displays for users with processing prescriptions
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Rx Working On It ANBA displays in Activity module
+#   - Shows processing prescription notifications
+#   - Provides status updates
+#   - Call-to-action for prescription details
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - rx_status
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_rx_workingonit}

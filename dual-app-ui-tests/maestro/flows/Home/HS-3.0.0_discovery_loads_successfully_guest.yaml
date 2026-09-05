@@ -1,0 +1,21 @@
+# BUSINESS LOGIC: Discovery Zone Loads Successfully (Guest)
+# Validates: Discovery content loads and displays for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Discovery zone header visible
+#   - Discovery NBAs load from Personalization Engine
+#   - Content is personalized for guest segment
+#   - Multiple discovery cards display
+#   - Cards are tappable and navigable
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/discover_nba_loaded.yaml

@@ -1,0 +1,29 @@
+# BUSINESS LOGIC: ANBA: Ready For Pickup DUR
+# Validates: Ready for pickup anba_dur_ready with DUR message displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Ready for pickup status NBA visible
+#   - DUR (Drug Utilization Review) message displays
+#   - Pickup location shown
+#   - Action to pickup works
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: ReadyRx
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_readyForPickup}
+- runFlow: ../../subflows/Pharmacy/validate_dur_questions_display.yaml

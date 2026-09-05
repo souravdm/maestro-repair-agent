@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC003 - Records"
+tags:
+  - health
+  - regression
+  - migrated-xcuitest
+---
+# Flow: View health records
+# Source: Migrated from XCUITest HealthRecordsTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runFlow: ../../subflows/Health/viewHealthRecords.yaml

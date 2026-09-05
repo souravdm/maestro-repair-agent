@@ -1,0 +1,40 @@
+# BUSINESS LOGIC: ExtraCare Member Eligibility (High Priority)
+# Validates: ExtraCare module displays for eligible members on Shop tab
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - ExtraCare shows for ExtraCare members with rewards/deals
+#   - Module appears on Shop tab (not Health & Pharmacy tab)
+#   - Displays "Savings & rewards" header
+#   - Provides "View all rewards" and "View all deals" options
+#   - User segment "user + EC" or "user + ECplus" receives module from PE
+#   - Correct ranking and order of content cards
+# This test verifies that LOA2 user (ExtraCare eligible) sees ExtraCare module
+# with rewards and deals on the Shop tab
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - business_units
+    - extracare
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_shop}
+- waitForAnimationToEnd
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_extracare.savingsAndRewardsHeader}
+      speed: 15
+- assertVisible: ${output.homescreen_extracare.savingsAndRewardsHeader}
+- assertVisible: ${output.homescreen_extracare.viewAllRewards}

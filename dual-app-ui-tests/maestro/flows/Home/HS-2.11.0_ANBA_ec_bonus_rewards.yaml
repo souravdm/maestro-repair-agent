@@ -1,0 +1,33 @@
+# BUSINESS LOGIC: ANBA: ExtraCare Bonus Rewards
+# Validates: ExtraCare bonus rewards anba_loy_ecplusreward displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - ExtraCare bonus rewards NBA visible
+#   - Bonus amount displays correctly
+#   - Action button available
+#   - Navigation to rewards works
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/LoginScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/activity_nba_loaded.yaml
+- tapOn: ${output.homescreen_splitview.tab_shop}
+- tapOn: "Close Tooltip"
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_bonusRewardBtn}
+- runFlow: ../../subflows/Shop/extracare/validate_rewards_screen.yaml

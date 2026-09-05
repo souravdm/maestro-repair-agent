@@ -1,0 +1,38 @@
+# BUSINESS LOGIC: Error Handling with Retry Mechanism (High Priority)
+# Validates: Display error banner when network fails and allow retry
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Show "Not connected to the internet" banner on network failure
+#   - Provide refresh/retry option (pull-to-refresh)
+#   - Cache previous content when possible
+#   - Graceful degradation for partial failures
+#   - Error clears when connection is restored
+# This test simulates network disconnection, verifies error display, then reconnects
+# and validates that pull-to-refresh recovers the content
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - error_handling
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+onFlowComplete:
+    - setAirplaneMode: disabled
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- setAirplaneMode: enabled
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_error.notConnectedText}
+- setAirplaneMode: disabled
+- waitForAnimationToEnd
+- swipe:
+      direction: down
+- waitForAnimationToEnd
+- assertNotVisible: ${output.homescreen_error.notConnectedText}

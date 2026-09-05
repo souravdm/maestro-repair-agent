@@ -1,0 +1,35 @@
+# BUSINESS LOGIC: Counsel Health Navigation
+# Validates: User can navigate to Counsel Health enrollment from homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Tapping Counsel Health CTA opens bottom sheet
+#   - Message physician button navigates to enrollment
+#   - Enrollment landing page loads correctly
+#   - Navigation flow completes successfully
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: ReadyNotFilledRx
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_counsel.title}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_counsel.businessUnitCta}
+- tapOn: ${output.homescreen_counsel.businessUnitCta}
+- tapOn: ${output.homescreen_counsel.messagePhysicianBtn}
+- runFlow: "../../subflows/Webview/counsel/validate_enrollment_landing.yaml"

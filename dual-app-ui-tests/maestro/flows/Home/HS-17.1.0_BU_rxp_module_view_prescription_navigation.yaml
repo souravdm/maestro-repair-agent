@@ -1,0 +1,38 @@
+# BUSINESS LOGIC: Business Unit RxP: View Prescription Navigation
+# Validates: User can view prescriptions from homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Pharmacy module displays prescriptions
+#   - View all prescriptions option available
+#   - Navigation to prescription details works
+#   - Prescription information displays correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js 
+    - runScript: ../../screens/Pharmacy/pharmacyObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_pharmacy.header}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_pharmacy.viewAllPrescriptions}
+- tapOn: ${output.homescreen_pharmacy.viewAllPrescriptions}
+- runFlow: "../../subflows/Pharmacy/validate_prescriptions_displayed.yaml"

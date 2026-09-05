@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: Smoke Test: Relaunch with KSMI
+# Validates: User remains signed in after app relaunch with KSMI
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Login state persists across app sessions
+#   - Session token automatically refreshed
+#   - No re-authentication required within 30 days
+#   - Homescreen loads with authenticated content
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js 
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: WOOL
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- assertNotVisible: ${output.homescreen_error.somethingWentWrong}
+
+- stopApp
+- launchApp
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- runFlow: ../../subflows/SearchAndNav/validate_header_signed_in.yaml

@@ -1,0 +1,28 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Loads Successfully (Signed In)
+# Validates: Homescreen loads successfully for authenticated users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Homescreen loads without errors
+#   - Activity zone visible with personalized content
+#   - All core zones visible
+#   - Bottom navigation bar present
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js 
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: WOOL
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml

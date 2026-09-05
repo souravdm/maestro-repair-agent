@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: ANBA: Fulfillment Status - Abandoned Cart
+# Validates: Fulfillment Status Abandoned Cart (anba_fs_abandoned_cart) displays for users with abandoned carts
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Fulfillment Status Abandoned Cart ANBA displays in Activity module
+#   - Shows abandoned cart notifications
+#   - Provides cart recovery information
+#   - Call-to-action to complete purchase
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - fulfillment_status
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WereWorkingOnIt
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_fs_abandoned_cart}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml

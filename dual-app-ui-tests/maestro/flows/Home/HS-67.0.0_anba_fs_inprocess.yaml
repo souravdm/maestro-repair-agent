@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Fulfillment Status - In Process
+# Validates: Fulfillment Status In Process (anba_fs_inprocess) displays for users with processing orders
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Fulfillment Status In Process ANBA displays in Activity module
+#   - Shows order processing notifications
+#   - Provides processing status updates
+#   - Call-to-action for order status
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - fulfillment_status
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: DOBBY_BOOK
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_fs_inprocess}

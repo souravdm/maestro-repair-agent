@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: Articles You May Like Load
+# Validates: Discovery articles load and display correctly
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Articles section visible in discovery zone
+#   - Multiple articles load
+#   - Article titles and images display
+#   - Articles are personalized for user
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_healthInsights.header}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.articlesYouMightLikeSubheader}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.articleTile}
+- tapOn: ${output.homescreen_healthInsights.articleTile}

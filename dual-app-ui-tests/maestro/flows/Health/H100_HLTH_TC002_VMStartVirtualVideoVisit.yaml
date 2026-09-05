@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC002 - Vm Start Virtual Video Visit"
+tags:
+  - vm
+  - virtual-visit
+  - minuteclinic
+  - smoke
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Health/VirtualMedicineScreen.js
+- runScript: ../../screens/Health/MinuteClinicCheckinScreen.js
+
+# Test: Virtual MinuteClinic Visit
+
+# Wait for app to load
+- assertVisible: ${HOME_TAB}
+
+- assertVisible: ${HOME_TAB}
+
+# Navigate to Virtual Visit
+- tapOn: ${HOME_TAB}
+- tapOn: ${MC_VISIT_LNK}
+- assertVisible: ${VISIT_CHECKLIST_TITLE}
+
+# Verify virtual visit elements
+- assertVisible:
+    text: ".*virtual.*|.*video.*|.*visit.*"
+- assertVisible:
+    text: ".*checklist.*|.*prepare.*"
+
+# Verify visit types
+- assertVisible:
+    text: ".*symptoms.*|.*conditions.*"

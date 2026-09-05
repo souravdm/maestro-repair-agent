@@ -1,0 +1,28 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Splitview Tooltips
+# Validates: Tab tooltips display helpful information
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health & Pharmacy tooltip displays
+#   - Shop tooltip displays
+#   - Tooltip text is helpful
+#   - Tooltips dismiss correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- assertVisible: ${output.homescreen_splitview.tooltip_health_and_pharmacy_title}
+- assertVisible: ${output.homescreen_splitview.tooltip_health_and_pharmacy_body}
+
+- tapOn: ${output.homescreen_splitview.tab_shop}
+- assertVisible: ${output.homescreen_splitview.tooltip_shop_title}
+- assertVisible: ${output.homescreen_splitview.tooltip_shop_body}

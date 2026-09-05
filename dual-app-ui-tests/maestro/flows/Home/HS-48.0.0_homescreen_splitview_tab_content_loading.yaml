@@ -1,0 +1,40 @@
+# BUSINESS LOGIC: Splitview Tab Content Loading (High Priority)
+# Validates: Content loads correctly when switching between Health & Pharmacy and Shop tabs
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health & Pharmacy tab is default on load
+#   - Shop tab shows shopping deals and ExtraCare rewards
+#   - Tab state persists during session
+#   - Content updates when switching tabs
+#   - Switching tabs triggers new API calls
+#   - Show loading state during switch
+#   - Preserve scroll position within tab
+#   - Cache tab content for quick switching
+# This test verifies tab switching loads correct content and maintains state
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - splitview
+    - tab_switching
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- assertVisible: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- tapOn: ${output.homescreen_splitview.tab_shop}
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_extracare.savingsAndRewardsHeader}
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_activity.activityHeader}

@@ -1,0 +1,29 @@
+# BUSINESS LOGIC: Homescreen Loading Performance (Critical Requirement)
+# Validates: Homescreen must load within 10 seconds with all core zones visible
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Bottom navigation bar must be present
+#   - Discovery zone header must be visible within 10 seconds
+#   - No "Something went wrong" error should appear
+#   - All core zones (Activity, Discovery, Business Units) should load
+# This test ensures the app meets the critical performance SLA of 10-second load time
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - critical
+    - performance
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- extendedWaitUntil:
+      visible: ${output.homescreen_discover.discoverHeader}
+      timeout: 10000
+- assertVisible: ${output.searchnav_bottom.homeBtn}
+- assertNotVisible: ${output.homescreen_error.somethingWentWrong}

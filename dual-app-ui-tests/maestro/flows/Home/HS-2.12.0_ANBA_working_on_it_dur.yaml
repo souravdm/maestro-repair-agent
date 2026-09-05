@@ -1,0 +1,29 @@
+# BUSINESS LOGIC: ANBA: Working On It Status
+# Validates: "We're working on it" anba_dur_workingonit prescription status displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Working on it status NBA displays
+#   - Correct status message shows
+#   - Estimated completion time visible
+#   - Tap action works correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+        file: ../../testdata/users_qa.js
+        env:
+            loginData: availableForRenewal
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_wereWorkingOnIt}
+- runFlow: ../../subflows/Pharmacy/validate_dur_questions_display.yaml

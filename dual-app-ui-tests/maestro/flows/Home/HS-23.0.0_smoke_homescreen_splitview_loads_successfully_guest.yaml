@@ -1,0 +1,22 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Splitview Loads (Guest)
+# Validates: Splitview tabs load correctly for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health & Pharmacy tab is default
+#   - Shop tab available
+#   - Tab switching works
+#   - Content loads for each tab
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- assertVisible: ${output.homescreen_splitview.tab_shop}
+- assertVisible: ${output.homescreen_splitview.tab_health_and_pharmacy}

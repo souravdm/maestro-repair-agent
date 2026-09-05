@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: ANBA: Loyalty - Personalized Deal
+# Validates: Loyalty Personalized Deal (anba_loy_persdeal) displays for users with personalized offers
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Loyalty Personalized Deal ANBA displays in Activity module
+#   - Shows personalized deal notifications
+#   - Provides deal details and savings information
+#   - Call-to-action to view deal
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - loyalty
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_loy_persdeal}
+- runFlow: ../../subflows/Shop/extracare/validate_rewards_screen.yaml

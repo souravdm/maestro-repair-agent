@@ -1,0 +1,52 @@
+# BUSINESS LOGIC: Business Unit: ExtraCare Savings
+# Validates: ExtraCare savings and rewards display on Shop tab
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - ExtraCare module visible on Shop tab
+#   - Savings and rewards display
+#   - View all rewards option available
+#   - Module appears in correct position
+
+appId: ${APP_ID}
+
+tags:
+  - homescreen
+  - ignore
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript:
+      file: ../../testdata/users_qa.js
+      env:
+        loginData: WERE_WORKING_ON_IT_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/activity_nba_loaded.yaml
+- tapOn: ${output.homescreen_splitview.tab_shop}
+- tapOn: "Close Tooltip"
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.ecPlusHeader}
+    speed: 10
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.savingsAndRewardsHeader}
+    speed: 10
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.startShoppingText}
+    speed: 10
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.shopNow}
+    speed: 10
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.viewAllRewards}
+    speed: 10
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_extracare.viewAllDeals}
+    speed: 10

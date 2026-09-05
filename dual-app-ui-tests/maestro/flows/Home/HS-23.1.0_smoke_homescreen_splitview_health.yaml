@@ -1,0 +1,59 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Splitview Health Tab
+# Validates: Health & Pharmacy tab displays correct content
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health & Pharmacy tab is default
+#   - Health services visible
+#   - Pharmacy module visible
+#   - Content loads correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.healthServices}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.inPersonVirtualCare}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.scheduleFluShot}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.healthShortcuts}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.exploreCareOptions}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.viewAllVaccineOptions}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.header}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.xponentialSubheader}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthInsights.articlesYouMightLikeSubheader}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_disclaimer.text}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_appRating.header}
+

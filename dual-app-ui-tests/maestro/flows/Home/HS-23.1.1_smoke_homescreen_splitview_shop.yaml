@@ -1,0 +1,45 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Splitview Shop Tab
+# Validates: Shop tab displays shopping content
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Shop tab shows retail content
+#   - ExtraCare rewards visible
+#   - Shop essentials visible
+#   - Content loads correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+
+- scrollUntilVisible:
+      element:
+          text: "Shop CVS"
+- scrollUntilVisible:
+      element:
+          text: "Shop essentials"
+- scrollUntilVisible:
+      element:
+          text: "All products"
+- scrollUntilVisible:
+      element:
+          text: "Extra Big Deals"
+- scrollUntilVisible:
+      element:
+          text: "Photo deals"
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_disclaimer.text}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_appRating.header}
+

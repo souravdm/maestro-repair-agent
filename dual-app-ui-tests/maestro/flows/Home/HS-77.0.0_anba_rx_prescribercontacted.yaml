@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Rx Status - Prescriber Contacted
+# Validates: Rx Prescriber Contacted (anba_rx_prescribercontacted) displays for users with contacted prescribers
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Rx Prescriber Contacted ANBA displays in Activity module
+#   - Shows prescriber contact notifications
+#   - Provides contact status
+#   - Call-to-action for prescription details
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - rx_status
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: DOBBY_BOOK
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_rx_prescribercontacted}

@@ -1,0 +1,33 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Reconnect Internet
+# Validates: Homescreen recovers when internet connection is restored
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Error banner clears when connection restored
+#   - Content refreshes automatically
+#   - All zones reload successfully
+#   - No manual refresh required
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js 
+  - setAirplaneMode: enabled
+onFlowComplete:
+  - setAirplaneMode: disabled
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- assertVisible: ${output.homescreen_error.notConnectedText}
+- setAirplaneMode: disabled
+
+- retry:
+    maxRetries: 2
+    commands:
+      - swipe:
+            direction: DOWN
+      - assertNotVisible: ${output.homescreen_error.notConnectedText}

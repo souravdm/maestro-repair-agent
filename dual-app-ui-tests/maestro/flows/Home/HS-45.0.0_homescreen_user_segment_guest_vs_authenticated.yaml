@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: Guest vs Authenticated User Experience (High Priority)
+# Validates: Different content and features for guest vs authenticated users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Guest User: Limited content, discovery zone only
+#   - Guest User: Sign-in prompts in place of activity
+#   - Guest User: Generic health services and shop content
+#   - Authenticated User: Personalized activity zone
+#   - Authenticated User: Personalized discovery recommendations
+#   - Authenticated User: ExtraCare rewards and deals
+# This test verifies guest user segment receives correct limited content and sign-in prompts
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - user_segments
+    - guest_vs_authenticated
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- assertVisible: ${output.searchnav_bottom.homeBtn}
+- tapOn: ${output.searchnav_bottom.menuBtn}
+- waitForAnimationToEnd

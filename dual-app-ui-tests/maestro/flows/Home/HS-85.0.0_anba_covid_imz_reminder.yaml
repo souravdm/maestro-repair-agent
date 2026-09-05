@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: ANBA: Health Services - COVID Reminder
+# Validates: COVID Reminder (anba_covid_imz_reminder) displays for users needing COVID vaccine
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - COVID Reminder ANBA displays in Activity module
+#   - Shows COVID vaccine reminder notifications
+#   - Provides COVID vaccine information
+#   - Call-to-action for COVID vaccine scheduling
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - anba
+    - health_services
+    - immunization
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: LEACH_ADAM
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_covid_imz_reminder}

@@ -1,0 +1,36 @@
+# BUSINESS LOGIC: Counsel Health Business Unit Eligibility (High Priority)
+# Validates: Counsel Health module displays for eligible users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Counsel Health shows for eligible users with care consult access
+#   - Module is returned from Personalization Engine based on user segment
+#   - Displays "Unlimited access to real providers in minutes" title
+#   - Provides "Message a Counsel physician" call-to-action button
+#   - Correct ranking and order of content cards
+# This test verifies that LOA2 user segment receives Counsel Health module
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - high_priority
+    - business_units
+    - counsel_health
+    - business_logic
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_counsel.title}
+      speed: 15
+- assertVisible: ${output.homescreen_counsel.title}
+- assertVisible: ${output.homescreen_counsel.messagePhysicianBtn}

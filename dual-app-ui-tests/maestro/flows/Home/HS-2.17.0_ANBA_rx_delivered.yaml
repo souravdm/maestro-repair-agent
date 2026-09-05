@@ -1,0 +1,55 @@
+# BUSINESS LOGIC: ANBA: RX Delivered
+# Validates: Delivered prescription NBA displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Delivered status NBA visible
+#   - Delivery confirmation shows
+#   - Delivery date displays
+#   - Reorder option available
+
+appId: ${APP_ID}
+tags:
+  - homescreen
+  - activity_nba
+  - pharmacy
+  - rx_delivered
+  - authenticated
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js 
+  - runScript:
+      file: ../../testdata/users_qa.js
+      env:
+        loginData: REGRESSION_PE
+---
+# Test: HS-2.17.0 - Activity NBA: Rx Delivered
+# Validates that the "Rx Delivered" activity NBA appears on homescreen
+# User Segment: User + Rx + EC+
+
+- runFlow: ../../subflows/Common/launchApp.yaml
+
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+# Verify Activity NBA section is visible
+- assertVisible:
+    id: ${output.homescreen_activity.activityHeader}
+    
+# Verify Rx Delivered NBA card is present
+- assertVisible:
+    text: "Delivered"
+    
+# Tap on Rx Delivered NBA
+- tapOn:
+    text: "Delivered"
+    
+# Verify navigation to prescription details or order history
+- assertVisible:
+    text: "Prescription|Order Details|Delivered"

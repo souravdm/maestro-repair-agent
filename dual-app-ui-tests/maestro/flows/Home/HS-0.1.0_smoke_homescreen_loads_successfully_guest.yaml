@@ -1,0 +1,20 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Loads Successfully (Guest)
+# Validates: Homescreen loads successfully for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Homescreen loads without errors
+#   - All core zones visible (Discovery, Business Units)
+#   - Bottom navigation bar present
+#   - No error banners displayed
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml

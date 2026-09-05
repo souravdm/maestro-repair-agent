@@ -1,0 +1,39 @@
+# BUSINESS LOGIC: Counsel Health Bottom Sheet Display
+# Validates: Counsel Health details display in bottom sheet modal
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Bottom sheet opens when tapping Counsel Health CTA
+#   - Care consult description displays
+#   - Message and receive treatment text visible
+#   - Third party disclaimer displays
+#   - Message physician button available and functional
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: ReadyNotFilledRx
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_counsel.title}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_counsel.businessUnitCta}
+- tapOn: ${output.homescreen_counsel.businessUnitCta}
+
+- assertVisible: ${output.homescreen_counsel.careConsultText}
+- assertVisible: ${output.homescreen_counsel.messageAndReceiveTreatmentText}
+- assertVisible: ${output.homescreen_counsel.thirdPartyDisclaimerText}
+- assertVisible: ${output.homescreen_counsel.messagePhysicianBtn}

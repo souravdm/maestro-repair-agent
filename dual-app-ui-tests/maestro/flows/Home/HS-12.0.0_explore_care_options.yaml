@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: Explore Care Options
+# Validates: Care options are available and navigable from homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Care options module displays
+#   - Multiple care options available
+#   - Navigation to care options works
+#   - Content loads successfully
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_healthServices.healthShortcuts}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.exploreCareOptions}
+
+- tapOn: ${output.homescreen_healthServices.exploreCareOptions}
+- assertVisible: "Find care"

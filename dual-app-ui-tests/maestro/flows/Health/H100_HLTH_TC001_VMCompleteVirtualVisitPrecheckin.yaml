@@ -1,0 +1,89 @@
+appId: ${APP_ID}
+name: "H100 | Health | TC001 - Vm Complete Virtual Visit Precheckin"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - vm
+  - virtual_visit
+  - precheckin
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Health/VirtualMedicineScreen.js
+- runScript: ../../screens/Health/MinuteClinicCheckinScreen.js
+
+# Test: Virtual Visit Pre-Checkin Flow
+# Verifies virtual MinuteClinic appointment pre-checkin process
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Health screen to load
+- assertVisible: ${HEALTH_TAB}
+
+- tapOn: ${HEALTH_TAB}
+- assertVisible: ${HEALTH_TAB}
+
+# Navigate to MinuteClinic
+- tapOn: "MinuteClinic"
+- assertVisible: "MinuteClinic"
+
+# Start virtual visit
+- tapOn: "Virtual Visit"
+- assertVisible: "Virtual Visit"
+- assertVisible: "Start Pre-Check-In"
+
+# Begin pre-checkin
+- tapOn: "Start Pre-Check-In"
+- assertVisible: "Pre-Check-In"
+
+# Select visit reason
+- assertVisible: "What brings you in today?"
+- tapOn: "Cold & Upper Respiratory"
+- tapOn: "Continue"
+
+# Patient information
+- assertVisible: "Patient Information"
+- assertVisible: "First Name"
+- assertVisible: "Last Name"
+- assertVisible: "Date of Birth"
+- tapOn: "Continue"
+
+# Insurance information
+- assertVisible: "Insurance"
+- tapOn: "I have insurance"
+- assertVisible: "Insurance Provider"
+- tapOn: "Continue"
+
+# Medical history
+- assertVisible: "Medical History"
+- assertVisible: "Allergies"
+- assertVisible: "Current Medications"
+- tapOn: "Continue"
+
+# Payment method
+- assertVisible: "Payment"
+- assertVisible: "Payment Method"
+- tapOn: "Continue"
+
+# Review and confirm (non-transactional - stop before final submission)
+- assertVisible: "Review"
+- assertVisible: "Patient Info"
+- assertVisible: "Insurance"
+- assertVisible: "Medical History"
+- assertVisible: "Submit Pre-Check-In"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

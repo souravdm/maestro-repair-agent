@@ -1,0 +1,46 @@
+# BUSINESS LOGIC: App Rating Component Display and Interaction
+# Validates: App rating prompt displays and user can provide feedback
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Shows "Healthier happens together®" header
+#   - Provides "Love it!" and "Not quite" feedback options
+#   - Appears conditionally based on user engagement
+#   - Dismissible by user
+#   - Feedback submission works correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- scrollUntilVisible:
+      element:
+        text: ${output.homescreen_appRating.header}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_appRating.subheader}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_appRating.bodyText}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_appRating.thumbsUp}
+- scrollUntilVisible:
+    element:
+      text: ${output.homescreen_appRating.thumbsDown}
+- tapOn:
+    text: ${output.homescreen_appRating.thumbsUp}
+    delay: 5000
+- tapOn: ${output.homescreen_appRating.thumbsUp}
+- assertVisible: "Tell us what you think!"
+- pressKey: "Back"
+- tapOn: ${output.homescreen_appRating.thumbsDown}
+- assertVisible: "Tell us what you think!"
+

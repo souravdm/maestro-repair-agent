@@ -1,0 +1,44 @@
+# BUSINESS LOGIC: Health Services Module Loaded
+# Validates: Health Services business unit displays on homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health Services module visible
+#   - Vaccine scheduling option available
+#   - Appointment scheduling option available
+#   - Module appears in correct position
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- tapOn: ${output.account_signIn.continueAsGuestBtn}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- tapOn: ${output.homescreen_splitview.tab_health_and_pharmacy}
+- runFlow:
+      file: "../../subflows/Home/bu_module_displayed.yaml"
+      env:
+          BU_MODULE_HEADER: ${output.homescreen_healthServices.healthServices}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.inPersonVirtualCare}
+      speed: 15
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.scheduleFluShot}
+      speed: 15
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.healthShortcuts}
+      speed: 15
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.exploreCareOptions}
+- scrollUntilVisible:
+      element:
+          text: ${output.homescreen_healthServices.viewAllVaccineOptions}
+      speed: 15

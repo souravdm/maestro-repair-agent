@@ -1,0 +1,23 @@
+# BUSINESS LOGIC: ANBA: Activity Component Loads
+# Validates: Activity zone with Next Best Action cards loads
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Activity zone displays for authenticated users
+#   - NBA cards load and display
+#   - Prescription count shows correctly
+#   - Priority NBAs appear first
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: WereWorkingOnIt
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow: ../../subflows/Home/activity_nba_loaded.yaml

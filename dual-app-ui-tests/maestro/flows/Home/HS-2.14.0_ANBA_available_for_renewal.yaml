@@ -1,0 +1,28 @@
+# BUSINESS LOGIC: ANBA: Available For Renewal
+# Validates: Available for renewal prescription anba_rx_refill_renewal displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Available for renewal status NBA visible
+#   - Renewal option available
+#   - Correct action text displays
+#   - Tap action navigates correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript:
+      file: ../../testdata/users_qa.js
+      env:
+        loginData: APRIL_MLP
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn: ${output.account_onboarding.letsGetStartedBtn}
+- runFlow: ../../subflows/Account/complete_signin_and_otp_dob.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_availableForRenewal}
+- runFlow: ../../subflows/Pharmacy/validate_prescriptions_displayed.yaml
