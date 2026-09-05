@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="456.003" timestamp="2026-09-05T08:50:47">
+    <testcase id="H100 | Benefits | Claims | TC015 - No Claims" name="H100 | Benefits | Claims | TC015 - No Claims" classname="H100 | Benefits | Claims | TC015 - No Claims" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC015_noClaims.yaml" time="455.96" timestamp="2026-09-05T08:50:47" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, history, smoke"/>
+      </properties>
+      <failure>Assertion is false: "We couldn.*" is visible</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
