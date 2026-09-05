@@ -1,0 +1,1388 @@
+08:25:36.852 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:25:36.853 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:25:36.854 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/CommonScreen.js RUNNING
+08:25:37.266 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:25:37.267 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:25:37.267 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:25:37.267 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/CommonScreen.js COMPLETED
+08:25:37.267 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:25:37.274 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:25:37.274 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:25:37.283 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:25:37.283 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../config/credentials-loader.js RUNNING
+08:25:37.297 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: ✓ Environment detected: QA
+08:25:37.302 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Environment: QA
+08:25:37.302 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Loaded user: DEAN_FANT
+08:25:37.302 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: Email: dean@qa2.com
+08:25:37.302 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: DOB: 05301982
+08:25:37.302 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../config/credentials-loader.js COMPLETED
+08:25:37.303 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:25:37.305 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:25:37.305 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Common/launchAndSetup.yaml RUNNING
+08:25:37.306 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:25:37.307 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:25:37.307 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/CommonScreen.js RUNNING
+08:25:37.311 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:25:37.311 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:25:37.311 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:25:37.311 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/CommonScreen.js COMPLETED
+08:25:37.311 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Account/LoginScreen.js RUNNING
+08:25:37.314 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Account/LoginScreen.js COMPLETED
+08:25:37.314 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/SystemPermissionsScreen.js RUNNING
+08:25:37.317 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/SystemPermissionsScreen.js COMPLETED
+08:25:37.317 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Account/OnboardingScreen.js RUNNING
+08:25:37.319 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Account/OnboardingScreen.js COMPLETED
+08:25:37.319 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../screens/Common/UpdateManagerScreen.js RUNNING
+08:25:37.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../screens/Common/UpdateManagerScreen.js COMPLETED
+08:25:37.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Launch app "${APP_ID}" RUNNING
+08:26:08.774 [DEBUG] maestro.Maestro.setPermissionInternal: Failed to set permission com.google.android.apps.aicore.service.BIND_SERVICE for app com.health100.launchers: shell command failed (exit -1): 
+Exception occurred while executing 'grant':
+java.lang.IllegalArgumentException: Unknown permission com.google.android.apps.aicore.service.BIND_SERVICE
+	at com.android.server.wm.Task$$ExternalSyntheticBUOutline2.m(R8$$SyntheticClass:0)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:1072)
+	at com.android.server.permission.access.permission.PermissionService.access$setRuntimePermissionGranted(PermissionService.kt:119)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted(PermissionService.kt:970)
+	at com.android.server.permission.access.permission.PermissionService.setRuntimePermissionGranted$default(PermissionService.kt:875)
+	at com.android.server.permission.access.permission.PermissionService.grantRuntimePermission(PermissionService.kt:837)
+	at com.android.server.pm.permission.PermissionManagerService.grantRuntimePermission(PermissionManagerService.java:590)
+	at android.permission.PermissionManager.grantRuntimePermissionInternal(PermissionManager.java:654)
+	at android.permission.PermissionManager.grantRuntimePermission(PermissionManager.java:619)
+	at com.android.server.pm.PackageManagerShellCommand.runGrantRevokePermission(PackageManagerShellCommand.java:2762)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:319)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:40)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7041)
+	at android.os.Binder.shellCommand(Binder.java:1054)
+	at android.os.Binder.onTransact(Binder.java:914)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4744)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7025)
+	at android.os.Binder.execTransactInternal(Binder.java:1328)
+	at android.os.Binder.execTransact(Binder.java:1282)
+
+08:26:09.017 [ INFO] maestro.Maestro.launchApp$lambda$5: Launching app com.health100.launchers
+08:26:09.018 [ INFO] maestro.Maestro.launchApp$lambda$5: Stopping com.health100.launchers app during launch
+08:26:09.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Launch app "${APP_ID}" COMPLETED
+08:26:09.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:26:09.236 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:26:09.243 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:09.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:09.755 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:09.755 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:10.316 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:26:10.317 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 3000} RUNNING
+08:26:10.331 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 3000} COMPLETED
+08:26:10.334 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.general_updateManager.notNowBtn}" is visible RUNNING
+08:26:17.865 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:26:17.867 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.general_updateManager.notNowBtn}" is visible SKIPPED
+08:26:17.867 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:17.870 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:17.870 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care" is visible RUNNING
+08:26:26.702 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care" is visible COMPLETED
+08:26:26.704 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 3000} RUNNING
+08:26:26.705 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 3000} COMPLETED
+08:26:26.705 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.general_updateManager.notNowBtn}" is visible RUNNING
+08:26:33.780 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:26:33.781 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.general_updateManager.notNowBtn}" is visible SKIPPED
+08:26:33.782 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:33.784 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:33.784 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:26:33.787 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:26:33.788 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.iAgreeBtn}" is visible RUNNING
+08:26:33.853 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:33.856 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:33.856 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_health100_onboarding.iAgreeBtn}" RUNNING
+08:26:33.928 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=I agree, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[472,2188][609,2241], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=472, y=2188, width=137, height=53))
+08:26:34.757 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:26:34.761 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2214) using hierarchy based logic for wait
+08:26:35.520 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:26:35.521 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_health100_onboarding.iAgreeBtn}" COMPLETED
+08:26:35.521 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:26:35.521 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:26:35.521 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:35.522 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:35.950 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:35.950 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:36.472 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:26:36.472 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.edu1Title}" is visible RUNNING
+08:26:36.571 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_health100_onboarding.onboardingContinueBtn}" RUNNING
+08:26:36.639 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Continue, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[449,2230][632,2283], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=449, y=2230, width=183, height=53))
+08:26:37.505 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:26:37.506 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2256) using hierarchy based logic for wait
+08:26:37.788 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:26:37.788 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_health100_onboarding.onboardingContinueBtn}" COMPLETED
+08:26:37.788 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:26:37.789 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:26:37.789 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:37.789 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:38.120 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:38.120 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:38.522 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:26:38.523 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.edu1Title}" is visible COMPLETED
+08:26:38.523 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.edu2Title}" is visible RUNNING
+08:26:38.579 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_health100_onboarding.getStartedBtn}" RUNNING
+08:26:38.636 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Get started, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[426,2230][654,2283], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=426, y=2230, width=228, height=53))
+08:26:39.517 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:26:39.520 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2256) using hierarchy based logic for wait
+08:26:39.840 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:26:39.840 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_health100_onboarding.getStartedBtn}" COMPLETED
+08:26:39.840 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:26:39.841 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:26:39.841 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:39.841 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:39.959 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:26:39.959 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:26:40.194 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:26:40.194 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.edu2Title}" is visible COMPLETED
+08:26:40.194 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:26:40.195 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:26:40.195 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.pushNotifTitle}" is visible RUNNING
+08:26:47.276 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:26:47.277 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.pushNotifTitle}" is visible SKIPPED
+08:26:47.277 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.simplifySignInTitle}" is visible RUNNING
+08:26:47.392 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:26:47.393 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.simplifySignInTitle}" is visible SKIPPED
+08:26:47.393 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:47.395 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:47.395 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.iAgreeBtn}" is visible COMPLETED
+08:26:47.395 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:47.396 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:47.396 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:26:47.398 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:26:47.398 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.common_messages.healthInPocketMsg}" is visible RUNNING
+08:26:54.472 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:26:54.473 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.common_messages.healthInPocketMsg}" is visible SKIPPED
+08:26:54.473 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:26:54.476 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:26:54.476 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Common/launchAndSetup.yaml COMPLETED
+08:26:54.476 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Account/authentication/login.yaml RUNNING
+08:26:54.479 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:26:54.481 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:26:54.481 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/SimplifySignInScreen.js RUNNING
+08:26:54.484 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/SimplifySignInScreen.js COMPLETED
+08:26:54.485 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/NotificationEnrollmentScreen.js RUNNING
+08:26:54.488 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/NotificationEnrollmentScreen.js COMPLETED
+08:26:54.488 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/SystemPermissionsScreen.js RUNNING
+08:26:54.492 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/SystemPermissionsScreen.js COMPLETED
+08:26:54.492 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.welcomeTitle}|${output.common_buttons.signInBtn}" is visible RUNNING
+08:26:54.555 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.common_buttons.signInBtn}" RUNNING
+08:27:01.584 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Text matching regex: Sign in
+08:27:01.771 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:27:01.772 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:01.968 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.common_buttons.signInBtn}" WARNED
+08:27:01.968 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_health100_onboarding.iAgreeBtn}" is visible RUNNING
+08:27:02.087 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:02.087 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.iAgreeBtn}" is visible SKIPPED
+08:27:02.088 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_health100_onboarding.continueWithMobileOrEmail}" is visible RUNNING
+08:27:02.149 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_health100_onboarding.continueWithMobileOrEmail}" is visible COMPLETED
+08:27:02.149 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that ${maestro.visible(${output.account_health100_onboarding.continueWithCvsHealth}) || maestro.visible(${output.account_health100_onboarding.continueWithPartner}) is true RUNNING
+08:27:02.155 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that ${maestro.visible(${output.account_health100_onboarding.continueWithCvsHealth}) || maestro.visible(${output.account_health100_onboarding.continueWithPartner}) is true COMPLETED
+08:27:02.156 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_health100_onboarding.continueAsAGuest}" is visible RUNNING
+08:27:02.219 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_health100_onboarding.continueAsAGuest}" is visible COMPLETED
+08:27:02.219 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.account_health100_onboarding.continueWithMobileOrEmail}" RUNNING
+08:27:02.277 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Continue with mobile number or email, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[126,1649][954,1696], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=126, y=1649, width=828, height=47))
+08:27:03.138 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:27:03.139 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1672) using hierarchy based logic for wait
+08:27:03.749 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:27:03.749 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.account_health100_onboarding.continueWithMobileOrEmail}" COMPLETED
+08:27:03.749 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_health100_onboarding.welcomeTitle}|${output.common_buttons.signInBtn}" is visible COMPLETED
+08:27:03.750 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_login.emailLabel}" is visible RUNNING
+08:27:03.817 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_login.emailLabel}" is visible COMPLETED
+08:27:03.818 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.account_login.kmsiSwitch}" RUNNING
+08:27:10.808 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Text matching regex: Keep me signed in
+08:27:10.869 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:27:10.869 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:10.934 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.account_login.kmsiSwitch}" WARNED
+08:27:10.934 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_login.emailField}", Index: ${output.account_login.emailFieldIndex} RUNNING
+08:27:10.993 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Mobile number or email, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[105,967][601,1030], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=105, y=967, width=496, height=63))
+08:27:11.812 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:27:11.813 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (353, 998) using hierarchy based logic for wait
+08:27:13.547 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:27:13.548 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_login.emailField}", Index: ${output.account_login.emailFieldIndex} COMPLETED
+08:27:13.549 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${output.user.email} RUNNING
+08:27:13.551 [ INFO] maestro.Maestro.inputText: Inputting text: dean@qa2.com
+08:27:15.058 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${output.user.email} COMPLETED
+08:27:15.058 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Press Back key RUNNING
+08:27:15.060 [ INFO] maestro.Maestro.pressKey: Pressing key BACK
+08:27:15.754 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Press Back key COMPLETED
+08:27:15.755 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.common_buttons.continueBtn}" RUNNING
+08:27:15.817 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Continue, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[449,2130][632,2183], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=449, y=2130, width=183, height=53))
+08:27:16.672 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:27:16.673 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2156) using hierarchy based logic for wait
+08:27:17.980 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:27:17.980 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.common_buttons.continueBtn}" COMPLETED
+08:27:17.980 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.otpSelectionTitle}" is visible RUNNING
+08:27:25.104 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:25.105 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.otpSelectionTitle}" is visible SKIPPED
+08:27:25.105 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.sendCodeBtn}" is visible RUNNING
+08:27:25.171 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_login.sendCodeBtn}" RUNNING
+08:27:25.245 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Send code, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[433,2209][647,2262], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=433, y=2209, width=214, height=53))
+08:27:26.116 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:27:26.116 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2235) using hierarchy based logic for wait
+08:27:27.723 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:27:27.724 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_login.sendCodeBtn}" COMPLETED
+08:27:27.724 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.sendCodeBtn}" is visible COMPLETED
+08:27:27.724 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.enterCodeTitle}" is visible RUNNING
+08:27:27.790 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that (Optional) "\d{6}" is visible RUNNING
+08:27:27.856 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that (Optional) "\d{6}" is visible COMPLETED
+08:27:27.856 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:27:27.856 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:27:27.857 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:27:27.857 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:28.001 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:27:28.001 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:28.197 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:27:28.197 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "\d{6}" is not visible RUNNING
+08:27:35.214 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:35.214 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "\d{6}" is not visible SKIPPED
+08:27:35.215 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_login.confirmBtn}" RUNNING
+08:27:35.273 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Confirm code, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[404,1977][677,2030], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=404, y=1977, width=273, height=53))
+08:27:36.129 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:27:36.130 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2003) using hierarchy based logic for wait
+08:27:37.385 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:27:37.386 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_login.confirmBtn}" COMPLETED
+08:27:37.386 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:27:37.387 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:27:37.387 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:27:37.387 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:37.498 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:27:37.498 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:27:37.720 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:27:37.720 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.notification_enrollment.screenTitle}" is visible RUNNING
+08:27:44.812 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:44.812 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.notification_enrollment.screenTitle}" is visible SKIPPED
+08:27:44.812 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:27:44.815 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:27:44.815 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.beforeYouExploreTitle}" is visible RUNNING
+08:27:51.896 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:51.897 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.beforeYouExploreTitle}" is visible SKIPPED
+08:27:51.897 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_login.dobTitle}|${output.account_login.notNowBtn}|${output.account_login.homeTab}|${output.account_login.extraCareFoundMsg}|${output.common_buttons.okBtn}|${output.simplify_sign_in.screenTitle}" is visible RUNNING
+08:27:51.966 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_login.dobTitle}|${output.account_login.notNowBtn}|${output.account_login.homeTab}|${output.account_login.extraCareFoundMsg}|${output.common_buttons.okBtn}|${output.simplify_sign_in.screenTitle}" is visible COMPLETED
+08:27:51.966 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.enterCodeTitle}" is visible COMPLETED
+08:27:51.966 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.passwordField}" is visible RUNNING
+08:27:59.035 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:27:59.036 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.passwordField}" is visible SKIPPED
+08:27:59.036 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_login.dobTitle}|${output.account_login.homeTab}|${output.account_login.notNowBtn}|${output.simplify_sign_in.screenTitle}" is visible RUNNING
+08:27:59.097 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_login.dobTitle}|${output.account_login.homeTab}|${output.account_login.notNowBtn}|${output.simplify_sign_in.screenTitle}" is visible COMPLETED
+08:27:59.097 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.dobTitle}" is visible RUNNING
+08:27:59.157 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.account_login.dobField}", Index: ${output.account_login.dobFieldFIndex} RUNNING
+08:27:59.221 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Date of birth, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[42,720][1038,946], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.view.View, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=720, width=996, height=226))
+08:28:00.569 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:28:00.571 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 833) using hierarchy based logic for wait
+08:28:02.147 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:28:02.147 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.account_login.dobField}", Index: ${output.account_login.dobFieldFIndex} COMPLETED
+08:28:02.147 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.allowPasteBtn}" is visible RUNNING
+08:28:09.269 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:09.270 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.allowPasteBtn}" is visible SKIPPED
+08:28:09.271 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${output.user.dob} RUNNING
+08:28:09.273 [ INFO] maestro.Maestro.inputText: Inputting text: 05301982
+08:28:10.397 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${output.user.dob} COMPLETED
+08:28:10.397 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.account_login.allowPasteBtn}" is visible RUNNING
+08:28:17.505 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:17.506 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.allowPasteBtn}" is visible SKIPPED
+08:28:17.506 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.common_buttons.okBtn}" RUNNING
+08:28:17.571 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Ok, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[858,1571][915,1624], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=858, y=1571, width=57, height=53))
+08:28:18.377 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:28:18.378 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (886, 1597) using hierarchy based logic for wait
+08:28:19.200 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:28:19.200 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.common_buttons.okBtn}" COMPLETED
+08:28:19.201 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.account_login.continueBtn}" RUNNING
+08:28:19.267 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Continue, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[449,2198][632,2251], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=449, y=2198, width=183, height=53))
+08:28:20.093 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:28:20.093 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2224) using hierarchy based logic for wait
+08:28:21.388 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:28:21.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.account_login.continueBtn}" COMPLETED
+08:28:21.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.account_login.dobTitle}" is visible COMPLETED
+08:28:21.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "${output.common_buttons.okBtn}" RUNNING
+08:28:28.456 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Text matching regex: OK
+08:28:28.520 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:28.520 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:28.681 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "${output.common_buttons.okBtn}" WARNED
+08:28:28.681 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) "Not Now|Not now|Don’t allow|Don’t Allow|Allow While Using App|Got it" RUNNING
+08:28:28.828 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Text matching regex: Not Now|Not now|Don’t allow|Don’t Allow|Allow While Using App|Got it
+08:28:28.898 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:28.899 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:29.008 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) "Not Now|Not now|Don’t allow|Don’t Allow|Allow While Using App|Got it" WARNED
+08:28:29.009 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) id: ${output.common_buttons.closeBtn} RUNNING
+08:28:29.125 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Id matching regex: Close
+08:28:29.188 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:29.189 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:29.292 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) id: ${output.common_buttons.closeBtn} WARNED
+08:28:29.293 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "Home" is not visible RUNNING
+08:28:29.860 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on (Optional) id: ${output.account_login.closeMenuBtn} RUNNING
+08:28:29.979 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Element not found: Id matching regex: xmark
+08:28:30.043 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:30.043 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:30.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on (Optional) id: ${output.account_login.closeMenuBtn} WARNED
+08:28:30.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "Home" is not visible COMPLETED
+08:28:30.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../postLogin/handleAllPostLoginScreens.yaml RUNNING
+08:28:30.149 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:28:30.149 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:28:30.149 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:28:30.151 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:28:30.151 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/SimplifySignInScreen.js RUNNING
+08:28:30.155 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/SimplifySignInScreen.js COMPLETED
+08:28:30.155 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/NotificationEnrollmentScreen.js RUNNING
+08:28:30.158 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/NotificationEnrollmentScreen.js COMPLETED
+08:28:30.158 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/HealthBottomSheetScreen.js RUNNING
+08:28:30.161 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/HealthBottomSheetScreen.js COMPLETED
+08:28:30.161 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:28:30.163 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:28:30.163 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.comingSoonScreenTitle}|${output.simplify_sign_in.screenTitle}|${output.notification_enrollment.screenTitle}|${output.health_bottom_sheet.screenTitle}" is visible RUNNING
+08:28:30.228 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run handleSimplifySignIn.yaml RUNNING
+08:28:30.229 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:28:30.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:28:30.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:28:30.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:28:30.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/SimplifySignInScreen.js RUNNING
+08:28:30.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/SimplifySignInScreen.js COMPLETED
+08:28:30.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:28:30.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:28:30.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.comingSoonScreenTitle}" is visible RUNNING
+08:28:37.316 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:37.318 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.comingSoonScreenTitle}" is visible SKIPPED
+08:28:37.318 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:28:37.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:28:37.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that (Optional) "${output.simplify_sign_in.helpsYouTakeControlWith}" is visible RUNNING
+08:28:42.459 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandWarned: Assertion is false: "(?i).*Helps you take control with:.*" is visible
+08:28:42.515 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:42.516 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:42.618 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that (Optional) "${output.simplify_sign_in.helpsYouTakeControlWith}" is visible WARNED
+08:28:42.618 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.helpsYouTakeControlWith}" is visible RUNNING
+08:28:44.404 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:44.404 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.helpsYouTakeControlWith}" is visible SKIPPED
+08:28:44.404 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.screenTitle}" is visible RUNNING
+08:28:44.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot SimplifySignIn_Screen RUNNING
+08:28:44.426 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:44.427 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:44.617 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot SimplifySignIn_Screen COMPLETED
+08:28:44.617 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${ENABLE_KEEP_SIGNED_IN === 'true'} is true RUNNING
+08:28:44.619 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:44.619 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${ENABLE_KEEP_SIGNED_IN === 'true'} is true SKIPPED
+08:28:44.619 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${ENABLE_FACE_ID === 'true'} is true RUNNING
+08:28:44.620 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:44.621 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${ENABLE_FACE_ID === 'true'} is true SKIPPED
+08:28:44.621 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.simplify_sign_in.continueBtn}" RUNNING
+08:28:44.733 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Continue, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[449,2209][632,2262], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=449, y=2209, width=183, height=53))
+08:28:45.561 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:28:45.561 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2235) using hierarchy based logic for wait
+08:28:47.514 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:28:47.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.simplify_sign_in.continueBtn}" COMPLETED
+08:28:47.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:28:47.515 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:28:47.515 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:28:47.515 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:47.714 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:28:47.714 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:47.945 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:28:47.945 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot SimplifySignIn_Completed RUNNING
+08:28:47.946 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:28:47.946 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:28:48.088 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot SimplifySignIn_Completed COMPLETED
+08:28:48.088 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.screenTitle}" is visible COMPLETED
+08:28:48.088 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run handleSimplifySignIn.yaml COMPLETED
+08:28:48.088 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run handleNotificationEnrollment.yaml RUNNING
+08:28:48.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:28:48.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:28:48.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:28:48.091 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:28:48.091 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/NotificationEnrollmentScreen.js RUNNING
+08:28:48.092 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/NotificationEnrollmentScreen.js COMPLETED
+08:28:48.092 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/SystemPermissionsScreen.js RUNNING
+08:28:48.093 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/SystemPermissionsScreen.js COMPLETED
+08:28:48.094 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:28:48.094 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:28:48.094 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.notification_enrollment.screenTitle}" is visible RUNNING
+08:28:55.244 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:28:55.246 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.notification_enrollment.screenTitle}" is visible SKIPPED
+08:28:55.246 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:28:55.248 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:28:55.249 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run handleNotificationEnrollment.yaml COMPLETED
+08:28:55.249 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run handleHealthBottomSheet.yaml RUNNING
+08:28:55.250 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:28:55.252 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:28:55.252 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:28:55.253 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:28:55.253 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Account/HealthBottomSheetScreen.js RUNNING
+08:28:55.256 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Account/HealthBottomSheetScreen.js COMPLETED
+08:28:55.257 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 500} RUNNING
+08:28:55.259 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 500} COMPLETED
+08:28:55.260 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.health_bottom_sheet.screenTitle}" is visible RUNNING
+08:29:02.438 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:02.440 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.health_bottom_sheet.screenTitle}" is visible SKIPPED
+08:29:02.440 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:29:02.441 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:29:02.441 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run handleHealthBottomSheet.yaml COMPLETED
+08:29:02.441 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot PostLogin_Complete RUNNING
+08:29:02.442 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:29:02.442 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:02.611 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot PostLogin_Complete COMPLETED
+08:29:02.611 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.comingSoonScreenTitle}|${output.simplify_sign_in.screenTitle}|${output.notification_enrollment.screenTitle}|${output.health_bottom_sheet.screenTitle}" is visible COMPLETED
+08:29:02.611 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ${maestro.timeoutMs = 10000} RUNNING
+08:29:02.612 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ${maestro.timeoutMs = 10000} COMPLETED
+08:29:02.612 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../postLogin/handleAllPostLoginScreens.yaml COMPLETED
+08:29:02.613 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.simplify_sign_in.beforeYouExploreTitle}" is visible RUNNING
+08:29:09.748 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:09.748 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.simplify_sign_in.beforeYouExploreTitle}" is visible SKIPPED
+08:29:09.748 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.account_login.homeTab}|${output.account_login.hiGreeting}" is visible RUNNING
+08:29:09.829 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.account_login.homeTab}|${output.account_login.hiGreeting}" is visible COMPLETED
+08:29:09.830 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Account/authentication/login.yaml COMPLETED
+08:29:09.830 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Common/dismissOverlays.yaml RUNNING
+08:29:09.831 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:09.832 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:09.832 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.common_overlays.visiblePattern}" is visible RUNNING
+08:29:16.933 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:16.934 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.common_overlays.visiblePattern}" is visible SKIPPED
+08:29:16.934 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.common_overlays.bannerVisiblePattern}" is visible RUNNING
+08:29:17.090 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:17.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.common_overlays.bannerVisiblePattern}" is visible SKIPPED
+08:29:17.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Common/dismissOverlays.yaml COMPLETED
+08:29:17.090 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Benefits/Dashboard/navigateToBenefitsTab.yaml RUNNING
+08:29:17.092 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:29:17.095 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:29:17.096 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:17.096 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:17.097 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_landing.benefitsTab}" RUNNING
+08:29:17.183 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Benefits, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[853,2252][958,2281], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=853, y=2252, width=105, height=29))
+08:29:18.097 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:18.098 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (905, 2266) using hierarchy based logic for wait
+08:29:20.196 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:20.197 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_landing.benefitsTab}" COMPLETED
+08:29:20.197 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output['benefits_dashboard_common'].benefitsTitle}" is visible RUNNING
+08:29:20.269 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output['benefits_dashboard_common'].benefitsTitle}" is visible COMPLETED
+08:29:20.270 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Benefits/Dashboard/navigateToBenefitsTab.yaml COMPLETED
+08:29:20.270 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 01_Benefits_Dashboard RUNNING
+08:29:20.271 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:29:20.271 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:20.370 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 01_Benefits_Dashboard COMPLETED
+08:29:20.371 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Benefits/Claims/navigateToClaimsLanding.yaml RUNNING
+08:29:20.372 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:29:20.379 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:29:20.379 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:29:20.384 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:29:20.384 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/CommonScreen.js RUNNING
+08:29:20.388 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:29:20.388 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:29:20.388 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:29:20.388 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/CommonScreen.js COMPLETED
+08:29:20.388 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:20.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:20.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.common_navigation.claimsTab}" RUNNING
+08:29:20.462 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Claims, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[507,2255][597,2292], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=507, y=2255, width=90, height=37))
+08:29:21.366 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:21.367 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (552, 2273) using hierarchy based logic for wait
+08:29:23.229 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:23.229 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.common_navigation.claimsTab}" COMPLETED
+08:29:23.229 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:23.230 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:23.230 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:23.230 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:23.376 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:23.376 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:23.610 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:23.610 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.benefits_claims_landing.claimsTitle}" is visible RUNNING
+08:29:23.668 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.benefits_claims_landing.claimsTitle}" is visible COMPLETED
+08:29:23.669 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot Claims_Landing_Screen RUNNING
+08:29:23.669 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:29:23.669 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:23.742 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot Claims_Landing_Screen COMPLETED
+08:29:23.742 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Benefits/Claims/navigateToClaimsLanding.yaml COMPLETED
+08:29:23.742 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Take screenshot 02_Claims_Landing RUNNING
+08:29:23.743 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:29:23.743 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:23.879 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Take screenshot 02_Claims_Landing COMPLETED
+08:29:23.880 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../subflows/Benefits/Claims/submitPrescriptionClaimFlow.yaml RUNNING
+08:29:23.884 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:29:23.884 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:29:23.885 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:29:23.885 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:29:23.885 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/BenefitsDashboardScreen.js RUNNING
+08:29:23.888 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/BenefitsDashboardScreen.js COMPLETED
+08:29:23.888 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:29:23.893 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:29:23.894 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Common/CommonScreen.js RUNNING
+08:29:23.897 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Selector Mode: 🎯 Accessibility (Native App)
+08:29:23.898 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] App ID: Not set
+08:29:23.899 [ INFO] maestro.orchestra.Orchestra.executeCommands$lambda$23$lambda$21: JsConsole: [CommonScreen] Platform: Android
+08:29:23.899 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Common/CommonScreen.js COMPLETED
+08:29:23.899 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:23.900 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:23.900 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ./startClaimFlow.yaml RUNNING
+08:29:23.901 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:29:23.902 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:29:23.902 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:23.902 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:23.902 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Retry 3 times RUNNING
+08:29:23.903 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.common_navigation.claimsTab}" RUNNING
+08:29:23.970 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Claims, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[43,192][214,259], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=43, y=192, width=171, height=67))
+08:29:25.082 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:25.082 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (128, 225) using hierarchy based logic for wait
+08:29:25.824 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:25.825 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.common_navigation.claimsTab}" COMPLETED
+08:29:25.825 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:25.825 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:25.826 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:25.826 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:25.980 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:25.980 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:26.210 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:26.210 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.benefits_claims_landing.startClaimBtn}" is visible RUNNING
+08:29:26.274 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.benefits_claims_landing.startClaimBtn}" is visible COMPLETED
+08:29:26.274 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Retry 3 times COMPLETED
+08:29:26.274 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_claims_landing.startClaimBtn}" RUNNING
+08:29:26.340 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=Start a claim, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[105,594][324,662], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.TextView, important-for-accessibility=true, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=105, y=594, width=219, height=68))
+08:29:27.230 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:27.230 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (214, 628) using hierarchy based logic for wait
+08:29:29.525 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:29.525 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_claims_landing.startClaimBtn}" COMPLETED
+08:29:29.525 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:29.526 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:29.526 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:29.526 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:29.652 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:29.652 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:29.893 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:29.894 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_what_you_need.addClaimDetailsBtn}", enabled is visible RUNNING
+08:29:29.952 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_what_you_need.addClaimDetailsBtn}", enabled is visible COMPLETED
+08:29:29.953 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:29.953 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:29.953 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:29.953 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:30.097 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:30.097 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:30.349 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:30.349 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_what_you_need.addClaimDetailsBtn}", enabled is visible RUNNING
+08:29:30.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_what_you_need.addClaimDetailsBtn}", enabled is visible COMPLETED
+08:29:30.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_what_you_need.addClaimDetailsBtn}", enabled RUNNING
+08:29:30.484 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Add claim details, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,2190][1038,2319], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=2190, width=996, height=129))
+08:29:31.332 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:31.333 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2254) using hierarchy based logic for wait
+08:29:32.111 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:32.112 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_what_you_need.addClaimDetailsBtn}", enabled COMPLETED
+08:29:32.112 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:32.112 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:32.112 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:32.112 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:32.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:32.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:32.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:32.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:32.927 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:32.927 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:33.168 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:33.169 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ./startClaimFlow.yaml COMPLETED
+08:29:33.169 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ./enterClaimDetails.yaml RUNNING
+08:29:33.170 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:29:33.171 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:29:33.171 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:29:33.173 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:29:33.174 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:33.174 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:33.174 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step1_details.stepIndicator}" is visible RUNNING
+08:29:33.236 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step1_details.stepIndicator}" is visible COMPLETED
+08:29:33.236 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step1_details.screenTitle}" is visible RUNNING
+08:29:33.292 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step1_details.screenTitle}" is visible COMPLETED
+08:29:33.292 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step1_details.allFieldsRequiredText}" is visible RUNNING
+08:29:33.350 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step1_details.allFieldsRequiredText}" is visible COMPLETED
+08:29:33.350 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:33.350 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:33.351 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:33.351 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:33.525 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:33.526 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:33.725 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:33.725 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.selectAnOption}", Index: 0 RUNNING
+08:29:33.784 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Select an option, Reason for submitting this claim, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1019][1038,1216], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1019, width=996, height=197))
+08:29:34.621 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:34.621 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1117) using hierarchy based logic for wait
+08:29:35.637 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:35.638 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.selectAnOption}", Index: 0 COMPLETED
+08:29:35.638 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:35.638 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:35.638 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:35.639 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:35.775 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:35.775 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:36.003 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:36.003 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Traveling (within US)"} is true RUNNING
+08:29:36.011 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.reasonTravelingWithinUS}" RUNNING
+08:29:36.068 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Traveling (within US), hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1237][1038,1363], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1237, width=996, height=126))
+08:29:36.908 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:36.909 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1300) using hierarchy based logic for wait
+08:29:37.938 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:37.940 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.reasonTravelingWithinUS}" COMPLETED
+08:29:37.940 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Traveling (within US)"} is true COMPLETED
+08:29:37.940 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Traveling (outside US)"} is true RUNNING
+08:29:37.942 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.942 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Traveling (outside US)"} is true SKIPPED
+08:29:37.942 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Natural disaster/emergency"} is true RUNNING
+08:29:37.943 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.943 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Natural disaster/emergency"} is true SKIPPED
+08:29:37.943 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Insurance card unavailable"} is true RUNNING
+08:29:37.944 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.944 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Insurance card unavailable"} is true SKIPPED
+08:29:37.944 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Pharmacy didn't accept insurance"} is true RUNNING
+08:29:37.945 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.945 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Pharmacy didn't accept insurance"} is true SKIPPED
+08:29:37.945 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Appealing claim"} is true RUNNING
+08:29:37.947 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.947 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Appealing claim"} is true SKIPPED
+08:29:37.947 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Requesting tiering exception"} is true RUNNING
+08:29:37.948 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.948 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Requesting tiering exception"} is true SKIPPED
+08:29:37.948 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Needed approval first"} is true RUNNING
+08:29:37.950 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.950 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Needed approval first"} is true SKIPPED
+08:29:37.950 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${CLAIM_REASON == "Other"} is true RUNNING
+08:29:37.951 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:37.951 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${CLAIM_REASON == "Other"} is true SKIPPED
+08:29:37.951 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:37.952 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:37.952 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:37.952 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:38.066 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:38.066 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:38.247 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:38.247 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.claims_step1_details.reasonHelpLabel}" is visible RUNNING
+08:29:45.332 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:45.332 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.claims_step1_details.reasonHelpLabel}" is visible SKIPPED
+08:29:45.333 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${IS_COMPOUND_DRUG == "true"} is true RUNNING
+08:29:45.336 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scroll vertically RUNNING
+08:29:45.338 [ INFO] maestro.Maestro.scrollVertical: Scrolling vertically
+08:29:45.888 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scroll vertically COMPLETED
+08:29:45.889 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step1_details.optionalSectionTitle}" is visible RUNNING
+08:29:45.954 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step1_details.optionalSectionTitle}" is visible COMPLETED
+08:29:45.954 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.compoundDrugCheckbox}" RUNNING
+08:29:46.026 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=This medication is a compound drug., hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1481][1038,1630], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.CheckBox, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1481, width=996, height=149))
+08:29:46.878 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:46.879 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1555) using hierarchy based logic for wait
+08:29:47.617 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:47.619 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.compoundDrugCheckbox}" COMPLETED
+08:29:47.619 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:47.620 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:47.620 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:47.620 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:47.777 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:47.777 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:47.949 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:47.950 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${IS_COMPOUND_DRUG == "true"} is true COMPLETED
+08:29:47.950 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${HAS_ADDITIONAL_INSURANCE == "true"} is true RUNNING
+08:29:47.951 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scroll vertically RUNNING
+08:29:47.951 [ INFO] maestro.Maestro.scrollVertical: Scrolling vertically
+08:29:48.484 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scroll vertically COMPLETED
+08:29:48.485 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step1_details.optionalSectionTitle}" is visible RUNNING
+08:29:48.546 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step1_details.optionalSectionTitle}" is visible COMPLETED
+08:29:48.546 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.additionalInsuranceCheckbox}" RUNNING
+08:29:48.610 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=I have additional primary/secondary insurance., hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1672][1038,1882], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.CheckBox, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1672, width=996, height=210))
+08:29:49.486 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:49.487 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1777) using hierarchy based logic for wait
+08:29:50.689 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:50.689 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.additionalInsuranceCheckbox}" COMPLETED
+08:29:50.690 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:50.690 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:50.690 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:50.690 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:50.828 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:50.828 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:51.045 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:29:51.045 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${HAS_ADDITIONAL_INSURANCE == "true"} is true COMPLETED
+08:29:51.045 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ./enterClaimDetails.yaml COMPLETED
+08:29:51.045 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${IS_COMPOUND_DRUG == "true"} is true RUNNING
+08:29:51.046 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${HAS_ADDITIONAL_INSURANCE == "true"} is true RUNNING
+08:29:51.047 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ./uploadExplanationOfBenefits.yaml RUNNING
+08:29:51.047 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:29:51.048 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:29:51.048 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:29:51.049 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:29:51.049 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.uploadEOBBtn}" RUNNING
+08:29:51.108 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Upload explanation of benefits, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1608][1038,2028], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1608, width=996, height=420))
+08:29:52.006 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:52.007 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1818) using hierarchy based logic for wait
+08:29:53.063 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:53.064 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.uploadEOBBtn}" COMPLETED
+08:29:53.065 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.claims_step2_receipt.photosOption}" is visible RUNNING
+08:29:53.133 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.filesOption}" is visible RUNNING
+08:29:53.193 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.filesOption}" is visible COMPLETED
+08:29:53.193 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.cameraOption}" is visible RUNNING
+08:29:53.256 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.cameraOption}" is visible COMPLETED
+08:29:53.256 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.photosOption}" is visible RUNNING
+08:29:53.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.photosOption}" is visible COMPLETED
+08:29:53.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is IOS RUNNING
+08:29:53.320 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:29:53.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is IOS SKIPPED
+08:29:53.320 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is ANDROID RUNNING
+08:29:53.321 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step2_receipt.cameraOption}" RUNNING
+08:29:53.338 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Camera, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[76,1921][517,2068], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=76, y=1921, width=441, height=147))
+08:29:54.221 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:29:54.224 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (296, 1994) using hierarchy based logic for wait
+08:29:56.057 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:29:56.058 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step2_receipt.cameraOption}" COMPLETED
+08:29:56.058 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:29:56.058 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:29:56.059 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:56.059 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:56.212 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:56.212 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:56.562 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:56.562 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:56.662 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:56.662 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:56.913 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:56.913 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:57.004 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:57.004 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:57.299 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:57.299 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:57.393 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:57.393 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:57.702 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:57.702 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:57.809 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:57.809 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:58.102 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:58.102 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:58.209 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:58.210 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:58.528 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:58.528 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:58.638 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:58.638 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:58.933 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:58.933 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:59.037 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:59.037 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:59.337 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:59.338 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:59.480 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:59.480 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:59.808 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:59.809 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:29:59.930 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:29:59.930 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:00.245 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:00.245 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:00.356 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:00.356 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:00.624 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:00.624 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:00.723 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:00.723 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.017 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.017 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.114 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.114 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.461 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.461 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.559 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.559 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.851 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.851 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:01.967 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:01.967 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:02.244 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:02.245 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:02.347 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:02.347 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:02.641 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:02.641 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:02.733 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:02.734 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.021 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.022 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.115 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.115 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.386 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.387 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.482 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.482 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.762 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.762 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:03.859 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:03.860 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:04.144 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:04.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:04.236 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:04.237 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:04.550 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:04.550 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:04.649 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:04.649 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:04.944 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:04.944 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:05.041 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:05.041 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:05.378 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:05.378 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:05.480 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:05.480 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:05.763 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:05.763 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:05.861 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:05.861 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:06.164 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:06.164 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:06.280 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:06.280 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:06.616 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:06.616 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:06.751 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:06.752 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.098 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.098 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.211 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.211 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.483 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.484 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.585 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.585 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.864 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.865 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:07.959 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:07.959 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:08.219 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:08.219 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:08.352 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:08.352 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:08.631 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:08.631 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:08.731 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:08.732 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.012 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.013 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.114 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.114 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.403 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.403 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.503 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.503 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:09.900 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:09.900 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:10.168 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:10.168 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:10.265 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:10.265 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:10.590 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:10.591 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:10.707 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:10.707 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:10.984 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:10.984 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:11.076 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:11.076 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:11.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:11.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is ANDROID COMPLETED
+08:30:11.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.claims_step2_receipt.photosOption}" is visible COMPLETED
+08:30:11.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is ANDROID RUNNING
+08:30:11.410 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on id: com.android.camera2:id/shutter_button RUNNING
+08:30:11.468 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Shutter, hintText=, ignoreBoundsFiltering=false, resource-id=com.android.camera2:id/shutter_button, clickable=true, bounds=[0,2109][1080,2424], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=0, y=2109, width=1080, height=315))
+08:30:12.284 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:12.285 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2266) using hierarchy based logic for wait
+08:30:13.139 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:13.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on id: com.android.camera2:id/shutter_button COMPLETED
+08:30:13.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on id: com.android.camera2:id/done_button RUNNING
+08:30:13.191 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=com.android.camera2:id/done_button, clickable=true, bounds=[429,2156][650,2377], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageButton, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=429, y=2156, width=221, height=221))
+08:30:14.003 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:14.005 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (539, 2266) using hierarchy based logic for wait
+08:30:15.705 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:15.706 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on id: com.android.camera2:id/done_button COMPLETED
+08:30:15.706 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is ANDROID COMPLETED
+08:30:15.706 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:30:15.706 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:30:15.706 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:15.706 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:15.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:15.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:15.997 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:15.998 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 400 ms RUNNING
+08:30:17.089 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 400 ms COMPLETED
+08:30:17.089 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Swiping in UP direction in 400 ms RUNNING
+08:30:18.133 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Swiping in UP direction in 400 ms COMPLETED
+08:30:18.134 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Retry 3 times RUNNING
+08:30:18.134 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.claims_step2_receipt.documentFailedToUpload}" is visible RUNNING
+08:30:25.229 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:30:25.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.claims_step2_receipt.documentFailedToUpload}" is visible SKIPPED
+08:30:25.231 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.documentFailedToUpload}" is not visible RUNNING
+08:30:25.800 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.documentFailedToUpload}" is not visible COMPLETED
+08:30:25.800 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Retry 3 times COMPLETED
+08:30:25.801 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ./uploadExplanationOfBenefits.yaml COMPLETED
+08:30:25.801 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.insuranceTypeSelectAnOption}" RUNNING
+08:30:25.858 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Select an option, What type of insurance is it?, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,681][1038,878], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=681, width=996, height=197))
+08:30:26.741 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:26.742 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 779) using hierarchy based logic for wait
+08:30:27.505 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:27.506 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.insuranceTypeSelectAnOption}" COMPLETED
+08:30:27.506 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.insuranceTypeSecondary}" RUNNING
+08:30:27.565 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Secondary, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1277][1038,1403], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1277, width=996, height=126))
+08:30:28.417 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:28.418 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1340) using hierarchy based logic for wait
+08:30:29.216 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:29.216 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.insuranceTypeSecondary}" COMPLETED
+08:30:29.216 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:30:29.216 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:30:29.216 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:29.216 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:29.733 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:29.733 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:29.953 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:29.953 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${HAS_ADDITIONAL_INSURANCE == "true"} is true COMPLETED
+08:30:29.953 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${IS_COMPOUND_DRUG == "true"} is true COMPLETED
+08:30:29.953 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:30:29.954 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:30:29.954 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:29.954 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:30.098 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:30.099 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:30.279 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:30.279 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step1_details.addMedicationBtn}" RUNNING
+08:30:30.331 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Add medication, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,2190][1038,2319], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=2190, width=996, height=129))
+08:30:31.196 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:31.196 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2254) using hierarchy based logic for wait
+08:30:32.140 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:32.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step1_details.addMedicationBtn}" COMPLETED
+08:30:32.140 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ./uploadReceipt.yaml RUNNING
+08:30:32.141 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:30:32.142 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:30:32.142 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:30:32.143 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:30:32.143 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.stepIndicator}" is visible RUNNING
+08:30:34.908 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.stepIndicator}" is visible COMPLETED
+08:30:34.910 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.screenTitle}" is visible RUNNING
+08:30:34.968 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.screenTitle}" is visible COMPLETED
+08:30:34.968 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.uploadInstructionText}" is visible RUNNING
+08:30:35.024 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.uploadInstructionText}" is visible COMPLETED
+08:30:35.024 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output['benefits_claims_common'].uploadReceiptBtn}" is visible RUNNING
+08:30:35.080 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output['benefits_claims_common'].uploadReceiptBtn}" is visible COMPLETED
+08:30:35.080 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output['benefits_claims_common'].uploadReceiptBtn}" RUNNING
+08:30:35.188 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Upload receipt, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,838][1038,1258], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=838, width=996, height=420))
+08:30:36.051 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:36.052 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1048) using hierarchy based logic for wait
+08:30:37.065 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:37.066 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output['benefits_claims_common'].uploadReceiptBtn}" COMPLETED
+08:30:37.066 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:30:37.067 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:30:37.067 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:37.067 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:37.190 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:37.190 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:37.376 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:37.376 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.claims_step2_receipt.photosOption}" is visible RUNNING
+08:30:37.440 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.filesOption}" is visible RUNNING
+08:30:37.459 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.filesOption}" is visible COMPLETED
+08:30:37.459 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.cameraOption}" is visible RUNNING
+08:30:37.520 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.cameraOption}" is visible COMPLETED
+08:30:37.520 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.photosOption}" is visible RUNNING
+08:30:37.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.photosOption}" is visible COMPLETED
+08:30:37.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is IOS RUNNING
+08:30:37.577 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:30:37.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is IOS SKIPPED
+08:30:37.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is ANDROID RUNNING
+08:30:37.577 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step2_receipt.cameraOption}" RUNNING
+08:30:37.634 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Camera, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[76,1151][517,1298], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=76, y=1151, width=441, height=147))
+08:30:38.478 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:38.479 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (296, 1224) using hierarchy based logic for wait
+08:30:40.108 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:40.109 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step2_receipt.cameraOption}" COMPLETED
+08:30:40.109 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:30:40.110 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:30:40.110 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.110 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:40.198 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.199 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:40.468 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.468 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:40.573 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.573 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:40.848 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.848 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:40.937 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:40.937 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:41.197 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:41.197 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:41.295 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:41.295 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:41.547 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:41.547 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:41.638 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:41.638 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:41.916 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:41.916 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:42.202 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:42.202 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:42.518 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:42.518 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:42.620 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:42.620 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:42.899 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:42.899 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:42.990 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:42.990 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:43.250 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:43.250 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:43.341 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:43.341 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:43.635 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:43.635 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:43.745 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:43.745 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.013 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.013 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.101 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.101 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.381 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.381 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.468 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.468 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.724 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.724 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:44.812 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:44.812 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.118 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.118 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.200 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.200 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.460 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.460 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.533 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.534 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.806 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:45.891 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:45.891 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.161 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.161 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.250 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.250 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.490 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.491 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.580 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.580 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.868 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.868 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:46.974 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:46.974 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:47.256 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:47.256 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:47.564 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:47.564 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:48.087 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:49.194 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:49.637 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:49.637 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:51.801 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:51.801 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:52.354 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:52.377 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:53.100 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:53.147 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:54.260 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:54.260 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:54.896 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:54.896 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:55.158 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:30:55.158 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:30:55.645 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:30:55.712 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is ANDROID COMPLETED
+08:30:55.712 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.claims_step2_receipt.photosOption}" is visible COMPLETED
+08:30:55.712 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is ANDROID RUNNING
+08:30:55.712 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on id: com.android.camera2:id/shutter_button RUNNING
+08:30:55.722 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Shutter, hintText=, ignoreBoundsFiltering=false, resource-id=com.android.camera2:id/shutter_button, clickable=true, bounds=[0,2109][1080,2424], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=0, y=2109, width=1080, height=315))
+08:30:56.543 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:56.543 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2266) using hierarchy based logic for wait
+08:30:57.419 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:30:57.490 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on id: com.android.camera2:id/shutter_button COMPLETED
+08:30:57.512 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on id: com.android.camera2:id/done_button RUNNING
+08:30:57.563 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=com.android.camera2:id/done_button, clickable=true, bounds=[429,2156][650,2377], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageButton, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=429, y=2156, width=221, height=221))
+08:30:58.435 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:30:58.506 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (539, 2266) using hierarchy based logic for wait
+08:31:00.679 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:00.680 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on id: com.android.camera2:id/done_button COMPLETED
+08:31:00.680 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is ANDROID COMPLETED
+08:31:00.680 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:31:00.680 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:31:00.680 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:00.680 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:00.822 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:00.823 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:01.258 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:31:01.258 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_claims_common.saveBtn}" RUNNING
+08:31:01.316 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Save, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,2190][1038,2319], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=2190, width=996, height=129))
+08:31:02.137 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:02.138 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2254) using hierarchy based logic for wait
+08:31:03.144 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:03.144 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_claims_common.saveBtn}" COMPLETED
+08:31:03.144 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:31:03.145 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:31:03.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:03.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:03.275 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:03.275 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:03.568 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:03.569 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:03.698 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:03.699 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:04.120 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:04.121 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:04.231 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:04.231 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:04.499 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:04.499 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:04.615 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:04.615 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:04.904 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:04.904 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:05.004 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:05.004 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:05.276 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:05.277 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:05.380 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:05.380 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:05.666 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:05.666 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:05.768 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:05.768 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:06.044 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:06.044 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:06.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:06.145 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:06.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:31:06.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Retry 3 times RUNNING
+08:31:06.422 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when "${output.claims_step2_receipt.documentFailedToUpload}" is visible RUNNING
+08:31:13.526 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:13.528 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when "${output.claims_step2_receipt.documentFailedToUpload}" is visible SKIPPED
+08:31:13.528 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step2_receipt.documentFailedToUpload}" is not visible RUNNING
+08:31:14.119 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step2_receipt.documentFailedToUpload}" is not visible COMPLETED
+08:31:14.120 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Retry 3 times COMPLETED
+08:31:14.120 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ./uploadReceipt.yaml COMPLETED
+08:31:14.120 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ./enterCompoundDrugMedicationDetails.yaml when ${IS_COMPOUND_DRUG == "true"} is true RUNNING
+08:31:14.122 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Define variables RUNNING
+08:31:14.122 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Define variables COMPLETED
+08:31:14.123 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../screens/Benefits/ClaimsScreen.js RUNNING
+08:31:14.127 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../screens/Benefits/ClaimsScreen.js COMPLETED
+08:31:14.127 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run ../../../../scripts/utils/screen-management/calculateDateFilled.js RUNNING
+08:31:14.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../../scripts/utils/screen-management/calculateDateFilled.js COMPLETED
+08:31:14.232 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Apply configuration RUNNING
+08:31:14.233 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Apply configuration COMPLETED
+08:31:14.233 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.stepIndicator}" is visible RUNNING
+08:31:14.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.stepIndicator}" is visible COMPLETED
+08:31:14.301 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.screenTitle}" is visible RUNNING
+08:31:14.361 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.screenTitle}" is visible COMPLETED
+08:31:14.361 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.allFieldsRequiredUnlessOptional}" is visible RUNNING
+08:31:14.417 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.allFieldsRequiredUnlessOptional}" is visible COMPLETED
+08:31:14.417 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.drugNameLabel}" is visible RUNNING
+08:31:14.479 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.drugNameLabel}" is visible COMPLETED
+08:31:14.479 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.drugNameLabel}" RUNNING
+08:31:14.545 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Drug name, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,780][1038,924], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=780, width=996, height=144))
+08:31:16.113 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:16.113 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 852) using hierarchy based logic for wait
+08:31:17.633 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:17.633 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.drugNameLabel}" COMPLETED
+08:31:17.633 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${DRUG_NAME} RUNNING
+08:31:17.634 [ INFO] maestro.Maestro.inputText: Inputting text: Pain Relief Cream
+08:31:20.153 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${DRUG_NAME} COMPLETED
+08:31:20.209 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when Platform is IOS RUNNING
+08:31:20.209 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:20.210 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when Platform is IOS SKIPPED
+08:31:20.210 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.drugFormSelectAnOption}" is visible RUNNING
+08:31:20.273 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.drugFormSelectAnOption}" is visible COMPLETED
+08:31:20.273 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.drugFormSelectAnOption}" RUNNING
+08:31:20.332 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Select an option, Drug form, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,987][1038,1184], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=987, width=996, height=197))
+08:31:21.157 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:21.157 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1085) using hierarchy based logic for wait
+08:31:22.196 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:22.196 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.drugFormSelectAnOption}" COMPLETED
+08:31:22.196 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:31:22.196 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:31:22.196 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:22.196 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:23.558 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:23.558 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:23.752 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:31:23.752 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Tablet"} is true RUNNING
+08:31:23.754 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:23.754 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Tablet"} is true SKIPPED
+08:31:23.754 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Capsule"} is true RUNNING
+08:31:23.754 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:23.754 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Capsule"} is true SKIPPED
+08:31:23.754 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Cream"} is true RUNNING
+08:31:23.755 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.drugFormCream}" RUNNING
+08:31:23.808 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Cream, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1331][1038,1457], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1331, width=996, height=126))
+08:31:24.672 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:24.673 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1394) using hierarchy based logic for wait
+08:31:26.462 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:26.512 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.drugFormCream}" COMPLETED
+08:31:26.513 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Cream"} is true COMPLETED
+08:31:26.513 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Ointment"} is true RUNNING
+08:31:26.514 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Ointment"} is true SKIPPED
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Solution"} is true RUNNING
+08:31:26.514 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Solution"} is true SKIPPED
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Injection"} is true RUNNING
+08:31:26.514 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Injection"} is true SKIPPED
+08:31:26.514 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Suspension"} is true RUNNING
+08:31:26.515 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:26.515 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Suspension"} is true SKIPPED
+08:31:26.515 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Run flow when ${DRUG_FORM == "Drops"} is true RUNNING
+08:31:26.515 [ INFO] maestro.orchestra.Orchestra.executeSubflowCommands: [Command execution subflow] CommandSkipped: null
+08:31:26.515 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run flow when ${DRUG_FORM == "Drops"} is true SKIPPED
+08:31:26.515 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Wait for animation to end RUNNING
+08:31:26.515 [ INFO] maestro.Maestro.waitForAnimationToEnd$lambda$53: Waiting for animation to end with timeout 15000
+08:31:26.516 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:26.516 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:26.657 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to byte array
+08:31:26.685 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:31:27.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Wait for animation to end COMPLETED
+08:31:27.146 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.compoundIngredientsTitle}" is visible RUNNING
+08:31:27.204 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.compoundIngredientsTitle}" is visible COMPLETED
+08:31:27.204 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${output.claims_step3_medication.ingredient1Title}" is visible RUNNING
+08:31:27.260 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${output.claims_step3_medication.ingredient1Title}" is visible COMPLETED
+08:31:27.264 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scrolling DOWN until "${output.claims_step3_medication.ingredientNDCLabel}", Index: 0 is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled RUNNING
+08:31:27.396 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Scrolling try count: 0, DeviceWidth: 1080, DeviceWidth: 2424
+08:31:27.574 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Element bounds: Bounds(x=42, y=1546, width=996, height=145)
+08:31:27.575 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Visibility Percent: 1.0
+08:31:27.582 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Command centerElement: ScrollUntilVisibleCommand(selector=ElementSelector(textRegex=.*NDC.*, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=0, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null, css=null), direction=DOWN, scrollDuration=601, visibilityPercentage=100, timeout=20000, waitToSettleTimeoutMs=null, centerElement=true, originalSpeedValue=40, label=null, optional=false).centerElement
+08:31:27.582 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: visibilityPercentageNormalized: 1.0
+08:31:27.599 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scrolling DOWN until "${output.claims_step3_medication.ingredientNDCLabel}", Index: 0 is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled COMPLETED
+08:31:27.671 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.ingredientNDCLabel}", Index: 0 RUNNING
+08:31:27.737 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Ingredient 1 NDC, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1546][1038,1691], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1546, width=996, height=145))
+08:31:28.678 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:28.809 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1618) using hierarchy based logic for wait
+08:31:29.631 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:29.631 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.ingredientNDCLabel}", Index: 0 COMPLETED
+08:31:29.631 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_1_NDC} RUNNING
+08:31:29.634 [ INFO] maestro.Maestro.inputText: Inputting text: 12345678901
+08:31:31.432 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_1_NDC} COMPLETED
+08:31:31.483 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:31:31.554 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:31:32.420 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:32.420 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:31:33.155 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:33.155 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:31:33.156 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.quantityLabel1}", Index: 0 RUNNING
+08:31:33.222 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Ingredient 1 Quantity, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1754][1038,1898], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1754, width=996, height=144))
+08:31:34.056 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:34.057 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1826) using hierarchy based logic for wait
+08:31:35.242 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:35.242 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.quantityLabel1}", Index: 0 COMPLETED
+08:31:35.242 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_1_QUANTITY} RUNNING
+08:31:35.244 [ INFO] maestro.Maestro.inputText: Inputting text: 10
+08:31:36.590 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_1_QUANTITY} COMPLETED
+08:31:36.620 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:31:36.690 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:31:37.551 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:37.552 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:31:38.310 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:38.310 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:31:38.310 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_claims_common.ingredientCostLabel}", Index: 0 RUNNING
+08:31:38.373 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=US dollars, Ingredient 1 Ingredient cost, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1961][1038,2106], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1961, width=996, height=145))
+08:31:39.241 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:39.242 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2033) using hierarchy based logic for wait
+08:31:40.743 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:40.743 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_claims_common.ingredientCostLabel}", Index: 0 COMPLETED
+08:31:40.744 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_1_COST} RUNNING
+08:31:40.746 [ INFO] maestro.Maestro.inputText: Inputting text: 50.00
+08:31:41.901 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_1_COST} COMPLETED
+08:31:41.903 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:31:41.961 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:31:42.835 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:42.836 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:31:43.597 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:43.597 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:31:43.597 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scrolling DOWN until "${output.claims_step3_medication.quantityLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled RUNNING
+08:31:44.197 [ WARN] maestro.orchestra.Orchestra.scrollUntilVisible: Error: maestro.MaestroException$ElementNotFound: Element not found: Text matching regex: Ingredient 2 Quantity
+08:31:44.206 [ INFO] maestro.Maestro.swipeFromCenter: Swiping UP from center
+08:31:45.886 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Scrolling try count: 0, DeviceWidth: 1080, DeviceWidth: 2424
+08:31:45.886 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Element bounds: Bounds(x=42, y=1323, width=996, height=145)
+08:31:45.886 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Visibility Percent: 1.0
+08:31:45.886 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Command centerElement: ScrollUntilVisibleCommand(selector=ElementSelector(textRegex=Ingredient 2 Quantity, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null, css=null), direction=DOWN, scrollDuration=601, visibilityPercentage=100, timeout=20000, waitToSettleTimeoutMs=null, centerElement=true, originalSpeedValue=40, label=null, optional=false).centerElement
+08:31:45.886 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: visibilityPercentageNormalized: 1.0
+08:31:45.887 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scrolling DOWN until "${output.claims_step3_medication.quantityLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled COMPLETED
+08:31:45.887 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.quantityLabel2}" RUNNING
+08:31:45.954 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Ingredient 2 Quantity, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1323][1038,1468], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1323, width=996, height=145))
+08:31:46.794 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:46.794 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1395) using hierarchy based logic for wait
+08:31:48.298 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:48.300 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.quantityLabel2}" COMPLETED
+08:31:48.300 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_2_QUANTITY} RUNNING
+08:31:48.302 [ INFO] maestro.Maestro.inputText: Inputting text: 20
+08:31:49.113 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_2_QUANTITY} COMPLETED
+08:31:49.114 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:31:49.183 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:31:50.037 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:50.037 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:31:50.773 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:50.774 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:31:50.774 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scrolling DOWN until "${output.benefits_claims_common.ingredientCostLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled RUNNING
+08:31:50.843 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Scrolling try count: 0, DeviceWidth: 1080, DeviceWidth: 2424
+08:31:50.843 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Element bounds: Bounds(x=42, y=1531, width=996, height=144)
+08:31:50.843 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Visibility Percent: 1.0
+08:31:50.843 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Command centerElement: ScrollUntilVisibleCommand(selector=ElementSelector(textRegex=US dollars, Ingredient 2 Ingredient cost, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null, css=null), direction=DOWN, scrollDuration=601, visibilityPercentage=100, timeout=20000, waitToSettleTimeoutMs=null, centerElement=true, originalSpeedValue=40, label=null, optional=false).centerElement
+08:31:50.843 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: visibilityPercentageNormalized: 1.0
+08:31:50.843 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scrolling DOWN until "${output.benefits_claims_common.ingredientCostLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled COMPLETED
+08:31:50.844 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_claims_common.ingredientCostLabel2}" RUNNING
+08:31:50.902 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=US dollars, Ingredient 2 Ingredient cost, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1531][1038,1675], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1531, width=996, height=144))
+08:31:51.724 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:51.725 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1603) using hierarchy based logic for wait
+08:31:53.255 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:53.255 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_claims_common.ingredientCostLabel2}" COMPLETED
+08:31:53.255 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_2_COST} RUNNING
+08:31:53.255 [ INFO] maestro.Maestro.inputText: Inputting text: 75.50
+08:31:54.387 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_2_COST} COMPLETED
+08:31:54.389 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:31:54.450 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:31:55.303 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:55.304 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:31:56.302 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:56.302 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:31:56.303 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Scrolling DOWN until "${output.claims_step3_medication.ingredientNDCLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled RUNNING
+08:31:56.370 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Scrolling try count: 0, DeviceWidth: 1080, DeviceWidth: 2424
+08:31:56.370 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Element bounds: Bounds(x=42, y=1116, width=996, height=144)
+08:31:56.370 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Visibility Percent: 1.0
+08:31:56.371 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: Command centerElement: ScrollUntilVisibleCommand(selector=ElementSelector(textRegex=Ingredient 2 NDC, idRegex=null, size=null, below=null, above=null, leftOf=null, rightOf=null, containsChild=null, containsDescendants=null, traits=null, index=null, enabled=null, optional=false, selected=null, checked=null, focused=null, childOf=null, css=null), direction=DOWN, scrollDuration=601, visibilityPercentage=100, timeout=20000, waitToSettleTimeoutMs=null, centerElement=true, originalSpeedValue=40, label=null, optional=false).centerElement
+08:31:56.371 [ INFO] maestro.orchestra.Orchestra.scrollUntilVisible: visibilityPercentageNormalized: 1.0
+08:31:56.371 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Scrolling DOWN until "${output.claims_step3_medication.ingredientNDCLabel2}" is visible with speed 40, visibility percentage 100%, timeout 20000 ms, with centering enabled COMPLETED
+08:31:56.371 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.ingredientNDCLabel2}" RUNNING
+08:31:56.430 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Ingredient 2 NDC, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1116][1038,1260], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1116, width=996, height=144))
+08:31:57.302 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:31:57.303 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 1188) using hierarchy based logic for wait
+08:31:58.755 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:31:58.755 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.ingredientNDCLabel2}" COMPLETED
+08:31:58.756 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${INGREDIENT_2_NDC} RUNNING
+08:31:58.757 [ INFO] maestro.Maestro.inputText: Inputting text: 98765432109
+08:32:00.662 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${INGREDIENT_2_NDC} COMPLETED
+08:32:00.663 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:32:00.717 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:32:01.598 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:32:01.600 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:32:02.382 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:32:02.382 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:32:02.382 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Assert that "${INGREDIENT_2_NDC}" is visible RUNNING
+08:32:02.441 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Assert that "${INGREDIENT_2_NDC}" is visible COMPLETED
+08:32:02.441 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.benefits_claims_common.prescriptionRxNumberLabel}" RUNNING
+08:32:02.500 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=, hintText=Prescription Rx number, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[42,1990][1038,2112], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.Button, important-for-accessibility=true, error=}, children=[], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=42, y=1990, width=996, height=122))
+08:32:03.362 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:32:03.362 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (540, 2051) using hierarchy based logic for wait
+08:32:04.879 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:32:04.879 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.benefits_claims_common.prescriptionRxNumberLabel}" COMPLETED
+08:32:04.879 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Input text ${PRESCRIPTION_RX_NUMBER} RUNNING
+08:32:04.880 [ INFO] maestro.Maestro.inputText: Inputting text: 546412346543156
+08:32:06.742 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Input text ${PRESCRIPTION_RX_NUMBER} COMPLETED
+08:32:06.742 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_confirmation.doneBtn}" RUNNING
+08:32:06.802 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tapping on element:  UiElement(treeNode=TreeNode(attributes={text=, accessibilityText=Done, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=true, bounds=[32,1197][158,1323], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=true, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.FrameLayout, important-for-accessibility=false, error=}, children=[TreeNode(attributes={text=, accessibilityText=, hintText=, ignoreBoundsFiltering=false, resource-id=com.google.android.inputmethod.latin:id/0_resource_name_obfuscated, clickable=false, bounds=[37,1202][153,1318], enabled=true, focused=false, checked=false, scrollable=false, selected=false, class=android.widget.ImageView, important-for-accessibility=false, error=}, children=[], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=false, enabled=true, focused=false, checked=false, selected=false)], clickable=true, enabled=true, focused=false, checked=false, selected=false), bounds=Bounds(x=32, y=1197, width=126, height=126))
+08:32:07.683 [ INFO] maestro.Maestro.tap-HgV9Ck0: Tap aimed via settled hierarchy
+08:32:07.684 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Tapping at (95, 1260) using hierarchy based logic for wait
+08:32:08.713 [ INFO] maestro.Maestro.hierarchyBasedTap-ogj28Uc: Something has changed in the UI judging by view hierarchy. Proceed.
+08:32:08.714 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_confirmation.doneBtn}" COMPLETED
+08:32:08.714 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandStart: Tap on "${output.claims_step3_medication.dateFilledSelect}" RUNNING
+08:32:25.893 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:32:25.895 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:32:26.047 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Tap on "${output.claims_step3_medication.dateFilledSelect}" FAILED
+08:32:26.050 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:32:26.050 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:32:26.118 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ./enterCompoundDrugMedicationDetails.yaml when ${IS_COMPOUND_DRUG == "true"} is true FAILED
+08:32:26.119 [ERROR] maestro.orchestra.Orchestra.executeCommands: [Command execution] CommandFailed: Element not found: Text matching regex: Date filled
+08:32:26.120 [ INFO] maestro.Maestro.takeScreenshot: Taking screenshot
+08:32:26.120 [TRACE] maestro.utils.ScreenshotUtils.takeScreenshot: Taking screenshot to output sink
+08:32:26.202 [ INFO] maestro.cli.runner.CliConsoleListener.onCommandFinished: Run ../../../subflows/Benefits/Claims/submitPrescriptionClaimFlow.yaml FAILED

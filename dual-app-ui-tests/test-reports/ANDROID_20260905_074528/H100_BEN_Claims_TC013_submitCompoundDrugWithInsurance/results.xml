@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="410.508" timestamp="2026-09-05T08:25:36">
+    <testcase id="H100 | Benefits | Claims | TC013 - Submit Compound Drug With Insurance" name="H100 | Benefits | Claims | TC013 - Submit Compound Drug With Insurance" classname="H100 | Benefits | Claims | TC013 - Submit Compound Drug With Insurance" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC013_submitCompoundDrugWithInsurance.yaml" time="410.461" timestamp="2026-09-05T08:25:36" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, submission, compound-drug, additional-insurance, comprehensive"/>
+      </properties>
+      <failure>Element not found: Text matching regex: Date filled</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
