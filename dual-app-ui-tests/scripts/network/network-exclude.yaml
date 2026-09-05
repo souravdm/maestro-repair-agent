@@ -1,0 +1,38 @@
+# Network log exclusion config for parse-network-logs.js
+# Add entries here to filter calls from the HTML report — no code changes needed.
+# Supports both 'domains' (substring match on full URL) and 'patterns' (regex).
+
+# Domains/substrings to include — only these are kept when full URLs are visible.
+# Add new CVS/Health100 environments here.
+include_domains:
+  - cvs.com
+  - cvshealth.com
+  - caremark.com
+  - aetna.com
+  - health100.com
+
+# Exact domain substrings to always exclude (matched case-insensitively against full URL).
+# Faster than regex — use for full domain/subdomain exclusions.
+exclude_domains:
+  - cmsservices.
+  - sit2depservices.
+  - cdn.
+  - static.
+  - assets.
+  - fonts.
+
+# Regex patterns to always exclude (applied to full URL).
+# Use for path-based exclusions, analytics vendors, static asset types.
+exclude_patterns:
+  # Static assets
+  - '\.(png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot|css|js|map)(\?|$)'
+  # Analytics & crash reporting
+  - 'google-analytics'
+  - 'googletagmanager'
+  - 'firebase'
+  - 'crashlytics'
+  - 'datadog'
+  - 'appsflyer'
+  - 'amplitude'
+  # Bot management / security probes (not real API calls)
+  - '/_bm/'

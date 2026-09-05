@@ -1,0 +1,71 @@
+{
+  "_comment": "Named test user profiles for multi-scenario parameterization. Select a profile at runtime with --user-profile <name>. Credentials with null values must be injected via environment variables (never commit real credentials here).",
+
+  "profiles": {
+    "default": {
+      "_description": "Standard Health100 QA user — loaded automatically when no --user-profile is given. Credentials come from credentials.qa.js / environment.",
+      "COMMON_USER":     null,
+      "COMMON_PASSWORD": null,
+      "COMMON_OTP":      null,
+      "COMMON_DOB":      null,
+      "STATIC_OTP":      null,
+      "DOB":             null,
+      "_source": "credentials.qa.js"
+    },
+
+    "aetna-member": {
+      "_description": "Health100 user with active Aetna benefits plan — use for Benefits/Dashboard, Benefits/Claims, Benefits/IDCard flows.",
+      "COMMON_USER":     "${H100_AETNA_USER}",
+      "COMMON_PASSWORD": "${H100_AETNA_PASSWORD}",
+      "COMMON_OTP":      "${H100_AETNA_OTP}",
+      "COMMON_DOB":      "${H100_AETNA_DOB}",
+      "STATIC_OTP":      "${H100_AETNA_STATIC_OTP}",
+      "DOB":             "${H100_AETNA_DOB}",
+      "_required_env":   ["H100_AETNA_USER", "H100_AETNA_DOB"]
+    },
+
+    "caremark-user": {
+      "_description": "Health100 user with Caremark pharmacy access — use for Benefits/CaremarkUser and InNetworkPharmacy flows.",
+      "COMMON_USER":     "${H100_CAREMARK_USER}",
+      "COMMON_PASSWORD": "${H100_CAREMARK_PASSWORD}",
+      "COMMON_OTP":      "${H100_CAREMARK_OTP}",
+      "COMMON_DOB":      "${H100_CAREMARK_DOB}",
+      "STATIC_OTP":      "${H100_CAREMARK_STATIC_OTP}",
+      "DOB":             "${H100_CAREMARK_DOB}",
+      "_required_env":   ["H100_CAREMARK_USER", "H100_CAREMARK_DOB"]
+    },
+
+    "no-benefits": {
+      "_description": "Health100 user with no active benefits plan — use for Benefits/Consent and error-state flows.",
+      "COMMON_USER":     "${H100_NOBENE_USER}",
+      "COMMON_PASSWORD": "${H100_NOBENE_PASSWORD}",
+      "COMMON_OTP":      "${H100_NOBENE_OTP}",
+      "COMMON_DOB":      "${H100_NOBENE_DOB}",
+      "STATIC_OTP":      "${H100_NOBENE_STATIC_OTP}",
+      "DOB":             "${H100_NOBENE_DOB}",
+      "_required_env":   ["H100_NOBENE_USER", "H100_NOBENE_DOB"]
+    },
+
+    "smart-scheduler": {
+      "_description": "Health100 user eligible for Smart Scheduler — use for Smart_Sch flows.",
+      "COMMON_USER":     "${H100_SS_USER}",
+      "COMMON_PASSWORD": "${H100_SS_PASSWORD}",
+      "COMMON_OTP":      "${H100_SS_OTP}",
+      "COMMON_DOB":      "${H100_SS_DOB}",
+      "STATIC_OTP":      "${H100_SS_STATIC_OTP}",
+      "DOB":             "${H100_SS_DOB}",
+      "_required_env":   ["H100_SS_USER", "H100_SS_DOB"]
+    },
+
+    "cvs-qa": {
+      "_description": "CVS Health app QA user — use with cvshealth suite flows.",
+      "COMMON_USER":     "${CVS_QA_USER}",
+      "COMMON_PASSWORD": "${CVS_QA_PASSWORD}",
+      "COMMON_OTP":      "${CVS_QA_OTP}",
+      "COMMON_DOB":      "${CVS_QA_DOB}",
+      "STATIC_OTP":      "${CVS_QA_STATIC_OTP}",
+      "DOB":             "${CVS_QA_DOB}",
+      "_required_env":   ["CVS_QA_USER", "CVS_QA_DOB"]
+    }
+  }
+}

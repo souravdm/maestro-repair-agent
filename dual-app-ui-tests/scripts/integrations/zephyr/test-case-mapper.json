@@ -1,0 +1,8 @@
+{
+  "_comment": "Mapping of Maestro test case IDs to Zephyr test case keys",
+  "_format": "TC_ID: ZEPHYR_KEY",
+  "_example": "TC001_Account_login_and_logout: TLPCWHSAM-T123",
+  "_auto_generated": true,
+  "_last_sync": null,
+  "mappings": {}
+}
