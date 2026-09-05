@@ -1,0 +1,33 @@
+# BUSINESS LOGIC: ANBA: Ready Status
+# Validates: Ready prescription anba_rx_ready displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Ready status NBA visible
+#   - Ready message displays
+#   - Pickup or delivery option shown
+#   - Action button available
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: ReadyRx
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_ready}
+- runFlow: ../../subflows/Pharmacy/validate_order_screen.yaml

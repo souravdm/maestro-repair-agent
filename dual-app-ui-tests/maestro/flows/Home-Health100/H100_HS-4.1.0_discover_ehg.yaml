@@ -1,0 +1,35 @@
+# BUSINESS LOGIC: Discover: Everyday Health Article Card
+# Validates: EHG article Discover card is tappable and navigates to Everyday Health content
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - EHG article card visible in Discover tab
+#   - "Read article" CTA tappable
+#   - Tap navigates to Everyday Health content
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10707
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- repeat:
+    times: 10
+    while:
+      notVisible: "Read article.*"
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+- tapOn: Read article.*
+- tapOn: Continue
+- waitForAnimationToEnd
+- assertVisible: "Done"

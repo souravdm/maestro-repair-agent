@@ -1,0 +1,39 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Loads Successfully (Signed In)
+# Validates: Homescreen loads successfully for authenticated users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Homescreen loads without errors
+#   - Activity zone visible with personalized content
+#   - All core zones visible
+#   - Bottom navigation bar present
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T1156
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- assertVisible: Medication reminders
+- assertVisible: .*All reminders.*
+- assertVisible: .*medication at.*
+- assertVisible: Skip
+- assertVisible: Take
+- assertVisible: Previous medication
+- assertVisible: Next medication

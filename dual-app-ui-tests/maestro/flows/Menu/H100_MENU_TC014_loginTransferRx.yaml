@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC014 - Login Transfer Rx"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+# Flow: Menu navigation and verification for Transfer Rx
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- scrollUntilVisible:
+    element: ${output.explore_more_menu.transferRxBtn}
+    speed: 40
+- assertVisible: ${output.explore_more_menu.transferRxBtn}
+- swipe:
+    direction: UP
+- tapOn: ${output.explore_more_menu.transferRxBtn}
+- assertVisible: ${output.pharmacy_transferRx.welcomeHeader}
+
+
+- takeScreenshot: Test_complete
+

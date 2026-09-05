@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC002 - Copy Device Info"
+
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification for copy device info in guest flow
+
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.explore_more_menu.copyDeviceInf}
+- tapOn: ${output.explore_more_menu.copyDeviceInf}
+- waitForAnimationToEnd
+- assertVisible: ${output.explore_more_menu.uuid}
+- takeScreenshot: Test_complete

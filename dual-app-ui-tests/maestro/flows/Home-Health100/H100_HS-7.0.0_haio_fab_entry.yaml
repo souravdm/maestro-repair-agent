@@ -1,0 +1,24 @@
+# BUSINESS LOGIC: Homescreen: HAIO FAB Entry Point
+# Validates: Tapping the HAIO assistant button from homescreen opens the health assistant
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - HAIO assistant button visible on homescreen
+#   - Tap opens HAIO with login/sign-up prompt
+#   - Chat input field present in HAIO view
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/HAIO/HealthAIHomeScreen.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: ${output.haio_ai_home.healthAssistantTitle}
+- waitForAnimationToEnd
+- assertVisible: ${output.haio_ai_home.loginOrSignUpBtn}

@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC012 - Login View Terms Privacy"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification while clicking view terms and privacy
+
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- scrollUntilVisible:
+    element: ${output.explore_more_menu.termsAndPrivacyBtn}
+    speed: 40
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- assertVisible: ${output.explore_more_menu.termsOfUse}
+- assertVisible: ${output.explore_more_menu.privacyPolicy}
+- assertVisible: ${output.explore_more_menu.personalHealth}
+
+
+- takeScreenshot: Test_complete
+

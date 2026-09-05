@@ -1,0 +1,23 @@
+# BUSINESS LOGIC: App Launch Validation (Crash Gate) — Health100
+# Validates: App launches and initial screen renders without crash
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - App launches without crashing
+#   - Terms & Conditions screen is visible on fresh launch
+#   - No crash on initial render
+
+appId: ${APP_ID}
+tags:
+    - app-validation
+    - crash-gate
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- tapOn:
+    text: "Allow While Using App"
+    optional: true
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ${output.account_health100_onboarding.termsTitle}
+    timeout: 30000

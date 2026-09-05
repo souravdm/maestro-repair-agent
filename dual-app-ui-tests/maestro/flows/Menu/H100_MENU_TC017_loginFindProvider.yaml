@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC017 - Login Find Provider"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification for Find provider
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- scrollUntilVisible:
+    element: ${output.explore_more_menu.findAProvider}
+    speed: 40
+- assertVisible: ${output.explore_more_menu.findAProvider}
+- swipe:
+    direction: UP
+- tapOn: ${output.explore_more_menu.findAProvider}
+- assertVisible: ${output.search_benefits_card.providerSearchBtn}
+
+
+- takeScreenshot: Test_complete
+

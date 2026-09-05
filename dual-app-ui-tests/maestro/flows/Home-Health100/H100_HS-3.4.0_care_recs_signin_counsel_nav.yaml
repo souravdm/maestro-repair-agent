@@ -1,0 +1,37 @@
+# BUSINESS LOGIC: Care Recommendations: Counsel CTA Navigation (Signed In)
+# Validates: Tapping "Chat with a physician" care recommendation opens Counsel enrollment
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Counsel care recommendation visible for authenticated users
+#   - "Chat with a physician" CTA tappable
+#   - Tap opens Counsel chat with physician enrollment
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript: ../../screens/Webview/counsel.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_careRecommendations.chatWithAPhysician}
+- tapOn: ${output.homescreen_careRecommendations.chatWithAPhysician}
+- assertVisible: ${output.homescreen_counsel.chatWithAPhysician}
+- tapOn: ${output.homescreen_counsel.messagePhysicianBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.counsel_enrollment.askAnything}

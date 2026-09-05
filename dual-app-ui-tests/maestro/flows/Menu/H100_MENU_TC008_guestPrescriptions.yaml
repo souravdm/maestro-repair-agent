@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC008 - Guest Prescriptions"
+
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification for prescriptions in guest flow
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.explore_more_menu.prescriptionsBtn}
+- tapOn: ${output.explore_more_menu.prescriptionsBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_health100_onboarding.continueWithMobileOrEmail}
+- assertVisible: ${output.account_health100_onboarding.continueWithCvsHealth}
+- assertVisible: ${output.account_health100_onboarding.continueAsAGuest}
+- takeScreenshot: Test_complete

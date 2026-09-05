@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Upcoming MinuteClinic Visit
+# Validates: "MinuteClinic® visit" ANBA card appears for users with scheduled appointments
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Upcoming MinuteClinic appointment NBA appears
+#   - Correct visit type and date text displays
+#   - Tap action navigates to appointment details
+# DATA DEPENDENCY: Requires test user with future MinuteClinic appointment in QA
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: JUNE_MLP
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow:
+    file: ../../subflows/Home/click_anba_card.yaml
+    env:
+        ANBA_CARD: ${output.homescreen_activity.anba_hs_upcomingmc}

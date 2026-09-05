@@ -1,0 +1,30 @@
+# BUSINESS LOGIC: Care Recommendations: EVC Navigation (Guest)
+# Validates: Tapping "Connect over video" care recommendation navigates to Find Care
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - EVC care recommendation visible for guest users
+#   - "Connect over video" CTA tappable
+#   - Tap navigates to Find Care screen
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10399
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/careRecommendations/validate_care_recommendations_displayed.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_careRecommendations.connectOverVideo}
+- tapOn: ${output.homescreen_careRecommendations.connectOverVideo}
+- waitForAnimationToEnd
+- assertVisible: ${output.health_scheduling.findCareTitle}

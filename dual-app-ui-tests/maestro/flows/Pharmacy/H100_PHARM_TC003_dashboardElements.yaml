@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: "H100 | Pharmacy | TC003 - Dashboard Elements"
+tags:
+  - pharmacy
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Verify pharmacy dashboard elements
+# Source: Migrated from XCUITest PharmacyScreenTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runFlow: ../../subflows/Pharmacy/dashboard/viewPharmacyDashboard.yaml

@@ -1,0 +1,44 @@
+# BUSINESS LOGIC: Homescreen: Error Recovery — Try Again Button
+# Validates: After airplane mode triggers an error, tapping "Try again" reloads the homescreen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Offline error banner displays when network is unavailable
+#   - Content reloads when connection is restored
+#   - No app restart required for recovery
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- runScript:
+    file: ../../config/network-toggle.js
+    env:
+        NETWORK_ACTION: block
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    commands:
+      - extendedWaitUntil:
+          visible: ${output.homescreen_error.notConnectedText}
+          timeout: 15000
+- runScript:
+    file: ../../config/network-toggle.js
+    env:
+        NETWORK_ACTION: unblock
+- waitForAnimationToEnd
+- tapOn: ${output.homescreen_error.tryAgainBtn}
+- extendedWaitUntil:
+    notVisible: ${output.homescreen_error.notConnectedText}
+    timeout: 15000
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml

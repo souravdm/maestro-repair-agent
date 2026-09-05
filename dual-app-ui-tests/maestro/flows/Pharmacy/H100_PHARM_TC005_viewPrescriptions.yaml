@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: "H100 | Pharmacy | TC005 - View Prescriptions"
+tags:
+  - pharmacy
+  - smoke
+  - migrated-xcuitest
+---
+# Flow: View prescriptions list
+# Source: Migrated from XCUITest PharmacyScreenTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runFlow: ../../subflows/Pharmacy/prescriptions/viewPrescriptions.yaml

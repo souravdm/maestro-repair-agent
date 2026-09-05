@@ -1,0 +1,33 @@
+# BUSINESS LOGIC: Medication Reminders: Setup State
+# Validates: Medication reminders setup CTA is displayed and navigates to the setup screen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Medication reminders setup banner visible on homescreen
+#   - "Set up now" CTA tappable
+#   - Tap navigates to Medication reminders setup screen
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript:
+          file: ../../testdata/users_qa.js
+          env:
+              loginData: BENJAMIN
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- assertVisible: ".*You can set up reminders for your medications.*"
+- assertVisible: "Set up now"
+- tapOn: "Set up now"
+- assertVisible: ${output.homescreen_medreminders.medicationReminders}

@@ -1,0 +1,36 @@
+# BUSINESS LOGIC: Discover: Oak Street Health Card
+# Validates: Oak Street primary care Discover card CTA navigates to booking flow
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Oak Street Health card visible in Discover tab
+#   - "Schedule an appointment" CTA tappable
+#   - Tap navigates to primary care booking flow
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10708
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- repeat:
+    times: 10
+    while:
+      notVisible: ".*primary care.*seniors.*"
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+- tapOn: Schedule an appointment
+- tapOn: Continue
+- waitForAnimationToEnd
+- assertVisible: Get primary care designed for seniors

@@ -1,0 +1,33 @@
+# BUSINESS LOGIC: Homescreen: ExtraCare Section
+# Validates: ExtraCare savings and rewards section loads for authenticated users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Savings & Rewards section header displays
+#   - ExtraCare branding visible
+#   - View all rewards action available
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_extracare.savingsAndRewardsHeader}
+- assertVisible: ${output.homescreen_extracare.savingsAndRewardsHeader}
+- assertVisible: ${output.homescreen_extracare.extracare}
+- assertVisible: ${output.homescreen_extracare.viewAllRewards}

@@ -1,0 +1,28 @@
+# BUSINESS LOGIC: Smoke Test: Swipe Down Refreshes Homescreen
+# Validates: Pull-to-refresh gesture updates homescreen content
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Swipe down triggers refresh action
+#   - Loading indicator displays during refresh
+#   - Content updates after refresh completes
+#   - Error handling on refresh failure
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T680
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/continue_as_guest_h100.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+
+- assertNotVisible: ${output.homescreen_error.somethingWentWrong}
+- assertNotVisible: ${output.homescreen_error.notConnectedText}
+- swipe:
+    direction: DOWN
+- assertNotVisible: ${output.homescreen_error.somethingWentWrong}
+- runFlow: ../../subflows/Home/discover_nba_loaded.yaml

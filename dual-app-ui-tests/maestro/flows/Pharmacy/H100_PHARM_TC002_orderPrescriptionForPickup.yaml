@@ -1,0 +1,69 @@
+appId: ${APP_ID}
+name: "H100 | Pharmacy | TC002 - Order Prescription For Pickup"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - pharmacy
+  - cnc_rx
+  - click_and_collect
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Pharmacy/PharmacyDashboardScreen.js
+
+# Test: Click & Collect Prescription Flow
+# Verifies CNC Rx ordering and pickup flow
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Pharmacy screen to load
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+- tapOn: ${PHARMACY_TAB}
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+# Navigate to prescriptions
+- assertVisible: ${PRESCRIPTIONS_SECTION}
+- tapOn: "Prescriptions"
+- assertVisible: "All Prescriptions"
+
+# Select a prescription for CNC
+- tapOn:
+    text: ".*Ready.*"
+    
+    index: 0
+
+# Verify CNC option
+- assertVisible: "Pick up in store"
+- tapOn: "Pick up in store"
+
+# Verify store selection
+- assertVisible: "Select Store"
+- assertVisible: "Current Store"
+
+# Select pickup time
+- assertVisible: "Select Pickup Time"
+- tapOn: "Select Pickup Time"
+- assertVisible: "Today"
+- assertVisible: "Tomorrow"
+
+# Complete CNC order
+- tapOn: "Confirm Pickup"
+- assertVisible: "Pickup Confirmed"
+- assertVisible: "Order Details"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

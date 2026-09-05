@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC013 - Login Support Faq"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+  - TLPCWHSAM-T766
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification for support faq
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- scrollUntilVisible:
+    element: ${output.explore_more_menu.supportAndFAQBtn}
+    speed: 40
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- tapOn: ${output.explore_more_menu.supportAndFAQBtn}
+- assertVisible: "(?i).*(FAQ|Help|Email Us|Call Us).*"
+
+
+- takeScreenshot: Test_complete
+

@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC011 - Copydevice Login"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification while clicking copy device info
+# Source: Migrated from XCUITest MenuTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- scrollUntilVisible:
+    element: ${output.explore_more_menu.copyDeviceInf}
+    speed: 40
+- assertVisible: ${output.explore_more_menu.copyDeviceInf}
+- tapOn: ${output.explore_more_menu.copyDeviceInf}
+
+
+- takeScreenshot: Test_complete
+

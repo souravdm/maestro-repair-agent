@@ -1,0 +1,34 @@
+# BUSINESS LOGIC: Discover: Xponential Fitness Video Card
+# Validates: Xponential fitness video Discover card is visible and tappable
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Xponential fitness section visible in Discover tab
+#   - Fitness video card tappable
+#   - Video content loads after tap
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10711
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- repeat:
+    times: 5
+    while:
+      notVisible: "Watch.*"
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+- tapOn: Watch.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_healthInsights.xponentialVideo}

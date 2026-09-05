@@ -1,0 +1,40 @@
+# BUSINESS LOGIC: Homescreen: Health Insights Section
+# Validates: Health Insights section is present with EHG and Xponential content zones
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Health Insights section header is visible
+#   - Articles You Might Like subheader displays
+#   - Xponential fitness section header and description visible
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_healthInsights.header}
+- assertVisible: ${output.homescreen_healthInsights.header}
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_healthInsights.articlesYouMightLikeSubheader}
+- assertVisible: ${output.homescreen_healthInsights.articlesYouMightLikeSubheader}
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_healthInsights.xponentialSubheader}
+- assertVisible: ${output.homescreen_healthInsights.xponentialSubheader}
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_healthInsights.xponentialDescription}
+- assertVisible: ${output.homescreen_healthInsights.xponentialDescription}

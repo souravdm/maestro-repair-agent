@@ -1,0 +1,31 @@
+# BUSINESS LOGIC: ANBA: Delayed Prescription
+# Validates: "Delayed" ANBA card appears for users with delayed prescriptions
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Delayed status NBA appears
+#   - Correct action text displays
+#   - Tap action navigates to prescription details
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: DELAYED_NBA
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow:
+    file: ../../subflows/Home/click_anba_card.yaml
+    env:
+        ANBA_CARD: ${output.homescreen_activity.anba_rx_delayed}
+- runFlow: ../../subflows/Pharmacy/validate_prescriptions_displayed.yaml

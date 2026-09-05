@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: Homescreen: Deductible Widget
+# Validates: Deductible widget is visible for users with insurance/benefits data
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Deductible widget visible for users with insurance/benefits data
+#   - Remaining and spent deductible values display correctly
+#   - Widget is present on homescreen after sign-in
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_deductible.deductibleLabel}
+- assertVisible: ${output.homescreen_deductible.remaining}
+- assertVisible: ${output.homescreen_deductible.spent}

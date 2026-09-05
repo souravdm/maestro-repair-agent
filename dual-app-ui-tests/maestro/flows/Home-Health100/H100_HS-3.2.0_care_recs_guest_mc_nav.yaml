@@ -1,0 +1,29 @@
+# BUSINESS LOGIC: Care Recommendations: MinuteClinic Navigation (Guest)
+# Validates: Tapping "Get in-person care" care recommendation navigates to Find Care
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - In-person care recommendation visible for guest users
+#   - "Get in-person care" CTA tappable
+#   - Tap navigates to Find Care screen
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/careRecommendations/validate_care_recommendations_displayed.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_careRecommendations.getInPersonCare}
+- tapOn: ${output.homescreen_careRecommendations.getInPersonCare}
+- waitForAnimationToEnd
+- assertVisible: ${output.health_scheduling.findCareTitle}

@@ -1,0 +1,21 @@
+# BUSINESS LOGIC: Care Recommendations: Guest View
+# Validates: Care Recommendations section displays correctly for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Care Recommendations section visible on homescreen
+#   - Recommended services displayed for guest users
+#   - Content loads without authentication
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10395
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/careRecommendations/validate_care_recommendations_displayed.yaml

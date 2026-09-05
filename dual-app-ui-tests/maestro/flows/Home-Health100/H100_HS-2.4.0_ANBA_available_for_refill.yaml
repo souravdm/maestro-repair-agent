@@ -1,0 +1,32 @@
+# BUSINESS LOGIC: ANBA: Available For Refill
+# Validates: Available for refill anba_rx_refill prescription NBA displays
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Available for refill status NBA visible
+#   - Refill option available
+#   - Correct action text displays
+#   - Tap action initiates refill
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: DAFFODILS_DUR
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow:
+      file: ../../subflows/Home/click_anba_card.yaml
+      env:
+          ANBA_CARD: ${output.homescreen_activity.anba_rx_refill}
+- runFlow: ../../subflows/Pharmacy/validate_prescriptions_displayed.yaml

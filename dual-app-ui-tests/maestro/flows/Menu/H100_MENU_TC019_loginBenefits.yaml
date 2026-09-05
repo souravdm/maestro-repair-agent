@@ -1,0 +1,32 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC019 - Login Benefits"
+tags:
+  - home
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Menu/MenuScreen.js
+---
+# Flow: Menu navigation and verification for benefits
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: DEAN_FANT
+      BUILD_CONFIG: ${BUILD_CONFIG}
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.searchnav_bottom_benefits.benefitsSummary}
+- tapOn: ${output.searchnav_bottom_benefits.benefitsSummary}
+- assertVisible: ${output.searchnav_bottom_benefits.benefits}
+
+
+- takeScreenshot: Test_complete
+

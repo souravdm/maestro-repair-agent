@@ -1,0 +1,41 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Loads Successfully (Signed In)
+# Validates: Homescreen loads successfully for authenticated users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Homescreen loads without errors
+#   - Activity zone visible with personalized content
+#   - All core zones visible
+#   - Bottom navigation bar present
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T641
+onFlowStart:
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: DEAN_FANT
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+      file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+      file: ../../subflows/Common/dismissOverlays.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+# Scroll until Discover is in the iOS accessibility tree — personalized content
+# (Prescriptions) is variable height; fixed scroll count is unreliable.
+- runScript: ../../screens/Home/homescreenObjectsH100.js
+- scrollUntilVisible:
+    element: ${output.homescreen_discover.discoverHeader}
+    direction: DOWN
+    timeout: 30000
+    speed: 40
+    visibilityPercentage: 10
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml

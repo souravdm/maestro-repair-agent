@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC003 - View Terms Privacy"
+
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu navigation and verification for terms and privacy in guest flow
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+- waitForAnimationToEnd
+- takeScreenshot: Test_screen
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- assertVisible: ${output.explore_more_menu.termsOfUse}
+- assertVisible: ${output.explore_more_menu.privacyPolicy}
+- assertVisible: ${output.explore_more_menu.personalHealth}
+- takeScreenshot: Test_complete

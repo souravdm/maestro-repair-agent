@@ -1,0 +1,37 @@
+# BUSINESS LOGIC: Smoke Test: Relaunch with KSMI
+# Validates: User remains signed in after app relaunch with KSMI
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Login state persists across app sessions
+#   - Session token automatically refreshed
+#   - No re-authentication required within 30 days
+#   - Homescreen loads with authenticated content
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: WOOL
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+
+- stopApp
+- launchApp
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/validate_header_signed_in_h100.yaml

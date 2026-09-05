@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC004 - View Support Faq"
+
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+---
+# Flow: Menu navigation and verification for View Support faq in guest flow
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+- waitForAnimationToEnd
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- tapOn: ${output.explore_more_menu.supportAndFAQBtn}
+- waitForAnimationToEnd
+- takeScreenshot: Support_and_FAQ
+- assertVisible: ${output.search_help_center.helpCenterTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterPopularQuestionsTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterHowCanWeHelpTitle}
+- takeScreenshot: Test_complete

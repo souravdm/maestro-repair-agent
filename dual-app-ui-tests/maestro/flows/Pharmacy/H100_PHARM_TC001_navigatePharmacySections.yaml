@@ -1,0 +1,79 @@
+appId: ${APP_ID}
+name: "H100 | Pharmacy | TC001 - Navigate Pharmacy Sections"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - pharmacy
+  - navigation
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Pharmacy/PharmacyDashboardScreen.js
+
+# Test: Pharmacy Screen Navigation
+# Verifies all pharmacy screen sections and navigation
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Pharmacy screen to load
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+- tapOn: ${PHARMACY_TAB}
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+# Verify main sections
+- assertVisible: ${PRESCRIPTIONS_SECTION}
+- assertVisible: ${REFILL_PRESCRIPTIONS_BTN}
+- assertVisible: "Transfer"
+- assertVisible: "Order Status"
+
+# Test Prescriptions section
+- tapOn: "Prescriptions"
+- assertVisible: "All Prescriptions"
+- tapOn:
+    id: "back_button"
+
+# Test Refill section
+- tapOn: "Refill"
+- assertVisible: "Refill Prescriptions"
+- assertVisible: "Scan Prescription"
+- tapOn:
+    id: "back_button"
+
+# Test Transfer section
+- tapOn: "Transfer"
+- assertVisible: "Transfer Prescriptions"
+- assertVisible: "From Another Pharmacy"
+- tapOn:
+    id: "back_button"
+
+# Test Order Status section
+- tapOn: "Order Status"
+- assertVisible: "Order Status"
+- assertVisible: "Track Orders"
+- tapOn:
+    id: "back_button"
+
+# Test More menu
+- tapOn: "More"
+- assertVisible: "More"
+- assertVisible: "Add or Manage People"
+- assertVisible: "Pharmacy Preferences"
+- assertVisible: "Insurance"
+- assertVisible: "Payment Methods"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

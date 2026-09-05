@@ -1,0 +1,39 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Loads Successfully (Guest)
+# Validates: Homescreen loads successfully for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Homescreen loads without errors
+#   - All core zones visible (Discovery, Business Units)
+#   - Bottom navigation bar present
+#   - No error banners displayed
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T656
+    - TLPCWHSAM-T1181
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- assertVisible: "Get a complete view of Health100™"
+- assertVisible: "Bring together your health care to start getting clear insights and guidance from your personal health assistant, HAIO."
+- assertVisible: "Sign in or create an account"
+- tapOn: "Sign in or create an account"
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- assertNotVisible: "Get a complete view of Health100™"
+- assertNotVisible: "Bring together your health care to start getting clear insights and guidance from your personal health assistant, HAIO."
+- assertNotVisible: "Sign in or create an account"

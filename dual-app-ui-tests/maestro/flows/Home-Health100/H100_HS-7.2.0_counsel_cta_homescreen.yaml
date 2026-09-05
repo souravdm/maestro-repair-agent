@@ -1,0 +1,36 @@
+# BUSINESS LOGIC: Homescreen: Counsel Business Unit CTA
+# Validates: "Request a care consult" CTA in the Counsel homescreen zone navigates correctly
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Counsel business unit CTA visible on homescreen
+#   - Tap navigates to Counsel chat with physician
+#   - Enrollment screen displays correctly
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/Webview/counsel.js
+    - runScript:
+          file: ../../config/credentials-loader.js
+          env:
+              loginData: LOA2
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- tapOn: ${output.searchnav_bottom.homeBtn}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- scrollUntilVisible:
+    direction: DOWN
+    element:
+      text: ${output.homescreen_counsel.chatWithAPhysician}
+- tapOn: ${output.homescreen_counsel.chatWithAPhysician}
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_counsel.chatWithAPhysician}
+- tapOn: ${output.homescreen_counsel.messagePhysicianBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.counsel_enrollment.askAnything}

@@ -1,0 +1,35 @@
+# BUSINESS LOGIC: Discover: Virtual Weight Loss Care Card
+# Validates: Weight loss care Discover card CTA navigates to Schedule Care
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Virtual weight loss care card visible in Discover tab
+#   - "Schedule a virtual visit" CTA tappable
+#   - Tap navigates to Schedule Care screen
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+    - TLPCWHSAM-T10707
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- repeat:
+    times: 10
+    while:
+      notVisible: "Schedule a virtual visit"
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+- tapOn: Schedule a virtual visit
+- waitForAnimationToEnd
+- assertVisible: Schedule Care

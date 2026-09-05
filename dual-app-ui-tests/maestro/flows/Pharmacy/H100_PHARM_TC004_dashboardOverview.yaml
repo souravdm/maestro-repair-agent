@@ -1,0 +1,60 @@
+appId: ${APP_ID}
+name: "H100 | Pharmacy | TC004 - Dashboard Overview"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - pharmacy
+  - dashboard
+  - smoke
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Pharmacy/PharmacyDashboardScreen.js
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Pharmacy screen to load
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+# Test: Pharmacy Dashboard Elements
+- tapOn: ${PHARMACY_TAB}
+- assertVisible: ${PHARMACY_DASHBOARD_TITLE}
+
+# Verify main sections
+- assertVisible: ${PRESCRIPTIONS_SECTION}
+- assertVisible: ${REFILL_PRESCRIPTIONS_BTN}
+
+# Verify pharmacy services
+- scrollUntilVisible:
+    element:
+      text: ${PHARMACY_SERVICES_SECTION}
+    direction: DOWN
+- assertVisible: ${PHARMACY_SERVICES_SECTION}
+- assertVisible: ${TRANSFER_PRESCRIPTION_LNK}
+- assertVisible: ${SCHEDULE_VACCINE_LNK}
+
+# Verify prescription history
+- scrollUntilVisible:
+    element:
+      text: ${PRESCRIPTION_HISTORY_SECTION}
+    direction: DOWN
+- assertVisible: ${PRESCRIPTION_HISTORY_SECTION}
+
+# Verify pharmacy info
+- scrollUntilVisible:
+    element:
+      text: ${MY_PHARMACY_SECTION}
+    direction: DOWN
+- assertVisible: ${MY_PHARMACY_SECTION}
+- assertVisible: ${CHANGE_PHARMACY_LNK}

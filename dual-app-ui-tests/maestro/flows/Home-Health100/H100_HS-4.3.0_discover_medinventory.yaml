@@ -1,0 +1,36 @@
+# BUSINESS LOGIC: Discover: Medication Inventory Check Card
+# Validates: Med inventory Discover card CTA navigates to Check inventory screen
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Medication inventory card visible in Discover tab
+#   - "Check your medications availability" CTA tappable
+#   - Tap navigates to Check inventory screen
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - TLPCWHSAM-T10707
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_discover.discoverHeader}
+- repeat:
+    times: 10
+    while:
+      notVisible: "Check your medications availability"
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+- tapOn: Check your medications availability
+- waitForAnimationToEnd
+- assertVisible: Check inventory
+- assertVisible: Check your Medication availability

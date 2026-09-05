@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Menu | TC001 - View Guest Mode"
+
+tags:
+  - TLPCWHSAM-T749
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+# Flow: Menu verification for guest flow
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+- waitForAnimationToEnd
+- takeScreenshot: Menu_Pic
+- assertVisible: ${output.menu_screen.healthRecordsLnk}
+- assertVisible: ${output.explore_more_menu.prescriptionsBtn}
+- assertVisible: ${output.explore_more_menu.transferRxBtn}
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- assertVisible: ${output.explore_more_menu.copyDeviceInf}
+- assertVisible: ${output.explore_more_menu.scheduleCareBtn}
+- takeScreenshot: Test_complete

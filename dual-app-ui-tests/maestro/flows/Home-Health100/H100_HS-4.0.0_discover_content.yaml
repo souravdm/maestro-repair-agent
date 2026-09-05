@@ -1,0 +1,30 @@
+# BUSINESS LOGIC: Discover: Structural Layout Validation (Guest)
+# Validates: Discover section structural elements and bottom nav are present for guest users
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Discover tab is accessible from homescreen
+#   - Sign in prompt visible for guest users
+#   - Bottom navigation bar fully present
+#   - Health 100 Logo and header icons visible
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+onFlowStart:
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
+- waitForAnimationToEnd
+- tapOn: Discover.*
+- waitForAnimationToEnd
+- assertVisible: Sign in
+- assertVisible: Health 100 Logo
+- assertVisible: Messages
+- assertVisible: Haio
+- assertVisible: Home
+- assertVisible: Pharmacy
+- assertVisible: Health

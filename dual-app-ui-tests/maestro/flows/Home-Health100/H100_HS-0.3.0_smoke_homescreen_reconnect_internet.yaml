@@ -1,0 +1,53 @@
+# BUSINESS LOGIC: Smoke Test: Homescreen Reconnect Internet
+# Validates: Homescreen recovers when internet connection is restored
+# -------------------------------------------------
+# Requirements from docs/maestro/features/homescreen.md:
+#   - Error banner clears when connection restored
+#   - Content refreshes automatically
+#   - All zones reload successfully
+#   - No manual refresh required
+
+appId: ${APP_ID}
+tags:
+    - homescreen
+    - ignore
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Home/homescreenObjectsH100.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+
+- runFlow: ../../subflows/SearchAndNav/bottom_nav_loaded.yaml
+- runScript:
+    file: ../../config/network-toggle.js
+    env:
+        NETWORK_ACTION: block
+- waitForAnimationToEnd
+# Execute this assertion only on iOS
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    commands:
+      - extendedWaitUntil:
+          visible: ${output.homescreen_error.notConnectedText}
+          timeout: 20000
+- runScript:
+    file: ../../config/network-toggle.js
+    env:
+        NETWORK_ACTION: unblock
+- waitForAnimationToEnd
+
+- retry:
+    maxRetries: 3
+    commands:
+      - swipe:
+          direction: DOWN
+      - waitForAnimationToEnd
+- extendedWaitUntil:
+    notVisible: ${output.homescreen_error.notConnectedText}
+    timeout: 15000
+- runFlow: ../../subflows/Home/homescreen_loaded_successful_h100.yaml
