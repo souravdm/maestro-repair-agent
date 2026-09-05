@@ -14,6 +14,7 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from ..collect.pom import resolve_flow_path
 from ..models import Action, FailureBundle, Verdict
 
 
@@ -188,6 +189,10 @@ _ALERT_SNIPPET = [
 ]
 
 
+# Actions whose fix site is the shared locator registry rather than a flow file.
+_REGISTRY_ACTIONS = frozenset({Action.RENAME_LOCATOR, Action.ADD_PLATFORM_OVERRIDE})
+
+
 def synthesize(
     bundle: FailureBundle,
     verdict: Verdict,
@@ -196,12 +201,24 @@ def synthesize(
 ) -> Optional[Patch]:
     """Turn a deterministic verdict into a concrete diff. No model involved."""
     h: Dict[str, Any] = verdict.patch_hint or {}
-    flow_path = os.path.join(flow_root, bundle.step.flow_id)
     # POM: the fix site is the frame that owns the locator, not the leaf command.
-    if bundle.step.call_stack:
-        flow_path = os.path.join(flow_root, bundle.step.call_stack[-1].file)
+    # Every candidate is resolved against the filesystem: bundle.step.flow_id is a
+    # display name, and JUnit records paths as the runner saw them, so neither can
+    # be joined onto flow_root and assumed to exist.
+    flow_path = ""
+    for cand in ([bundle.step.call_stack[-1].file] if bundle.step.call_stack else []) + \
+            [bundle.step.flow_file, bundle.step.flow_id]:
+        flow_path = resolve_flow_path(os.path.dirname(flow_root) or ".", flow_root, cand)
+        if flow_path:
+            break
     idx = bundle.step.command_index
     br = bundle.inventories.blast_radius
+
+    # Registry-level fixes edit locators.yaml and need no flow file. Everything
+    # else edits the flow itself, so without a resolved path there is nothing to
+    # patch — decline rather than emit a diff git apply will reject.
+    if not flow_path and verdict.action not in _REGISTRY_ACTIONS:
+        return None
 
     if verdict.action == Action.RENAME_LOCATOR:
         return patch_locator_rename(

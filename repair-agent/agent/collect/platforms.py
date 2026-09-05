@@ -24,6 +24,8 @@ DART_EXC_RE = re.compile(
 )
 ROUTE_RE = re.compile(r"\[NAV\]\s*(push|pop|replace)\s+(\S+)")
 JANK_RE = re.compile(r"Skipped \d+ frames|frame took|Janky frames")
+ANR_RE = re.compile(r"ANR in ([\w.]+)|Application Not Responding")
+NATIVE_CRASH_RE = re.compile(r"FATAL EXCEPTION|beginning of crash|signal \d+ \(SIG")
 
 
 def _sh(cmd: List[str], timeout: int = 120) -> str:
@@ -34,9 +36,66 @@ def _sh(cmd: List[str], timeout: int = 120) -> str:
         return ""
 
 
+# Bounded read for consumers that want log *text* (build info, semantics markers).
+# Those markers appear at launch, so the head of the capture is the right slice.
+# Diagnostics are found by streaming instead — see scan_log_file.
+MAX_ARCHIVED_BYTES = int(os.environ.get("REPAIR_AGENT_MAX_LOG_BYTES", str(2 << 20)))
+
+
+def _read_archived(path: str, max_bytes: int = MAX_ARCHIVED_BYTES) -> str:
+    if not path or not os.path.exists(path):
+        return ""
+    try:
+        with open(path, errors="ignore") as fh:
+            return fh.read(max_bytes)
+    except OSError:
+        return ""
+
+
+def scan_log_file(path: str) -> Optional[Dict[str, Any]]:
+    """Scan an archived capture end to end, streaming.
+
+    These files reach tens of MB, but the scan keeps only a handful of matches,
+    so cost is bounded by IO rather than memory. Reading a slice would be wrong
+    in both directions: an ANR lands wherever the app stalled, which for a
+    run-scoped capture is as often line 252 as the last line.
+    """
+    if not path or not os.path.exists(path):
+        return None
+    try:
+        with open(path, errors="ignore") as fh:
+            return _scan_lines(fh)
+    except OSError:
+        return None
+
+
+def find_archived_log(debug_dir: str) -> str:
+    """Locate the device log a finished run saved alongside its debug output."""
+    for pat in ("**/logs/device-logcat.txt", "**/device-logcat.txt",
+                "**/logs/device-log.txt", "**/logs/*.logcat"):
+        hits = glob.glob(os.path.join(debug_dir, pat), recursive=True)
+        if hits:
+            return max(hits, key=os.path.getsize)
+    return ""
+
+
+def android_device_online(serial: str = "") -> bool:
+    """Cheap reachability probe, so post-hoc triage does not pay six adb timeouts."""
+    out = _sh(["adb", "devices"], timeout=10)
+    lines = [l for l in out.splitlines()[1:] if l.strip() and "device" in l.split("\t")[-1]]
+    if not lines:
+        return False
+    return True if not serial else any(l.split("\t")[0] == serial for l in lines)
+
+
 def _scan_log_text(text: str) -> Dict[str, Any]:
+    return _scan_lines(text.splitlines())
+
+
+def _scan_lines(lines: Any) -> Dict[str, Any]:
     dart, routes, jank = [], [], 0
-    for line in text.splitlines():
+    anr, crashes = [], []
+    for line in lines:
         if DART_EXC_RE.search(line):
             dart.append(line.strip()[:400])
         m = ROUTE_RE.search(line)
@@ -48,7 +107,17 @@ def _scan_log_text(text: str) -> Dict[str, Any]:
                 routes.append(route)
         if JANK_RE.search(line):
             jank += 1
-    return {"dart_exceptions": dart[:5], "route_stack": routes[-8:], "jank_markers": jank}
+        if ANR_RE.search(line):
+            anr.append(line.strip()[:300])
+        if NATIVE_CRASH_RE.search(line):
+            crashes.append(line.strip()[:300])
+    return {
+        "dart_exceptions": dart[:5],
+        "route_stack": routes[-8:],
+        "jank_markers": jank,
+        "anr_traces": anr[:3],
+        "native_crashes": crashes[:3],
+    }
 
 
 # ------------------------------------------------------------------- iOS
@@ -80,20 +149,27 @@ def ios_device_state(udid: str) -> DeviceState:
     return st
 
 
-def ios_log_window(udid: str, bundle_id: str, at: Optional[float] = None) -> LogWindow:
+def ios_log_window(
+    udid: str,
+    bundle_id: str,
+    at: Optional[float] = None,
+    archived_log: str = "",
+) -> LogWindow:
     at = at or time.time()
     start = datetime.fromtimestamp(at - WINDOW_S, tz=timezone.utc)
     end = datetime.fromtimestamp(at + WINDOW_S, tz=timezone.utc)
     fmt = "%Y-%m-%d %H:%M:%S"
-    pred = f'processImagePath CONTAINS "{bundle_id.split(".")[-1]}"' if bundle_id else ""
-    args = ["xcrun", "simctl", "spawn", udid, "log", "show",
-            "--start", start.strftime(fmt), "--end", end.strftime(fmt), "--style", "compact"]
-    if pred:
-        args += ["--predicate", pred]
-    text = _sh(args, timeout=180)
-    scan = _scan_log_text(text)
 
-    crashes: List[str] = []
+    scan = scan_log_file(archived_log)
+    if scan is None:
+        pred = f'processImagePath CONTAINS "{bundle_id.split(".")[-1]}"' if bundle_id else ""
+        args = ["xcrun", "simctl", "spawn", udid, "log", "show",
+                "--start", start.strftime(fmt), "--end", end.strftime(fmt), "--style", "compact"]
+        if pred:
+            args += ["--predicate", pred]
+        scan = _scan_log_text(_sh(args, timeout=180))
+
+    crashes: List[str] = list(scan.pop("native_crashes", []))
     cutoff = at - 600
     for pat in (
         os.path.expanduser("~/Library/Logs/DiagnosticReports/*.ips"),
@@ -110,6 +186,7 @@ def ios_log_window(udid: str, bundle_id: str, at: Optional[float] = None) -> Log
         window_start=start.isoformat(),
         window_end=end.isoformat(),
         native_crashes=crashes[:3],
+        raw_slice_path=archived_log,
         **scan,
     )
 
@@ -130,6 +207,10 @@ def android_device_state(serial: str = "") -> DeviceState:
         return _sh(args, timeout=30).strip()
 
     st = DeviceState(platform=Platform.ANDROID, udid=serial)
+    if not android_device_online(serial):
+        # Archived run: the emulator is gone. Return what we know rather than
+        # blocking on six adb calls that will each run out their timeout.
+        return st
     st.model = prop("ro.product.model")
     st.os_version = prop("ro.build.version.release")
     try:
@@ -151,28 +232,49 @@ def android_device_state(serial: str = "") -> DeviceState:
     return st
 
 
-def android_log_window(serial: str = "", tag_filter: str = "") -> LogWindow:
-    args = ["adb"] + (["-s", serial] if serial else []) + ["logcat", "-d", "-t", "2000"]
-    if tag_filter:
-        args += [f"{tag_filter}:V", "flutter:V", "*:E"]
-    text = _sh(args, timeout=120)
-    scan = _scan_log_text(text)
+def android_log_window(
+    serial: str = "",
+    tag_filter: str = "",
+    archived_log: str = "",
+) -> LogWindow:
+    """Windowed logcat.
 
-    anr: List[str] = []
-    dump = _sh(["adb"] + (["-s", serial] if serial else []) + ["shell", "ls", "/data/anr/"], 30)
-    for name in dump.split():
-        if name.strip():
-            anr.append(f"/data/anr/{name.strip()}")
+    Prefers `archived_log` — a logcat capture saved by the run — so a finished
+    CI run can be triaged after the emulator is gone. Live `adb` is the fallback,
+    and every device probe below is skipped when working from an archive, since
+    they would each block for their full timeout against no device.
+    """
+    scan = scan_log_file(archived_log)
+    from_archive = scan is not None
+    if not from_archive:
+        args = ["adb"] + (["-s", serial] if serial else []) + ["logcat", "-d", "-t", "2000"]
+        if tag_filter:
+            args += [f"{tag_filter}:V", "flutter:V", "*:E"]
+        scan = _scan_log_text(_sh(args, timeout=120))
 
+    # ANR evidence: trace files on the device, plus "ANR in <pkg>" in the log
+    # itself, which is the only form that survives into an archived capture.
+    anr: List[str] = list(scan.pop("anr_traces", []))
     alerts: List[str] = []
-    fg = _sh(["adb"] + (["-s", serial] if serial else []) +
-             ["shell", "dumpsys", "activity", "activities"], 90)
-    for owner in ("com.android.permissioncontroller", "com.google.android.gms",
-                  "com.android.systemui", "com.android.packageinstaller"):
-        if owner in fg:
-            alerts.append(owner)
+    if not from_archive:
+        dump = _sh(["adb"] + (["-s", serial] if serial else []) + ["shell", "ls", "/data/anr/"], 30)
+        for name in dump.split():
+            if name.strip():
+                anr.append(f"/data/anr/{name.strip()}")
 
-    return LogWindow(anr_traces=anr[:3], system_alert_owners=alerts, **scan)
+        fg = _sh(["adb"] + (["-s", serial] if serial else []) +
+                 ["shell", "dumpsys", "activity", "activities"], 90)
+        for owner in ("com.android.permissioncontroller", "com.google.android.gms",
+                      "com.android.systemui", "com.android.packageinstaller"):
+            if owner in fg:
+                alerts.append(owner)
+
+    return LogWindow(
+        anr_traces=anr[:3],
+        system_alert_owners=alerts,
+        raw_slice_path=archived_log if from_archive else "",
+        **scan,
+    )
 
 
 def foreground_route(log_text: str) -> Optional[str]:

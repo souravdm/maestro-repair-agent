@@ -42,7 +42,12 @@ def maestro_version() -> str:
 
 
 def parse_junit(path: str) -> List[Dict[str, Any]]:
-    """-> [{flow, name, message, time_s}] for failing cases only."""
+    """-> [{flow, name, file, message, time_s}] for failing cases only.
+
+    `file` is the flow's real path on disk. `classname`/`name` carry Maestro's
+    display name ("H100 | Benefits | Claims | TC001 - ..."), which is not a path
+    and must never be joined onto flow_root.
+    """
     if not os.path.exists(path):
         return []
     root = ET.parse(path).getroot()
@@ -52,6 +57,7 @@ def parse_junit(path: str) -> List[Dict[str, Any]]:
             out.append({
                 "flow": case.get("classname") or case.get("name") or "",
                 "name": case.get("name") or "",
+                "file": (case.get("file") or "").strip(),
                 "message": (bad.get("message") or bad.text or "").strip(),
                 "time_s": float(case.get("time") or 0.0),
             })
@@ -59,12 +65,44 @@ def parse_junit(path: str) -> List[Dict[str, Any]]:
 
 
 def find_hierarchies(debug_dir: str) -> List[str]:
-    """Maestro writes per-step hierarchy dumps; newest last."""
-    pats = ["**/*hierarchy*.json", "**/view-hierarchy*.json", "**/*.viewhierarchy.json"]
+    """Maestro writes per-step hierarchy dumps; newest last.
+
+    Layouts differ by Maestro version: 2.6.x writes
+    `<flow>/screen-hierarchy/step-NNN-<command>.json`, where the basename carries
+    the step rather than the word "hierarchy", so a basename glob alone misses
+    every file.
+    """
+    pats = [
+        "**/screen-hierarchy/*.json",
+        "**/*hierarchy*.json",
+        "**/view-hierarchy*.json",
+        "**/*.viewhierarchy.json",
+    ]
     hits: List[str] = []
     for p in pats:
         hits += glob.glob(os.path.join(debug_dir, p), recursive=True)
     return sorted(set(hits), key=lambda p: os.path.getmtime(p))
+
+
+_STEP_NO_RE = re.compile(r"step-(\d+)-")
+
+
+def hierarchy_for_step(debug_dir: str, command_index: int) -> str:
+    """The dump captured at the failing step, by step number rather than mtime.
+
+    Maestro names dumps `step-NNN-<command>.json` with NNN 1-based, so the file
+    for command index i is step-(i+1). Retries and equal mtimes make "newest
+    file" an unreliable stand-in; an exact step match is not.
+    """
+    files = find_hierarchies(debug_dir)
+    if not files:
+        return ""
+    if command_index >= 0:
+        for p in files:
+            m = _STEP_NO_RE.search(os.path.basename(p))
+            if m and int(m.group(1)) == command_index + 1:
+                return p
+    return files[-1]
 
 
 def find_screenshots(debug_dir: str) -> List[str]:
@@ -78,22 +116,46 @@ def find_commands_json(debug_dir: str) -> Optional[str]:
     return None
 
 
+def _selector_from_dict(sel: Any) -> Optional[Selector]:
+    """Read the selector fields off one candidate dict, or None if absent."""
+    if not isinstance(sel, dict):
+        return None
+    if sel.get("idRegex") or sel.get("id"):
+        return Selector("id", str(sel.get("idRegex") or sel.get("id")), raw=sel)
+    if sel.get("textRegex") or sel.get("text"):
+        return Selector("text", str(sel.get("textRegex") or sel.get("text")), raw=sel)
+    if sel.get("point"):
+        return Selector("point", str(sel["point"]), raw=sel)
+    if sel.get("index") is not None:
+        return Selector("index", str(sel["index"]), index=int(sel["index"]), raw=sel)
+    return None
+
+
+# assertConditionCommand nests its selector one level deeper, under the
+# condition it is asserting: {condition: {visible: {textRegex: ...}}}.
+_CONDITION_KEYS = ("visible", "notVisible", "true", "scrollable")
+
+
 def parse_selector(command: Dict[str, Any]) -> Selector:
     """Extract the selector from a Maestro command object."""
     for key in ("tapOnElement", "assertConditionCommand", "tapOn", "assertVisible",
-                "inputTextCommand", "scrollUntilVisible", "waitUntilVisible"):
+                "inputTextCommand", "scrollUntilVisible", "waitUntilVisible",
+                "assertNotVisible", "longPressOnElementCommand"):
         node = command.get(key)
-        if isinstance(node, dict):
-            sel = node.get("selector") or node.get("element") or node
-            if isinstance(sel, dict):
-                if sel.get("idRegex") or sel.get("id"):
-                    return Selector("id", str(sel.get("idRegex") or sel.get("id")), raw=sel)
-                if sel.get("textRegex") or sel.get("text"):
-                    return Selector("text", str(sel.get("textRegex") or sel.get("text")), raw=sel)
-                if sel.get("point"):
-                    return Selector("point", str(sel["point"]), raw=sel)
-                if sel.get("index") is not None:
-                    return Selector("index", str(sel["index"]), index=int(sel["index"]), raw=sel)
+        if not isinstance(node, dict):
+            continue
+
+        cond = node.get("condition")
+        if isinstance(cond, dict):
+            for ck in _CONDITION_KEYS:
+                found = _selector_from_dict(cond.get(ck))
+                if found is not None:
+                    return found
+
+        for candidate in (node.get("selector"), node.get("element"), node):
+            found = _selector_from_dict(candidate)
+            if found is not None:
+                return found
     return Selector()
 
 
@@ -115,6 +177,7 @@ def extract_failing_step(
 
     step = FailingStep(
         flow_id=fail["flow"],
+        flow_file=fail.get("file", ""),
         command_index=-1,
         driver_message=msg,
         failure_class=classify(msg),
@@ -131,23 +194,48 @@ def extract_failing_step(
         return step
 
     commands = data if isinstance(data, list) else data.get("commands", [])
-    for i, c in enumerate(commands):
-        status = str(c.get("status") or c.get("state") or "").upper()
-        if status in ("FAILED", "ERROR"):
-            step.command_index = i
-            step.command_type = next(iter(c.get("command", c).keys()), "")
-            step.raw_yaml = json.dumps(c.get("command", c), separators=(",", ":"))[:600]
-            step.resolved_command = step.raw_yaml
-            step.selector = parse_selector(c.get("command", c))
-            step.timeout_ms = int(c.get("timeout") or c.get("timeoutMs") or 0)
-            src = c.get("sourceDescription") or c.get("source") or ""
-            if src:
-                step.call_stack = [StepFrame(file=str(src), command_index=i)]
-            break
+    failed = [i for i, c in enumerate(commands) if _status_of(c) in ("FAILED", "ERROR")]
+    if failed:
+        # A failure propagates up through every enclosing runFlow, so the first
+        # FAILED entry is usually a container. The last one is the leaf that
+        # actually threw, and that is the step to reason about.
+        i = failed[-1]
+        c = commands[i]
+        inner = c.get("command", c)
+        step.command_index = i
+        step.command_type = next(iter(inner.keys()), "")
+        step.raw_yaml = json.dumps(inner, separators=(",", ":"))[:600]
+        step.selector = parse_selector(inner)
+        step.timeout_ms = _timeout_of(c, inner)
+        src = c.get("sourceDescription") or c.get("source") or ""
+        if src:
+            step.call_stack = [StepFrame(file=str(src), command_index=i)]
     else:
         step.command_index = max(0, len(commands) - 1)
 
     return step
+
+
+def _status_of(entry: Dict[str, Any]) -> str:
+    """Maestro 2.6.x nests run state under `metadata`; older builds inline it."""
+    meta = entry.get("metadata")
+    if isinstance(meta, dict) and meta.get("status"):
+        return str(meta["status"]).upper()
+    return str(entry.get("status") or entry.get("state") or "").upper()
+
+
+def _timeout_of(entry: Dict[str, Any], inner: Dict[str, Any]) -> int:
+    """Timeout lives on the command body, not the wrapper, and may be a string."""
+    body = next(iter(inner.values()), {}) if isinstance(inner, dict) else {}
+    for src in (body if isinstance(body, dict) else {}, entry):
+        for key in ("timeout", "timeoutMs"):
+            try:
+                v = int(src.get(key) or 0)
+            except (TypeError, ValueError):
+                continue
+            if v:
+                return v
+    return 0
 
 
 def capture_hierarchy(out_path: str, device_udid: str = "") -> Optional[str]:

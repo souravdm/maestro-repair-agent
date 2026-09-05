@@ -6,6 +6,7 @@ counts how many flows would be affected by changing it.
 """
 from __future__ import annotations
 
+import glob
 import os
 import re
 from typing import Any, Dict, List, Optional, Tuple
@@ -142,3 +143,36 @@ def resolve_call_stack(
 
 def env_leaks(resolved_command: str) -> List[str]:
     return TEMPLATE_RE.findall(resolved_command or "")
+
+
+def resolve_flow_path(repo_root: str, flow_root: str, flow_file: str) -> str:
+    """Locate a flow on disk from the path a JUnit report recorded.
+
+    Reports carry the path as the runner saw it (".maestro/flows/A/B.yaml"), which
+    rarely lines up with the collector's --flow-root. Try the path as given, then
+    under repo_root, then under flow_root, then fall back to a basename search.
+    Returns "" when the flow cannot be found, so callers can decline to patch
+    rather than emit a diff against a file that does not exist.
+    """
+    if not flow_file:
+        return ""
+    cands = [
+        flow_file,
+        os.path.join(repo_root, flow_file),
+        os.path.join(flow_root, flow_file),
+        os.path.join(flow_root, os.path.basename(flow_file)),
+    ]
+    # ".maestro/flows/Benefits/..." -> "Benefits/..." relative to flow_root
+    parts = flow_file.replace("\\", "/").split("/")
+    for i, seg in enumerate(parts):
+        if seg.strip(".") == "flows":
+            cands.append(os.path.join(flow_root, *parts[i + 1:]))
+            break
+    for c in cands:
+        if c and os.path.isfile(c):
+            return c
+    base = os.path.basename(flow_file)
+    if base and os.path.isdir(flow_root):
+        for found in glob.glob(os.path.join(flow_root, "**", base), recursive=True):
+            return found
+    return ""

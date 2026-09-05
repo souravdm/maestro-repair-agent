@@ -94,6 +94,26 @@ def _parse_bounds(attrs: Dict[str, Any]) -> Tuple[int, int, int, int]:
     return (0, 0, 0, 0)
 
 
+_REGEX_META = re.compile(r"\(\?[a-z]*\)|[\\^$*+?()\[\]{}]")
+
+
+def _alternatives(value: str) -> List[str]:
+    """Split a selector regex into the literal branches a human would recognise.
+
+    "(?i).*(Days supply).*" -> ["days supply"]; "A|B|C" -> ["a", "b", "c"].
+    Falls back to the whole string when it carries no alternation or metachars.
+    """
+    v = (value or "").strip().lower()
+    if not v:
+        return []
+    out = []
+    for part in v.split("|"):
+        lit = _REGEX_META.sub("", part).strip(". ")
+        if lit:
+            out.append(lit)
+    return out or [v]
+
+
 def _truthy(v: Any, default: bool = True) -> bool:
     if v is None:
         return default
@@ -187,17 +207,29 @@ class Tree:
         return []
 
     def candidates(self, value: str, k: int = 5) -> List[Tuple[float, Node]]:
-        """Nearest plausible replacements, ranked. Pure string distance — free."""
-        target = (value or "").lower()
+        """Nearest plausible replacements, ranked. Pure string distance — free.
+
+        Maestro selectors are regexes, and an alternation of eight labels scores
+        near zero against any one of them by raw string distance — length alone
+        sinks it. Score against each branch separately and keep the best, so a
+        selector like "A|B|C" is judged on the branch that matches.
+        """
+        alts = [a for a in _alternatives(value) if a]
+        if not alts:
+            return []
         scored: List[Tuple[float, Node]] = []
         for n in self.nodes:
+            best = 0.0
             for field_val in (n.id, n.text, n.hint):
                 if not field_val:
                     continue
-                r = difflib.SequenceMatcher(None, target, field_val.lower()).ratio()
-                if r > 0.45:
-                    scored.append((round(r, 3), n))
-                    break
+                fv = field_val.lower()
+                for alt in alts:
+                    r = difflib.SequenceMatcher(None, alt, fv).ratio()
+                    if r > best:
+                        best = r
+            if best > 0.45:
+                scored.append((round(best, 3), n))
         scored.sort(key=lambda t: -t[0])
         return scored[:k]
 
@@ -281,16 +313,30 @@ def prune_around(
     `radius` levels plus their descendants, capped. If no anchor, fall back to
     the deepest interactive cluster.
     """
-    cands = tree.candidates(anchor_value, k=1)
-    if cands:
-        anchor = cands[0][1]
+    # An exact hit is the anchor when there is one: the element the step named is
+    # more decisive than anything string distance can rank. Only then fall back to
+    # fuzzy candidates, and only then to a structural guess.
+    anchor = None
+    for kind in ("text", "id"):
+        hits = tree.match(kind, anchor_value)
+        if hits:
+            anchor = hits[0]
+            break
+    if anchor is None:
+        cands = tree.candidates(anchor_value, k=1)
+        if cands:
+            anchor = cands[0][1]
+    if anchor is not None:
         parts = anchor.path.split(".")
         base = ".".join(parts[: max(1, len(parts) - radius)])
     else:
+        # No anchor at all. The deepest node is a poor proxy — on Android the
+        # status bar is among the deepest things in the tree — so prefer the
+        # largest text-bearing subtree, which is where app content lives.
         interactive = [n for n in tree.nodes if n.id or n.text]
         if not interactive:
             return tree.nodes[:max_nodes]
-        anchor = max(interactive, key=lambda n: n.depth)
+        anchor = max(interactive, key=lambda n: (n.width * n.height, n.depth))
         base = ".".join(anchor.path.split(".")[:-radius] or ["0"])
     slice_ = [n for n in tree.nodes if n.path.startswith(base)]
     slice_.sort(key=lambda n: n.path)

@@ -221,8 +221,14 @@ Rules:
 - Set "found": false if confidence would be below 0.70`;
 
   const body = JSON.stringify({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 256,
+    model: 'claude-sonnet-5',
+    // Sonnet 5 runs adaptive thinking by default, and thinking tokens count
+    // against max_tokens — 256 was sized for a thinking-off model and would
+    // starve the JSON answer. This call sits inline in a 20s self-heal budget
+    // and only needs one short JSON object, so keep it fast with low effort.
+    max_tokens: 1024,
+    thinking: { type: 'adaptive' },
+    output_config: { effort: 'low' },
     messages: [{ role: 'user', content: prompt }],
   });
 
@@ -245,7 +251,10 @@ Rules:
         res.on('end', () => {
           try {
             const response = JSON.parse(data);
-            const text = response.content?.[0]?.text || '';
+            // With thinking on, content[0] is a thinking block, not text —
+            // find the text block instead of assuming position 0.
+            const textBlock = (response.content || []).find((b) => b.type === 'text');
+            const text = textBlock?.text || '';
             const jsonMatch = text.match(/\{[\s\S]*\}/);
             if (!jsonMatch) { resolve(null); return; }
             const parsed = JSON.parse(jsonMatch[0]);

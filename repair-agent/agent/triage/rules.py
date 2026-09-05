@@ -85,6 +85,24 @@ def r02_dart_exception(t: TriageInput) -> Optional[Verdict]:
     return None
 
 
+# Android renders the ANR prompt as a system dialog with stable ids. When the
+# capture holds no /data/anr trace and no "ANR in" line, this is the evidence.
+_ANR_IDS = ("android:id/aerr_close", "android:id/aerr_wait", "android:id/aerr_restart")
+_ANR_TEXT_RE = re.compile(r"isn'?t responding|not responding|close app", re.I)
+
+
+def _anr_dialog(t: TriageInput) -> Optional[str]:
+    if t.failing is None:
+        return None
+    for n in t.failing.nodes:
+        if n.id in _ANR_IDS:
+            return f"system ANR dialog in the tree ({n.id})"
+    for n in t.failing.nodes:
+        if n.id.endswith(":id/alertTitle") and _ANR_TEXT_RE.search(n.text or ""):
+            return f"system ANR dialog in the tree ({n.text!r})"
+    return None
+
+
 def r03_anr(t: TriageInput) -> Optional[Verdict]:
     if t.b.logs.anr_traces:
         return Verdict(
@@ -93,6 +111,17 @@ def r03_anr(t: TriageInput) -> Optional[Verdict]:
             confidence=0.95,
             rationale="ANR trace present; main thread blocked, not a locator issue.",
             patch_hint={"artifacts": t.b.logs.anr_traces},
+            requires_rerun=False,
+        )
+    seen = _anr_dialog(t)
+    if seen:
+        return Verdict(
+            rule="r03_anr",
+            action=Action.FILE_APP_BUG,
+            confidence=0.95,
+            rationale=f"App not responding: {seen}. The step failed because the app "
+                      f"stalled, not because the locator is wrong.",
+            patch_hint={"evidence": seen, "hierarchy": t.b.artifacts.hierarchy_failing},
             requires_rerun=False,
         )
     return None
@@ -119,11 +148,21 @@ def make_cache_rule(cache) -> Rule:
 
 def r05_unresolved_template(t: TriageInput) -> Optional[Verdict]:
     """An un-substituted ${VAR} reaching the driver is a wiring bug, never a
-    locator bug. Extremely common in POM subflow chains."""
-    target = t.b.step.resolved_command or t.b.step.selector.value
-    leaks = TEMPLATE_RE.findall(target)
+    locator bug. Extremely common in POM subflow chains.
+
+    Evidence must come from what the *driver* saw, not from the flow source. Every
+    templated flow contains ${VAR} by construction; commands.json records the
+    command pre-substitution, so treating the source as evidence marks every
+    page-object-driven flow as broken wiring. The driver message is the only place
+    a template that genuinely failed to resolve shows up literally.
+    """
+    # Both are post-substitution views: what the driver reported, and the command
+    # as executed. Never step.raw_yaml or step.selector.value — those are the
+    # pre-substitution source and contain ${VAR} in every templated flow.
+    leaks = TEMPLATE_RE.findall(t.b.step.driver_message) + \
+        TEMPLATE_RE.findall(t.b.step.resolved_command)
     if leaks:
-        missing = [v.strip("${}") for v in leaks]
+        missing = sorted({v.strip("${}") for v in leaks})
         return Verdict(
             rule="r05_unresolved_template",
             action=Action.PATCH_ENV_WIRING,
@@ -247,6 +286,37 @@ def r07_no_branch_matched(t: TriageInput) -> Optional[Verdict]:
     return None
 
 
+# Packages that own a *dialog* when they appear, as opposed to persistent chrome.
+# com.android.systemui is deliberately absent: the status bar is in every Android
+# hierarchy, so treating its presence as an alert fires on every screen.
+_ALERT_PKGS = (
+    "com.android.permissioncontroller", "com.android.packageinstaller",
+    "com.google.android.gms", "com.apple.springboard",
+)
+# Framework dialog ids. The app cannot own these; only a system-drawn dialog can.
+_ALERT_IDS = ("android:id/alertTitle", "android:id/parentPanel", "android:id/button1")
+
+
+def _system_dialog_owner(t: TriageInput) -> Optional[str]:
+    """Detect a system dialog from resource-id namespaces.
+
+    Maestro's Android view dumps carry no `package` attribute, so owners() is
+    empty and package-based detection cannot fire at all. Resource-ids are
+    namespaced by their owning package, which survives the dump.
+    """
+    if t.failing is None:
+        return None
+    app_pkg = t.b.app.bundle_id
+    for n in t.failing.nodes:
+        pkg = n.id.split(":id/")[0] if ":id/" in n.id else ""
+        if pkg and pkg != app_pkg and any(pkg.startswith(a) for a in _ALERT_PKGS):
+            return pkg
+    for n in t.failing.nodes:
+        if n.id in _ALERT_IDS:
+            return "android"
+    return None
+
+
 def r08_system_alert(t: TriageInput) -> Optional[Verdict]:
     """System chrome on top of the app: permissions, biometrics, OS nags."""
     known = t.b.logs.system_alert_owners[:]
@@ -259,6 +329,10 @@ def r08_system_alert(t: TriageInput) -> Optional[Verdict]:
                     "com.apple.", "android.", "google.android.gms",
                 )):
                     known.append(owner)
+        if not known:
+            found = _system_dialog_owner(t)
+            if found:
+                known.append(found)
     if known:
         return Verdict(
             rule="r08_system_alert",

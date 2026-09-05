@@ -97,8 +97,15 @@ class Selector:
 class FailingStep:
     flow_id: str
     command_index: int
+    # Display name ("H100 | Benefits | Claims | TC001 - ...") vs. the real path on
+    # disk. flow_id is for humans and fingerprints; flow_file is what may be joined
+    # onto a directory. Never use flow_id as a path.
+    flow_file: str = ""
     command_type: str = ""
     raw_yaml: str = ""
+    # The command as the driver actually executed it, with ${VAR} substituted.
+    # Left empty when the run did not record it — it must never be backfilled
+    # from raw_yaml, or every templated flow looks like an unresolved-variable bug.
     resolved_command: str = ""
     selector: Selector = field(default_factory=Selector)
     locator_constant: str = ""

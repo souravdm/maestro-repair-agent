@@ -18,7 +18,7 @@ gates:
 
 llm:
   enabled: true
-  model: claude-sonnet-4-6
+  model: claude-sonnet-5
   # Hard ceiling on the escalation prompt. If the slice does not fit, prune
   # harder rather than paying for a bigger context.
   max_prompt_tokens: 4000

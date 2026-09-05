@@ -53,17 +53,19 @@ def collect(
         return None
 
     # ---- platform state + windowed logs
+    # A finished run archives its own device log next to the debug output. Prefer
+    # it: it is the only source that still exists once CI has torn the device down.
+    archived_log = pf.find_archived_log(debug_dir)
     if platform == Platform.IOS:
         device = pf.ios_device_state(device_udid)
-        logs = pf.ios_log_window(device_udid, bundle_id)
+        logs = pf.ios_log_window(device_udid, bundle_id, archived_log=archived_log)
     else:
         device = pf.android_device_state(device_udid)
-        logs = pf.android_log_window(device_udid, bundle_id)
+        # tag_filter is a logcat tag, not a package name; passing bundle_id here
+        # built an invalid filterspec that silently matched nothing.
+        logs = pf.android_log_window(device_udid, archived_log=archived_log)
 
-    log_text = ""
-    if logs.raw_slice_path and os.path.exists(logs.raw_slice_path):
-        with open(logs.raw_slice_path, errors="ignore") as fh:
-            log_text = fh.read()
+    log_text = pf._read_archived(logs.raw_slice_path) if logs.raw_slice_path else ""
 
     # ---- app build
     sdk, renderer, flavor = fl.flutter_build_info(
@@ -89,10 +91,13 @@ def collect(
 
     fr = os.path.join(repo_root, flow_root)
     radius, referencing = pom.blast_radius(fr, const, step.selector.value)
-    chain = pom.resolve_call_stack(fr, step.flow_id) if step.flow_id else []
-    if chain and not step.call_stack:
+    # Resolve the call stack from the flow's real path. step.flow_id is Maestro's
+    # display name and resolves to nothing on disk.
+    chain = pom.resolve_call_stack(fr, step.flow_file) if step.flow_file else []
+    if not step.call_stack:
         from ..models import StepFrame
-        step.call_stack = [StepFrame(file=f) for f in chain]
+        frames = chain or ([step.flow_file] if step.flow_file else [])
+        step.call_stack = [StepFrame(file=f) for f in frames]
 
     # ---- static Flutter inventories (shared across platforms)
     dr = os.path.join(repo_root, dart_root)
@@ -121,10 +126,15 @@ def collect(
     )
 
     hierarchies = mz.find_hierarchies(debug_dir)
+    failing_hier = mz.hierarchy_for_step(debug_dir, step.command_index)
+    prev_hier = ""
+    if failing_hier in hierarchies:
+        i = hierarchies.index(failing_hier)
+        prev_hier = hierarchies[i - 1] if i > 0 else ""
     shots = mz.find_screenshots(debug_dir)
     artifacts = Artifacts(
-        hierarchy_failing=hierarchies[-1] if hierarchies else "",
-        hierarchy_prev_step=hierarchies[-2] if len(hierarchies) > 1 else "",
+        hierarchy_failing=failing_hier,
+        hierarchy_prev_step=prev_hier,
         hierarchy_green_same_platform=last_green_hierarchy,
         hierarchy_green_other_platform=green_other_hierarchy,
         screenshot_failing=shots[-1] if shots else "",
@@ -135,7 +145,7 @@ def collect(
 
     if step.selector.kind == "id" and not logs.expected_route:
         logs.expected_route = _expected_route_from_flow(
-            os.path.join(fr, step.flow_id) if step.flow_id else ""
+            pom.resolve_flow_path(repo_root, fr, step.flow_file)
         )
 
     return FailureBundle(

@@ -146,7 +146,15 @@ def _call_anthropic(system: str, user: str, model: str) -> str:
         raise RuntimeError("ANTHROPIC_API_KEY not set")
     body = json.dumps({
         "model": model,
-        "max_tokens": 700,
+        # Sonnet 5 runs adaptive thinking by default, and thinking tokens count
+        # against max_tokens. The old 700 ceiling was sized for a thinking-off
+        # model and would truncate the verdict into the unparseable-JSON path.
+        "max_tokens": 4000,
+        "thinking": {"type": "adaptive"},
+        # This is the residue the 18 deterministic rules could not resolve, so
+        # some reasoning earns its keep — but the slice is small and the answer
+        # is one JSON object, so buy it at the cheapest effort.
+        "output_config": {"effort": "low"},
         "system": system,
         "messages": [{"role": "user", "content": user}],
     }).encode()
@@ -161,7 +169,10 @@ def _call_anthropic(system: str, user: str, model: str) -> str:
     )
     with urllib.request.urlopen(req, timeout=90) as resp:
         data = json.loads(resp.read())
-    return "".join(b.get("text", "") for b in data.get("content", []))
+    # Responses now carry thinking blocks alongside the answer; take only text.
+    return "".join(
+        b.get("text", "") for b in data.get("content", []) if b.get("type") == "text"
+    )
 
 
 def _complete(system: str, user: str, model: str) -> str:
@@ -192,7 +203,7 @@ def escalate(
     green_same: Optional[Tree],
     green_other: Optional[Tree],
     diff_compact: Optional[Dict[str, Any]] = None,
-    model: str = "claude-sonnet-4-6",
+    model: str = "claude-sonnet-5",
     dry_run: bool = False,
 ) -> Verdict:
     sl = build_slice(bundle, failing, green_same, green_other, diff_compact)
@@ -223,15 +234,36 @@ def escalate(
     tgt = out.get("target") or {}
 
     # Guard: never accept an identifier the app does not define.
-    inv = set(bundle.inventories.semantics_identifiers)
-    if action == Action.RENAME_LOCATOR and inv and tgt.get("new") not in inv:
-        return Verdict(
-            rule="llm",
-            action=Action.NO_ACTION,
-            confidence=0.0,
-            rationale=f"Model proposed '{tgt.get('new')}', absent from the semantics inventory. Rejected.",
-            tokens_spent=sl.tokens,
-        )
+    #
+    # The inventory is empty for any project without a Dart source tree, and an
+    # `and inv` short-circuit turned this guard off in exactly that case — the one
+    # where nothing else is checking the model's output. Fall back to what the
+    # failing tree actually contains, and refuse the rename outright when there is
+    # no corpus to check against: unverifiable is not the same as verified.
+    if action == Action.RENAME_LOCATOR:
+        known = set(bundle.inventories.semantics_identifiers)
+        source = "semantics inventory"
+        if not known and failing is not None:
+            known = {n.id for n in failing.nodes if n.id} | {n.text for n in failing.nodes if n.text}
+            source = "failing hierarchy"
+        proposed = tgt.get("new")
+        if not known:
+            return Verdict(
+                rule="llm",
+                action=Action.NO_ACTION,
+                confidence=0.0,
+                rationale=f"Model proposed '{proposed}', but no inventory or hierarchy was "
+                          f"available to verify it against. Rejected.",
+                tokens_spent=sl.tokens,
+            )
+        if proposed not in known:
+            return Verdict(
+                rule="llm",
+                action=Action.NO_ACTION,
+                confidence=0.0,
+                rationale=f"Model proposed '{proposed}', absent from the {source}. Rejected.",
+                tokens_spent=sl.tokens,
+            )
 
     hint: Dict[str, Any] = {
         "locator": tgt.get("locator") or bundle.step.locator_constant,
