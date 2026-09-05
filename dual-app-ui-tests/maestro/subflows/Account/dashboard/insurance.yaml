@@ -1,0 +1,17 @@
+# Subflow: Navigate to Insurance
+# Purpose: Manage insurance cards and information
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/InsuranceScreen.js
+
+# Scroll to Payments & Insurance section
+- scroll
+
+# Navigate to Insurance
+- tapOn: ${output.account_dashboard.insuranceBtn}
+- waitForAnimationToEnd
+
+# Verify Insurance page loaded
+- assertVisible: ${output.account_insurance.insuranceTitle}

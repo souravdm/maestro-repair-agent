@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: Verify AV Trend Card
+tags:
+  - haio
+  - avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Trend card is the last in the AVS sequence
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avTrendCardHeading}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_avs_chat.avTrendCardHeading}"
+- assertVisible: "${output.haio_avs_chat.avTrendCardText}"
+- takeScreenshot: HAIO_AVS_Trend_Card

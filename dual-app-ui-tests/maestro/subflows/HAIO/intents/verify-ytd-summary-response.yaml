@@ -1,0 +1,17 @@
+# Subflow: Verify YTD Summary Intent Response
+#
+# Required env var (must be passed by caller):
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Response guaranteed ready by send-message.yaml
+- waitForAnimationToEnd
+
+# Verify response contains expected keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Capture HAIO chat screen for report
+- takeScreenshot: HAIO_YTD_Summary_Response

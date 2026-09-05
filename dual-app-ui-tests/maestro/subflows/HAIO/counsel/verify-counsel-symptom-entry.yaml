@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: Verify Counsel Sub-Agent Symptom Entry
+tags:
+  - haio
+  - counsel
+---
+- runScript: ../../../screens/HAIO/CounselScreen.js
+
+# Verify counsel sub-agent responds to symptom input
+- extendedWaitUntil:
+    visible: "${output.haio_counsel.counselSubAgentGreeting}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_counsel.counselSubAgentGreeting}"
+- takeScreenshot: HAIO_Counsel_Symptom_Entry

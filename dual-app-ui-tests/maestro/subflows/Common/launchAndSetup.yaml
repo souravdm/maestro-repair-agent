@@ -1,0 +1,224 @@
+appId: ${APP_ID}
+name: Unified Launch and Onboarding - CVS Health & Health100
+tags:
+  - onboarding
+  - smoke
+---
+# =============================================================================
+# Unified Launch & Onboarding Subflow
+# Supports: CVS Health + Health100 | iOS + Android
+# Combines: launchAndSetup, launchApp, firstTimeAppLaunch,
+#           launchAppWithNotificationHandling
+# =============================================================================
+
+# --- Load all required screen objects ---
+# These MUST be loaded here (not just in the calling flow's onFlowStart) so that
+# launchAndSetup.yaml is self-contained. Without these, the ${output.*} variables
+# used in extendedWaitUntil and onboarding gates cause a GraalJS evaluation crash.
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/LoginScreen.js
+- runScript: ../../screens/Common/SystemPermissionsScreen.js
+- runScript: ../../screens/Account/OnboardingScreen.js
+- runScript: ../../screens/Common/UpdateManagerScreen.js
+
+# =============================================================================
+# PHASE 1: App Launch
+# =============================================================================
+
+# clearState: false — app data is wiped externally by reset-app-state.sh BEFORE
+# Maestro starts. This subflow just force-restarts the app and grants permissions.
+#
+#   iOS:     simctl data container wipe + permission re-grant + pre-launch.
+#            clearState: true would reinstall the app, breaking XCTest port-7001.
+#   Android: run-as data directory wipe + force-stop. Does NOT use pm clear
+#            (pm clear causes blank white screen on Compose/WebView apps).
+- launchApp:
+    clearState: false
+    permissions:
+      all: allow
+- waitForAnimationToEnd
+
+# Dismiss "Update Available" in-app dialog if it appears on launch
+- evalScript: ${maestro.timeoutMs = 3000}
+- runFlow:
+    when:
+      visible: ${output.general_updateManager.notNowBtn}
+    commands:
+      - tapOn: ${output.general_updateManager.notNowBtn}
+      - waitForAnimationToEnd
+- evalScript: ${maestro.timeoutMs = 10000}
+
+# Wait for app to fully load. All valid first screens after any launch state:
+#   CVS Health:                      "We put better health in your pocket." (splash)
+#   Health100 truly first launch:    "Terms & conditions"
+#   Health100 first-time user:       "Let's get you started in Health100™"
+#   Health100 returning user (v1):   "Welcome to Health100™"
+#   Health100 returning user (v2):   "Sign in or create an account"
+#   Android (after pm clear):        Shows onboarding (Terms & conditions)
+# The downstream runFlow(when: termsTitle) and runFlow(when: healthInPocketMsg) gates
+# handle their specific paths; all others pass through to login.yaml directly.
+- extendedWaitUntil:
+    visible: ${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care
+    timeout: 60000
+
+# Dismiss "Update Available" if it matched the wait condition or appeared during the wait
+- evalScript: ${maestro.timeoutMs = 3000}
+- runFlow:
+    when:
+      visible: ${output.general_updateManager.notNowBtn}
+    commands:
+      - tapOn: ${output.general_updateManager.notNowBtn}
+      - waitForAnimationToEnd
+- evalScript: ${maestro.timeoutMs = 10000}
+
+# =============================================================================
+# PHASE 2-5: App-Specific Onboarding (branched for speed)
+# Each path is self-contained — Health100 skips all CVS checks & vice versa.
+# runFlow when:visible polls until the element appears or the element timeout expires.
+# Gate checks use maestro.timeoutMs = 500 so the wrong-app gate fails in ~500ms, not ~7s.
+# =============================================================================
+
+# --- HEALTH100 PATH ---
+# Gate: T&C screen — trigger on "I agree" button (more reliable than termsTitle heading
+# which may not surface in the iOS accessibility tree on all app/OS versions).
+# Short timeout for gate check. Reset to full timeout inside block.
+- evalScript: ${maestro.timeoutMs = 500}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.iAgreeBtn}
+    commands:
+      - evalScript: ${maestro.timeoutMs = 10000}
+      # T&C — tap agree
+      - tapOn: ${output.account_health100_onboarding.iAgreeBtn}
+      - waitForAnimationToEnd
+
+      # Education screen 1 (conditional — does not appear for all users/states)
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.edu1Title}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.onboardingContinueBtn}
+            - waitForAnimationToEnd
+
+      # Education screen 2 (conditional)
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.edu2Title}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.getStartedBtn}
+            - waitForAnimationToEnd
+
+      # Push notifications (optional)
+      - evalScript: ${maestro.timeoutMs = 500}
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.pushNotifTitle}
+            optional: true
+          commands:
+            - tapOn: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+            - waitForAnimationToEnd
+
+      # Simplify sign in (optional)
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.simplifySignInTitle}
+            optional: true
+          commands:
+            - tapOn: ${output.account_health100_onboarding.simplifyContinueBtn}
+            - waitForAnimationToEnd
+
+      # Reset timeout to default after optional checks
+      - evalScript: ${maestro.timeoutMs = 10000}
+
+      # Note: "Continue with CVS Health" tap is handled in login.yaml
+
+# Restore full timeout whether Health100 gate fired or was skipped
+- evalScript: ${maestro.timeoutMs = 10000}
+
+# --- CVS HEALTH PATH ---
+# Gate: CVS Health splash message (only appears in CVS Health after launch)
+- evalScript: ${maestro.timeoutMs = 500}
+- runFlow:
+    when:
+      visible: ${output.common_messages.healthInPocketMsg}
+    commands:
+      - evalScript: ${maestro.timeoutMs = 10000}
+      # iOS notification permission prompt
+      - tapOn:
+          text: ${output.system_permissions.allowNotificationsBtn}
+          optional: true
+      # Native notification dialog -> Don't Allow
+      - tapOn:
+          text: ${output.account_onboarding.dontAllowBtn}
+          optional: true
+      # Location permission -> Allow While Using App
+      - tapOn:
+          text: ${output.account_onboarding.allowWhileUsingAppBtn}
+          optional: true
+      # Bluetooth permission -> OK
+      - tapOn:
+          text: ${output.account_onboarding.okBtn}
+          optional: true
+      # Camera permission
+      - tapOn:
+          text: ${output.system_permissions.allowCameraBtn}
+          optional: true
+      # Onboarding carousel entry
+      - tapOn:
+          text: ${output.account_onboarding.letsGetStartedBtn}
+          optional: true
+      # Carousel step 1: Manage Your Health -> Next
+      - tapOn:
+          text: ${output.account_onboarding.nextBtn}
+          optional: true
+      # Carousel step 2: Find Care -> Next
+      - tapOn:
+          text: ${output.account_onboarding.nextBtn}
+          optional: true
+      # Carousel step 3: Track Benefits -> Next
+      - tapOn:
+          text: ${output.account_onboarding.nextBtn}
+          optional: true
+      # Carousel step 4: Save with ExtraCare -> Next
+      - tapOn:
+          text: ${output.account_onboarding.nextBtn}
+          optional: true
+      # Notification prompt -> Not Now
+      - tapOn:
+          text: ${output.account_onboarding.notNowBtn}
+          optional: true
+      # Enable notifications prompt
+      - tapOn:
+          text: ${output.account_onboarding.enableBtn}
+          optional: true
+      # "All Set" completion screen -> Continue
+      - tapOn:
+          text: ${output.account_onboarding.continueBtn}
+          optional: true
+      # =============================================================================
+      # PHASE 6: Common Post-Onboarding Cleanup (both apps)
+      # =============================================================================
+
+      # App rating/review prompt or remaining overlay
+      - tapOn:
+          text: ${output.common_buttons.skipBtn}|${output.common_buttons.cancelBtn}|${output.common_buttons.dismissBtn}|${output.common_buttons.notNowBtn}
+          optional: true
+
+      # Close button by ID (xmark icon)
+      - tapOn:
+          id: ${output.account_onboarding.xmarkId}
+          optional: true
+
+      # Close message button
+      - tapOn:
+          text: ${output.account_onboarding.closeMessageBtn}
+          optional: true
+
+      # Remaining system dialogs
+      - tapOn:
+          text: ${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}|${output.common_buttons.okBtn}
+          optional: true
+
+# Restore full timeout whether CVS gate fired or was skipped
+- evalScript: ${maestro.timeoutMs = 10000}
+

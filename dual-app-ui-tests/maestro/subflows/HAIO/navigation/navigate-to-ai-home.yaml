@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+name: Navigate to Health AI Home via Global FAB
+tags:
+  - haio
+  - navigation
+---
+- runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Tap the global FAB (sparkles/AI icon) on Health Home to open the assistant
+- tapOn:
+    text: "${output.haio_ai_home.assistantFab}"
+    optional: true
+
+# Wait for AI Home landing view to load
+- extendedWaitUntil:
+    visible: "${output.haio_ai_home.healthAssistantTitle}"
+    timeout: 25000
+
+# Dismiss "Meet Haio" intro modal if shown on first launch
+- runFlow:
+    when:
+      visible: "Close Message"
+    commands:
+      - tapOn: "Close Message"
+      - waitForAnimationToEnd
+
+# Verify greeting lockup and chat input are present
+- assertVisible: "${output.haio_ai_home.greetingLockup}"
+- assertVisible: "${output.haio_ai_home.chatInputField}"

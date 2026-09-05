@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: Verify AVS NBA (Next Best Action) Card
+tags:
+  - haio
+  - avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# NBA card renders after AVS summary card
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avNbaCardHeading}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_avs_chat.avNbaCardHeading}"
+- assertVisible: "${output.haio_avs_chat.avNbaCardCta}"
+- takeScreenshot: HAIO_AVS_NBA_Card

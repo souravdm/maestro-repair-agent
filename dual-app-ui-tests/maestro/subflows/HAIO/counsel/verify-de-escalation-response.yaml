@@ -1,0 +1,25 @@
+appId: ${APP_ID}
+name: Verify De-escalation Response with SLA Disclaimer
+tags:
+  - haio
+  - counsel
+  - de-escalation
+---
+- runScript: ../../../screens/HAIO/CounselScreen.js
+
+# Verify de-escalation card content
+- extendedWaitUntil:
+    visible: "${output.haio_counsel.deEscalationHeading}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_counsel.deEscalationHeading}"
+- assertVisible: "${output.haio_counsel.deEscalationBody}"
+
+# Scroll to bottom to verify full disclaimer renders
+- scrollUntilVisible:
+    element: "${output.haio_counsel.slaDisclaimerScrolledBottom}"
+    direction: DOWN
+    timeout: 10000
+
+- assertVisible: "${output.haio_counsel.slaDisclaimerScrolledBottom}"
+- takeScreenshot: HAIO_Counsel_De_Escalation

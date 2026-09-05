@@ -1,0 +1,15 @@
+# Subflow: Navigate to CVS Health Caregiving
+# Purpose: Manage dependents and caregiver access
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/CVSHealthCaregivingScreen.js
+
+# Navigate to CVS Health Caregiving
+- tapOn: ${output.account_dashboard.cvsHealthCaregivingBtn}
+- waitForAnimationToEnd
+
+# Verify CVS Health Caregiving page loaded
+- assertVisible: ${output.account_cvsHealthCaregiving.cvsHealthCaregivingNavBar}
+- assertVisible: ${output.account_cvsHealthCaregiving.caregivingHeader}

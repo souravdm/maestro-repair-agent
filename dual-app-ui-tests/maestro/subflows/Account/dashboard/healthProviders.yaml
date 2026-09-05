@@ -1,0 +1,19 @@
+# Subflow: Navigate to Health Providers & Facilities
+# Purpose: Manage connections to health providers and facilities
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/ManageConnectionsScreen.js
+
+# Scroll to Manage Connections section
+- scroll
+- scroll
+
+# Navigate to Health Providers & Facilities
+- tapOn: ${output.account_dashboard.healthProvidersBtn}
+- waitForAnimationToEnd
+
+# Verify Health Providers page loaded
+- assertVisible: ${output.account_manageConnections.healthProvidersNavBar}
+- assertVisible: ${output.account_manageConnections.healthProvidersHeader}

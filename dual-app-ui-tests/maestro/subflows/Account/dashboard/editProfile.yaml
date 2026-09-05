@@ -1,0 +1,30 @@
+# Subflow: Edit user profile information
+# Source: Migrated from XCUITest EditProfileSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/ProfileScreen.js
+
+# Navigate to Profile
+- tapOn: ${output.account_dashboard.profileBtn}
+- waitForAnimationToEnd
+
+# Verify profile page loaded
+- assertVisible: ${output.account_profile.profileNavTitle}
+- assertVisible: ${output.account_profile.personalInfoHeader}
+
+# Tap edit button to enable editing
+- tapOn: ${output.account_profile.editBtn}
+- waitForAnimationToEnd
+
+# Handle password re-authentication if prompted
+- runFlow:
+    when:
+      visible: ${output.account_profile.passwordOption}
+    commands:
+      - runScript: ../../../config/credentials-loader.js
+      - tapOn: ${output.account_profile.passwordOption}
+      - inputText: ${output.user.password}
+      - tapOn: ${output.account_profile.submitBtn}
+      - waitForAnimationToEnd

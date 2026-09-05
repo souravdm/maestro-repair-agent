@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: Verify AVS Agent Initial Chat Message
+tags:
+  - haio
+  - avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Wait for the actual greeting message — more reliable than waiting for the
+# transient thinking indicator which can disappear before extendedWaitUntil fires
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.agentInitialMsg}"
+    timeout: 30000
+
+- assertVisible: "${output.haio_avs_chat.agentInitialMsg}"
+- takeScreenshot: HAIO_AVS_Agent_Initial_Chat

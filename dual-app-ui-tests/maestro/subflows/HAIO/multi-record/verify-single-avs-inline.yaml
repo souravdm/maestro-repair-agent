@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+name: Verify Inline Single AVS Detail Card
+tags:
+  - haio
+  - multi-avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Tap a record from the multi-result list to view single inline detail
+- tapOn: "${output.haio_avs_chat.avSummaryCardHeading}"
+- waitForAnimationToEnd
+
+# Verify single summary display: card heading, body text, and follow-up question
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avSummaryExpandedMedications}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_avs_chat.avSummaryCardHeading}"
+- assertVisible: "${output.haio_avs_chat.avSummaryCardText}"
+- assertVisible: "${output.haio_avs_chat.followUpQuestion}"
+- takeScreenshot: HAIO_Single_AVS_Inline_Detail

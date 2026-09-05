@@ -1,0 +1,13 @@
+# Subflow: Navigate to and view health records
+# Source: Migrated from XCUITest HealthRecordsSteps
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Health/HealthLandingScreen.js
+- runScript: ../../screens/Health/HealthRecordsScreen.js
+
+# Navigate to Health Records
+- tapOn: ${output.health_landing.healthRecordsBtn}
+- waitForAnimationToEnd
+
+# Verify health records loaded
+- assertVisible: ${output.health_records.healthRecordsTitle}

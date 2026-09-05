@@ -1,0 +1,19 @@
+# Subflow: Verify No Access Response
+# Validates HAIO responds with "no access" message for restricted features
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME - Unique name for screenshot (e.g., "NoAccess_RestrictedFeature")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Response guaranteed ready by send-message.yaml
+- waitForAnimationToEnd
+
+# Capture HAIO chat screen BEFORE assertion (ensures screenshot on failure)
+- takeScreenshot: HAIO_${SCENARIO_NAME}_Response
+
+# Verify response contains expected keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"

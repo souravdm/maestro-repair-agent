@@ -1,0 +1,19 @@
+# Subflow: Verify Benefit Landing Intent Response
+# Validates HAIO responds correctly to benefit/plan overview questions
+# Updated: CTA removed - AI now provides direct benefit information
+#
+# Required env var (must be passed by caller):
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify (e.g., "deductible|remaining")
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Response guaranteed ready by send-message.yaml
+- waitForAnimationToEnd
+
+# Verify response contains expected keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Capture HAIO chat screen for report
+- takeScreenshot: HAIO_Benefit_Landing_Response

@@ -1,0 +1,18 @@
+# Subflow: Navigate to Pay a Bill
+# Purpose: Pay MinuteClinic, Pharmacy, and other bills
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/PayABillScreen.js
+
+# Scroll to Payments & Insurance section
+- scroll
+
+# Navigate to Pay a Bill
+- tapOn: ${output.account_dashboard.payABillBtn}
+- waitForAnimationToEnd
+
+# Verify Pay a Bill page loaded
+- assertVisible: ${output.account_payABill.payABillNavBar}
+- assertVisible: ${output.account_payABill.billPaymentHeader}

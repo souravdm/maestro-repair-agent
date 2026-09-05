@@ -1,0 +1,18 @@
+# Subflow: Verify Claims Intent Response
+# Updated: CTA removed - AI now provides direct claim information or access denied message
+#
+# Required env var (must be passed by caller):
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify (e.g., "Processed|Denied|claim")
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Response guaranteed ready by send-message.yaml
+- waitForAnimationToEnd
+
+# Verify response contains expected keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Capture HAIO chat screen for report
+- takeScreenshot: HAIO_Claims_Response

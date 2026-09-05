@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+name: Navigate to Chatbot from Health Page (Contextual Entry)
+tags:
+  - haio
+  - navigation
+---
+- runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Tap contextual assistant entry on a Health sub-page
+# Bottom nav morphs to input bar when assistant activates
+- tapOn:
+    text: "${output.haio_ai_home.assistantFab}"
+    optional: true
+
+# Verify bottom nav has morphed to chat input bar
+- extendedWaitUntil:
+    visible: "${output.haio_ai_home.morphedInputField}"
+    timeout: 25000
+
+- assertVisible: "${output.haio_ai_home.morphedInputField}"

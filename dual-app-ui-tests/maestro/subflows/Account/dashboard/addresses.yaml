@@ -1,0 +1,15 @@
+# Subflow: View and manage addresses
+# Source: Migrated from XCUITest AddressesTabSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/AddressesScreen.js
+
+# Navigate to Addresses
+- tapOn: ${output.account_dashboard.addressesBtn}
+- waitForAnimationToEnd
+
+# Verify addresses page loaded
+- assertVisible: ${output.account_addresses.addressesNavBar}
+- assertVisible: ${output.account_addresses.addressListHeader}

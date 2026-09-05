@@ -1,0 +1,218 @@
+appId: ${APP_ID}
+name: Handle Overlays and Modals - Comprehensive Flow
+tags:
+  - common
+  - smoke
+---
+# Comprehensive test flow for handling various overlays, modals, dialogs, and alerts throughout the app
+
+- runScript: ../../screens/Common/CommonScreen.js
+
+# Step 2: Verify app loaded
+- assertVisible: ${output.common_navbars.homeScreenNavBar}|${output.common_navbars.accountNavBar}|${output.common_messages.welcomeMsg}
+
+# Step 3: Handle modal dialogs
+- runFlow:
+    when:
+      visible: "Dialog|Are you sure|Confirm"
+    commands:
+      - assertVisible: ${output.common_buttons.okBtn}|${output.common_buttons.cancelBtn}|${output.common_buttons.confirmBtn}|${output.common_buttons.dismissBtn}
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.confirmBtn}
+      - waitForAnimationToEnd
+
+# Step 4: Handle alert dialogs
+- runFlow:
+    when:
+      visible: "Alert|Something went wrong|Error"
+    commands:
+      - assertVisible: ${output.common_buttons.okBtn}|${output.common_buttons.retryBtn}|${output.common_buttons.closeBtn}
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Step 5: Handle confirmation dialogs
+- runFlow:
+    when:
+      visible: "Confirm Action|Are you sure you want to proceed"
+    commands:
+      - assertVisible: ${output.common_buttons.yesBtn}|${output.common_buttons.noBtn}
+      - tapOn: ${output.common_buttons.yesBtn}
+      - waitForAnimationToEnd
+
+# Step 6: Handle loading overlays
+- runFlow:
+    when:
+      visible: ${output.common_messages.loadingMsg}|${output.common_messages.pleaseWaitMsg}
+    commands:
+      - waitForAnimationToEnd
+      - assertVisible: ${output.common_messages.loadingMsg}|${output.common_messages.pleaseWaitMsg}
+
+# Step 7: Handle error overlays
+- runFlow:
+    when:
+      visible: ${output.common_messages.errorMsg}|${output.common_messages.errorOccurredMsg}|${output.common_messages.tryAgainMsg}
+    commands:
+      - assertVisible: ${output.common_buttons.retryBtn}|${output.common_buttons.dismissBtn}|${output.common_buttons.okBtn}
+      - tapOn: ${output.common_buttons.retryBtn}|${output.common_buttons.okBtn}
+      - waitForAnimationToEnd
+
+# Step 8: Handle success overlays
+- runFlow:
+    when:
+      visible: "Success|Operation completed|successfully"
+    commands:
+      - assertVisible: ${output.common_buttons.okBtn}
+      - tapOn: ${output.common_buttons.okBtn}
+      - waitForAnimationToEnd
+
+# Step 9: Handle warning overlays
+- runFlow:
+    when:
+      visible: "Warning|Please be careful"
+    commands:
+      - assertVisible: ${output.common_buttons.okBtn}|${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.okBtn}
+      - waitForAnimationToEnd
+
+# Step 10: Handle bottom sheets
+- runFlow:
+    when:
+      visible: "Options|Choose an action"
+    commands:
+      - assertVisible: "Option 1|Option 2|${output.common_buttons.cancelBtn}"
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 11: Handle popups and popovers
+- runFlow:
+    when:
+      visible: "Information|This is a popup"
+    commands:
+      - assertVisible: ${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}
+      - tapOn: ${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Step 12: Handle tooltips
+- runFlow:
+    when:
+      visible: "Helpful tip|Did you know"
+    commands:
+      - assertVisible: ${output.common_buttons.gotItBtn}|${output.common_buttons.closeBtn}
+      - tapOn: ${output.common_buttons.gotItBtn}
+      - waitForAnimationToEnd
+
+# Step 13: Handle date picker overlays
+- runFlow:
+    when:
+      visible: "Select Date|Date Picker"
+    commands:
+      - assertVisible: ${output.common_buttons.doneBtn}|${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 14: Handle time picker overlays
+- runFlow:
+    when:
+      visible: "Select Time|Time Picker"
+    commands:
+      - assertVisible: ${output.common_buttons.doneBtn}|${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 15: Handle dropdown menus
+- runFlow:
+    when:
+      visible: "Menu|Option 1|Option 2"
+    commands:
+      - tapOn: "Option 1"
+      - waitForAnimationToEnd
+
+# Step 16: Handle context menus
+- runFlow:
+    when:
+      visible: "Actions|Edit|Delete|Share"
+    commands:
+      - assertVisible: "Edit|Delete|Share|${output.common_buttons.cancelBtn}"
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 17: Handle action sheets
+- runFlow:
+    when:
+      visible: "Choose an action|Option 1|Option 2"
+    commands:
+      - assertVisible: ${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 18: Handle banners
+- runFlow:
+    when:
+      visible: "Important message|Banner"
+    commands:
+      - assertVisible: ${output.common_buttons.closeBtn}|"Action"
+      - tapOn: ${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Step 19: Handle snackbars
+- runFlow:
+    when:
+      visible: "Message|Undo"
+    commands:
+      - waitForAnimationToEnd
+
+# Step 20: Handle search overlays
+- runFlow:
+    when:
+      visible: ${output.common_buttons.searchBtn}|"Search..."
+    commands:
+      - assertVisible: ${output.common_buttons.clearBtn}|${output.common_buttons.closeBtn}
+      - tapOn: ${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Step 21: Handle filter overlays
+- runFlow:
+    when:
+      visible: ${output.common_buttons.filtersBtn}|${output.common_buttons.applyBtn}|${output.common_buttons.clearBtn}
+    commands:
+      - assertVisible: ${output.common_buttons.applyBtn}|${output.common_buttons.clearBtn}|${output.common_buttons.closeBtn}
+      - tapOn: ${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Step 22: Handle sort overlays
+- runFlow:
+    when:
+      visible: "Sort by|Newest|Price"
+    commands:
+      - assertVisible: ${output.common_buttons.applyBtn}
+      - tapOn: ${output.common_buttons.applyBtn}
+      - waitForAnimationToEnd
+
+# Step 23: Handle share overlays
+- runFlow:
+    when:
+      visible: "Share|Email|Message|Social Media"
+    commands:
+      - assertVisible: ${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 24: Handle rating overlays
+- runFlow:
+    when:
+      visible: "Rate this|How would you rate"
+    commands:
+      - assertVisible: ${output.common_buttons.submitBtn}|${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 25: Handle feedback overlays
+- runFlow:
+    when:
+      visible: "Send Feedback|Tell us what you think"
+    commands:
+      - assertVisible: ${output.common_buttons.submitBtn}|${output.common_buttons.cancelBtn}
+      - tapOn: ${output.common_buttons.cancelBtn}
+      - waitForAnimationToEnd
+
+# Step 26: Verify app is still in stable state after handling overlays
+- assertVisible: ${output.common_navbars.homeScreenNavBar}|${output.common_navbars.accountNavBar}|${output.common_messages.welcomeMsg}

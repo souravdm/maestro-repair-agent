@@ -1,0 +1,25 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/Account/accountObjects.js
+---
+- assertVisible: ${output.account_otp.enterCodeText}
+- runFlow:
+    when:
+      true: ${BUILD_CONFIG === "release" || BUILD_CONFIG === "adhoc"}
+    commands:
+      - tapOn:
+          below: ${output.account_otp.enterCodeText}
+      - inputText: "999999"
+      - tapOn:
+          text: ${output.account_otp.confirmCodeBtn}
+- runFlow:
+    when:
+      true: ${BUILD_CONFIG === "qa" || BUILD_CONFIG === "debug"  }
+    commands:
+      - assertVisible:
+          text: ".+"
+          below: ${output.account_otp.enterCodeText}
+      - tapOn:
+          text: ${output.account_otp.confirmCodeBtn}
+    
+- waitForAnimationToEnd

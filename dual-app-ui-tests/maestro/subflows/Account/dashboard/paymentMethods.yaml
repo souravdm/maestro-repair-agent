@@ -1,0 +1,18 @@
+# Subflow: Navigate to Payment Methods from Account Dashboard
+# Prerequisites: User must be logged in and on Account Dashboard
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/PaymentMethodScreen.js
+
+# Scroll to and tap Payment Methods
+- scrollUntilVisible:
+    element: ${output.account_payment.paymentMethodsNavBar}
+    direction: DOWN
+    timeout: 8000
+- tapOn: ${output.account_payment.paymentMethodsNavBar}
+- waitForAnimationToEnd
+
+# Verify payment methods page loaded
+- assertVisible: ${output.account_payment.paymentMethodsNavBar}

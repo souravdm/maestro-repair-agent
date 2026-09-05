@@ -1,0 +1,19 @@
+# Subflow: Navigate to Shared Medical Records
+# Purpose: Manage shared medical records and access
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/ManageConnectionsScreen.js
+
+# Scroll to Manage Connections section
+- scroll
+- scroll
+
+# Navigate to Shared Medical Records
+- tapOn: ${output.account_dashboard.sharedMedicalRecordsBtn}
+- waitForAnimationToEnd
+
+# Verify Shared Medical Records page loaded
+- assertVisible: ${output.account_manageConnections.sharedMedicalRecordsNavBar}
+- assertVisible: ${output.account_manageConnections.sharedRecordsHeader}

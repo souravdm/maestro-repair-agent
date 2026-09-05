@@ -1,0 +1,31 @@
+appId: ${APP_ID}
+# Harvest subflow: waits for the bot to finish responding, takes a labeled
+# screenshot, copies the response text, and logs a HARVEST_STEP JSON line
+# to stdout so run-haio-harvest.sh can collect it.
+#
+# Required env vars (passed by caller):
+#   SCENARIO_NAME - unique key for this question (e.g. "Q1_OrderStatus")
+#   TC_NAME       - flow identifier (e.g. "TC032")
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Wait for bot thinking indicator to disappear (bot finished responding)
+- extendedWaitUntil:
+    notVisible: ${output.haio_avs_chat.botThinkingIndicator}
+    timeout: 30000
+- waitForAnimationToEnd
+
+# Scroll down so the latest response is visible
+- scroll
+
+# Take labeled screenshot — this is the ground-truth harvest artifact
+- takeScreenshot: "HARVEST_${TC_NAME}_${SCENARIO_NAME}"
+
+# Copy response text — captures the first non-greeting bot message on screen.
+# In a multi-turn session this is Q1's response for every subsequent question;
+# treat it as a domain-level hint only. Screenshots are the accurate record.
+- copyTextFrom: "Haio, (?!I'm Haio).*"
+
+# Store in output.harvestData and log HARVEST_STEP JSON to stdout
+- runScript:
+    file: ../../../scripts/harvest/harvest-capture.js

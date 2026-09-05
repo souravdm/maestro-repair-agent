@@ -1,0 +1,22 @@
+# Subflow: Verify Lab Results & Vitals Intent Response
+# Validates HAIO responds with relevant lab interpretation, reference ranges, and follow-up guidance
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME   - Unique name for screenshot (e.g., "Labs_Cholesterol")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify in bot response
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Bot response already ready (send-message.yaml waited for typing indicator)
+- waitForAnimationToEnd
+
+# Capture chat screen BEFORE assertions for failure diagnosis
+- takeScreenshot: HAIO_LabResults_${SCENARIO_NAME}_Response
+
+# Verify response contains lab/vitals-relevant keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Ensure no raw PHI/lab identifiers are exposed outside clinical context
+- assertNotVisible: "(?i).*(ssn|social security|credit card|cvv).*"

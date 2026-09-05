@@ -1,0 +1,181 @@
+appId: ${APP_ID}
+name: Handle Notification Prompts - Reusable Subflow
+tags:
+  - common
+  - notifications
+  - permissions
+  - subflow
+---
+# Reusable subflow for handling various notification and permission prompts throughout the app
+
+- runScript: ../../screens/Common/SystemPermissionsScreen.js
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/OnboardingScreen.js
+
+# Handle push notification permission prompt
+- runFlow:
+    when:
+      visible: ${output.system_permissions.notificationPromptTitle}
+    commands:
+      - tapOn: ${output.system_permissions.allowNotificationsBtn}
+      - waitForAnimationToEnd
+
+# Handle location permission prompt (matches both CVS Pharmacy and Health100)
+- runFlow:
+    when:
+      visible: 'Allow.*to use your location'
+    commands:
+      - tapOn: ${output.system_permissions.allowWhileUsingAppBtn}
+      - waitForAnimationToEnd
+
+# Handle camera permission prompt
+- runFlow:
+    when:
+      visible: '"CVS Pharmacy" Would Like to Access Your Camera'
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+# Handle contacts permission prompt
+- runFlow:
+    when:
+      visible: ${output.system_permissions.contactsPromptTitleIOS}
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+# Handle Bluetooth permission prompt
+- runFlow:
+    when:
+      visible: ${output.system_permissions.bluetoothPromptTitleIOS}
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+# Handle in-app notification enable prompt
+- runFlow:
+    when:
+      visible: ${output.system_permissions.notificationPromptVariant}
+    commands:
+      - tapOn: "Yes, enable notifications|${output.system_permissions.enableNotificationsBtn}"
+      - waitForAnimationToEnd
+
+# Handle notification banner - prescription ready
+- runFlow:
+    when:
+      visible: "Your prescription is ready|Pick up at your nearest CVS"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle notification banner - refill reminder
+- runFlow:
+    when:
+      visible: "Time to refill|Your prescription is running low"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle notification banner - appointment reminder
+- runFlow:
+    when:
+      visible: "Appointment reminder|You have an appointment"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle notification banner - claim status
+- runFlow:
+    when:
+      visible: "Claim status updated|Your claim has been processed"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle notification banner - reward
+- runFlow:
+    when:
+      visible: "New reward available|You've earned a new reward"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle notification banner - promotion
+- runFlow:
+    when:
+      visible: "Special offer|Check out this week's deals"
+    commands:
+      - tapOn: ${output.common_buttons.viewBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle ExtraCare promotion overlay
+- runFlow:
+    when:
+      visible: "Join ExtraCare|Save with ExtraCare"
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtn}|${output.common_buttons.skipBtn}|${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Handle CarePass promotion overlay
+- runFlow:
+    when:
+      visible: "CarePass|Unlimited free shipping"
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtn}|${output.common_buttons.skipBtn}|${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Handle general promotional overlay
+- runFlow:
+    when:
+      visible: "Limited time|Special offer|Promotion"
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}|"X"|${output.common_buttons.notNowBtn}
+      - waitForAnimationToEnd
+
+# Handle tip/information overlay
+- runFlow:
+    when:
+      visible: "Did you know|Helpful tip|Information"
+    commands:
+      - tapOn: ${output.common_buttons.gotItBtn}|${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle app update prompt
+- runFlow:
+    when:
+      visible: "Update available|New version|Update now"
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtn}|${output.common_buttons.skipBtn}|"Later"
+      - waitForAnimationToEnd
+
+# Handle maintenance message
+- runFlow:
+    when:
+      visible: "Maintenance|Under maintenance|Coming soon"
+    commands:
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd
+
+# Handle error notification
+- runFlow:
+    when:
+      visible: "Error|Something went wrong|Please try again"
+    commands:
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.retryBtn}|${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Handle success notification
+- runFlow:
+    when:
+      visible: "Success|Completed successfully|Done"
+    commands:
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+
+# Handle warning notification
+- runFlow:
+    when:
+      visible: "Warning|Please be careful|Caution"
+    commands:
+      - tapOn: ${output.common_buttons.okBtn}|${output.common_buttons.closeBtn}|${output.common_buttons.dismissBtn}
+      - waitForAnimationToEnd

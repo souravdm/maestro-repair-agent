@@ -1,0 +1,16 @@
+# Complete guest flow for Health100, assumes app is launched and Terms & Conditions have not been
+# completed yet.
+
+appId: ${APP_ID}
+tags:
+  - homescreen
+  - h100
+onFlowStart:
+  - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- assertVisible: ${output.account_health100_onboarding.termsTitle}
+- tapOn: ${output.account_health100_onboarding.iAgreeBtn}
+- tapOn: ${output.account_health100_onboarding.onboardingContinueBtn}
+- tapOn: ${output.account_health100_onboarding.getStartedBtn}
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- waitForAnimationToEnd

@@ -1,0 +1,23 @@
+# Subflow: Manage communication preferences
+# Source: Migrated from XCUITest CommunicationPrefsSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/CommunicationPrefsScreen.js
+
+# Navigate to Communication Preferences from Account Dashboard
+# Note: This navigates from the main dashboard, not from the Communication Preferences section
+# For section-specific navigation, use the individual subflows (texts, emails, etc.)
+- scroll
+- tapOn:
+    text: ${output.account_communicationPrefs.communicationPrefsNavBar}
+- waitForAnimationToEnd
+
+# Verify communication preferences page loaded
+- assertVisible: ${output.account_communicationPrefs.communicationPrefsNavBar}
+- assertVisible: ${output.account_communicationPrefs.textsBtn}
+- assertVisible: ${output.account_communicationPrefs.automatedCallsBtn}
+- assertVisible: ${output.account_communicationPrefs.emailsBtn}
+- assertVisible: ${output.account_communicationPrefs.notificationsBtn}
+- assertVisible: ${output.account_communicationPrefs.liveActivitiesBtn}

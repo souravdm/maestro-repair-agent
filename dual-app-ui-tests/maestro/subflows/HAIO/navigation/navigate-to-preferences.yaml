@@ -1,0 +1,18 @@
+appId: ${APP_ID}
+name: Navigate to HAIO Preferences
+tags:
+  - haio
+  - preferences
+  - navigation
+---
+# Load screen objects
+- runScript: ../../../screens/HAIO/HomeScreen.js
+- runScript: ../../../screens/HAIO/PreferencesScreen.js
+
+# Assumes user is already on HAIO home screen
+# Tap preferences button
+- tapOn: ${output.haio_home.preferencesBtn}
+- waitForAnimationToEnd
+
+# Verify preferences screen loaded
+- assertVisible: ${output.haio_preferences.preferencesTitle}

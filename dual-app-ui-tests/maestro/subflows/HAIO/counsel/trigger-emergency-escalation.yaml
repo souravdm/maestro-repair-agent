@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+name: Trigger Emergency Escalation and Verify Scheduling Sheet
+tags:
+  - haio
+  - counsel
+  - escalation
+  - emergency
+---
+- runScript: ../../../screens/HAIO/CounselScreen.js
+
+# Verify emergency escalation card is visible
+- extendedWaitUntil:
+    visible: "${output.haio_counsel.emergencyEscalationHeading}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_counsel.emergencyEscalationHeading}"
+- assertVisible: "${output.haio_counsel.emergencyEscalationBody}"
+- assertVisible: "${output.haio_counsel.emergencyEscalationDisclaimer}"
+
+# Scroll to verify SLA disclaimer is present
+- scrollUntilVisible:
+    element: "${output.haio_counsel.slaDisclaimer}"
+    direction: DOWN
+    timeout: 10000
+
+- takeScreenshot: HAIO_Counsel_Emergency_Escalation
+
+# Tap scheduling CTA to open scheduling bottom sheet
+- tapOn: "${output.haio_counsel.schedulingSheetTitle}"
+- waitForAnimationToEnd
+
+- assertVisible: "${output.haio_counsel.schedulingSheetTitle}"
+- assertVisible: "${output.haio_counsel.schedulingSheetProviderOption}"
+- takeScreenshot: HAIO_Counsel_Scheduling_Sheet
+
+# Dismiss sheet
+- tapOn: "${output.haio_counsel.schedulingSheetCloseBtn}"
+- waitForAnimationToEnd

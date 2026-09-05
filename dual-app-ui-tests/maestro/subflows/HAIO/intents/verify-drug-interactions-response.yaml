@@ -1,0 +1,23 @@
+# Subflow: Verify Drug Interactions & Safety Intent Response
+# Validates HAIO responds with accurate drug interaction warnings, contraindications,
+# and safe-use guidance — and recommends pharmacist/provider escalation when appropriate
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME   - Unique name for screenshot (e.g., "DrugInteraction_AlcoholWarning")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify in bot response
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Bot response already ready (send-message.yaml waited for typing indicator)
+- waitForAnimationToEnd
+
+# Capture chat screen BEFORE assertions for failure diagnosis
+- takeScreenshot: HAIO_DrugInteractions_${SCENARIO_NAME}_Response
+
+# Verify response contains drug safety-relevant keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Ensure no raw PHI identifiers are exposed
+- assertNotVisible: "(?i).*(ssn|social security|credit card|cvv).*"

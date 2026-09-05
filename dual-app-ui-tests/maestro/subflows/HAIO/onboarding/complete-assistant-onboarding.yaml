@@ -1,0 +1,39 @@
+appId: ${APP_ID}
+name: Complete Assistant Onboarding (Signed-in)
+tags:
+  - haio
+  - onboarding
+---
+- runScript: ../../../screens/HAIO/AssistantOnboardingScreen.js
+
+# Step 1: Education screen
+- extendedWaitUntil:
+    visible: "${output.haio_onboarding.educationTitle}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_onboarding.educationTitle}"
+- assertVisible: "${output.haio_onboarding.educationSubcopy}"
+- takeScreenshot: HAIO_Onboarding_Education
+- tapOn: "${output.haio_onboarding.educationGetStartedBtn}"
+- waitForAnimationToEnd
+
+# Step 2: Push notification enrollment (conditional — may not show on repeat runs)
+- runFlow:
+    when:
+      visible: "${output.haio_onboarding.pushEnrollmentTitle}"
+    commands:
+      - assertVisible: "${output.haio_onboarding.pushEnrollmentBody}"
+      - takeScreenshot: HAIO_Onboarding_Push_Enrollment
+      - tapOn: "${output.haio_onboarding.pushAllowBtn}"
+      - waitForAnimationToEnd
+
+# Step 3: Records connect
+- runFlow:
+    when:
+      visible: "${output.haio_onboarding.recordsConnectTitle}"
+    commands:
+      - assertVisible: "${output.haio_onboarding.recordsConnectBody}"
+      - takeScreenshot: HAIO_Onboarding_Records_Connect
+      - tapOn: "${output.haio_onboarding.recordsConnectAuthorizeBtn}"
+      - waitForAnimationToEnd
+      - assertVisible: "${output.haio_onboarding.recordsConnectSuccessMsg}"

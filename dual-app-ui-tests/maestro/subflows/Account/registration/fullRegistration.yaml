@@ -1,0 +1,90 @@
+appId: ${APP_ID}
+name: Fullregistration
+---
+# Registration subflow - matches XCUITest CreateAnAccountView.swift and CreateAnAccountSteps.swift
+# Reference: XCUITest uses multi-step registration flow
+
+# Load screen objects
+- runScript: ../../../screens/Account/RegisterScreen.js
+- runScript: ../../../screens/Account/LoginScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Step 1: Navigate to Create Account
+# XCUITest: AccountTabView.createAnAccountButton = label("Create an account")
+- runFlow:
+    when:
+      visible: ${output.account_register.createAccountBtn}
+    commands:
+      - tapOn: ${output.account_register.createAccountBtn}
+      - assertVisible: ${output.account_register.emailLookupHeader}
+
+# Step 2: Email lookup screen
+# XCUITest: CreateAnAccountView.emailLookUpHeader = "To start, enter your email address"
+# XCUITest: CreateAnAccountView.emailAddressTextField = label("Mobile number or email,")
+- runFlow:
+    when:
+      visible: ${output.account_register.emailField}
+    commands:
+      - tapOn: ${output.account_register.emailField}
+      - inputText: ${NEW_USER_EMAIL}
+      - tapOn: ${output.common_buttons.continueBtn}
+      - assertVisible: ${output.account_register.createAccountTitle}
+
+# Step 3: Create account form
+# XCUITest: CreateAnAccountView.firstNameTextField = label("First name,")
+# XCUITest: CreateAnAccountView.lastNameTextField = label("Last name,")
+# XCUITest: CreateAnAccountView.mobileNumberTextField = label("Mobile number,")
+- runFlow:
+    when:
+      visible: ${output.account_register.firstNameLabel}
+    commands:
+      - tapOn: ${output.common_inputs.firstNameField}
+      - inputText: ${NEW_USER_FIRST_NAME}
+      - tapOn: ${output.common_inputs.lastNameField}
+      - inputText: ${NEW_USER_LAST_NAME}
+      - tapOn: ${output.account_register.mobileField}
+      - inputText: ${NEW_USER_PHONE}
+      - swipe:
+          direction: DOWN
+      - assertVisible: ${output.account_register.passwordLabel}
+
+# Step 4: Password entry
+# XCUITest: CreateAnAccountView.createAPasswordTextField = label("Password,")
+# XCUITest: CreateAnAccountView.createMyAccountButton = label("Create my account")
+- runFlow:
+    when:
+      visible: ${output.account_register.passwordLabel}
+    commands:
+      - tapOn: ${output.account_register.passwordField}
+      - inputText: ${NEW_USER_PASSWORD}
+      - swipe:
+          direction: DOWN
+      - tapOn: ${output.account_register.submitRegistrationBtn}
+      - assertVisible: ".*"
+
+# Handle potential OTP/verification during registration
+# XCUITest: SignInScreenView.enterCodeTitle = label("Enter Code")
+- runFlow:
+    when:
+      visible: ${output.account_register.enterCodeTitle}
+    commands:
+      - tapOn: ${output.account_register.otpField}
+      - inputText: ${STATIC_OTP}
+      - tapOn: ${output.account_register.confirmBtn}
+      - assertVisible: ".*"
+
+# Handle "Not Now" prompts after registration
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtn}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtn}
+
+- runFlow:
+    when:
+      visible: ${output.account_register.notNowBtnVariant}
+    commands:
+      - tapOn: ${output.account_register.notNowBtnVariant}
+
+# Verify successful registration
+- assertVisible: ${output.account_register.welcomeMsg}

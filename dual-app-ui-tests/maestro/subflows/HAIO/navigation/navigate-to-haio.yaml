@@ -1,0 +1,62 @@
+appId: ${APP_ID}
+name: Navigate to HAIO Assistant
+tags:
+  - haio
+  - navigation
+---
+# Load screen objects
+- runScript: ../../../screens/HAIO/HomeScreen.js
+- runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Waiting for the home screen to be loaded properly and HAIO button to be visible
+- extendedWaitUntil:
+      visible: ${output.haio_ai_home.healthAssistantTitle}
+      timeout: 10000
+
+- assertVisible: ${output.haio_ai_home.healthAssistantTitle}
+- tapOn: ${output.haio_ai_home.healthAssistantTitle}
+- waitForAnimationToEnd
+
+# Wait for HAIO chat screen to load OR error dialog to appear.
+# iOS modal dialogs block background accessibility so "Haio" header is inaccessible
+# when the dialog is on screen — include the dialog text so extendedWaitUntil resolves
+# on either condition and the dialog handler below can fire.
+- extendedWaitUntil:
+    visible: ${output.haio_ai_home.healthAssistantTitle}|Chat isn't available at the moment
+    timeout: 25000
+
+# Dismiss "Meet Haio" intro modal if shown on first launch
+- runFlow:
+    when:
+      visible: "Close Message"
+    commands:
+      - tapOn: "Close Message"
+      - waitForAnimationToEnd
+
+
+# learnMoreLink only appears for authenticated users; skip for guests
+- runFlow:
+    when:
+      visible: ${output.haio_ai_home.learnMoreLink}
+      optional: true
+    commands:
+      - assertVisible: ${output.haio_ai_home.learnMoreLink}
+
+# Dismiss "Chat isn't available at the moment" dialog if service had a transient error
+- evalScript: ${maestro.timeoutMs = 2000}
+- runFlow:
+    when:
+      visible: "Chat isn't available at the moment"
+    commands:
+      - tapOn: "Try again"
+      - waitForAnimationToEnd
+      # Reset timeout before extendedWaitUntil — maestro.timeoutMs=2000 from the outer
+      # evalScript propagates into commands and would cap the wait at 2s otherwise.
+      - evalScript: ${maestro.timeoutMs = 10000}
+      # After retry, wait for greeting to reappear before returning to caller
+      - extendedWaitUntil:
+          visible: ${output.haio_home.greetingMsg}
+          timeout: 60000
+- evalScript: ${maestro.timeoutMs = 10000}
+

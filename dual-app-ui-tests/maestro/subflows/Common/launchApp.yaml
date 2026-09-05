@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+name: Launchapp
+---
+- runScript: ../../screens/Common/CommonScreen.js
+
+- launchApp:
+    clearState: false
+    permissions:
+      all: allow
+      android.permission.ACCESS_FINE_LOCATION: allow
+      android.permission.POST_NOTIFICATIONS: allow
+      android.permission.BLUETOOTH: allow
+      android.permission.BLUETOOTH_SCAN: allow
+      android.permission.BLUETOOTH_CONNECT: allow
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeMessageBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeMessageBtn}
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtn}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtn}
+- waitForAnimationToEnd
+- tapOn:
+    text: "Allow While Using App"
+    optional: true
+- waitForAnimationToEnd

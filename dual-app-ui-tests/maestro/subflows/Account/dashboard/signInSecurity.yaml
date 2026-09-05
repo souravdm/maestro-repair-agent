@@ -1,0 +1,14 @@
+# Subflow: Navigate to Sign In & Security
+# Purpose: Access sign in methods, password, biometric, and two-step verification settings
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/SignInSecurityScreen.js
+
+# Navigate to Sign In & Security
+- tapOn: ${output.account_dashboard.signInSecurityBtn}
+- waitForAnimationToEnd
+
+# Verify Sign In & Security page loaded
+- assertVisible: ${output.account_signInSecurity.signInSecurityTitle}

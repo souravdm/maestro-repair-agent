@@ -1,0 +1,21 @@
+# Subflow: Click CTA button and verify destination header
+# Taps the CTA button in the chatbot response and verifies navigation
+# Expects env vars: CTA_TEXT (button text), EXPECTED_HEADER (destination screen header)
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+- waitForAnimationToEnd
+
+# Tap the CTA button
+- tapOn: "(?i).*${CTA_TEXT}.*"
+- waitForAnimationToEnd
+
+# Wait for destination screen to load and verify header
+- extendedWaitUntil:
+    visible: "${EXPECTED_HEADER}"
+    timeout: 30000
+
+# Capture destination screen for report
+- takeScreenshot: HAIO_CTA_Navigation_${EXPECTED_HEADER}

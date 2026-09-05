@@ -1,0 +1,36 @@
+# Basic flow to enter Benefits module from any file login
+appId: ${APP_ID}
+env:
+  USER_NAME: ${USER_NAME}
+
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+---
+- runScript: ../../../screens/Account/accountObjects.js
+- runScript: ../../../screens/Account/OnboardingScreen.js
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: ${USER_NAME}
+- runFlow:
+    file: ../../../subflows/Common/launchApp.yaml
+- runFlow:
+    file: ../../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow:
+    file: ../../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+
+- runFlow:
+    file: ../../../subflows/Common/dismissOverlays.yaml
+
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+- waitForAnimationToEnd

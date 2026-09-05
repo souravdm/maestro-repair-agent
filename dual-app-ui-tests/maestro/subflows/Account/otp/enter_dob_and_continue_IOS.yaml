@@ -1,0 +1,22 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/Account/accountObjects.js
+---
+- extendedWaitUntil:
+    visible: ${output.account_otp.enterDobText}
+    timeout: 20000
+- assertVisible: ${output.common_inputs.dateOfBirthField}
+- tapOn:
+    below:
+      text: ${output.account_otp.dobFormat}
+- inputText: ${output.user.dob}
+- runFlow:
+    when:
+      visible: "Allow Paste"
+    commands:
+      - tapOn: "Allow Paste"
+- extendedWaitUntil:
+    visible:
+      text: ${output.account_otp.continueBtn}
+    timeout: 20000
+- tapOn: ${output.account_otp.continueBtn}

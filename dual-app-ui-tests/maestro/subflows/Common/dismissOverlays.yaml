@@ -1,0 +1,25 @@
+# Subflow: Dismiss common overlays and popups
+# Handles tips, promotions, banners, and informational dialogs
+# that can appear at any point in the app (especially post-login).
+# Uses patterns defined in CommonScreen.js → output.common_overlays
+
+appId: ${APP_ID}
+---
+
+# Handle promotional/informational popups
+- runFlow:
+    when:
+      visible: ${output.common_overlays.visiblePattern}
+    commands:
+      - tapOn:
+          text: ${output.common_overlays.dismissPattern}
+          optional: true
+
+# Handle promotional banners
+- runFlow:
+    when:
+      visible: ${output.common_overlays.bannerVisiblePattern}
+    commands:
+      - tapOn:
+          text: ${output.common_overlays.bannerDismissPattern}
+          optional: true

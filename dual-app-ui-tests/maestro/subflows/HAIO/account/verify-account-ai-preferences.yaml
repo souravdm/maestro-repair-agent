@@ -1,0 +1,41 @@
+appId: ${APP_ID}
+name: Verify Account AI Preferences and Health Info Management
+tags:
+  - haio
+  - account
+  - preferences
+---
+- runScript: ../../../screens/HAIO/AssistantAccountScreen.js
+
+# Verify AI settings section is visible on Account landing
+- extendedWaitUntil:
+    visible: "${output.haio_account.aiSettingsSectionHeading}"
+    timeout: 15000
+
+- assertVisible: "${output.haio_account.aiSettingsSectionHeading}"
+- tapOn: "${output.haio_account.aiSettingsListRow}"
+- waitForAnimationToEnd
+
+# Verify preferences screen
+- assertVisible: "${output.haio_account.preferencesTitle}"
+- assertVisible: "${output.haio_account.preferencesToggleLabel}"
+- assertVisible: "${output.haio_account.preferencesToggle}"
+- takeScreenshot: HAIO_Account_Preferences
+
+# Verify health info management sections
+- tapOn: "${output.haio_account.shareHealthInfo}"
+- waitForAnimationToEnd
+
+- assertVisible: "${output.haio_account.allergiesRow}"
+- assertVisible: "${output.haio_account.conditionsRow}"
+- assertVisible: "${output.haio_account.diagnosticResultsRow}"
+- assertVisible: "${output.haio_account.labsResultsRow}"
+- takeScreenshot: HAIO_Account_Health_Info
+
+# Spot-check Allergies screen
+- tapOn: "${output.haio_account.allergiesRow}"
+- waitForAnimationToEnd
+- assertVisible: "${output.haio_account.allergiesTitle}"
+- takeScreenshot: HAIO_Account_Allergies
+- tapOn: "${output.haio_account.backBtn}"
+- waitForAnimationToEnd

@@ -1,0 +1,22 @@
+# Subflow: Verify Insurance Benefits Intent Response
+# Validates HAIO responds with relevant plan/coverage information
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME   - Unique name for screenshot (e.g., "Benefits_Deductible")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify in bot response
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Bot response already ready (send-message.yaml waited for typing indicator)
+- waitForAnimationToEnd
+
+# Capture chat screen BEFORE assertions for failure diagnosis
+- takeScreenshot: HAIO_InsuranceBenefits_${SCENARIO_NAME}_Response
+
+# Verify response contains plan/benefit-relevant keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Ensure no raw financial identifiers are exposed
+- assertNotVisible: "(?i).*(ssn|social security|credit card|cvv).*"

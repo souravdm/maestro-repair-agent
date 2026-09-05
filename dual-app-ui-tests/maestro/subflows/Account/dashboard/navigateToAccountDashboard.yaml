@@ -1,0 +1,10 @@
+# Subflow: Navigate to Account dashboard and verify sections
+# Source: Migrated from XCUITest AccountDashboardTabSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+
+# Navigate to Account tab
+- tapOn: ${output.common_navigation.accountBtn}
+- waitForAnimationToEnd

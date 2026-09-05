@@ -1,0 +1,23 @@
+# Subflow: Verify Specialty Pharmacy Intent Response
+# Validates HAIO responds with relevant specialty drug, prior auth, cold-chain,
+# and specialty pharmacy network information
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME   - Unique name for screenshot (e.g., "SpecialtyRx_Ozempic")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify in bot response
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Bot response already ready (send-message.yaml waited for typing indicator)
+- waitForAnimationToEnd
+
+# Capture chat screen BEFORE assertions for failure diagnosis
+- takeScreenshot: HAIO_SpecialtyPharmacy_${SCENARIO_NAME}_Response
+
+# Verify response contains specialty pharmacy-relevant keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Ensure no raw PHI identifiers are exposed
+- assertNotVisible: "(?i).*(ssn|social security|credit card|cvv).*"

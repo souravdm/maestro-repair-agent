@@ -1,0 +1,19 @@
+# Subflow: Navigate to CVS Health Family of Companies
+# Purpose: Manage connections to Aetna, Caremark, and other CVS Health companies
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/ManageConnectionsScreen.js
+
+# Scroll to Manage Connections section
+- scroll
+- scroll
+
+# Navigate to CVS Health Family of Companies
+- tapOn: ${output.account_dashboard.cvsHealthFamilyBtn}
+- waitForAnimationToEnd
+
+# Verify CVS Health Family page loaded
+- assertVisible: ${output.account_manageConnections.cvsHealthFamilyNavBar}
+- assertVisible: ${output.account_manageConnections.cvsHealthFamilyHeader}

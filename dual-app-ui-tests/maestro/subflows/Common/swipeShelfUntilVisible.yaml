@@ -1,0 +1,14 @@
+appId: ${APP_ID}
+name: Swipe right inside a shelf until card text is visible
+---
+- repeat:
+    times: 10
+    while:
+      notVisible:
+        text: ${CARD_TEXT}
+    commands:
+      - swipe:
+          from:
+            below: ${SHELF_TITLE}
+          start: 85%, 50%
+          end: 15%, 50%

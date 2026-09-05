@@ -1,0 +1,29 @@
+# Subflow: Delete account flow
+# Source: Migrated from XCUITest DeleteAccountSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/DeleteAccountScreen.js
+- runScript: ../../../screens/Account/SignInSecurityScreen.js
+
+# Navigate to Sign In & Security
+- tapOn: ${output.account_dashboard.signInSecurityBtn}
+- waitForAnimationToEnd
+
+# Navigate to Delete Account
+- tapOn: ${output.account_signInSecurity.deleteAccountBtn}
+- waitForAnimationToEnd
+
+# Verify delete account screen
+- assertVisible: ${output.account_deleteAccount.deleteAccountNavBar}
+- assertVisible: ${output.account_deleteAccount.areYouSureMessage}
+
+# Enter password for confirmation
+- runScript: ../../../config/credentials-loader.js
+- tapOn: ${output.account_deleteAccount.passwordField}
+- inputText: ${output.user.password}
+
+# Confirm deletion
+- tapOn: ${output.account_deleteAccount.deleteMyAccountBtn}
+- waitForAnimationToEnd

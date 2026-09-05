@@ -1,0 +1,14 @@
+# Subflow: Manage people / caregiving
+# Source: Migrated from XCUITest ManagePeopleSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../../screens/Account/ManagePeopleScreen.js
+
+# Navigate to Manage People
+- tapOn: ${output.account_dashboard.addAndManagePeopleButton}
+- waitForAnimationToEnd
+
+# Verify manage people page loaded
+- assertVisible: ${output.account_managePeople.managePeopleNavBar}

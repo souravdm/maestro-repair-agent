@@ -1,0 +1,81 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+---
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.continueWithOurPartners}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.continueWithOurPartners}
+- tapOn: ${output.account_health100_onboarding.continueWithCvsHealth}
+- runFlow:
+    when:
+      true: ${maestro.platform == 'android'}
+    commands:
+      - runFlow: ./authentication/android_enter_email_and_continue.yaml
+      - runFlow: ../Account/otp/select_default_otp_method.yaml
+      - runFlow: ../Account/otp/enter_and_confirm_code.yaml
+      - runFlow: ../Account/otp/enter_dob_and_continue.yaml
+
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    commands:
+      - runFlow: ./authentication/ios_enter_email_and_continue_h100.yaml
+      - runFlow: ../Account/otp/select_default_otp_method.yaml
+      - runFlow: ../Account/otp/enter_and_confirm_code.yaml
+      - runFlow:
+          when:
+            visible: ${output.account_otp.enterDobText}
+          file: ../Account/otp/enter_dob_and_continue_IOS.yaml
+
+- runFlow:
+    when:
+      visible: ${output.account_otp.okBtn}
+    commands:
+      - tapOn: ${output.account_otp.okBtn}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.simplifyContinueBtn}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.simplifyContinueBtn}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.edu1Title}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.onboardingContinueBtn}
+      - waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.edu2Title}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.getStartedBtn}
+      - waitForAnimationToEnd
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    commands:
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.continueWithOurPartners}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.continueWithOurPartners}
+            - waitForAnimationToEnd
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.continueWithCvsHealth}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.continueWithCvsHealth}
+            - waitForAnimationToEnd
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.edu2Title}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.getStartedBtn}
+            - waitForAnimationToEnd

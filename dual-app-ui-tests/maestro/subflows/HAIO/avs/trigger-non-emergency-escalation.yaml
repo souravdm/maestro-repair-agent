@@ -1,0 +1,31 @@
+appId: ${APP_ID}
+name: Trigger Non-Emergency Escalation from AVS Chat
+tags:
+  - haio
+  - avs
+  - escalation
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Verify non-emergency escalation message and CTA are visible
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.nonEmergencyEscalationMsg}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_avs_chat.nonEmergencyEscalationMsg}"
+- assertVisible: "${output.haio_avs_chat.nonEmergencyEscalationCta}"
+
+# Tap the store hours / schedule CTA to open bottom sheet
+- tapOn: "${output.haio_avs_chat.nonEmergencyEscalationCta}"
+- waitForAnimationToEnd
+
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.storeHoursBottomSheet}"
+    timeout: 15000
+
+- assertVisible: "${output.haio_avs_chat.storeHoursBottomSheet}"
+- takeScreenshot: HAIO_AVS_Non_Emergency_Escalation
+
+# Dismiss bottom sheet
+- tapOn: "${output.haio_avs_chat.storeHoursCloseBtn}"
+- waitForAnimationToEnd

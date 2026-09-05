@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+name: View Guest Education Screen and Verify Records Connect Unavailable
+tags:
+  - haio
+  - onboarding
+  - guest
+---
+- runScript: ../../../screens/HAIO/AssistantOnboardingScreen.js
+
+# Verify guest education screen shows sign-in prompt
+- extendedWaitUntil:
+    visible: "${output.haio_onboarding.guestEducationTitle}"
+    timeout: 20000
+
+- assertVisible: "${output.haio_onboarding.guestEducationTitle}"
+- assertVisible: "${output.haio_onboarding.guestEducationBody}"
+- takeScreenshot: HAIO_Onboarding_Guest_Education
+
+# Records connect should not be accessible in guest mode
+- assertNotVisible: "${output.haio_onboarding.recordsConnectTitle}"
+
+# Verify login CTA is shown
+- assertVisible: "${output.haio_onboarding.guestLoginBtn}"

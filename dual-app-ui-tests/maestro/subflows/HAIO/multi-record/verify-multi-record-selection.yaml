@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: Verify Multi-Record Selection List
+tags:
+  - haio
+  - multi-avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Wait directly for the selection list — skips the transient thinking indicator
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avSummaryCardHeading}"
+    timeout: 25000
+
+- assertVisible: "${output.haio_avs_chat.avSummaryCardHeading}"
+- assertVisible: "${output.haio_avs_chat.avSummaryCardProvider}"
+- takeScreenshot: HAIO_Multi_Record_Selection

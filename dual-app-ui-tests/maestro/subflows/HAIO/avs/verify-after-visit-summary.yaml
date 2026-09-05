@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+name: Verify After Visit Summary Card
+tags:
+  - haio
+  - avs
+---
+- runScript: ../../../screens/HAIO/AVSChatScreen.js
+
+# Wait for AVS card to render after bot thinking state clears
+- extendedWaitUntil:
+    visible: "${output.haio_avs_chat.avSummaryCardHeading}"
+    timeout: 25000
+
+- assertVisible: "${output.haio_avs_chat.avSummaryCardHeading}"
+- assertVisible: "${output.haio_avs_chat.avSummaryCardProvider}"
+- assertVisible: "${output.haio_avs_chat.avSummaryCardText}"
+- takeScreenshot: HAIO_AVS_Summary_Card

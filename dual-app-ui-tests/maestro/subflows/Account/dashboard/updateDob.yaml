@@ -1,0 +1,22 @@
+# Subflow: Update Date of Birth on profile
+# Source: Migrated from XCUITest EditProfileSteps.verifyEditDOBPageExists
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Account/ProfileScreen.js
+
+# Tap DOB field
+- tapOn: ${output.account_profile.dateOfBirthLabel}
+- waitForAnimationToEnd
+
+# Enter new DOB values
+- tapOn: ${output.account_profile.updateDobMonth}
+- inputText: "01"
+- tapOn: ${output.account_profile.updateDobDay}
+- inputText: "15"
+- tapOn: ${output.account_profile.updateDobYear}
+- inputText: "1990"
+
+# Confirm DOB update
+- tapOn: ${output.account_profile.updateDobContinueBtn}
+- waitForAnimationToEnd

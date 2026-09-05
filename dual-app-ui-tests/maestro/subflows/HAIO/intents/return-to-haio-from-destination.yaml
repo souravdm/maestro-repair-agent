@@ -1,0 +1,16 @@
+# Subflow: Return to HAIO chat from a CTA destination screen
+# Navigates back to the HAIO chat screen after verifying CTA navigation
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/HomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Tap back to return to HAIO chat
+- tapOn: "(?i)Back"
+- waitForAnimationToEnd
+
+# Verify we're back on the HAIO chat screen (input field is always present, not transient)
+- extendedWaitUntil:
+    visible: ${output.haio_home.chatInputField}
+    timeout: 15000

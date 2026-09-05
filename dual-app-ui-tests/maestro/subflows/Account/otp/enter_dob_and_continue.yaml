@@ -1,0 +1,13 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/Account/LoginScreen.js
+---
+- extendedWaitUntil:
+    visible: ${output.account_login.dobTitle}
+    timeout: 20000
+- tapOn:
+    text: ${output.account_login.dobField}
+    index: 1
+- inputText: ${output.user.dob}
+- tapOn: ${output.account_login.okBtn}
+- tapOn: ${output.account_login.continueBtn}

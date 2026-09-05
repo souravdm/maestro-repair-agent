@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+name: Select Quick Reply Option
+tags:
+  - haio
+  - quick-reply
+  - interaction
+---
+# Load screen objects
+- runScript: ../../../screens/HAIO/HomeScreen.js
+- runScript: ../../../screens/HAIO/ChatScreen.js
+
+# Assumes user is on HAIO home or chat screen
+# Tap quick reply button (expects QUICK_REPLY env var)
+# Examples: "Track symptoms", "Proactive care", "Health visit"
+- tapOn: ${QUICK_REPLY}
+- waitForAnimationToEnd
+
+# Wait for response
+- extendedWaitUntil:
+    visible: "${output.haio_chat.followUpQuestion}|${output.haio_chat.recentVisitsHeading}"
+    timeout: 15000

@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: Capture Screen Hierarchy for Pulse Validation
+tags:
+  - common
+  - debugging
+  - pulse
+  - reusable
+---
+# Centralized screen hierarchy capture for all flows
+# Captures the current UI state for Pulse component validation and debugging
+# 
+# Usage in flows:
+#   - runFlow: ../../subflows/Common/captureScreenHierarchyStart.yaml
+#   
+# Or with custom screen name:
+#   - runFlow:
+#       file: ../../subflows/Common/captureScreenHierarchyStart.yaml
+#       env:
+#         SCREEN_NAME: "Custom Screen Name"
+#
+# Parameters (optional):
+#   SCREEN_NAME: Human-readable name for this screen (defaults to current timestamp)
+#   REPORT_DIR: Where to save hierarchy (defaults to ${REPORT_DIR})
+
+# Step 1: Store the screen name in output object using a file-based script.
+# Maestro requires runScript.file in this environment.
+- runScript:
+    file: ../../../scripts/utils/setCapturedScreenName.js
+    env:
+      SCREEN_NAME: ${SCREEN_NAME}
+
+# Step 2: Call the capture script which reads from output.capturedScreenName
+- runScript:
+    file: ../../../scripts/utils/captureScreenHierarchy.js
+    env:
+      REPORT_DIR: ${REPORT_DIR}

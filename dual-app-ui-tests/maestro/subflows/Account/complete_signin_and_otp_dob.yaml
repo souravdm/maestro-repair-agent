@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+---
+- runFlow:
+    when:
+      true: ${maestro.platform == 'android'}
+    file: ./authentication/android_enter_email_and_continue.yaml
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    file: ./authentication/ios_enter_email_and_continue.yaml
+- runFlow: ./otp/select_default_otp_method.yaml
+- runFlow: ./otp/enter_and_confirm_code.yaml
+- runFlow:
+    when:
+      true: ${maestro.platform == 'android'}
+    file: ./otp/enter_dob_and_continue.yaml
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+      visible: ${output.account_otp.enterDobText}
+    file: ./otp/enter_dob_and_continue_IOS.yaml
+- runFlow:
+    when:
+      visible: ${output.account_otp.okBtn}
+    commands:
+      - tapOn: ${output.account_otp.okBtn}
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Not now"
+    commands:
+      - tapOn: "Not now"

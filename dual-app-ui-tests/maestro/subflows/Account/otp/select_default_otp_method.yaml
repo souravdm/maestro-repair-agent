@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/Account/accountObjects.js
+---
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: "${output.account_otp.chooseHowOTP}"
+    commands:
+      - tapOn: "${output.account_otp.continueBtn}"

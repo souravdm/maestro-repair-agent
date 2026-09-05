@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: Send Message to HAIO
+tags:
+  - haio
+  - chat
+  - interaction
+---
+# Load screen objects
+- runScript: ../../../screens/HAIO/HomeScreen.js
+- runScript: ../../../screens/HAIO/ChatScreen.js
+
+# Assumes user is on HAIO home screen
+# Scroll input into view after bot replies; no-op if already visible
+- scrollUntilVisible:
+    element: ${output.haio_home.chatInputField}
+    direction: DOWN
+    timeout: 5000
+
+# Tap chat input field
+- tapOn: ${output.haio_home.chatInputField}
+- waitForAnimationToEnd
+
+# Input message (expects MESSAGE env var)
+- inputText: ${MESSAGE}
+
+# Send message
+- tapOn: ${output.haio_home.sendBtn}
+- waitForAnimationToEnd
+# Wait for bot to FINISH responding. notVisible on the typing dots succeeds
+# immediately if the bot responds before the dots appear (fast LLM path),
+# or waits until they disappear (normal path). Prevents the race condition
+# where extendedWaitUntil misses a transient indicator that already vanished.
+- extendedWaitUntil:
+    notVisible: ${output.haio_chat.typingIndicatorA11y}
+    timeout: 45000

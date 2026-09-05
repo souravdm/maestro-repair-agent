@@ -1,0 +1,22 @@
+# Subflow: Verify Health History & Personalization Intent Response
+# Validates HAIO uses member health history to surface personalized trends, risks, and goal tracking
+#
+# Required env vars (must be passed by caller):
+#   SCENARIO_NAME   - Unique name for screenshot (e.g., "HealthHistory_HeartRisk")
+#   EXPECTED_KEYWORDS - Pipe-separated keywords to verify in bot response
+appId: ${APP_ID}
+onFlowStart:
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+---
+
+# Bot response already ready (send-message.yaml waited for typing indicator)
+- waitForAnimationToEnd
+
+# Capture chat screen BEFORE assertions for failure diagnosis
+- takeScreenshot: HAIO_HealthHistory_${SCENARIO_NAME}_Response
+
+# Verify response contains personalization-relevant keywords
+- assertVisible: "(?i).*(${EXPECTED_KEYWORDS}).*"
+
+# Ensure no raw PHI identifiers (SSN, full DOB) are surfaced in personalized responses
+- assertNotVisible: "(?i).*(ssn|social security|credit card|cvv).*"
