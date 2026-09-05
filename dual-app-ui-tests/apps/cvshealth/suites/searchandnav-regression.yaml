@@ -1,0 +1,126 @@
+appId: ${APP_ID}
+---
+# CVS Health - Search & Navigation regression test suite
+# Purpose: Regression test functionality specific to Search and Navigation (SNAPP, Chatbot, SuperApp)
+# Modules: SearchAndNav
+# ============================================================================
+
+# ============================================================================
+# SNAPP Search tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC001_SearchInstoreOnlyGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC002_SearchOutOfStockGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC003_SearchValidProductGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC004_InvalidSearchGuest.yaml
+
+# ============================================================================
+# SNAPP Trending & Recent Searches tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC005_TrendingSearchGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC006_TrendingSearchSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC007_RecentSearchesSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC008_RecentSearchesGuest.yaml
+
+# ============================================================================
+# SNAPP Pharmacy Order Status tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC009_PharmacyOrderStatusGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC010_PharmacyOrderStatusSignedIn.yaml
+
+# ============================================================================
+# SNAPP Navigation tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC011_PickupOnlyItemGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC012_SecondaryNavGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC013_SecondaryNavSignedIn.yaml
+
+# ============================================================================
+# SNAPP Help Center tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC014_HelpCenterPopularQuestionsGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC017_HelpCenterHowCanWeHelpGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC018_HelpCenterPopularQuestionsSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC019_HelpCenterHowCanWeHelpSignedIn.yaml
+
+# ============================================================================
+# SNAPP Services & Products tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC015_ServicesGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC016_FindProductsSignedIn.yaml
+
+# ============================================================================
+# SNAPP Health Navigation tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC020_CounselHealthNavSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC021_MinuteClinicNavSignedIn.yaml
+
+# ============================================================================
+# SNAPP Kickstarter tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC097_KickstarterScheduleAVaccineGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC098_KickstarterSeeMyPharmacyHoursGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC099_KickstarterCheckRxOrderStatusGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC100_KickstarterEditMyProfileGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC101_KickstarterViewMyCouponsGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC102_KickstarterRefillAPrescriptionGuest.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC103_KickstarterScheduleAVaccineSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC104_KickstarterSeeMyPharmacyHoursSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC105_KickstarterCheckRxOrderStatusSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC106_KickstarterEditMyProfileSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC107_KickstarterViewMyCouponsSignedIn.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC108_KickstarterRefillAPrescriptionSignedIn.yaml
+
+# ============================================================================
+# Chatbot tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC001_askFreeformQuestions.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC002_getPrescriptionHelp.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC003_manageAccountSettings.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC004_scheduleAppointment.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC005_trackPrescriptionDelivery.yaml
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC006_openChatAssistant.yaml
+
+# ============================================================================
+# SuperApp tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/SearchAndNav/CVSH_SNAPP_TC004_SuperAppSearchProduct.yaml

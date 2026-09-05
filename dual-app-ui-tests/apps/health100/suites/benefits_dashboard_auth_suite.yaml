@@ -1,0 +1,25 @@
+# Benefits Complete Test Suite
+# All Benefits features test flows including plan variations, consent, and features
+# Run with: bash scripts/testing/test.sh .maestro/apps/health100/suites/benefits-complete-suite.yaml
+
+appId: ${APP_ID}
+---
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC001_landingCaremarkAetnaAllConsents.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC002_landingCaremarkOnlyConsented.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC003_landingAetnaOnly.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Consent/H100_BEN_Consent_TC001_caremarkPharmacyAccess.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC004_tabSwitchingAllTabs.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC005_singleTabPharmacy.yaml
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC006_dualTabsMedicalDental.yaml
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC007_FABAllPlans.yaml
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC008_landingTabNavigation.yaml
+

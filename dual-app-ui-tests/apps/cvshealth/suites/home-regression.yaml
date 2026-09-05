@@ -1,0 +1,222 @@
+appId: ${APP_ID}
+---
+# CVS Health - Home screen regression test suite
+# Run time: ~45 minutes
+# Purpose: Regression test functionality specfic to the homescreen
+# Modules: Home
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-0.1.0_smoke_homescreen_loads_successfully_guest.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-0.1.1_smoke_homescreen_loads_successfully_signed_in.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-0.2.0_smoke_homescreen_no_internet_banner.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-0.3.0_smoke_homescreen_reconnect_internet.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-0.4.0_smoke_relaunch_with_ksmi.yaml
+
+- runFlow:
+    file: ../../../flows/Home/HS-0.6.0_smoke_swipe_down_refreshes_homescreen.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.0.0-ANBA_activity_component_loads.yaml
+# Disabled in prod
+#- runFlow:
+#    file: ../../../flows/Home/HS-2.1.0_ANBA_priority_not_filled.yaml
+# Disabled in prod
+#- runFlow:
+#    file: ../../../flows/Home/HS-2.2.0_ANBA_sms_rx_opt_in.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.4.0_ANBA_available_for_refill.yaml
+
+# ============================================================================
+# Additional Home regression tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-11.0.0_Health_services_loaded.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-11.1.0_health_services_evc_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-11.2.0_health_services_flu_shot_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-12.0.0_explore_care_options.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-15.0.0_articles_you_may_like_load.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-15.1.0_articles_you_may_like_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-16.0.0_homescreen_bu_shop_essentials.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-17.1.0_BU_rxp_module_view_prescription_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-17.3.1_BU_rxp_update_data_access_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-18.0.0_BU_extracare_savings.yaml
+
+# ============================================================================
+# ANBA (Adaptive NBA) tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-2.11.0_ANBA_ec_bonus_rewards.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.12.0_ANBA_working_on_it_dur.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.13.0_ANBA_ready_for_pickup_dur.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.14.0_ANBA_available_for_renewal.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.15.0_ANBA_delayed.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.16.0_ANBA_ready.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.17.0_ANBA_rx_delivered.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-2.7.0_ANBA_counsel_health_navigation.yaml
+
+# ============================================================================
+# Headspace component tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-22.1.0_headspace_component_displayed.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-22.1.1_headspace_navigation.yaml
+
+# ============================================================================
+# Split view tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-23.0.0_smoke_homescreen_splitview_loads_successfully_guest.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-23.1.0_smoke_homescreen_splitview_health.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-23.1.1_smoke_homescreen_splitview_shop.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-23.2.0_smoke_homescreen_splitview_tooltips.yaml
+
+# ============================================================================
+# Component and feature tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-24.0.0_smoke_homescreen_app_rating_component.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-3.0.0_discovery_loads_successfully_guest.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-3.1.0_DNBA_extracare_plus_navigation.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-3.3.0_DNBA_photo_deals_navigation_guest.yaml
+
+# ============================================================================
+# Performance and error handling tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-40.0.0_homescreen_loading_performance_10sec.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-41.0.0_homescreen_personalization_engine_activity_nba.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-42.0.0_homescreen_error_handling_retry.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-43.0.0_homescreen_business_unit_eligibility_counsel.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-44.0.0_homescreen_business_unit_pharmacy_rx_tied.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-45.0.0_homescreen_user_segment_guest_vs_authenticated.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-46.0.0_homescreen_prescription_status_priority_ordering.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-47.0.0_homescreen_pull_to_refresh.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-48.0.0_homescreen_splitview_tab_content_loading.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-49.0.0_homescreen_ksmi_session_persistence.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-50.0.0_homescreen_extracare_member_eligibility.yaml
+
+# ============================================================================
+# ANBA Fulfillment Status tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-64.0.0_anba_fs_delivered.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-65.0.0_anba_fs_ready.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-66.0.0_anba_fs_shipped.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-67.0.0_anba_fs_inprocess.yaml
+
+# ============================================================================
+# ANBA Loyalty tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-68.0.0_anba_loy_rewardsexpiring.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-69.0.0_anba_loy_persdeal.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-70.0.0_anba_loy_persdealexpiry.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-71.0.0_anba_loy_total_deals_ec.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-72.0.0_anba_loy_hipaareconsent.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-89.0.0_anba_loy_ecplusexpiring.yaml
+
+# ============================================================================
+# ANBA Fulfillment Status additional tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-73.0.0_anba_fs_abandoned_cart.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-74.0.0_anba_rrx_rewards.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-75.0.0_anba_rx_shipped.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-76.0.0_anba_rx_workingonit.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-77.0.0_anba_rx_prescribercontacted.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-78.0.0_anba_rx_refill_scheduled.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-79.0.0_anba_rx_caregiving_waiting.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-80.0.0_anba_rx_caregiving_approval.yaml
+
+# ============================================================================
+# ANBA Health Services tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-81.0.0_anba_hs_upcomingmc.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-82.0.0_anba_hs_upcomingimz.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-83.0.0_anba_flu_covid_imz_reminder.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-84.0.0_anba_flu_imz_reminder.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-85.0.0_anba_covid_imz_reminder.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-86.0.0_anba_hs_upcoming_group_imz.yaml
+
+# ============================================================================
+# ANBA Fulfillment Status shopping list tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-87.0.0_anba_fs_create_shopping_list.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-88.0.0_anba_fs_continue_shopping_list.yaml
+
+# ============================================================================
+# BU Counsel Health tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-9.0.0_BU_counsel_health_displayed.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-9.1.0_BU_counsel_health_bottom_sheet.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-9.2.0_BU_counsel_health_navigation.yaml
+
+# ============================================================================
+# ANBA Pharmacy Chat tests
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home/HS-90.0.0_anba_pharmacy_chat_ciq.yaml
+- runFlow:
+    file: ../../../flows/Home/HS-91.0.0_anba_pharmacy_message_hub_ciq.yaml

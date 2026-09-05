@@ -1,0 +1,22 @@
+# YTD Complete Test Suite
+# Run with: bash scripts/testing/test.sh .maestro/apps/health100/suites/benefits_in_network_pharmacy_suite.yaml
+
+appId: ${APP_ID}
+---
+# IN network pharmacy
+# ============================================
+
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC001_filter.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC002_error.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC003_specialtyPharmacy.yaml
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC004_enterAddress.yaml
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC005_search.yaml
+- runFlow:
+    file: ../../../flows/Benefits/InNetworkPharmacy/H100_BEN_INP_TC006_filterLanguages.yaml

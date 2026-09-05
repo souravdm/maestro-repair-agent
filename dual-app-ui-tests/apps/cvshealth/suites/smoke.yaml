@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+---
+# CVS Health - Smoke Test Suite
+# Run time: ~15 minutes
+# Purpose: Critical path validation across all major features
+# Modules: Account, Shop, Pharmacy, SuperApp, Benefits, Health
+
+# ============================================================================
+# ACCOUNT - Authentication
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Account/H100_ACCT_TC010_loginAndLogout.yaml
+
+# ============================================================================
+# SHOP - Product Search & Cart
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Shop/CVSH_SHOP_TC014_searchAndAddProductsToCart.yaml
+
+# ============================================================================
+# PHARMACY - Dashboard Access
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Pharmacy/H100_PHARM_TC004_dashboardOverview.yaml
+
+# ============================================================================
+# SUPERAPP - Home Screen Validation
+# ============================================================================
+- runFlow:
+    # [REMOVED - file does not exist] file: ../../../flows/SearchAndNav/browse-shop-cvs-section.yaml
+
+# ============================================================================
+# BENEFITS - Dashboard Navigation
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC008_landingTabNavigation.yaml
+
+# ============================================================================
+# HEALTH - Caremark Benefits Flow
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Health/H100_HLTH_TC001_caremarkUserBenefitsFlow.yaml
+

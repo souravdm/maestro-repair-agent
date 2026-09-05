@@ -1,0 +1,72 @@
+appId: ${APP_ID}
+---
+# Smart Scheduler Complete Test Suite
+# Covers: Haio Care Routing Sub-Agent (PLOP-1, TLOP-4685, TLOP-4694, TLOP-4639)
+# Generated from Figma: 'MVP Care Routing, Scheduling & Async 6/26'
+# Total: 22 representative flows spanning all 17 modules (TC001-TC120)
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/Authentication/H100_SS_Auth_TC001_loa1UserBlocked.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/Authentication/H100_SS_Auth_TC003_loa2GreetingMessage.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/Authentication/H100_SS_Auth_TC004_conversationPersistsBackNav.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/VisitReason/H100_SS_VisitReason_TC006_inpersonVisitReasonAccepted.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/VisitReason/H100_SS_VisitReason_TC007_labVisitReasonAccepted.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/VisitReason/H100_SS_VisitReason_TC008_virtualVisitReasonAccepted.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/InPerson-Self/H100_SS_InPersonSelf_TC015_happyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/InPerson-Self/H100_SS_InPersonSelf_TC022_appointmentConfirmationSummary.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/InPerson-Caregivee/H100_SS_InPersonCaregivee_TC027_caregiveeHappyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/MCAsync/H100_SS_MCAsync_TC042_costDisplay.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/MCAsync/H100_SS_MCAsync_TC043_patientSelection.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/Lab/H100_SS_Lab_TC054_happyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/OutboundCall/H100_SS_OutboundCall_TC060_happyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/BrowserAgent/H100_SS_BrowserAgent_TC074_happyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/CounselHealth/Unregistered/H100_SS_CounselUnregistered_TC082_entry.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/CounselHealth/Unregistered/H100_SS_CounselUnregistered_TC083_legalPrivacyModal.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/NotFound/H100_SS_NotFound_TC094_nonurgentNextDay.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/ErrorStates/H100_SS_ErrorStates_TC100_minus1AvailabilityFail.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/ViewCancel/H100_SS_ViewCancel_TC106_viewUpcomingAppointments.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/ViewCancel/H100_SS_ViewCancel_TC107_cancelAppointmentHappyPath.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/NLP/H100_SS_NLP_TC117_urgencyDetectionEmergency.yaml
+
+- runFlow:
+    file: ../../../flows/Smart_Sch/NLP/H100_SS_NLP_TC119_typoMisspellingIntent.yaml

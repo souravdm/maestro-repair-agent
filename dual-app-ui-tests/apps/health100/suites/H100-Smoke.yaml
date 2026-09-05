@@ -1,0 +1,60 @@
+appId: ${APP_ID}
+---
+# Health100 - Smoke Test Suite
+# Run time: ~ 50 minutes
+# Purpose: Critical path validation across all major features
+# Modules: Home, Menu, SNAPP, Benefits, HAIO, Smart Scheduler
+
+# Home Health 100
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HS-0.1.0_smoke_homescreen_loads_successfully_guest.yaml
+
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HS-0.6.0_smoke_swipe_down_refreshes_homescreen.yaml
+
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HS-0.1.1_smoke_homescreen_loads_successfully_signed_in.yaml
+
+# Menu Test cases
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC027_guest_menu_navs.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC026_login_menu_navs.yaml
+
+# SearchAndNav Test cases
+# - runFlow:
+    file: ../../../flows/SearchAndNav-Health100/H100_SNAPP_TC001_ExploreMoreScheduleCareGuest.yaml
+
+# - runFlow:
+#    file: ../../../flows/SearchAndNav-Health100/H100_SNAPP_TC020_DisclaimersForYouTabGuest.yaml
+
+# Benefits TCs
+# - runFlow:
+#    file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC001_guestMode.yaml
+
+# - runFlow:
+#    file: ../../../flows/Benefits/IDCard/H100_BEN_IDCard_TC004_viewCardDetails.yaml
+
+# - runFlow:
+#     file: ../../../flows/Benefits/CaremarkUser/H100_BEN_Cmk_TC001_landing.yaml
+
+# HAIO Chat
+# - runFlow:
+#    file: ../../../flows/HAIO/H100_HAIO_TC001_basicChatInteraction.yaml
+
+# - runFlow:
+#    file: ../../../flows/HAIO/H100_HAIO_TC003_chatWithInvalidInput.yaml
+
+# Smart scheduler
+#- runFlow:
+#      file: ../../../flows/Smart_Sch/Authentication/H100_SS_Auth_TC003_loa2GreetingMessage.yaml
+
+#- runFlow:
+#      file: ../../../flows/Smart_Sch/Authentication/H100_SS_Auth_TC002_guestUserBlocked.yaml
+
+#- runFlow:
+#    file: ../../../flows/Smart_Sch/VisitReason/H100_SS_VisitReason_TC010_outOfScopeReason.yaml
+
+# - runFlow:
+#     file: ../../../flows/Smart_Sch/InPerson-Self/H100_SS_InPersonSelf_TC015_happyPath.yaml

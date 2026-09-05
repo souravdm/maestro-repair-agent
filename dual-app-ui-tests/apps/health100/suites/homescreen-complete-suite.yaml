@@ -1,0 +1,56 @@
+appId: ${APP_ID}
+---
+# CVS Health - Home screen regression test suite
+# Purpose: Regression test functionality specific to the homescreen
+# Modules: Home
+# ============================================================================
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HS-0.1.0_smoke_homescreen_loads_successfully_guest.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HS-0.1.1_smoke_homescreen_loads_successfully_signed_in.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC003_smokeHomescreenNoInternetBanner.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC004_smokeHomescreenReconnectInternet.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC005_smokeRelaunchWithKsmi.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC006_smokeSwipeDownRefreshesHomescreen.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC007_ANBA_activityComponentLoads.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC008_ANBA_notFilled.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC009_ANBA_availableForRefill.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC010_ANBA_ready.yaml
+- runFlow:
+    file: ../../../flows/Home-Health100/H100_HOME_TC011_ANBA_workingOnIt.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC012_verifyCareRecommendationsGuest.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC013_verifyCareRecommendationsGuestEvcNavigation.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC014_verifyCareRecommendationsGuestMcNavigation.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC015_verifyCareRecommendationsSignin.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC016_verifyCareRecommendationsSigninCounselNavigation.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC017_homescreenDiscoverContent.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC018_homescreenDiscoverEhg.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC019_homescreenDiscoverMcSeasonal.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC020_homescreenDiscoverMedinventory.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC021_homescreenDiscoverOakstreet.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC022_homescreenDiscoverWeightloss.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC023_homescreenDiscoverXponential.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC024_homescreenLoginBannerDisplayed.yaml
+- runFlow:
+      file: ../../../flows/Home-Health100/H100_HOME_TC025_homescreenMedRemindersOpenState.yaml

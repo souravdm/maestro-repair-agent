@@ -1,0 +1,33 @@
+# Home Screen Menu Test Suite
+# All Menu feature test flows
+# Run with: bash scripts/testing/test.sh .maestro/apps/health100/suites/home_screen_menu_screens_complete_suite.yaml
+
+appId: ${APP_ID}
+---
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC001_viewGuestMode.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC002_copyDeviceInfo.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC003_viewTermsPrivacy.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC004_viewSupportFaq.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC005_guestHealthRecords.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC006_guestTransferRx.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC007_guestRxOrders.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC008_guestPrescriptions.yaml
+
+- runFlow:
+    file: ../../../flows/Menu/H100_MENU_TC009_guestScheduleCare.yaml

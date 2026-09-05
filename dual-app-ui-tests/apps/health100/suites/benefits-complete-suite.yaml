@@ -1,0 +1,76 @@
+# Benefits Complete Test Suite
+# All Benefits features test flows including plan variations, consent, and features
+# Run with: bash scripts/testing/test.sh .maestro/apps/health100/suites/benefits-complete-suite.yaml
+
+appId: ${APP_ID}
+---
+
+# ============================================
+# PRIOR AUTHORIZATION FLOWS
+# ============================================
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC001_viewAuthorizations.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC002_planSpecificTypes.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC003_viewPriorAuthorizationStatus.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC004_trackRequestStatus.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC005_viewApprovedAuthorization.yaml
+
+- runFlow:
+    file: ../../../flows/Benefits/PriorAuth/H100_BEN_PriorAuth_TC006_viewDeniedAuthorization.yaml
+
+# ================================================
+# Dashboard
+# =================================================
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC001_landingCaremarkAetnaAllConsents.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC002_landingCaremarkOnlyConsented.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC003_landingAetnaOnly.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Consent/H100_BEN_Consent_TC001_caremarkPharmacyAccess.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC004_tabSwitchingAllTabs.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC005_singleTabPharmacy.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC006_dualTabsMedicalDental.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC007_FABAllPlans.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Dashboard/H100_BEN_Dashboard_TC008_landingTabNavigation.yaml
+
+
+# ================================================
+# Spending test cases
+# =================================================
+- runFlow:
+      file: ../../../flows/Benefits/Spending/H100_BEN_Spending_TC001_viewPharmacySpending.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Spending/H100_BEN_Spending_TC002_viewMedicalDentalSpending.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Spending/H100_BEN_Spending_TC003_inNetworkSpendingDetails.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Spending/H100_BEN_Spending_TC004_outOfNetworkDetails.yaml
+
+- runFlow:
+      file: ../../../flows/Benefits/Spending/H100_BEN_Spending_TC005_viewPharmacySpendingFamilyMember.yaml

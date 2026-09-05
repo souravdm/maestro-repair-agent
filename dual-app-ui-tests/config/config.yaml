@@ -1,0 +1,112 @@
+# Maestro Configuration - Unified Multi-App Config
+# Supports both CVS Pharmacy and Health100 apps via dynamic APP_ID resolution.
+#
+# APP_ID is automatically set by test.sh from build_config.yaml (ios.scheme + configuration):
+#   CVS Health (CVSOnlineiPhone):
+#     Debug / Debug_Dev / Adhoc → com.cvsenterpriseiphone.cvspharmacy
+#     Alpha                     → com.cvs.cvspharmacy.alpha
+#     Release                   → com.cvs.cvspharmacy
+#   Health100:
+#     Debug / Debug_Dev / Adhoc → com.cvsenterpriseiphone.health100
+#     Alpha                     → com.health100.h100.alpha
+#     Release                   → com.health100.h100.app
+#   Android: com.cvs.launchers.cvs (shop flavor) / com.health100.launchers (health flavor)
+#
+# To switch apps: Edit build_config.yaml (ios.scheme / configuration)
+# Or override at runtime: APP_ID=com.cvsenterpriseiphone.cvspharmacy ./scripts/testing/test.sh ...
+#
+# SECURITY: All credentials must be provided via environment variables or users_qa.js.
+# Never commit plaintext credentials to this file.
+
+# ============================================================================
+# APP ID - Dynamic Multi-App Support
+# ============================================================================
+appId: ${APP_ID}
+
+# ============================================================================
+# ENVIRONMENT VARIABLES
+# ============================================================================
+env:
+  APP_ID: com.cvsenterpriseiphone.health100
+
+  # ============================================================================
+  # GENERIC VARIABLES (shared across both apps)
+  # ============================================================================
+  GUEST_USER: "guest"
+  DEFAULT_ZIP: "02895"
+
+  # ============================================================================
+  # HEALTH100 TEST USER CREDENTIALS
+  # ============================================================================
+  # These are only used by Health100 flows. CVS flows use users_qa.js instead.
+  # Override via environment: USER_EMAIL=xxx ./scripts/testing/test.sh ...
+  USER_EMAIL: ${USER_EMAIL:-brayden.wilkie@test.com}
+  USER_DOB: ${USER_DOB:-09/17/1982}
+  USER_OTP: ${USER_OTP:-999999}
+  USER_DOB_MONTH: ${USER_DOB_MONTH:-09}
+  USER_DOB_DAY: ${USER_DOB_DAY:-17}
+  USER_DOB_YEAR: ${USER_DOB_YEAR:-1982}
+
+  # ============================================================================
+  # BENEFITS TEST DATA (Health100)
+  # ============================================================================
+  EXPECTED_MEMBER_ID_PATTERN: "[A-Z0-9]{8,12}"
+  EXPECTED_GROUP_NUMBER_PATTERN: "[0-9]{6,10}"
+  EXPECTED_CLAIM_AMOUNT_PATTERN: "\\$[0-9,]+\\.[0-9]{2}"
+  PARTNER_PROGRAM_HEADSPACE: "Headspace"
+  PARTNER_PROGRAM_SOLERA: "Solera"
+  PARTNER_PROGRAM_XPO: "Xpo"
+  PARTNER_PROGRAM_EVERYDAY_HEALTH: "Everyday Health"
+
+  # ============================================================================
+  # RECORDING CONFIGURATION
+  # ============================================================================
+  RECORD_VIDEO: "true"
+  RECORDING_FORMAT: "mp4"
+  RECORDING_FPS: "30"
+  RECORDING_QUALITY: "high"
+  RECORDING_OUTPUT_DIR: ${RECORDING_OUTPUT_DIR:-../../test-reports/videos}
+
+  # ============================================================================
+  # LOGGING CONFIGURATION
+  # ============================================================================
+  ENABLE_LOGGING: "true"
+  LOG_LEVEL: "info"
+  LOG_INCLUDE_TIMESTAMPS: "true"
+  LOG_OUTPUT_DIR: ${LOG_OUTPUT_DIR:-../../test-reports/logs}
+
+  # ============================================================================
+  # EXECUTION CONFIGURATION
+  # ============================================================================
+  EXECUTION_TIMEOUT: "600000"
+  CONTINUE_ON_FAILURE: "true"
+  RECORD_TIMINGS: "true"
+
+  # ============================================================================
+  # REPORT CONFIGURATION
+  # ============================================================================
+  REPORTS_ENABLED: "true"
+  REPORTS_FORMAT: "html"
+  REPORTS_OUTPUT_DIR: ${REPORTS_OUTPUT_DIR:-../../test-reports}
+  REPORTS_INCLUDE_SCREENSHOTS: "true"
+  REPORTS_SCREENSHOT_ON_FAILURE: "true"
+  REPORTS_SCREENSHOT_ON_SUCCESS: "true"
+  REPORTS_INCLUDE_TIMINGS: "true"
+
+  # Screenshot Deduplication
+  REPORTS_DEDUPLICATE_SCREENSHOTS: "true"    # Filter visually-similar screenshots
+  REPORTS_SIMILARITY_THRESHOLD: "0.95"       # 0.0-1.0, higher = more strict
+  REPORTS_MIN_TIME_GAP_MS: "2000"            # Minimum time between screenshots (ms)
+
+  # ============================================================================
+  # SCREEN PRELOADER
+  # Automatically discovers and injects all required screen runScript entries
+  # into a flow's onFlowStart before the test runs, so individual subflows
+  # don't need redundant runScript calls.
+  # Set to "false" to disable. Can also be overridden per-run with --no-preload.
+  # ============================================================================
+  AUTO_PRELOAD_SCREENS: "true"
+
+excludeTags:
+  - util
+  - ignore
