@@ -1,0 +1,35 @@
+{
+  "name": "maestro-flow-recorder-backend",
+  "version": "1.0.0",
+  "description": "Maestro Flow Recorder - Backend",
+  "main": "dist/server.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "axe-core": "^4.11.2",
+    "body-parser": "^1.20.2",
+    "color-contrast-checker": "^2.1.0",
+    "color-diff": "^1.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "electron": "43.0.0",
+    "express": "^4.19.2",
+    "sharp": "^0.33.3",
+    "uuid": "^14.0.1",
+    "ws": "^8.17.0",
+    "yaml": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "@types/uuid": "^9.0.8",
+    "@types/ws": "^8.5.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
