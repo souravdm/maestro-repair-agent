@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="182.947" timestamp="2026-09-05T08:09:40">
+    <testcase id="H100 | Benefits | Claims | TC010 - Submit Claim Needed Approval" name="H100 | Benefits | Claims | TC010 - Submit Claim Needed Approval" classname="H100 | Benefits | Claims | TC010 - Submit Claim Needed Approval" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC010_submitClaimNeededApproval.yaml" time="182.832" timestamp="2026-09-05T08:09:40" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, submission, reason-needed-approval"/>
+      </properties>
+      <failure>Assertion is false: "Home|Hi,.*" is visible</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
