@@ -1,0 +1,38 @@
+const __platform = maestro.platform.toLowerCase() === "ios" ? "ios" : "android";
+const __isIOS = __platform === 'ios';
+
+output.account_payment = {
+    paymentMethodsNavBar: "Pay A Bill",
+    balanceDueHeader: "Balances due",
+    addPaymentMethodBtn: "Add Payment Method|Add payment method",
+    addCreditCardBtn: "Add Credit Card",
+    cardNumberField: "Card number.*",
+    cardNumberFieldPattern: "card number",
+    expirationDateField: "expiration date",
+    monthField: "Month.*",
+    yearField: "Year.*",
+    expirationMonthOption: "12",
+    expirationYearOption: "2026",
+    cvvField: "CVV",
+    securityCodeField: "Security code.*|CVV.*",
+    billingAddressField: "billing address",
+    billingStateOption: "Massachusetts",
+    firstNameField: "First name.*",
+    lastNameField: "Last name.*",
+    streetAddressField: "Street address.*",
+    cityField: "City.*",
+    stateField: "State.*",
+    zipCodeField: "ZIP code.*",
+    saveBtn: "Save",
+    savePaymentMethodBtn: "Add Payment Method|Save",
+    editBtn: "Edit",
+    manageBtn: "Manage",
+    editOrManageBtn: "Edit|Manage",
+    deleteBtn: "Delete",
+    cancelBtn: "Cancel",
+    setAsDefaultToggle: "Set as Default",
+    cardEndingPattern: ".*1111.*",
+    youAreCaughtUp: "You're all caught up!",
+    caughtupMessage: "Future bills will show up.*",
+    payBtn: "Pay"
+};
