@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CVS Chat Bot - AI Assistant</title>
+<style>
+  :root {
+    --cvs-red: #CC0000;
+    --cvs-red-dark: #990000;
+    --bg: #0D0D1A;
+    --bg2: #12121F;
+    --bg3: #1A1A2E;
+    --border: #2A2A45;
+    --text: #D0D8E8;
+    --text-dim: #7A8AAA;
+    --text-bright: #FFFFFF;
+    --accent: #4A90D9;
+    --green: #27AE60;
+    --yellow: #E8A838;
+    --red-cov: #CC3333;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header {
+    background: var(--cvs-red);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px #0008;
+  }
+
+  .header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ai-badge {
+    font-size: 9px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .dot-green { background: var(--green); }
+  .dot-red { background: var(--red-cov); }
+  .dot-yellow { background: var(--yellow); }
+
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: var(--bg2);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 6px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .msg {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .msg-user {
+    background: var(--cvs-red);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 6px;
+  }
+
+  .msg-bot {
+    background: var(--bg3);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  .msg-source {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .msg-thinking {
+    background: var(--bg3);
+    color: var(--text-dim);
+    align-self: flex-start;
+    border-bottom-left-radius: 6px;
+    border: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  /* Table styling for test reports */
+  .msg-bot table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 11px;
+  }
+  .msg-bot th {
+    background: var(--bg2);
+    color: var(--text-bright);
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid var(--border);
+    font-weight: 600;
+  }
+  .msg-bot td {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .msg-bot th:first-child,
+  .msg-bot td:first-child {
+    border-left: none;
+  }
+  .msg-bot th:last-child,
+  .msg-bot td:last-child {
+    border-right: none;
+  }
+  
+  /* Enhanced spacing for readability */
+  .msg-bot p {
+    margin: 8px 0;
+    line-height: 1.5;
+  }
+  .msg-bot ul, .msg-bot ol {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+  .msg-bot li {
+    margin: 4px 0;
+  }
+  .msg-bot strong {
+    color: var(--text-bright);
+    font-weight: 600;
+  }
+  .msg-bot code {
+    background: var(--bg2);
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-family: monospace;
+  }
+
+  .quick-prompts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .qp-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .qp-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .chat-input-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .chat-input {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    min-height: 48px;
+    max-height: 120px;
+    font-family: inherit;
+  }
+
+  .chat-input:focus {
+    border-color: var(--accent);
+  }
+
+  .chat-input::placeholder {
+    color: var(--text-dim);
+  }
+
+  .send-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: none;
+    background: var(--cvs-red);
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .send-btn:hover {
+    background: var(--cvs-red-dark);
+  }
+
+  .send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 600px) {
+    .chat-container {
+      padding: 12px;
+    }
+    
+    .msg {
+      max-width: 90%;
+    }
+  }
+</style>
+</head>
+<body>
+  <header class="header">
+    <h1>
+      🤖 CVS Chat Bot
+      <span class="ai-badge">AI</span>
+    </h1>
+    <div class="status" id="ollama-status">
+      <div class="status-dot dot-yellow"></div>
+      <span id="ollama-status-text">Checking…</span>
+    </div>
+  </header>
+
+  <main class="chat-container">
+    <div class="chat-messages" id="chat-messages">
+      <div class="msg msg-bot">
+        👋 Hi! I'm your CVS test automation assistant. I can help you:<br><br>
+        • Analyze <strong>test coverage</strong><br>
+        • Identify <strong>gaps</strong> in your flows<br>
+        • Suggest <strong>priorities</strong><br>
+        • Recommend <strong>test strategies</strong><br>
+        • Troubleshoot <strong>script errors</strong><br>
+        • Analyze <strong>test reports</strong> & <strong>artifacts</strong><br><br>
+        What would you like to know about your test coverage or recent test results?
+      </div>
+    </div>
+
+    <div class="quick-prompts">
+      <button class="qp-btn" onclick="quickPrompt('What are the test coverage gaps?')">Coverage Gaps</button>
+      <button class="qp-btn" onclick="quickPrompt('What should I prioritize?')">Priorities</button>
+      <button class="qp-btn" onclick="quickPrompt('How can I improve my tests?')">Improvement Tips</button>
+      <button class="qp-btn" onclick="quickPrompt('What are the most important flows?')">Key Flows</button>
+      <button class="qp-btn" onclick="quickPrompt('Are there any script errors?')">Script Errors</button>
+      <button class="qp-btn" onclick="quickPrompt('What do recent test reports show?')">Test Reports</button>
+    </div>
+
+    <div class="chat-input-container">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask about test coverage, gaps, recommendations…" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"
+        oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendChat()" title="Send">➤</button>
+    </div>
+  </main>
+
+  <script>
+    let chatHistory = [];
+    let ollamaModels = [];
+
+    // Auto-resize textarea
+    function autoResize(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+    }
+
+    // Check Ollama status
+    async function checkOllama() {
+      try {
+        const r = await fetch('/api/ollama/status');
+        const data = await r.json();
+        const dot = document.querySelector('#ollama-status .status-dot');
+        const txt = document.getElementById('ollama-status-text');
+        if (data.available && data.models.length > 0) {
+          ollamaModels = data.models;
+          dot.className = 'status-dot dot-green';
+          txt.textContent = data.models[0].split(':')[0];
+        } else {
+          dot.className = 'status-dot dot-red';
+          txt.textContent = 'Ollama offline';
+        }
+      } catch {
+        document.getElementById('ollama-status-text').textContent = 'Fallback mode';
+      }
+    }
+
+    // Render markdown tables and formatting
+    function renderMarkdown(text) {
+      // Convert markdown tables to HTML
+      let html = text;
+      
+      // Convert headers
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+      // Convert tables
+      const tableRegex = /\|(.+)\|\n\|(.+)\|\n((?:\|.+\|\n?)*)/g;
+      html = html.replace(tableRegex, (match, header, separator, rows) => {
+        const headers = header.split('|').map(h => h.trim()).filter(h => h);
+        const rowLines = rows.trim().split('\n').filter(row => row.trim());
+        
+        let tableHtml = '<table><thead><tr>';
+        headers.forEach(h => {
+          tableHtml += `<th>${h}</th>`;
+        });
+        tableHtml += '</tr></thead><tbody>';
+        
+        rowLines.forEach(row => {
+          const cells = row.split('|').map(c => c.trim()).filter(c => c);
+          if (cells.length === headers.length) {
+            tableHtml += '<tr>';
+            cells.forEach(cell => {
+              tableHtml += `<td>${cell}</td>`;
+            });
+            tableHtml += '</tr>';
+          }
+        });
+        
+        tableHtml += '</tbody></table>';
+        return tableHtml;
+      });
+      
+      // Convert line breaks
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = html.replace(/\n/g, '<br>');
+      
+      return `<p>${html}</p>`;
+    }
+
+    // Add message to chat
+    function addMessage(text, role, source) {
+      const el = document.createElement('div');
+      el.className = `msg msg-${role}`;
+      
+      if (role === 'bot') {
+        el.innerHTML = renderMarkdown(text);
+      } else {
+        el.textContent = text;
+      }
+      
+      if (source && role === 'bot') {
+        const src = document.createElement('div');
+        src.className = 'msg-source';
+        src.textContent = source === 'ollama' ? `via Ollama` : 'fallback mode';
+        el.appendChild(src);
+      }
+      
+      document.getElementById('chat-messages').appendChild(el);
+      el.scrollIntoView({ behavior: 'smooth' });
+      return el;
+    }
+
+    // Quick prompt buttons
+    function quickPrompt(message) {
+      document.getElementById('chat-input').value = message;
+      sendChat(message);
+    }
+
+    // Send chat message
+    async function sendChat(overrideMessage) {
+      const input = document.getElementById('chat-input');
+      const msg = overrideMessage || input.value.trim();
+      if (!msg) return;
+
+      if (!overrideMessage) { 
+        input.value = ''; 
+        autoResize(input); 
+      }
+      
+      addMessage(msg, 'user');
+      chatHistory.push({ role: 'user', content: msg });
+
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+
+      const thinking = addMessage('🤔 Thinking...', 'bot');
+      thinking.classList.add('msg-thinking');
+
+      try {
+        const r = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: msg, history: chatHistory.slice(-6) }),
+        });
+        const data = await r.json();
+        thinking.remove();
+
+        addMessage(data.reply, 'bot', data.source);
+        chatHistory.push({ role: 'assistant', content: data.reply });
+      } catch (e) {
+        thinking.remove();
+        addMessage('❌ Sorry, I encountered an error. Please try again.', 'bot', 'error');
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+
+    // Initialize
+    (async () => {
+      await checkOllama();
+    })();
+  </script>
+</body>
+</html>

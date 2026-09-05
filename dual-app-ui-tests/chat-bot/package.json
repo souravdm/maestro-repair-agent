@@ -1,0 +1,17 @@
+{
+  "name": "cvs-chat-bot",
+  "version": "1.0.0",
+  "description": "Ollama-powered chat bot for CVS app testing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0"
+  },
+  "keywords": ["chat", "ollama", "cvs", "testing"],
+  "author": "CVS E2E Team",
+  "license": "MIT"
+}
