@@ -1,0 +1,268 @@
+{
+  "timestamp": "2026-09-05T12:25:10.275Z",
+  "testName": "H100_BEN_Claims_TC012_submitCompoundDrugClaim",
+  "stepName": "failure_step",
+  "deviceId": "emulator-5554",
+  "platform": "android",
+  "elementCount": 7,
+  "elements": [
+    {
+      "text": "12345678901",
+      "type": "button",
+      "identifier": null,
+      "label": "12345678901",
+      "value": "12345678901",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,245][1038,389]"
+    },
+    {
+      "text": "10",
+      "type": "button",
+      "identifier": null,
+      "label": "10",
+      "value": "10",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,452][1038,597]"
+    },
+    {
+      "text": "50.00",
+      "type": "button",
+      "identifier": null,
+      "label": "50.00",
+      "value": "50.00",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,660][1038,804]"
+    },
+    {
+      "text": "98765432109",
+      "type": "button",
+      "identifier": null,
+      "label": "98765432109",
+      "value": "98765432109",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,1032][1038,1177]"
+    },
+    {
+      "text": "20",
+      "type": "button",
+      "identifier": null,
+      "label": "20",
+      "value": "20",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,1240][1038,1384]"
+    },
+    {
+      "text": "75.50",
+      "type": "button",
+      "identifier": null,
+      "label": "75.50",
+      "value": "75.50",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,1447][1038,1592]"
+    },
+    {
+      "text": "546412346543",
+      "type": "button",
+      "identifier": null,
+      "label": "546412346543",
+      "value": "546412346543",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[42,1907][1038,2051]"
+    }
+  ],
+  "summary": {
+    "totalElements": 7,
+    "visibleElements": 0,
+    "interactiveElements": 0,
+    "textElements": [
+      {
+        "text": "12345678901",
+        "type": "button",
+        "identifier": null,
+        "label": "12345678901",
+        "value": "12345678901",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,245][1038,389]"
+      },
+      {
+        "text": "10",
+        "type": "button",
+        "identifier": null,
+        "label": "10",
+        "value": "10",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,452][1038,597]"
+      },
+      {
+        "text": "50.00",
+        "type": "button",
+        "identifier": null,
+        "label": "50.00",
+        "value": "50.00",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,660][1038,804]"
+      },
+      {
+        "text": "98765432109",
+        "type": "button",
+        "identifier": null,
+        "label": "98765432109",
+        "value": "98765432109",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,1032][1038,1177]"
+      },
+      {
+        "text": "20",
+        "type": "button",
+        "identifier": null,
+        "label": "20",
+        "value": "20",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,1240][1038,1384]"
+      },
+      {
+        "text": "75.50",
+        "type": "button",
+        "identifier": null,
+        "label": "75.50",
+        "value": "75.50",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,1447][1038,1592]"
+      },
+      {
+        "text": "546412346543",
+        "type": "button",
+        "identifier": null,
+        "label": "546412346543",
+        "value": "546412346543",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[42,1907][1038,2051]"
+      }
+    ],
+    "buttons": [],
+    "textFields": [],
+    "labels": []
+  },
+  "failureAnalysis": {
+    "failedElement": null,
+    "failedElementType": "unknown",
+    "failedElementSource": "test_logs",
+    "expectedElement": null,
+    "screenElements": [
+      {
+        "name": "12345678901",
+        "type": "button",
+        "identifier": null,
+        "label": "12345678901",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "10",
+        "type": "button",
+        "identifier": null,
+        "label": "10",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "50.00",
+        "type": "button",
+        "identifier": null,
+        "label": "50.00",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "98765432109",
+        "type": "button",
+        "identifier": null,
+        "label": "98765432109",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "20",
+        "type": "button",
+        "identifier": null,
+        "label": "20",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "75.50",
+        "type": "button",
+        "identifier": null,
+        "label": "75.50",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "546412346543",
+        "type": "button",
+        "identifier": null,
+        "label": "546412346543",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      }
+    ],
+    "timestamp": "2026-09-05T12:25:10.371Z"
+  },
+  "rawOutput": "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.LinearLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/content\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"2\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"true\" focused=\"true\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,2424]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,0][1080,300]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.Button\" package=\"com.health100.launchers\" content-desc=\"Back\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][263,289]\" drawing-order=\"0\" hint=\"\" /><node index=\"1\" text=\"\" resource-id=\"\" class=\"android.widget.Button\" package=\"com.health100.launchers\" content-desc=\"Cancel\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[856,153][1080,279]\" drawing-order=\"0\" hint=\"\" /></node><node index=\"1\" text=\"\" resource-id=\"\" class=\"android.widget.ScrollView\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"true\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[42,184][1038,2112]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[42,184][1038,2112]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[42,184][1038,867]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"Ingredient 1\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[42,184][318,213]\" drawing-order=\"0\" hint=\"\" "
+}

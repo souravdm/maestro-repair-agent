@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-09-05T13:16:45.951Z",
+  "testName": "H100_BEN_Claims_TC017_minorClaim",
+  "stepName": "failure_step",
+  "deviceId": "emulator-5554",
+  "platform": "android",
+  "elementCount": 3,
+  "elements": [
+    {
+      "text": "Health100 isn't responding",
+      "type": "label",
+      "identifier": null,
+      "label": "Health100 isn't responding",
+      "value": "Health100 isn't responding",
+      "className": "android.widget.TextView",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[133,1083][947,1154]"
+    },
+    {
+      "text": "Close app",
+      "type": "button",
+      "identifier": null,
+      "label": "Close app",
+      "value": "Close app",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[70,1193][1010,1319]"
+    },
+    {
+      "text": "Wait",
+      "type": "button",
+      "identifier": null,
+      "label": "Wait",
+      "value": "Wait",
+      "className": "android.widget.Button",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[70,1319][1010,1445]"
+    }
+  ],
+  "summary": {
+    "totalElements": 3,
+    "visibleElements": 0,
+    "interactiveElements": 0,
+    "textElements": [
+      {
+        "text": "Health100 isn't responding",
+        "type": "label",
+        "identifier": null,
+        "label": "Health100 isn't responding",
+        "value": "Health100 isn't responding",
+        "className": "android.widget.TextView",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[133,1083][947,1154]"
+      },
+      {
+        "text": "Close app",
+        "type": "button",
+        "identifier": null,
+        "label": "Close app",
+        "value": "Close app",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[70,1193][1010,1319]"
+      },
+      {
+        "text": "Wait",
+        "type": "button",
+        "identifier": null,
+        "label": "Wait",
+        "value": "Wait",
+        "className": "android.widget.Button",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[70,1319][1010,1445]"
+      }
+    ],
+    "buttons": [],
+    "textFields": [],
+    "labels": []
+  },
+  "failureAnalysis": {
+    "failedElement": null,
+    "failedElementType": "unknown",
+    "failedElementSource": "test_logs",
+    "expectedElement": null,
+    "screenElements": [
+      {
+        "name": "Health100 isn't responding",
+        "type": "label",
+        "identifier": null,
+        "label": "Health100 isn't responding",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "Close app",
+        "type": "button",
+        "identifier": null,
+        "label": "Close app",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "Wait",
+        "type": "button",
+        "identifier": null,
+        "label": "Wait",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      }
+    ],
+    "timestamp": "2026-09-05T13:16:46.043Z"
+  },
+  "rawOutput": "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[28,994][1052,1508]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1036][1010,1466]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/content\" class=\"android.widget.FrameLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1036][1010,1466]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/parentPanel\" class=\"android.widget.LinearLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1036][1010,1466]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/topPanel\" class=\"android.widget.LinearLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1036][1010,1154]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/title_template\" class=\"android.widget.LinearLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1036][1010,1154]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"Health100 isn't responding\" resource-id=\"android:id/alertTitle\" class=\"android.widget.TextView\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[133,1083][947,1154]\" drawing-order=\"2\" hint=\"\" /></node></node><node index=\"1\" text=\"\" resource-id=\"android:id/customPanel\" class=\"android.widget.FrameLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1154][1010,1466]\" drawing-order=\"3\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/custom\" class=\"android.widget.FrameLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1154][1010,1466]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.LinearLayout\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1154][1010,1466]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"Close app\" resource-id=\"android:id/aerr_close\" class=\"android.widget.Button\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1193][1010,1319]\" drawing-order=\"1\" hint=\"\" /><node index=\"1\" text=\"Wait\" resource-id=\"android:id/aerr_wait\" class=\"android.widget.Button\" package=\"android\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[70,1319][1010,1445]\" drawing-order=\"2\" hint=\"\" /></node></node></node></node></node></node></node></hierarchy>"
+}

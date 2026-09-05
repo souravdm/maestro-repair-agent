@@ -1,0 +1,132 @@
+{
+  "timestamp": "2026-09-05T12:12:59.005Z",
+  "testName": "H100_BEN_Claims_TC010_submitClaimNeededApproval",
+  "stepName": "failure_step",
+  "deviceId": "emulator-5554",
+  "platform": "android",
+  "elementCount": 3,
+  "elements": [
+    {
+      "text": "Please try that again",
+      "type": "label",
+      "identifier": null,
+      "label": "Please try that again",
+      "value": "Please try that again",
+      "className": "android.widget.TextView",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[126,1104][954,1219]"
+    },
+    {
+      "text": "Something went wrong on our end",
+      "type": "label",
+      "identifier": null,
+      "label": "Something went wrong on our end",
+      "value": "Something went wrong on our end",
+      "className": "android.widget.TextView",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[126,1219][954,1272]"
+    },
+    {
+      "text": "Dismiss",
+      "type": "label",
+      "identifier": null,
+      "label": "Dismiss",
+      "value": "Dismiss",
+      "className": "android.widget.TextView",
+      "enabled": true,
+      "visible": true,
+      "interactive": false,
+      "bounds": "[762,1341][922,1394]"
+    }
+  ],
+  "summary": {
+    "totalElements": 3,
+    "visibleElements": 0,
+    "interactiveElements": 0,
+    "textElements": [
+      {
+        "text": "Please try that again",
+        "type": "label",
+        "identifier": null,
+        "label": "Please try that again",
+        "value": "Please try that again",
+        "className": "android.widget.TextView",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[126,1104][954,1219]"
+      },
+      {
+        "text": "Something went wrong on our end",
+        "type": "label",
+        "identifier": null,
+        "label": "Something went wrong on our end",
+        "value": "Something went wrong on our end",
+        "className": "android.widget.TextView",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[126,1219][954,1272]"
+      },
+      {
+        "text": "Dismiss",
+        "type": "label",
+        "identifier": null,
+        "label": "Dismiss",
+        "value": "Dismiss",
+        "className": "android.widget.TextView",
+        "enabled": true,
+        "visible": true,
+        "interactive": false,
+        "bounds": "[762,1341][922,1394]"
+      }
+    ],
+    "buttons": [],
+    "textFields": [],
+    "labels": []
+  },
+  "failureAnalysis": {
+    "failedElement": null,
+    "failedElementType": "unknown",
+    "failedElementSource": "test_logs",
+    "expectedElement": null,
+    "screenElements": [
+      {
+        "name": "Please try that again",
+        "type": "label",
+        "identifier": null,
+        "label": "Please try that again",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "Something went wrong on our end",
+        "type": "label",
+        "identifier": null,
+        "label": "Something went wrong on our end",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      },
+      {
+        "name": "Dismiss",
+        "type": "label",
+        "identifier": null,
+        "label": "Dismiss",
+        "value": null,
+        "enabled": true,
+        "visible": true,
+        "interactive": false
+      }
+    ],
+    "timestamp": "2026-09-05T12:12:59.094Z"
+  },
+  "rawOutput": "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?><hierarchy rotation=\"0\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"android:id/content\" class=\"android.widget.FrameLayout\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.ViewGroup\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"0\" hint=\"\"><node index=\"0\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[0,142][1080,2361]\" drawing-order=\"0\" hint=\"\"><node index=\"1\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[63,1041][1017,1462]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"Please try that again\" resource-id=\"\" class=\"android.widget.TextView\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[126,1104][954,1219]\" drawing-order=\"0\" hint=\"\" /><node index=\"1\" text=\"\" resource-id=\"\" class=\"android.widget.ScrollView\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[63,1219][1017,1272]\" drawing-order=\"1\" hint=\"\"><node index=\"0\" text=\"Something went wrong on our end\" resource-id=\"\" class=\"android.widget.TextView\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[126,1219][954,1272]\" drawing-order=\"0\" hint=\"\" /></node><node index=\"2\" text=\"\" resource-id=\"\" class=\"android.view.View\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"true\" enabled=\"true\" focusable=\"true\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[730,1304][954,1430]\" drawing-order=\"2\" hint=\"\"><node index=\"0\" text=\"Dismiss\" resource-id=\"\" class=\"android.widget.TextView\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" password=\"false\" selected=\"false\" bounds=\"[762,1341][922,1394]\" drawing-order=\"0\" hint=\"\" /><node index=\"1\" text=\"\" resource-id=\"\" class=\"android.widget.Button\" package=\"com.health100.launchers\" content-desc=\"\" checkable=\"false\" checked=\"false\" clickable=\"false\" enabled=\"true\" focusable=\"false\" focused=\"false\" scrollable=\"false\" long-clickable=\"false\" pa"
+}
