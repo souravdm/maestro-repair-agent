@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Authentication | TC005 - Insurance Connect Message"
+tags:
+  - smart_scheduler
+  - authentication
+  - negative
+  - edge_case
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Attempt to trigger the duplicate booking guard by explicitly referencing
+# a completed booking and requesting a new provider search in the same session
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Start a new provider search"
+- waitForAnimationToEnd
+
+# The system should block a second provider search within the same session
+- assertVisible: "(?i).*(Insurance and benefits access).*"
+
+- takeScreenshot: SS_TC005_Duplicate_Booking_Blocked

@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Authentication | TC003 - Loa2 Greeting Message"
+tags:
+  - smart_scheduler
+  - authentication
+  - smoke
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/HAIO/HomeScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../../subflows/Common/launchApp.yaml
+- runFlow: ../../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- runFlow: ../../../subflows/Account/authentication/complete_signin_with_cvs_h100.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Verify the Smart Scheduler greeting is shown to authenticated LOA-2 users
+- assertVisible: "(?i).*(scheduling assistant|health assistant|schedule.*manage.*cancel|I can help you schedule|MinuteClinic|ready to help you schedule).*"
+
+# Verify the chat input field is available for user interaction
+- assertVisible: ${output.haio_home.chatInputField}
+
+- takeScreenshot: SS_TC003_LOA2_Scheduling_Greeting

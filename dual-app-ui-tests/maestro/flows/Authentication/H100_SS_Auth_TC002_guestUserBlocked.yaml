@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Authentication | TC002 - Guest User Blocked"
+tags:
+  - smart_scheduler
+  - authentication
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/Account/OnboardingScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+---
+# NOTE: No credentials loaded - this is a guest (unauthenticated) test
+# Guest user must not be able to access Smart Scheduler scheduling flows.
+# The app should surface a sign-in prompt or otherwise block access.
+
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/continue_as_guest_h100.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+# Tap Haio as a guest — do NOT use navigate-to-haio.yaml which expects authenticated chat
+- extendedWaitUntil:
+    visible: ${output.haio_ai_home.healthAssistantTitle}
+    timeout: 15000
+- tapOn: ${output.haio_ai_home.healthAssistantTitle}
+- waitForAnimationToEnd
+
+# Guest must see a sign-in prompt - scheduling is not accessible without authentication
+- assertVisible: "(?i).*(Sign in|sign in|Get started|Log in|Create account|Login|sign up).*"
+
+- takeScreenshot: SS_TC002_Guest_SignIn_Prompt_Shown

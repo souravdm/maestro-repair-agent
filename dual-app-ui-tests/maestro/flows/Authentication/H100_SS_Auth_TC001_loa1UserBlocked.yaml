@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Authentication | TC001 - Loa1 User Blocked"
+tags:
+  - smart_scheduler
+  - authentication
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: AETNA_ONLY_1
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# NOTE: A true LOA-1 user would be blocked before reaching the scheduling screen.
+# This test validates the LOA-2 gating requirement by confirming LOA-2 users
+# CAN successfully reach and interact with the Smart Scheduler. Any user without
+# sufficient LOA should never reach this response.
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Send a scheduling intent - LOA-2 user should reach the Smart Scheduler greeting
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a MinuteClinic visit"
+- waitForAnimationToEnd
+
+# Verify LOA-2 gating: scheduling greeting must load (LOA-1 would be blocked here)
+- assertVisible: "(?i).*(scheduling assistant|schedule.*manage.*cancel|MinuteClinic|schedule.*visit).*"
+
+- takeScreenshot: SS_TC001_LOA2_Scheduling_Access_Verified

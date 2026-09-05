@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Authentication | TC004 - Conversation Persists Back Nav"
+tags:
+  - smart_scheduler
+  - authentication
+  - navigation
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a scheduling message to create conversation history
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to schedule a visit"
+- waitForAnimationToEnd
+
+# Capture conversation state before navigating away
+- takeScreenshot: SS_TC004_Conversation_Before_Back
+
+# Navigate back out of Haio
+- tapOn: "Back|back"
+- waitForAnimationToEnd
+
+# Navigate back into Haio
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Verify previous message still visible in conversation history
+- assertVisible: "(?i).*(schedule.*visit|I need to schedule).*"
+
+- takeScreenshot: SS_TC004_Conversation_Persisted_After_Back
