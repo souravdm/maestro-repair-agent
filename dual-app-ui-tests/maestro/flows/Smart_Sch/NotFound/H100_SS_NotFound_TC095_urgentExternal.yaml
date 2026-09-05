@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC095 - Urgent External"
+tags:
+  - smart_scheduler
+  - not_found
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send urgent request restricted to MinuteClinic only (to surface external providers fallback)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I urgently need to see a provider today, MinuteClinic only"
+- waitForAnimationToEnd
+
+# Verify not-found urgent message with external providers
+# Full expected text: "I'm not finding any availability today. Here are some external providers who may have availability."
+- assertVisible: "(?i).*(not finding any availability today.*external providers|Here are some external providers|external.*providers.*availability).*"
+
+# Verify quick reply chips are present
+- assertVisible: "(?i).*(Update visit preferences|Search for external providers).*"
+
+- takeScreenshot: SS_TC095_NotFound_Urgent

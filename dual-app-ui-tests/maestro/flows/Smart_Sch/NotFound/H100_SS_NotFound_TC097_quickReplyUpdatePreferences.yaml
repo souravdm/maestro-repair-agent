@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC097 - Quick Reply Update Preferences"
+tags:
+  - smart_scheduler
+  - not_found
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send a scheduling message to potentially trigger the 'Update visit preferences' quick reply chip
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+# If the 'Update visit preferences' chip is visible, tap it and verify preferences prompt
+- runFlow:
+    when:
+      visible: "(?i).*(Update visit preferences).*"
+    commands:
+      - runFlow:
+          file: ../../../subflows/HAIO/interactions/select-quick-reply.yaml
+          env:
+            REPLY_TEXT: "Update visit preferences"
+      - waitForAnimationToEnd
+      # Verify the system prompts to modify scheduling preferences
+      - assertVisible: "(?i).*(visit reason|patient|location|time|update.*preferences).*"
+
+- takeScreenshot: SS_TC097_Update_Prefs

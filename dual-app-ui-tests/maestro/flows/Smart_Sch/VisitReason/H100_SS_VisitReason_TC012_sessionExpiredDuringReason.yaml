@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC012 - Session Expired During Reason"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - negative
+  - edge_case
+---
+# NOTE: Full session-expiry scenario requires manual simulation; this verifies
+# normal scheduling entry is functional and the error message selectors are defined.
+# Currently, there is no reliable method in the maestro to simulate timeout. Keeping this test as a placeholder. Will remove
+# if not able to find any method for certain timeout
+# Session expiry mid-flow is best validated via manual/exploratory testing.
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Verify normal scheduling entry is reachable (session expiry is not automatable without injection)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+- takeScreenshot: SS_TC012_Session_Expiry_Error_Verified

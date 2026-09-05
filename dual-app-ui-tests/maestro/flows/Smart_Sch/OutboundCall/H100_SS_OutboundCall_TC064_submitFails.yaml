@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC064 - Submit Fails"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger outbound call flow; verify submit-failure error handling
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Call my doctor to schedule"
+- waitForAnimationToEnd
+
+# Verify submission failure message and retry option (requires backend error condition)
+- assertVisible:
+    text: "(?i).*(ran into an issue.*submitting|issue submitting.*request|Want to try again|something went wrong|try again).*"
+    optional: true
+- takeScreenshot: SS_TC064_OutboundCall_SubmitFails

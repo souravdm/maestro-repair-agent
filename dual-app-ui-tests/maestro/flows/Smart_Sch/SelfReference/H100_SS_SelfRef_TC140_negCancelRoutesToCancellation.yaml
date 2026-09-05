@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC140 - Neg Cancel Routes To Cancellation"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - cancellation
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Cancellation intent — must route to cancel flow, not new scheduling
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to cancel my appointment"
+- waitForAnimationToEnd
+
+# System must show cancellation flow
+- assertVisible: "(?i).*(cancel|cancellation|which appointment|upcoming.*appointments|cancel.*appointment).*"
+
+# System must NOT start a new scheduling flow
+- assertNotVisible:
+    text: "(?i).*(What.*reason.*visit|schedule.*new|book.*new|Which clinic|clinic.*list).*"
+    optional: true
+
+- takeScreenshot: SS_TC140_Neg_Cancel_Routes_To_Cancellation

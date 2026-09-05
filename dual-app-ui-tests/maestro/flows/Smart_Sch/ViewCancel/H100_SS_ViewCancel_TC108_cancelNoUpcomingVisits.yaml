@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC108 - Cancel No Upcoming Visits"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request to cancel when user has no upcoming visits
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Cancel my upcoming appointments"
+- waitForAnimationToEnd
+
+# Verify response informs user there are no upcoming visits to cancel
+- assertVisible: "(?i).*(don't have any.*upcoming visits.*cancel|no.*upcoming.*visits|no.*visits.*cancel).*"
+
+- takeScreenshot: SS_TC108_No_Visits_Cancel

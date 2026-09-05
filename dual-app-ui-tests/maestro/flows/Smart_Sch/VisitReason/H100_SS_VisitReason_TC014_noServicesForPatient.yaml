@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC014 - No Services For Patient"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - edge_case
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Request scheduling for a generic patient - may trigger eligibility check
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit for this patient"
+- waitForAnimationToEnd
+
+# System should indicate no services are available for this patient profile
+- assertVisible: "(?i).*(No services available.*patient|choose someone else|different patient|not eligible|no available services).*"
+
+- takeScreenshot: SS_TC014_No_Services_For_Patient

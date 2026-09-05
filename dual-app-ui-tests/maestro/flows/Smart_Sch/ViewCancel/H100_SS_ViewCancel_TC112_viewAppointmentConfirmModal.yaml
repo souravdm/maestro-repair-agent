@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC112 - View Appointment Confirm Modal"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request to cancel a visit to trigger the cancellation confirmation modal
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to cancel a visit"
+- waitForAnimationToEnd
+
+# Verify the cancellation confirmation modal appears with reason selection
+- assertVisible: "(?i).*(found the appointment.*cancel|do you want to cancel|Choose a reason).*"
+
+- takeScreenshot: SS_TC112_Cancel_Modal

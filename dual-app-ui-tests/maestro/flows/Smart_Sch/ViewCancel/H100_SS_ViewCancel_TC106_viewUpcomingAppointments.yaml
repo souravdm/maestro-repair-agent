@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC106 - View Upcoming Appointments"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - positive
+  - smoke
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request to view upcoming appointments
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my upcoming appointments"
+- waitForAnimationToEnd
+
+# Verify response shows upcoming appointments list or empty state
+- assertVisible: "(?i).*(upcoming appointments|Here are your.*upcoming|appointments.*scheduled|don't have any.*upcoming appointments).*"
+
+- takeScreenshot: SS_TC106_Upcoming_Appointments

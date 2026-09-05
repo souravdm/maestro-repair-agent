@@ -1,0 +1,46 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC145 - Neg Named Dependent Disambiguation"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - caregivee
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Named reference — could be a dependent under ELIZABETH_MILLER's account
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Book an appointment for Alex"
+- waitForAnimationToEnd
+
+# Named reference to possible dependent must trigger patient disambiguation
+- assertVisible: "(?i).*(select a patient|which patient|Who.*Alex|confirm.*patient|choose.*patient|Alex.*dependent).*"
+
+- takeScreenshot: SS_TC145_Neg_Named_Dependent_Disambiguation

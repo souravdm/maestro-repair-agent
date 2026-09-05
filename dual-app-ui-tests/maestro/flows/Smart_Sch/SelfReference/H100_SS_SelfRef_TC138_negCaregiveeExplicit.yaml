@@ -1,0 +1,51 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC138 - Neg Caregivee Explicit"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - caregivee
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# ELIZABETH_MILLER has dependents — must enter caregivee flow, NOT self
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My son needs a flu shot"
+- waitForAnimationToEnd
+
+# System must route to patient selection for dependent, not schedule for logged-in user
+- assertVisible: "(?i).*(select a patient|Who.*this.*for|which patient|choose.*patient|your.*son|dependent).*"
+
+# System must NOT schedule for self when caregivee intent is explicit
+- assertNotVisible:
+    text: "(?i).*(scheduling.*for you|your appointment).*"
+    optional: true
+
+- takeScreenshot: SS_TC138_Neg_Caregivee_Not_Self

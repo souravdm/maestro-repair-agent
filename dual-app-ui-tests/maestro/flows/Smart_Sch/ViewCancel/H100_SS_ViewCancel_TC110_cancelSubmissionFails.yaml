@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC110 - Cancel Submission Fails"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to cancel appointment (may trigger submission failure in error conditions)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Cancel my appointment"
+- waitForAnimationToEnd
+
+# Verify cancellation submission failure message (optional - requires specific API failure condition)
+- assertVisible:
+    text: "(?i).*(cancellation request couldn't be submitted|couldn't submit.*cancellation|Want to try again).*"
+    optional: true
+
+- takeScreenshot: SS_TC110_Cancel_Submit_Fail

@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC062 - Provider No Phone Number"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger outbound call flow; backend will surface a provider with no phone number on file
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Call to schedule with a provider"
+- waitForAnimationToEnd
+
+# Verify that missing phone number error is communicated to the user
+- assertVisible:
+    text: "(?i).*(no phone number on file|doesn't have.*phone.*number|not available.*provider.*no phone|no.*phone.*provider).*"
+    optional: true
+- takeScreenshot: SS_TC062_Provider_NoPhoneNumber

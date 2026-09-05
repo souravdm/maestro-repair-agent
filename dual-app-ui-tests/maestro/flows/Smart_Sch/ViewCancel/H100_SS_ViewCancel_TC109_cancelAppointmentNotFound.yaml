@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC109 - Cancel Appointment Not Found"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to cancel a non-existent appointment ID
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Cancel appointment ID 99999FAKE"
+- waitForAnimationToEnd
+
+# Verify graceful not-found error message
+- assertVisible: "(?i).*(couldn't find.*appointment|appointment.*not found|Want to try again).*"
+
+- takeScreenshot: SS_TC109_Appt_Not_Found

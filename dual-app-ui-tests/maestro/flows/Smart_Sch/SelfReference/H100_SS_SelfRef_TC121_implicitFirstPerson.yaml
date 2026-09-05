@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC121 - Implicit First Person"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# First-person implicit self-reference
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to schedule a flu shot"
+- waitForAnimationToEnd
+
+# Patient selection prompt must NOT appear — user is implicitly self
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient|choose.*patient|for whom).*"
+    optional: true
+
+# Scheduling flow continues for logged-in user
+- assertVisible: "(?i).*(What.*reason.*visit|scheduling.*for you|How can I help|I can help.*schedule|flu shot|vaccine|clinic).*"
+
+- takeScreenshot: SS_TC121_Self_Ref_Implicit_I_Need

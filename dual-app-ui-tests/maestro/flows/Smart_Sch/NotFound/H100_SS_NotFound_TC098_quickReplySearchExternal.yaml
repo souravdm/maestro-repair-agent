@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC098 - Quick Reply Search External"
+tags:
+  - smart_scheduler
+  - not_found
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send a MinuteClinic scheduling request to trigger not-found and surface the external providers option
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a MinuteClinic visit today"
+- waitForAnimationToEnd
+
+# If 'Search for external providers' chip is visible, tap it and verify provider search results
+- runFlow:
+    when:
+      visible: "(?i).*(Search for external providers).*"
+    commands:
+      - runFlow:
+          file: ../../../subflows/HAIO/interactions/select-quick-reply.yaml
+          env:
+            REPLY_TEXT: "Search for external providers"
+      - waitForAnimationToEnd
+      # Verify external provider search results are shown
+      - assertVisible: "(?i).*(external providers|provider.*search|best matches|find.*provider).*"
+
+- takeScreenshot: SS_TC098_External_Providers

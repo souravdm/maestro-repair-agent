@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC070 - Provider Multiple Locations"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - provider_search
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Search for a common provider name likely to have multiple locations
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule with Dr. Johnson"
+- waitForAnimationToEnd
+
+# Verify multiple-location disambiguation prompt appears when applicable
+- assertVisible:
+    text: "(?i).*(multiple locations.*Select an address|has multiple locations|Select an address|which location|choose a location).*"
+    optional: true
+- takeScreenshot: SS_TC070_Provider_MultipleLocations

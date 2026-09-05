@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC008 - Virtual Visit Reason Accepted"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - positive
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a virtual visit reason
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to see a doctor online"
+- waitForAnimationToEnd
+
+# System should recognize the virtual visit intent and route accordingly
+- assertVisible: "(?i).*(help you find a provider|speciality|services|reason for your visit).*"
+
+- takeScreenshot: SS_TC008_Virtual_Visit_Reason_Accepted

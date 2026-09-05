@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC094 - Nonurgent Next Day"
+tags:
+  - smart_scheduler
+  - not_found
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message requesting non-urgent same-day visit (likely to trigger not-found for today)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a non-urgent MinuteClinic visit for today"
+- waitForAnimationToEnd
+
+# Verify not-found next-day availability message
+# Full expected text: "I'm not finding any availability today. However, there are visits available as soon as tomorrow morning.
+# Here are the closest matches based on your preferences."
+- assertVisible: "(?i).*(not finding any availability today.*tomorrow|available.*tomorrow morning|closest matches.*preferences).*"
+
+# Verify visit preferences card details (optional - may not render in all environments)
+- assertVisible:
+    text: "(?i).*(Visit reason.*|Patient:.*|Location:.*|Time requested:.*).*"
+    optional: true
+
+# Verify quick reply chips are present
+- assertVisible: "(?i).*(Update visit preferences|Search for external providers).*"
+
+- takeScreenshot: SS_TC094_NotFound_NextDay

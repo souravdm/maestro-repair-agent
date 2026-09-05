@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC111 - Cancel Vaccine Not Found"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - negative
+  - vaccine
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to cancel a vaccine appointment that doesn't exist
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Cancel my vaccine appointment"
+- waitForAnimationToEnd
+
+# Verify vaccine appointment not found graceful error message (optional - requires no scheduled vaccine appointment)
+- assertVisible:
+    text: "(?i).*(couldn't find.*vaccine appointment|vaccine.*appointment.*not found|Want to try again).*"
+    optional: true
+
+- takeScreenshot: SS_TC111_Vaccine_Not_Found

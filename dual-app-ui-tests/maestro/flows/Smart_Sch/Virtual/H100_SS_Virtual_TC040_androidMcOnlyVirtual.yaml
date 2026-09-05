@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Virtual | TC040 - Android Mc Only Virtual"
+tags:
+  - smart_scheduler
+  - virtual
+  - platform_android
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# NOTE: Run only on Android - iOS shows full virtual options (MinuteClinic + Counsel Health + etc).
+# On Android, only MinuteClinic virtual option is available; Counsel Health virtual is not shown.
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request a virtual care visit
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual care visit"
+- waitForAnimationToEnd
+
+# Android must show MinuteClinic as a virtual option
+- assertVisible: "MinuteClinic"
+
+# Android must NOT show Counsel Health virtual option
+- assertNotVisible: "Counsel Health virtual"
+  optional: true
+
+- takeScreenshot: SS_TC040_Android_Virtual_MC_Only

@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC009 - Ambiguous Reason Clarification"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - edge_case
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send an ambiguous reason that does not map to a specific service
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I'm not feeling well"
+- waitForAnimationToEnd
+
+# System must NOT show an error state - it should ask a clarifying question
+- assertNotVisible: "(?i).*(error|something went wrong|unexpected).*"
+
+# System should prompt for more information to resolve ambiguity
+- assertVisible: "(?i).*(tell me more|which type|what kind.*care|how can I help|can you tell|what.*bring you in|what.*help).*"
+
+- takeScreenshot: SS_TC009_Ambiguous_Reason_Clarification

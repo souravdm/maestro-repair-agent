@@ -1,0 +1,46 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Virtual | TC038 - Cards Initial Display"
+tags:
+  - smart_scheduler
+  - virtual
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request a virtual doctor visit
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual doctor visit"
+- waitForAnimationToEnd
+
+# Verify the virtual intent is recognized and routing response appears
+- assertVisible: "(?i).*(virtual|video visit|online.*visit|MinuteClinic.*video|telehealth|video.*care).*"
+
+# Verify at least one of the 3 virtual care option cards is shown
+- assertVisible: "(?i).*(MinuteClinic|Counsel Health|on-demand|virtual.*option|video.*visit.*option|available.*virtual).*"
+
+- takeScreenshot: SS_TC038_Virtual_Cards_Initial_Display

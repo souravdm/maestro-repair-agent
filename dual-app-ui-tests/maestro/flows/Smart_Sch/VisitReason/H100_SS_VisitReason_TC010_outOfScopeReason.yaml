@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC010 - Out Of Scope Reason"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - negative
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a reason that is clearly outside supported MinuteClinic services
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a root canal"
+- waitForAnimationToEnd
+
+# System should gracefully indicate this is not a supported service
+# extendedWaitUntil absorbs any remaining generation time after send-message.yaml returns
+- extendedWaitUntil:
+    visible: "(?i).*(root canal|can.t help|not finding|more details|not available|scheduling tool|Find care|not a service|not something|dental|dentist|tooth|outside|scope|suggest|not able to help|unable|specializ).*"
+    timeout: 90000
+
+- takeScreenshot: SS_TC010_Out_Of_Scope_Reason

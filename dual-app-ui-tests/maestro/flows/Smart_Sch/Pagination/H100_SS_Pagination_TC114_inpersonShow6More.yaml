@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Pagination | TC114 - Inperson Show 6 More"
+tags:
+  - smart_scheduler
+  - pagination
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request in-person MinuteClinic locations to trigger clinic list
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find MinuteClinic locations near me"
+- waitForAnimationToEnd
+
+# Verify clinic list header is visible
+- assertVisible: ${output.smart_scheduler.clinicListHeader}
+
+# Figma note: When 'Show 6 more results' tapped, initial options dismiss and full list reloads
+# Tap 'Show 6 more results' pagination button (optional - only appears when > initial results)
+- runFlow:
+    when:
+      visible: "(?i).*(Show 6 more results|Show more results).*"
+    commands:
+      - tapOn: "(?i).*(Show 6 more results|Show more results).*"
+      - waitForAnimationToEnd
+      # Verify 6 more options are loaded
+      - assertVisible:
+          text: "(?i).*(Here are 6 more options|6 more.*options|more options for you).*"
+          optional: true
+
+- takeScreenshot: SS_TC114_Show_6_More

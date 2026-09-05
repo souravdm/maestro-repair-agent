@@ -1,0 +1,25 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC006 - Inperson Visit Reason Accepted"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - positive
+  - smoke
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a clear in-person visit reason - flu shot is a supported MinuteClinic service
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a flu shot"
+- waitForAnimationToEnd
+
+# System should accept the reason and advance toward scheduling
+- assertVisible: "(?i).*(More than one|Flu Vaccine).*"
+
+- takeScreenshot: SS_TC006_InPerson_Visit_Reason_Accepted

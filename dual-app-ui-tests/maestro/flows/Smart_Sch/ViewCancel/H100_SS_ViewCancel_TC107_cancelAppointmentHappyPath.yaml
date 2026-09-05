@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC107 - Cancel Appointment Happy Path"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Execute the cancel appointment subflow (happy path - requires a scheduled appointment)
+- runFlow: ../../../subflows/Smart_Sch/cancel/cancel-appointment-flow.yaml
+
+# Verify appointment cancellation success message
+- assertVisible: "(?i).*(appointment is canceled|Your appointment is canceled).*"
+
+- takeScreenshot: SS_TC107_Appointment_Canceled

@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC125 - No Subject Defaults Self"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# No explicit subject — should default to logged-in user
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Need a flu shot next week"
+- waitForAnimationToEnd
+
+# Subjectless message should default to self without asking
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+- assertVisible: "(?i).*(flu shot|vaccine|clinic|schedule|next week|I can help).*"
+
+- takeScreenshot: SS_TC125_Self_Ref_No_Subject_Defaults_Self

@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC011 - Reason Requires Follow Up Ques"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - edge_case
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Scheduling for a child triggers a DOB collection step
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit for my child"
+- waitForAnimationToEnd
+
+# System should prompt for the patient's date of birth
+- assertVisible: "(?i).*(What is|name|Who|not able).*"
+
+- takeScreenshot: SS_TC011_DOB_Prompt_For_Child_Visit

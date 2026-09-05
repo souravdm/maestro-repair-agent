@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Pagination | TC115 - Lab Pagination Behavior"
+tags:
+  - smart_scheduler
+  - pagination
+  - lab
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request Quest Lab locations to trigger lab location list
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find Quest Lab locations near me"
+- waitForAnimationToEnd
+
+# Verify lab location list is visible
+- assertVisible: "(?i).*(Quest|lab.*location|location.*lab).*"
+
+# Tap pagination button if present (optional - only appears when > initial results)
+- runFlow:
+    when:
+      visible: "(?i).*(Show 6 more results|Show more).*"
+    commands:
+      - tapOn: "(?i).*(Show 6 more results|Show more).*"
+      - waitForAnimationToEnd
+      # Verify 6 more options loaded
+      - assertVisible:
+          text: "(?i).*(6 more options|more.*options).*"
+          optional: true
+
+- takeScreenshot: SS_TC115_Lab_Pagination

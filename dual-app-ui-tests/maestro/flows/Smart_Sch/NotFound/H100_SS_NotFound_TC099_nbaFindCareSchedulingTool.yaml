@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC099 - Nba Find Care Scheduling Tool"
+tags:
+  - smart_scheduler
+  - not_found
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger the NBA (Next Best Action) card for care scheduling
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to find care"
+- waitForAnimationToEnd
+
+# NBA (Next Best Action) card persists in chat for easy scheduling tool access
+# Verify the scheduling tool card appears (optional - requires NBA card feature to be active)
+- assertVisible:
+    text: "(?i).*(Find care with scheduling tool|scheduling tool).*"
+    optional: true
+
+# If visible, tap and verify navigation to scheduling tool
+- runFlow:
+    when:
+      visible: "(?i).*(Find care with scheduling tool|scheduling tool).*"
+    commands:
+      - tapOn: "(?i).*(Find care with scheduling tool|scheduling tool).*"
+      - waitForAnimationToEnd
+
+- takeScreenshot: SS_TC099_NBA_Card

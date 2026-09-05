@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC137 - Neg Third Person He"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# 'He' refers to someone other than the user — clarification required
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "He needs a vaccination appointment"
+- waitForAnimationToEnd
+
+# Third-person pronoun must trigger patient clarification — must not self-schedule
+- assertVisible: "(?i).*(Who.*this.*for|which patient|select a patient|for whom|who.*he|please.*clarify).*"
+
+# System must NOT start booking flow without patient identification
+- assertNotVisible:
+    text: "(?i).*(What.*reason.*visit|clinic.*near|schedule.*you).*"
+    optional: true
+
+- takeScreenshot: SS_TC137_Neg_Third_Person_He

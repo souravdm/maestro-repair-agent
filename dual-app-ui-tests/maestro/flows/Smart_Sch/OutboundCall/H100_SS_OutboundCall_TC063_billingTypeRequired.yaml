@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC063 - Billing Type Required"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger outbound call flow to reach billing type selection gate
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Have the office call me to schedule"
+- waitForAnimationToEnd
+
+# Verify billing type prompt is shown before submission is allowed
+- assertVisible: "(?i).*(billing type.*continue|Select your billing type|how.*pay.*visit|billing.*required|payment.*type).*"
+- takeScreenshot: SS_TC063_BillingType_Required

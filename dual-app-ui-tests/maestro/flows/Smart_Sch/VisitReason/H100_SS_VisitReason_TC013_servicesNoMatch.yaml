@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC013 - Services No Match"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - negative
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a highly specific reason unlikely to match any available service
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a very specific experimental procedure"
+- waitForAnimationToEnd
+
+# System should indicate no matching services were found
+- assertVisible: "(?i).*(No services matched|try a different description|tell me more|no.*services.*match|rephrase|not able to).*"
+
+- takeScreenshot: SS_TC013_No_Services_Match

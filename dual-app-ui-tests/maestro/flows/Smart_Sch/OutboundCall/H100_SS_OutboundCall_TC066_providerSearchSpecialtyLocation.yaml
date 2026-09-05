@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC066 - Provider Search Specialty Location"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - provider_search
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Search for a provider using specialty + geographic location
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find a cardiologist near Boston MA"
+- waitForAnimationToEnd
+
+# Verify provider results list is shown with location/address information
+- assertVisible: "(?i).*(cardiologist|provider.*found|here are.*providers|best matches|results.*near).*"
+- waitForAnimationToEnd
+
+# Address details should be visible in at least one result
+- assertVisible:
+    text: "(?i).*(Boston|MA|address|miles away|location).*"
+    optional: true
+- takeScreenshot: SS_TC066_ProviderSearch_SpecialtyLocation

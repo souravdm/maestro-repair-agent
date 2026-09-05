@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Virtual | TC041 - Visit Provider Greeting"
+tags:
+  - smart_scheduler
+  - virtual
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger the virtual visit flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to see a doctor virtually"
+- waitForAnimationToEnd
+
+# Verify provider greeting response is shown
+- assertVisible: "(?i).*(Great, how would you like to connect|connect with a provider|Video visit|video.*MinuteClinic|see a provider).*"
+- takeScreenshot: SS_TC041_Virtual_Greeting

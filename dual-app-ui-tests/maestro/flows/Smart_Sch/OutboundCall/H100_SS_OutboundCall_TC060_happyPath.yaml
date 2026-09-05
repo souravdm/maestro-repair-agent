@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Outbound Call | TC060 - Happy Path"
+tags:
+  - smart_scheduler
+  - outbound_call
+  - positive
+  - smoke
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger outbound call scheduling flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Call my doctor's office to schedule an appointment"
+- waitForAnimationToEnd
+
+# Verify provider search is initiated
+- assertVisible: "(?i).*(provider.*name|What.*specialty|help.*find.*provider|search.*provider|find a doctor).*"
+- waitForAnimationToEnd
+
+# After provider search and selection, verify submission confirmation
+- assertVisible:
+    text: "(?i).*(request is submitted.*call.*office|submitted.*call.*schedule|call.*office.*submitted|request.*submitted).*"
+    optional: true
+- takeScreenshot: SS_TC060_OutboundCall_HappyPath

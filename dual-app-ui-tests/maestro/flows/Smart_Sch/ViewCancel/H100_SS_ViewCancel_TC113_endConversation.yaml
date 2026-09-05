@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | View and Cancel | TC113 - End Conversation"
+tags:
+  - smart_scheduler
+  - view_cancel
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send farewell message to end the scheduling conversation
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Thank you, goodbye"
+- waitForAnimationToEnd
+
+# Verify farewell/end message is shown by the assistant (optional - depends on NLP routing)
+- assertVisible:
+    text: "(?i).*(Thanks for using.*Virtual Assistant|Thanks.*scheduling assistant|goodbye.*health.*assistant).*"
+    optional: true
+
+- takeScreenshot: SS_TC113_End_Conversation

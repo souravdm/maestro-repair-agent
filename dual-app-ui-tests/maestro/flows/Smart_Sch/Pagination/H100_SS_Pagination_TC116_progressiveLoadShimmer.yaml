@@ -1,0 +1,41 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Pagination | TC116 - Progressive Load Shimmer"
+tags:
+  - smart_scheduler
+  - pagination
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request MinuteClinic appointments to trigger availability fetch with shimmer
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find available MinuteClinic appointments"
+
+# Shimmer/loading indicator expected during availability fetch; may be transient
+# Attempt to catch the loading state (optional - very brief, may not be captured)
+- assertVisible:
+    text: "(?i).*(loading|shimmer|fetching).*"
+    optional: true
+
+- waitForAnimationToEnd
+
+# After load completes, verify clinic list or response is visible
+- assertVisible: "(?i).*(MinuteClinic|clinic|appointment|visit|available).*"
+
+- takeScreenshot: SS_TC116_Progressive_Load

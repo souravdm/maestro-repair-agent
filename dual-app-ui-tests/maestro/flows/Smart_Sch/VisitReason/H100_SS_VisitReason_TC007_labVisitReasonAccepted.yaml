@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Visit Reason | TC007 - Lab Visit Reason Accepted"
+tags:
+  - smart_scheduler
+  - visit_reason
+  - positive
+---
+
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Send a lab visit reason - blood work at Quest Labs
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need blood work done at Quest Labs"
+- waitForAnimationToEnd
+
+# System should accept the lab reason and proceed with scheduling
+- assertVisible: "(?i).*(lab|Quest|blood work|blood.*test|schedule.*lab|test.*scheduled|medical|records).*"
+
+- takeScreenshot: SS_TC007_Lab_Visit_Reason_Accepted

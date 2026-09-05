@@ -1,0 +1,60 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Self Reference | TC129 - Context Switch Caregivee To Self"
+tags:
+  - smart_scheduler
+  - self_reference
+  - nlp
+  - caregivee
+  - multi_turn
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: Request for caregivee — patient selection shown
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a MinuteClinic visit for my daughter"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(select a patient|Who.*this.*for|which patient|choose.*patient).*"
+
+# Step 2: Override to self — should resolve to logged-in user
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Actually, I need one for myself instead"
+- waitForAnimationToEnd
+
+# Patient selection must clear after self override
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+- assertVisible: "(?i).*(scheduling.*for you|What.*reason|I can help|clinic|MinuteClinic).*"
+
+- takeScreenshot: SS_TC129_Context_Switch_Caregivee_To_Self

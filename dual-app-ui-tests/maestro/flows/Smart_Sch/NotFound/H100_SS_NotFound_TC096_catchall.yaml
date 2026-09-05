@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Not Found | TC096 - Catchall"
+tags:
+  - smart_scheduler
+  - not_found
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send specific visit type request restricted to MinuteClinic to trigger catch-all not-found
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a flu evaluation visit, only show MinuteClinic"
+- waitForAnimationToEnd
+
+# Verify catch-all not-found message
+# Full expected: "I'm not finding any flu evaluation visits based on your preferences.
+# Try updating your preferences or expanding your search to external providers."
+- assertVisible: "(?i).*(not finding any.*visits.*preferences|Try updating your preferences|expanding your search.*external providers).*"
+
+# Verify quick reply chips are present
+- assertVisible: "(?i).*(Update visit preferences|Search for external providers).*"
+
+- takeScreenshot: SS_TC096_NotFound_Catchall

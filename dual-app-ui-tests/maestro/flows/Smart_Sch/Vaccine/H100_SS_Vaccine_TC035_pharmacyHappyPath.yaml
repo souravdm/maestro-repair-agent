@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Vaccine | TC035 - Pharmacy Happy Path"
+tags:
+  - smart_scheduler
+  - vaccine
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Health/VaccineScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request a flu vaccine at CVS Pharmacy - a supported vaccine scheduling path
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to schedule a flu vaccine at CVS Pharmacy"
+- waitForAnimationToEnd
+
+# System should route to vaccine/pharmacy scheduling
+- assertVisible: "(?i).*(vaccine|pharmacy|flu.*shot|schedule.*vaccine|CVS.*pharmacy.*vaccine|vaccine.*CVS).*"
+
+# Booking confirmation or pharmacy selection should follow
+- assertVisible: "(?i).*(pharmacy.*near|confirm.*vaccine|select.*pharmacy|book.*vaccine|schedule.*flu).*"
+  optional: true
+
+- takeScreenshot: SS_TC035_Vaccine_Pharmacy_Happy_Path
