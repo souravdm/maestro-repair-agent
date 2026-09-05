@@ -1,0 +1,54 @@
+{
+  "name": "maestro-flow-recorder-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Maestro Flow Recorder - Frontend",
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@monaco-editor/react": "^4.6.0",
+    "@mui/icons-material": "^5.15.15",
+    "@mui/material": "^5.15.15",
+    "ajv": "^8.0.0",
+    "axios": "^1.6.8",
+    "d3": "^7.9.0",
+    "electron": "43.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3",
+    "react-scripts": "^5.0.1",
+    "typescript": "^4.9.5",
+    "uuid": "14.0.1",
+    "ws": "^8.17.0",
+    "yaml": "^2.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "@types/ws": "^8.5.10"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
