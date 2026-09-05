@@ -1,0 +1,28 @@
+# TC007: Explore More Menu Terms & Privacy as Guest User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC007 - Explore More Terms Privacy Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/Account/AccountTermsScreen.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.termsAndPrivacyNavBar}
+- assertVisible: ${output.account_terms.termsOfUseLink}
+- tapOn: ${output.common_buttons.backBtn}

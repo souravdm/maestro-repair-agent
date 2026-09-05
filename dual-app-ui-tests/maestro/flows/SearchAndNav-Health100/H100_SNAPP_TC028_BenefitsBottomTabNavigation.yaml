@@ -1,0 +1,79 @@
+# TC028: Benefits Bottom Tab Navigation as Signed In User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC028 - Benefits Bottom Tab Navigation"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Benefits/BenefitsDashboardScreen.js
+    - runScript: ../../screens/Benefits/ClaimsScreen.js
+    - runScript: ../../screens/Benefits/SpendingScreen.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+# Tap the Benefits bottom tab button
+- assertVisible: ${output.searchnav_bottom.benefitsTab}
+- tapOn: ${output.searchnav_bottom.benefitsTab}
+
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtnVariant}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtnVariant}
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+
+# Tap the Benefits sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.benefitsTab}
+- tapOn: ${output.searchnav_secondary_tabs.benefitsTab}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_navigation.benefitsTab}
+- assertVisible: ${output.benefits_landing.planSummariesTitle}
+- runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateYourCardsButtonNavigation.yaml
+
+# Validate Claims sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.claimsTab}
+- tapOn: ${output.searchnav_secondary_tabs.claimsTab}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_navigation.claimsTab}
+- assertVisible: ${output.benefits_claims_landing.submitClaimCard}
+- runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateYourCardsButtonNavigation.yaml
+
+# Validate Drug Pricing sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.drugPricingTab}
+- tapOn: ${output.searchnav_secondary_tabs.drugPricingTab}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_navigation.drugPricingTab}
+- assertVisible: ${output.benefits_spending_common.compareMedicationPricesTitle}
+- runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateYourCardsButtonNavigation.yaml

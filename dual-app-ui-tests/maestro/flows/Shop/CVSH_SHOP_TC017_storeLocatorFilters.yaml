@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC017 - Store Locator Filters"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Store locator with filters
+# Source: Migrated from XCUITest StoreLocatorTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+
+# Navigate to store locator
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/StoreLocatorScreen.js
+
+# Find a store
+- runFlow: ../../subflows/Shop/store-locator/findStore.yaml

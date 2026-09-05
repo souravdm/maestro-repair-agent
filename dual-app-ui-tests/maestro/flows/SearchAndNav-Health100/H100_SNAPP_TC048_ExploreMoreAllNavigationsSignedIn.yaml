@@ -1,0 +1,200 @@
+# TC048: Explore More Menu All Button Navigations as Signed In User - Combined (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC048 - Explore More All Navigations Signed In"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../screens/Benefits/MemberIDScreen.js
+  - runScript: ../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../screens/Benefits/DrugPricingScreen.js
+  - runScript: ../../screens/Benefits/SpendingScreen.js
+  - runScript: ../../screens/Health/HealthScreen.js
+  - runScript: ../../screens/Health/HealthRecordsScreen.js
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+  - runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+  - runScript: ../../screens/Account/AccountTermsScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+# Schedule Care
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.scheduleCareLnk}
+- tapOn: ${output.explore_more_menu.scheduleCareLnk}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.health_scheduling.findCareLabel}
+- assertVisible: ${output.health_scheduling.findTheCareYouNeed}
+- tapOn: ${output.common_buttons.backBtn}
+
+- waitForAnimationToEnd
+
+# Health Records
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.menu_screen.healthRecordsLnk}
+- tapOn: ${output.menu_screen.healthRecordsLnk}
+
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+      - assertVisible: ${output.health_records.healthRecordsTitle}
+      - assertVisible: ${output.health_records.yourPersonalHealthRecords}
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'prod'}
+    commands:
+      - assertVisible: ${output.common_navbars.healthNavBar}
+      - assertVisible: ${output.health_health.healthyUpdatesActionsLabel}
+- tapOn: ${output.common_navigation.homeTab}
+- waitForAnimationToEnd
+
+# Prescriptions
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.prescriptionsBtn}
+- tapOn: ${output.explore_more_menu.prescriptionsBtn}
+
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtnVariant}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtnVariant}
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+
+- assertVisible: ${output.pharmacy_screen.myPrescriptionsTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Transfer Rx
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.transferRxBtn}
+- tapOn: ${output.explore_more_menu.transferRxBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.pharmacy_transferRx.welcomeHeader}
+- tapOn: ${output.common_buttons.accountDashboardBackBtn}
+- waitForAnimationToEnd
+
+# Support & FAQ
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- tapOn: ${output.explore_more_menu.supportAndFAQBtn}
+
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+- assertVisible: ${output.search_help_center.helpCenterTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterPopularQuestionsTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterHowCanWeHelpTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Terms & Privacy
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.termsAndPrivacyNavBar}
+- assertVisible: ${output.account_terms.termsOfUseLink}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Benefits Summary
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.benefitsSummaryBtn}
+- tapOn: ${output.explore_more_menu.benefitsSummaryBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_dashboard_common.benefitsTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Claims
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.claimsBtn}
+- tapOn: ${output.explore_more_menu.claimsBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_claims_landing.claimsTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Drug Pricing
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.drugPricingBtn}
+- tapOn: ${output.explore_more_menu.drugPricingBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.drugPricingTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Find A Pharmacy
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.findAPharmacyBtn}
+- tapOn: ${output.explore_more_menu.findAPharmacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Find a Provider
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.findAProviderBtn}
+- tapOn: ${output.explore_more_menu.findAProviderBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_providers.providersHeader}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

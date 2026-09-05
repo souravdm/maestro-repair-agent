@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC009 - Extracare Plus Dashboard"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: ExtraCare Plus dashboard
+# Source: Migrated from XCUITest ECPlusTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runScript: ../../screens/Shop/ECPlusDashboardScreen.js
+- assertVisible: ${output.shop_ecPlusDashboard.ecPlusDashboardTitle}

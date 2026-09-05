@@ -1,0 +1,97 @@
+# TC047: Explore More Menu All Button Navigations as Guest User - Combined (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC047 - Explore More All Navigations Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript: ../../screens/Health/HealthScreen.js
+    - runScript: ../../screens/Account/LoginScreen.js
+    - runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+    - runScript: ../../screens/Account/AccountTermsScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+
+# Schedule Care
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.scheduleCareLnk}
+- tapOn: ${output.explore_more_menu.scheduleCareLnk}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.health_scheduling.findCareLabel}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Health Records
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.menu_screen.healthRecordsLnk}
+- tapOn: ${output.menu_screen.healthRecordsLnk}
+
+- runFlow:
+    file: ../../subflows/Account/signin/validateH100LoginScreen.yaml
+- tapOn: ${output.account_h100_login.continueGuestH100Button}
+- waitForAnimationToEnd
+
+# Prescriptions
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.prescriptionsBtn}
+- tapOn: ${output.explore_more_menu.prescriptionsBtn}
+
+- runFlow:
+    file: ../../subflows/Account/signin/validateH100LoginScreen.yaml
+- tapOn: ${output.account_h100_login.continueGuestH100Button}
+- waitForAnimationToEnd
+
+# Transfer Rx
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.transferRxBtn}
+- tapOn: ${output.explore_more_menu.transferRxBtn}
+
+- runFlow:
+    file: ../../subflows/Account/signin/validateH100LoginScreen.yaml
+- tapOn: ${output.account_h100_login.continueGuestH100Button}
+- waitForAnimationToEnd
+
+# Support & FAQ
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- tapOn: ${output.explore_more_menu.supportAndFAQBtn}
+
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+- assertVisible: ${output.search_help_center.helpCenterTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Terms & Privacy
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.termsAndPrivacyNavBar}
+- tapOn: ${output.common_buttons.backBtn}

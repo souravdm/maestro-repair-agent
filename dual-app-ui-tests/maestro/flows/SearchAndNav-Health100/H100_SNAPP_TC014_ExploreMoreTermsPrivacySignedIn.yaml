@@ -1,0 +1,38 @@
+# TC014: Explore More Menu Terms & Privacy as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC014 - Explore More Terms Privacy Signed In"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/Account/AccountTermsScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- swipe:
+    direction: UP
+
+- assertVisible: ${output.explore_more_menu.termsAndPrivacyBtn}
+- tapOn: ${output.explore_more_menu.termsAndPrivacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.termsAndPrivacyNavBar}
+- assertVisible: ${output.account_terms.termsOfUseLink}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

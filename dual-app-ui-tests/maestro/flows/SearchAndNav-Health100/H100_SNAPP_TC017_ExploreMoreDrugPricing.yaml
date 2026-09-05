@@ -1,0 +1,38 @@
+# TC017: Explore More Menu Drug Pricing as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC017 - Explore More Drug Pricing"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Benefits/DrugPricingScreen.js
+  - runScript: ../../screens/Benefits/SpendingScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+
+- assertVisible: ${output.explore_more_menu.drugPricingBtn}
+- tapOn: ${output.explore_more_menu.drugPricingBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.drugPricingTitle}
+- assertVisible: ${output.benefits_spending_common.compareMedicationPricesTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

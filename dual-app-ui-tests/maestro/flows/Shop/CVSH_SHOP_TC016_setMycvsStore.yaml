@@ -1,0 +1,14 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC016 - Set Mycvs Store"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Set myCVS store
+# Source: Migrated from XCUITest StoreLocatorTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+
+# Find and set a store
+- runFlow: ../../subflows/Shop/store-locator/findStore.yaml
+- runFlow: ../../subflows/Shop/store-locator/setMyCVSStore.yaml

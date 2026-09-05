@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC006 - Checkout Pickup"
+tags:
+  - shop
+  - critical
+  - migrated-xcuitest
+---
+# Flow: Checkout with pickup
+# Source: Migrated from XCUITest CheckoutTests.testSignInCheckoutPickup
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Navigate to cart and checkout
+- runScript: ../../screens/Common/CommonScreen.js
+- tapOn: ${output.common_navigation.cartIcon}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Shop/checkout/completeCheckout.yaml

@@ -1,0 +1,57 @@
+# TC024: Pharmacy Bottom Tab Navigation as Guest User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC024 - Pharmacy Bottom Tab Navigation Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- waitForAnimationToEnd
+
+# Tap the Pharmacy bottom tab button
+- assertVisible: ${output.searchnav_bottom.pharmacyBtn}
+- tapOn: ${output.searchnav_bottom.pharmacyBtn}
+- waitForAnimationToEnd
+
+# Validate Orders sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.orders}
+- tapOn: ${output.searchnav_bottom_pharmacy.orders}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.ordersNavBar}
+- assertVisible: ${output.pharmacy_prescriptions_sign_in.signIntoPrescriptionsAcctLabel}
+
+# Validate Prescriptions sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.prescriptions}
+- tapOn: ${output.searchnav_bottom_pharmacy.prescriptions}
+- waitForAnimationToEnd
+- assertVisible: ${output.pharmacy_prescriptions_sign_in.pharmacyHeader}
+- assertVisible: ${output.pharmacy_prescriptions_sign_in.signIntoPrescriptionsAcctLabel}
+
+# Validate Spending sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.spending}
+- tapOn: ${output.searchnav_bottom_pharmacy.spending}
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+      - waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.spendingNavBar}
+- assertVisible: ${output.pharmacy_dashboard.smartSpendingLabel}
+
+# Validate More sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.more}
+- tapOn: ${output.searchnav_bottom_pharmacy.more}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.moreNavBar}
+- assertVisible: ${output.pharmacy_screen.transferPrescriptionsBtn}

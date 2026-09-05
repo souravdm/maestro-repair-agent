@@ -1,0 +1,86 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC008 - Complete Checkout And Payment"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - shop
+  - checkout
+  - e2e
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Checkout Flow
+# Verifies complete checkout process from cart to order confirmation
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Shop screen to load
+- assertVisible: ${SHOP_TITLE}
+
+- tapOn: ${SHOP_TAB}
+- assertVisible: ${SHOP_TITLE}
+
+# Add product to cart
+- tapOn:
+    id: "search_bar"
+- inputText: "aspirin"
+- tapOn: "Search"
+- tapOn:
+    text: ".*Aspirin.*"
+    
+    index: 0
+- tapOn: "Add to Cart"
+
+# Proceed to checkout
+- tapOn:
+    id: "cart_icon"
+- assertVisible: "Cart"
+- tapOn: "Checkout"
+
+# Verify checkout screen
+- assertVisible: "Checkout"
+- assertVisible: "Shipping Address"
+- assertVisible: "Payment Method"
+- assertVisible: "Order Summary"
+
+# Select shipping address
+- tapOn: "Shipping Address"
+- assertVisible: "Select Address"
+- tapOn:
+    text: ".*Home.*"
+    
+    index: 0
+
+# Select payment method
+- tapOn: "Payment Method"
+- assertVisible: "Select Payment"
+- tapOn:
+    text: ".*Visa.*|.*ending.*"
+    
+    index: 0
+
+# Review order
+- assertVisible: "Subtotal"
+- assertVisible: "Tax"
+- assertVisible: "Total"
+
+# Place order (non-transactional test - stop before final submission)
+- assertVisible: "Place Order"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

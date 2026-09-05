@@ -1,0 +1,63 @@
+# TC026: Health Bottom Tab Navigation as Guest User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC026 - Health Bottom Tab Navigation Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/Account/LoginScreen.js
+    - runScript: ../../screens/Health/HealthScreen.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- waitForAnimationToEnd
+
+# Tap the Health bottom tab button
+- assertVisible: ${output.searchnav_bottom.healthBtn}
+- tapOn: ${output.searchnav_bottom.healthBtn}
+- waitForAnimationToEnd
+
+# Validate Find Care sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.findCareTab}
+- tapOn: ${output.searchnav_secondary_tabs.findCareTab}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.findCareNavBar}
+- assertVisible: ${output.health_scheduling.findTheCareYouNeed}
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+      - runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+
+# Validate Your Health sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.yourHealthTab}
+- tapOn: ${output.searchnav_secondary_tabs.yourHealthTab}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.healthNavBar}
+- assertVisible: ${output.health_health.unlockHealthExpLabel}
+- runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+        # Validate Records sub-tab navigation
+        - assertVisible: ${output.searchnav_secondary_tabs.recordsTab}
+        - tapOn: ${output.searchnav_secondary_tabs.recordsTab}
+        - waitForAnimationToEnd
+        - runFlow: ../../subflows/Account/signin/validateH100LoginScreen.yaml
+        - tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+        # Validate Providers sub-tab navigation
+        - assertVisible: ${output.searchnav_secondary_tabs.providersTab}
+        - tapOn: ${output.searchnav_secondary_tabs.providersTab}
+        - waitForAnimationToEnd
+        - runFlow: ../../subflows/Account/signin/validateH100LoginScreen.yaml
+        - tapOn: ${output.account_health100_onboarding.continueAsAGuest}

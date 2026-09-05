@@ -1,0 +1,15 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC010 - Extracare Deals"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: View ExtraCare deals and rewards
+# Source: Migrated from XCUITest ExtraCareTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runFlow: ../../subflows/Shop/extracare/viewExtraCareDeals.yaml

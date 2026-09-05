@@ -1,0 +1,22 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC012 - Modern Cart Elements"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Verify modern cart elements
+# Source: Migrated from XCUITest CartTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Navigate to cart (assumes items in cart)
+- runScript: ../../screens/Common/CommonScreen.js
+- tapOn: ${output.common_navigation.cartIcon}
+- waitForAnimationToEnd
+
+# Verify cart elements
+- runFlow: ../../subflows/Shop/cart/viewModernCart.yaml

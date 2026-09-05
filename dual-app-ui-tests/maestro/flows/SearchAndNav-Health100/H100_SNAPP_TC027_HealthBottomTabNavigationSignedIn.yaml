@@ -1,0 +1,76 @@
+# TC027: Health Bottom Tab Navigation as Signed In User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC027 - Health Bottom Tab Navigation Signed In"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Health/HealthScreen.js
+    - runScript: ../../screens/Health/HealthRecordsScreen.js
+    - runScript: ../../screens/Benefits/ProvidersScreen.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+# Tap the Health bottom tab button
+- assertVisible: ${output.searchnav_bottom.healthBtn}
+- tapOn: ${output.searchnav_bottom.healthBtn}
+- waitForAnimationToEnd
+
+# Validate Find Care sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.findCareTab}
+- tapOn: ${output.searchnav_secondary_tabs.findCareTab}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.findCareNavBar}
+- assertVisible: ${output.health_scheduling.findTheCareYouNeed}
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+      - runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+
+# Validate Your Health sub-tab navigation
+- assertVisible: ${output.searchnav_secondary_tabs.yourHealthTab}
+- tapOn: ${output.searchnav_secondary_tabs.yourHealthTab}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.healthNavBar}
+- assertVisible: ${output.health_health.healthyUpdatesActionsLabel}
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+      - runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${output.detectedEnv == 'qa'}
+    commands:
+        # Validate Records sub-tab navigation
+        - assertVisible: ${output.searchnav_secondary_tabs.recordsTab}
+        - tapOn: ${output.searchnav_secondary_tabs.recordsTab}
+        - waitForAnimationToEnd
+        - assertVisible: ${output.common_navbars.recordsNavBar}
+        - assertVisible: ${output.health_records.yourPersonalHealthRecords}
+        - runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml
+        # Validate Providers sub-tab navigation
+        - assertVisible: ${output.searchnav_secondary_tabs.providersTab}
+        - tapOn: ${output.searchnav_secondary_tabs.providersTab}
+        - waitForAnimationToEnd
+        - assertVisible: ${output.common_navbars.providersNavBar}
+        - assertVisible: ${output.benefits_providers.manageConnectionPermissions}
+        - runFlow: ../../subflows/SearchAndNav/validateChatButtonNavigation.yaml

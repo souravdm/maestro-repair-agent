@@ -1,0 +1,37 @@
+# TC015: Explore More Menu Benefits Summary as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC015 - Explore More Benefits Summary"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Benefits/MemberIDScreen.js
+  - runScript: ../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.benefitsSummaryBtn}
+- tapOn: ${output.explore_more_menu.benefitsSummaryBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_dashboard_common.benefitsTitle}
+- assertVisible: ${output.benefits_memberid_member_selection.planSummaryAltLabel}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

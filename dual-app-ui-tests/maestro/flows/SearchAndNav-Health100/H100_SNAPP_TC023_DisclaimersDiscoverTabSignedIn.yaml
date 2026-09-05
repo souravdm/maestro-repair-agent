@@ -1,0 +1,37 @@
+# TC023: Disclaimers on Discover Tab as Signed In User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC023 - Disclaimers Discover Tab Signed In"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.tab_btns_h100.discoverBtn}
+- tapOn: ${output.tab_btns_h100.discoverBtn}
+
+- scrollUntilVisible:
+    element: ${output.disclaimers_h100.poweredByAILabel}
+    timeout: 40000
+    direction: DOWN
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/validateLearnMoreAboutAIDisclaimer.yaml
+
+- assertVisible: ${output.disclaimers_h100.restrictionsMayApplyLabel}
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/validateViewOfferInfoDisclaimers.yaml

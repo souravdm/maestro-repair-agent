@@ -1,0 +1,33 @@
+# TC021: Disclaimers on Discover Tab as Guest User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC021 - Disclaimers Discover Tab Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.tab_btns_h100.discoverBtn}
+- tapOn: ${output.tab_btns_h100.discoverBtn}
+
+- scrollUntilVisible:
+    element: ${output.disclaimers_h100.poweredByAILabel}
+    timeout: 40000
+    direction: DOWN
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/validateLearnMoreAboutAIDisclaimer.yaml
+
+- assertVisible: ${output.disclaimers_h100.restrictionsMayApplyLabel}
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/validateViewOfferInfoDisclaimers.yaml

@@ -1,0 +1,71 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC019 - View Product Details Page"
+tags:
+  - shop
+  - pdp
+  - product-details
+  - smoke
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: PDP Details Sections
+
+# Wait for app to load
+- assertVisible: ${SHOP_TAB}
+
+- tapOn: ${SHOP_TAB}
+- tapOn: ${SEARCH_FIELD}
+- inputText: "Band-Aid"
+- tapOn: "Band-Aid"
+
+# Verify PDP elements
+- assertVisible: ${PRODUCT_NAME}
+- assertVisible: ${QTY_LABEL}
+
+# Test: Details Section
+- scrollUntilVisible:
+    element:
+      text: ${DETAILS_BTN}
+    direction: DOWN
+- tapOn: ${DETAILS_BTN}
+- assertVisible: "Details"
+- tapOn: ${BACK_BTN}
+
+# Test: Ingredients Section
+- scrollUntilVisible:
+    element:
+      text: ${INGREDIENTS_BTN}
+    direction: DOWN
+- tapOn: ${INGREDIENTS_BTN}
+- assertVisible: "Ingredients"
+- tapOn: ${BACK_BTN}
+
+# Test: Directions Section
+- scrollUntilVisible:
+    element:
+      text: ${DIRECTIONS_BTN}
+    direction: DOWN
+- tapOn: ${DIRECTIONS_BTN}
+- assertVisible: "Directions"
+- tapOn: ${BACK_BTN}
+
+# Test: Warnings Section
+- scrollUntilVisible:
+    element:
+      text: ${WARNINGS_BTN}
+    direction: DOWN
+- tapOn: ${WARNINGS_BTN}
+- assertVisible: "Warnings"
+- tapOn: ${BACK_BTN}
+
+# Test: Reviews Section
+- scrollUntilVisible:
+    element:
+      text: ${REVIEWS_BTN}
+    direction: DOWN
+- tapOn: ${REVIEWS_BTN}
+- assertVisible: "Reviews"
+- assertVisible: ${WRITE_REVIEW_BTN}

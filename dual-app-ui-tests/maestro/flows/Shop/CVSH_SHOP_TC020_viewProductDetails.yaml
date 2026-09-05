@@ -1,0 +1,28 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC020 - View Product Details"
+tags:
+  - shop
+  - smoke
+  - migrated-xcuitest
+---
+# Flow: View product detail page
+# Source: Migrated from XCUITest PDPTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Search for a product
+- runFlow:
+    file: ../../subflows/SearchAndNav/searchForProduct.yaml
+    env:
+      SEARCH_QUERY: "vitamins"
+
+# Tap on first product result to open PDP
+- tapOn:
+    index: 0
+    text: ".*"
+
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Shop/pdp/viewProductDetails.yaml

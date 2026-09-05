@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC014 - Search And Add Products To Cart"
+tags:
+  - shop
+  - search
+  - cart
+  - smoke
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Search Product and Add to Cart
+
+# Wait for app to load
+- assertVisible: ${HOME_TAB}
+
+- assertVisible: ${HOME_TAB}
+
+# Navigate to Shop
+- tapOn: ${SHOP_TAB}
+- assertVisible: ${SHOP_TITLE}
+
+# Search for product
+- tapOn: ${SEARCH_FIELD}
+- inputText: "Vitamin C"
+- tapOn: "Vitamin C"
+
+# Verify PDP elements
+- assertVisible: ${PRODUCT_NAME}
+- assertVisible: ${HOW_TO_GET_IT}
+- assertVisible: ${QTY_LABEL}
+
+# Verify shipping availability
+- assertVisible:
+    text: "${ADD_FOR_SHIPPING_BTN}|${ADD_FOR_PICKUP_BTN}|${ADD_TO_CART_BTN}"
+
+# Add to cart
+- tapOn:
+    text: "${ADD_FOR_SHIPPING_BTN}|${ADD_TO_CART_BTN}"
+- assertVisible: ${ADDED_TO_CART_MSG}
+
+# Navigate to cart
+- tapOn: ${CART_BTN}
+- assertVisible: ${CART_TITLE}
+- assertVisible: "Vitamin C"
+- assertVisible: ${CHECKOUT_BTN}

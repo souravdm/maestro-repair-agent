@@ -1,0 +1,70 @@
+# TC025: Pharmacy Bottom Tab Navigation as Signed In User (H100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC025 - Pharmacy Bottom Tab Navigation Signed In"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Common/CommonScreen.js
+    - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+# Tap the Pharmacy bottom tab button
+- assertVisible: ${output.searchnav_bottom.pharmacyBtn}
+- tapOn: ${output.searchnav_bottom.pharmacyBtn}
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtnVariant}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtnVariant}
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+
+# Validate Orders sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.orders}
+- tapOn: ${output.searchnav_bottom_pharmacy.orders}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.ordersNavBar}
+- runFlow: ../../subflows/SearchAndNav/validateYourCardsButtonNavigation.yaml
+
+# Validate Prescriptions sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.prescriptions}
+- tapOn: ${output.searchnav_bottom_pharmacy.prescriptions}
+- waitForAnimationToEnd
+- assertVisible: ${output.pharmacy_prescriptions_sign_in.pharmacyHeader}
+- runFlow: ../../subflows/SearchAndNav/validateYourCardsButtonNavigation.yaml
+- runFlow: ../../subflows/SearchAndNav/validatePrescriptionsCartButtonNavigation.yaml
+
+# Validate Spending sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.spending}
+- tapOn: ${output.searchnav_bottom_pharmacy.spending}
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+- assertVisible: ${output.common_navbars.spendingNavBar}
+- assertVisible: ${output.pharmacy_dashboard.smartSpendingLabel}
+
+# Validate More sub-tab navigation
+- assertVisible: ${output.searchnav_bottom_pharmacy.more}
+- tapOn: ${output.searchnav_bottom_pharmacy.more}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navbars.moreNavBar}
+- assertVisible: ${output.pharmacy_screen.transferPrescriptionsBtn}

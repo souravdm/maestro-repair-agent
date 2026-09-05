@@ -1,0 +1,45 @@
+# TC039: Side Menu Top NavBar as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC039 - Side Menu Top Navbar Signed In"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript: ../../screens/Menu/MenuScreen.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow: ../../subflows/SearchAndNav/openSideMenu.yaml
+
+- waitForAnimationToEnd
+- assertVisible: ${output.common_buttons.messagesBtn}
+- assertVisible: ${output.common_buttons.backBtn}
+
+# Validating Messages Button Navigation
+- runFlow: ../../subflows/SearchAndNav/validateMessagesButtonNavigation.yaml
+
+- runFlow: ../../subflows/SearchAndNav/openSideMenu.yaml
+
+# Validating Cart Button Navigation
+- runFlow: ../../subflows/SearchAndNav/validatePrescriptionsCartButtonNavigation.yaml
+
+- runFlow: ../../subflows/SearchAndNav/openSideMenu.yaml
+
+# Validating Close Button Navigation
+- assertVisible: ${output.common_buttons.backBtn}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+- assertNotVisible: ${output.common_buttons.backBtn}

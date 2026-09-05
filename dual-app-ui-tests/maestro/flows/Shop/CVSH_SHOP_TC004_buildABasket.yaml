@@ -1,0 +1,16 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC004 - Build A Basket"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Build a basket
+# Source: Migrated from XCUITest BABTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+- runScript: ../../screens/Shop/BuildABasketScreen.js
+- assertVisible: ${output.shop_buildABasket.buildABasketNavBar}

@@ -1,0 +1,79 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC011 - Find Nearby Store Locations"
+tags:
+  - shop
+  - store_locator
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Store Locator Functionality
+# Verifies store search, filters, and store details
+
+# Wait for app to load
+- assertVisible: ${HOME_TAB}
+
+- assertVisible: ${HOME_TAB}
+
+# Navigate to Store Locator
+- tapOn: ${MENU_TAB}
+- assertVisible: ${MENU_TAB}
+- tapOn: "Find a Store"
+- assertVisible: "Find a Store"
+
+# Test location search
+- tapOn:
+    id: "search_location"
+- inputText: "10001"
+- tapOn: "Search"
+- assertVisible:
+    text: ".*CVS.*"
+    
+
+# Test filters
+- tapOn: "Filters"
+- assertVisible: "Store Filters"
+
+# Test MinuteClinic filter
+- tapOn: "MinuteClinic"
+- tapOn: "Apply"
+- assertVisible:
+    text: ".*MinuteClinic.*"
+    
+
+# Test 24 Hours Pharmacy filter
+- tapOn: "Filters"
+- tapOn: "24 Hours Pharmacy"
+- tapOn: "Apply"
+
+# Test Drive-Thru Pharmacy filter
+- tapOn: "Filters"
+- tapOn: "Drive-Thru Pharmacy"
+- tapOn: "Apply"
+
+# Test Photo Services filter
+- tapOn: "Filters"
+- tapOn: "Passport Photo"
+- tapOn: "Apply"
+
+# View store details
+- tapOn:
+    text: ".*CVS.*"
+    
+    index: 0
+- assertVisible: "Store Details"
+- assertVisible: "Hours"
+- assertVisible: "Phone"
+- assertVisible: "Get Directions"
+- assertVisible: "Services"
+
+# Test map view
+- tapOn:
+    id: "back_button"
+- tapOn: "Map View"
+- assertVisible: "Map"
+
+- tapOn: "Home"

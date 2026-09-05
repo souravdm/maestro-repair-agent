@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC013 - Product Listing Page"
+tags:
+  - shop
+  - regression
+  - migrated-xcuitest
+---
+# Flow: Verify product listing page and filters
+# Source: Migrated from XCUITest PLPTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Search to get PLP results
+- runFlow:
+    file: ../../subflows/SearchAndNav/searchForProduct.yaml
+    env:
+      SEARCH_QUERY: "cold medicine"
+
+# Verify PLP elements
+- runFlow: ../../subflows/Shop/plp/viewProductListing.yaml
+
+# Test filter functionality
+- runFlow: ../../subflows/Shop/plp/filterProducts.yaml

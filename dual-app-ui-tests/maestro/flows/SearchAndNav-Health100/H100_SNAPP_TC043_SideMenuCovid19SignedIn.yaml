@@ -1,0 +1,39 @@
+# TC043: Side Menu COVID-19 as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC043 - Side Menu Covid19 Signed In"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript:
+        file: ../../config/credentials-loader.js
+        env:
+          loginData: DEAN_FANT
+          BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openSideMenu.yaml
+
+- swipe:
+    start: 50%, 70%
+    end: 50%, 40%
+    speed: 1
+
+- assertVisible: ${output.menu_screen.covid19Lnk}
+- tapOn: ${output.menu_screen.covid19Lnk}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.health_scheduling.patientVaccineLabel}
+- assertVisible: ${output.common_buttons.backBtn}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

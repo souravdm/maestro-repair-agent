@@ -1,0 +1,71 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC002 - Add Update Remove Cart Items"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - shop
+  - cart
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Shopping Cart Management
+# Verifies add to cart, update quantity, and remove from cart functionality
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Shop screen to load
+- assertVisible: ${SHOP_TITLE}
+
+- tapOn: ${SHOP_TAB}
+- assertVisible: ${SHOP_TITLE}
+
+# Search for a product
+- tapOn:
+    id: "search_bar"
+- inputText: "vitamins"
+- tapOn: "Search"
+
+# Add product to cart
+- tapOn:
+    text: ".*Vitamin.*"
+    
+    index: 0
+- assertVisible: "Add to Cart"
+- tapOn: "Add to Cart"
+- assertVisible: "Added to Cart"
+
+# View cart
+- tapOn:
+    id: "cart_icon"
+- assertVisible: "Cart"
+- assertVisible: "1 item"
+
+# Update quantity
+- tapOn: "+"
+- assertVisible: "2 items"
+
+# Decrease quantity
+- tapOn: "-"
+- assertVisible: "1 item"
+
+# Remove from cart
+- tapOn: "Remove"
+- assertVisible: "Cart is empty"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

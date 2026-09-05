@@ -1,0 +1,36 @@
+# TC016: Explore More Menu Claims as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC016 - Explore More Claims"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.claimsBtn}
+- tapOn: ${output.explore_more_menu.claimsBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_claims_landing.claimsTitle}
+- assertVisible: ${output.benefits_claims_landing.submitClaimCard}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

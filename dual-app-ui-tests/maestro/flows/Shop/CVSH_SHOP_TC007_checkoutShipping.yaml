@@ -1,0 +1,24 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC007 - Checkout Shipping"
+tags:
+  - shop
+  - critical
+  - migrated-xcuitest
+---
+# Flow: Checkout with shipping
+# Source: Migrated from XCUITest CheckoutTests.testSignInCheckoutShipping
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Navigate to cart and checkout
+- runScript: ../../screens/Common/CommonScreen.js
+- tapOn: ${output.common_navigation.cartIcon}
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Shop/checkout/completeCheckout.yaml
+
+# Verify checkout page with shipping
+- runScript: ../../screens/Shop/CheckoutScreen.js
+- assertVisible: ${output.shop_checkout.checkoutTitle}

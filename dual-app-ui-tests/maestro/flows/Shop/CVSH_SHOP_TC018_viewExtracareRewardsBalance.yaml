@@ -1,0 +1,91 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC018 - View Extracare Rewards Balance"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - shop
+  - extracare
+  - rewards
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: ExtraCare Rewards and Savings
+# Verifies ExtraCare card, rewards, and savings features
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Account screen to load
+- assertVisible: ${ACCOUNT_ICON}
+
+- tapOn: ${ACCOUNT_ICON}
+- assertVisible: ${ACCOUNT_TITLE}
+
+# Navigate to ExtraCare
+- tapOn: "ExtraCare"
+- assertVisible: "ExtraCare"
+
+# Verify ExtraCare sections
+- assertVisible: "ExtraCare Card"
+- assertVisible: "ExtraBucks Rewards"
+- assertVisible: "Deals & Rewards"
+- assertVisible: "Coupons"
+
+# Test ExtraCare Card display
+- tapOn: "ExtraCare Card"
+- assertVisible:
+    text: ".*\\d{10}.*"
+    
+- assertVisible: "Barcode"
+- tapOn:
+    id: "back_button"
+
+# Test ExtraBucks Rewards
+- tapOn: "ExtraBucks Rewards"
+- assertVisible: "ExtraBucks"
+- assertVisible:
+    text: ".*Available.*|.*Balance.*"
+    
+- tapOn:
+    id: "back_button"
+
+# Test Deals & Rewards
+- tapOn: "Deals & Rewards"
+- assertVisible: "Deals"
+- assertVisible: "Personalized Offers"
+- tapOn:
+    id: "back_button"
+
+# Test Coupons
+- tapOn: "Coupons"
+- assertVisible: "Coupons"
+- assertVisible: "Available Coupons"
+- assertVisible: "Clipped Coupons"
+
+# Clip a coupon
+- tapOn:
+    text: ".*Clip.*"
+    
+    index: 0
+- assertVisible: "Clipped"
+
+# View clipped coupons
+- tapOn: "Clipped Coupons"
+- assertVisible: "Clipped Coupons"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

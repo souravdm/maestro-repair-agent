@@ -1,0 +1,31 @@
+# TC001: Explore More Menu Schedule Care as Guest User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC001 - Explore More Schedule Care Guest"
+tags:
+    - searchAndNav
+    - TLPCWHSAM-T751
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+---
+
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/continue_as_guest_h100.yaml
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+
+- waitForAnimationToEnd
+- runFlow: ../../subflows/Menu/navigateViaMenu.yaml
+- waitForAnimationToEnd
+
+- assertVisible: ${output.explore_more_menu.scheduleCareLnk}
+- tapOn: ${output.explore_more_menu.scheduleCareLnk}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.health_scheduling.findCareLabel}
+- assertVisible: ${output.health_scheduling.findTheCareYouNeed}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

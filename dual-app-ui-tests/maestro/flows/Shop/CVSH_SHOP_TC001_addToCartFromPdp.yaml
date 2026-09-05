@@ -1,0 +1,28 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC001 - Add To Cart From Pdp"
+tags:
+  - shop
+  - smoke
+  - migrated-xcuitest
+---
+# Flow: Add product to cart from PDP
+# Source: Migrated from XCUITest PDPTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+# Search and navigate to PDP
+- runFlow:
+    file: ../../subflows/SearchAndNav/searchForProduct.yaml
+    env:
+      SEARCH_QUERY: "vitamins"
+
+- tapOn:
+    index: 0
+    text: ".*"
+- waitForAnimationToEnd
+
+# Add to cart from PDP
+- runFlow: ../../subflows/Shop/pdp/addToCartFromPDP.yaml

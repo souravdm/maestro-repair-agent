@@ -1,0 +1,36 @@
+# TC018: Explore More Menu Find a Pharmacy as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC018 - Explore More Find A Pharmacy"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Benefits/DrugPricingScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.findAPharmacyBtn}
+- tapOn: ${output.explore_more_menu.findAPharmacyBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- assertVisible: ${output.benefits_drug_pricing.searchInNetworkPharmaciesLabel}
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd

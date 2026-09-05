@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC005 - Check Product Availability"
+tags:
+  - shop
+  - inventory
+  - product-availability
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: In Store Only Product
+
+# Wait for app to load
+- assertVisible: ${SHOP_TAB}
+
+- tapOn: ${SHOP_TAB}
+- tapOn: ${SEARCH_FIELD}
+- inputText: "Milk"
+- tapOn: "Milk"
+
+# Verify in-store only message
+- assertVisible:
+    text: ".*In store only.*|.*Available in store.*"
+
+# Test: Out of Stock Product
+- tapOn: ${BACK_BTN}
+- tapOn: ${SEARCH_FIELD}
+- eraseText
+- inputText: "Diapers Size 1"
+- tapOn: "Diapers"
+
+# Verify OOS message
+- assertVisible:
+    text: ".*Out of stock.*|.*not available.*"
+
+# Test: Pickup Only Product
+- tapOn: ${BACK_BTN}
+- tapOn: ${SEARCH_FIELD}
+- eraseText
+- inputText: "Paper Towels"
+- tapOn: "Paper Towels"
+
+# Verify pickup availability
+- assertVisible: ${PICKUP_LABEL}
+- tapOn: ${PICKUP_LABEL}
+- assertVisible: ${ADD_FOR_PICKUP_BTN}

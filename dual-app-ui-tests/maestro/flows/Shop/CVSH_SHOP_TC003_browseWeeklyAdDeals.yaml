@@ -1,0 +1,87 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC003 - Browse Weekly Ad Deals"
+env:
+  USERNAME: ${AUTH_USER}
+  PASSWORD: ${AUTH_PASSWORD}
+tags:
+  - shop
+  - weekly_ad
+  - coupons
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Weekly Ad and Coupons
+# Verifies weekly ad display, coupon clipping, and navigation
+
+# Load credentials so subflows can access ${output.user.*} without needing
+# to call credentials-loader.js themselves – output is shared with all runFlow calls.
+- runScript:
+    file: ../../config/credentials-loader.js
+    env:
+      loginData: ${loginData:-LOA2}
+      BUILD_CONFIG: ${BUILD_CONFIG}
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Wait for Shop screen to load
+- assertVisible: ${SHOP_TITLE}
+
+- tapOn: ${SHOP_TAB}
+- assertVisible: ${SHOP_TITLE}
+
+# Navigate to Weekly Ad
+- tapOn: "Weekly Ad"
+- assertVisible: "Weekly Ad"
+- assertVisible: "This Week's Deals"
+
+# Verify ad sections
+- assertVisible: "Featured Deals"
+- assertVisible: "ExtraCare Offers"
+
+# Test coupon clipping
+- tapOn:
+    text: ".*Clip.*|.*Send to Card.*"
+    
+    index: 0
+- assertVisible:
+    text: ".*Clipped.*|.*Added.*"
+    
+
+# Test ExtraCare card coupon
+- scroll
+- tapOn:
+    text: ".*ExtraCare.*"
+    
+    index: 0
+- assertVisible: "Coupon Details"
+- assertVisible: "Terms & Conditions"
+- tapOn:
+    id: "back_button"
+
+# Test manufacturer coupon
+- tapOn:
+    text: ".*MFR.*|.*Manufacturer.*"
+    
+    index: 0
+- assertVisible: "Manufacturer Coupon"
+- assertVisible: "Send to Card"
+- tapOn: "Send to Card"
+- assertVisible: "Sent to Card"
+
+# Change store
+- tapOn: "Change Store"
+- assertVisible: "Select Store"
+- tapOn:
+    text: ".*CVS.*"
+    
+    index: 0
+- assertVisible: "Weekly Ad"
+
+- tapOn: "Home"
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml

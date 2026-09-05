@@ -1,0 +1,34 @@
+# TC012: Explore More Menu Transfer Rx as Signed In User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC012 - Explore More Transfer Rx Signed In"
+tags:
+  - searchAndNav
+onFlowStart:
+  - runScript: ../../screens/Account/accountObjects.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: DEAN_FANT
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../subflows/Account/authentication/login.yaml
+- runFlow: ../../subflows/Common/dismissOverlays.yaml
+
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.transferRxBtn}
+- tapOn: ${output.explore_more_menu.transferRxBtn}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.pharmacy_transferRx.welcomeHeader}
+- tapOn: ${output.common_buttons.accountDashboardBackBtn}
+- waitForAnimationToEnd

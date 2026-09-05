@@ -1,0 +1,34 @@
+# TC006: Explore More Menu Support & FAQ as Guest User (Health100)
+appId: ${APP_ID}
+name: "H100 | Search and Nav | TC006 - Explore More Support Faq Guest"
+tags:
+    - searchAndNav
+onFlowStart:
+    - runScript: ../../screens/Account/accountObjects.js
+    - runScript: ../../screens/Account/OnboardingScreen.js
+    - runScript: ../../screens/Home/homescreenObjects.js
+    - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+    - runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+---
+- runFlow: ../../subflows/Common/launchApp.yaml
+- runFlow: ../../subflows/Account/onboarding/h100_continue_to_sign_options.yaml
+- tapOn: ${output.account_health100_onboarding.continueAsAGuest}
+- runFlow: ../../subflows/Home/homescreen_loaded_successful.yaml
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/SearchAndNav/openExploreMoreMenu.yaml
+
+- assertVisible: ${output.explore_more_menu.supportAndFAQBtn}
+- tapOn: ${output.explore_more_menu.supportAndFAQBtn}
+
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+- assertVisible: ${output.search_help_center.helpCenterTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterPopularQuestionsTitle}
+- assertVisible: ${output.snapp_navigation.helpCenterHowCanWeHelpTitle}
+- tapOn: ${output.common_buttons.backBtn}

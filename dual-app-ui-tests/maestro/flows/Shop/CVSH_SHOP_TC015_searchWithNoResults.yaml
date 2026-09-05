@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Shop | TC015 - Search With No Results"
+tags:
+  - shop
+  - search
+  - invalid
+  - regression
+---
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+# Load screen files (POM) - defines all locators
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Shop/ShopScreen.js
+
+# Test: Invalid Search Character
+
+# Wait for app to load
+- assertVisible: ${SHOP_TAB}
+
+- tapOn: ${SHOP_TAB}
+- tapOn: ${SEARCH_FIELD}
+- inputText: "@#$%"
+- assertVisible:
+    text: ".*No results.*|.*try again.*|.*different search.*"
+
+# Test: Invalid Search Word
+- tapOn: ${SEARCH_FIELD}
+- eraseText
+- inputText: "xyzabc123notfound"
+- assertVisible:
+    text: ".*No results.*|.*try again.*|.*different search.*"
+
+# Test: Invalid SKU Number
+- tapOn: ${SEARCH_FIELD}
+- eraseText
+- inputText: "9999999999"
+- assertVisible:
+    text: ".*No results.*|.*try again.*|.*different search.*"
+
+# Test: Clear Search
+- tapOn: ${SEARCH_FIELD}
+- assertVisible:
+    text: ".*Clear.*|.*Cancel.*"
+- tapOn:
+    text: ".*Clear.*|.*Cancel.*"
+- assertVisible: ${SHOP_TITLE}
