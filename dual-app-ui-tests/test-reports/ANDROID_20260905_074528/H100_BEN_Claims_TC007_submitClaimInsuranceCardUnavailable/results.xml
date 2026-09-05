@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="328.796" timestamp="2026-09-05T07:52:04">
+    <testcase id="H100 | Benefits | Claims | TC007 - Submit Claim Insurance Card Unavailable" name="H100 | Benefits | Claims | TC007 - Submit Claim Insurance Card Unavailable" classname="H100 | Benefits | Claims | TC007 - Submit Claim Insurance Card Unavailable" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC007_submitClaimInsuranceCardUnavailable.yaml" time="328.741" timestamp="2026-09-05T07:52:04" status="ERROR">
+      <properties>
+        <property name="tags" value="benefits, claims, submission, reason-insurance-card-unavailable"/>
+      </properties>
+      <failure>Element not found: Text matching regex: (?i).*(Days supply).*</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
