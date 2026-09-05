@@ -1,0 +1,211 @@
+/* ── Test Generator ── */
+.test-generator {
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.test-generator h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.test-generator p {
+  margin: 0 0 20px 0;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.test-generator h4 {
+  margin: 20px 0 12px 0;
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+.import-section {
+  margin-bottom: 20px;
+}
+
+.import-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.import-btn:hover {
+  background: #e8e8e8;
+  border-color: var(--cvs-red);
+}
+
+.test-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-group label {
+  font-size: 12px;
+  color: #333;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--cvs-red);
+  background: #fff;
+}
+
+.generation-controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.generate-btn {
+  background: var(--cvs-red);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.generate-btn:hover {
+  background: #c41e3a;
+}
+
+.preview-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.preview-btn:hover {
+  background: #e8e8e8;
+}
+
+.output-section {
+  margin-top: 20px;
+}
+
+.output-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.copy-btn,
+.save-btn,
+.download-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.copy-btn:hover,
+.save-btn:hover,
+.download-btn:hover {
+  background: #e8e8e8;
+}
+
+.generated-output {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  line-height: 1.4;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* ── Batch Test Generation ── */
+.excel-rows-table { width:100%; border-collapse:collapse; font-size:11px; margin-top:8px; }
+.excel-rows-table th { text-align:left; padding:6px 8px; background:var(--bg3); border-bottom:1px solid var(--border); font-weight:600; color:var(--text-dim); font-size:10px; text-transform:uppercase; letter-spacing:.5px; }
+.excel-rows-table td { padding:6px 8px; border-bottom:1px solid var(--bg4); vertical-align:top; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.excel-rows-table tr:hover td { background:var(--bg3); }
+.excel-rows-table .row-status { width:28px; text-align:center; }
+.batch-gen-btn { width:100%; margin-top:12px; padding:10px 16px; font-size:13px; font-weight:600; background:var(--cvs-red); color:#fff; border:none; border-radius:var(--radius-sm); cursor:pointer; transition:background .15s; }
+.batch-gen-btn:hover { background:var(--cvs-red-dark); }
+.batch-gen-btn:disabled { opacity:.5; cursor:not-allowed; }
+.batch-progress { margin-top:8px; font-size:11px; color:var(--text-dim); text-align:center; }
+.batch-progress-bar { height:4px; background:var(--bg4); border-radius:2px; margin-top:4px; overflow:hidden; }
+.batch-progress-bar-fill { height:100%; background:var(--cvs-red); border-radius:2px; transition:width .3s; width:0%; }
+
+.batch-test-container { border:1px solid var(--border); border-radius:var(--radius); margin-bottom:12px; background:var(--bg2); overflow:hidden; transition:all .3s; }
+.batch-test-container.collapsed .batch-test-body { display:none; }
+.batch-test-container.added { border-color:var(--green); }
+.batch-test-header { display:flex; align-items:center; gap:8px; padding:10px 14px; background:var(--bg3); border-bottom:1px solid var(--border); cursor:pointer; user-select:none; }
+.batch-test-header .test-name { font-weight:600; font-size:12px; flex:1; }
+.batch-test-header .test-module { font-size:10px; color:var(--text-dim); background:var(--bg4); padding:2px 8px; border-radius:10px; }
+.batch-test-header .collapse-arrow { font-size:10px; color:var(--text-muted); transition:transform .2s; }
+.batch-test-container.collapsed .collapse-arrow { transform:rotate(-90deg); }
+.batch-test-body { padding:12px; }
+.batch-tab-content { display: block; }
+.batch-tab-content[style*="display:none"] { display: none; }
+.batch-test-body textarea { width:100%; min-height:200px; border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px; font-family:'SF Mono','Fira Code','Cascadia Code',monospace; font-size:11px; line-height:1.6; resize:vertical; background:#1e1e1e; color:#d4d4d4; tab-size:2; }
+.batch-test-body textarea:focus { outline:none; border-color:var(--cvs-red); box-shadow:0 0 0 2px rgba(204,0,0,.15); }
+.batch-test-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+.batch-test-actions .btn-add-test { padding:5px 14px; font-size:11px; font-weight:600; background:var(--green); color:#fff; border:none; border-radius:var(--radius-sm); cursor:pointer; transition:all .15s; }
+.batch-test-actions .btn-add-test:hover { filter:brightness(1.1); }
+.batch-test-actions .btn-add-test:disabled { opacity:.6; cursor:not-allowed; }
+.batch-test-actions .btn-add-test.added { background:#e8f5e9; color:var(--green); cursor:default; }
+.add-all-bar { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:12px; position:sticky; top:0; z-index:5; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+.add-all-bar .btn-add-all { padding:7px 18px; font-size:12px; font-weight:600; background:var(--cvs-red); color:#fff; border:none; border-radius:var(--radius-sm); cursor:pointer; transition:background .15s; }
+.add-all-bar .btn-add-all:hover { background:var(--cvs-red-dark); }
+.add-all-bar .add-all-status { font-size:11px; color:var(--text-dim); flex:1; }

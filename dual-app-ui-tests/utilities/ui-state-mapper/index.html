@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CVS App — UI State Mapper</title>
+<script src="https://unpkg.com/@viz-js/viz@3.11.0/lib/viz-standalone.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cvs-red: #CC0000;
+    --cvs-red-dark: #990000;
+    --bg: #0D0D1A;
+    --bg2: #12121F;
+    --bg3: #1A1A2E;
+    --border: #2A2A45;
+    --text: #D0D8E8;
+    --text-dim: #7A8AAA;
+    --text-bright: #FFFFFF;
+    --accent: #4A90D9;
+    --green: #27AE60;
+    --yellow: #E8A838;
+    --red-cov: #CC3333;
+    --panel-w: 260px;
+    --header-h: 52px;
+  }
+
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); width: 100%; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* ── Header ── */
+  header { height: var(--header-h); background: var(--cvs-red); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; flex-shrink: 0; box-shadow: 0 2px 8px #0008; z-index: 10; }
+  header .title { display: flex; align-items: center; gap: 10px; color: white; font-size: 17px; font-weight: 700; }
+  header .title span.sub { font-size: 11px; font-weight: 400; opacity: 0.8; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 10px; }
+  header .hdr-stats { display: flex; gap: 14px; align-items: center; }
+  .hdr-stat { display: flex; flex-direction: column; align-items: center; color: white; }
+  .hdr-stat .val { font-size: 18px; font-weight: 700; line-height: 1; }
+  .hdr-stat .lbl { font-size: 9px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
+  header .hdr-actions { display: flex; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 600; transition: opacity 0.15s; }
+  .btn:hover { opacity: 0.85; }
+  .btn-ghost { background: rgba(255,255,255,0.15); color: white; }
+  .btn-primary { background: white; color: var(--cvs-red); }
+  .btn-accent { background: var(--accent); color: white; }
+  .btn-green { background: var(--green); color: white; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* ── Main layout ── */
+  .main { display: flex; flex: 1; overflow: hidden; }
+
+  /* ── Left Sidebar ── */
+  .sidebar { width: var(--panel-w); background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow: hidden; }
+  .sidebar-header { padding: 12px 14px 8px; border-bottom: 1px solid var(--border); }
+  .sidebar-header h3 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim); }
+  .sidebar-body { flex: 1; overflow-y: auto; padding: 10px 0; }
+  .sidebar-body::-webkit-scrollbar { width: 4px; }
+  .sidebar-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .overall-bar { margin: 10px 14px; }
+  .overall-bar .label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); margin-bottom: 4px; }
+  .progress-outer { background: var(--bg3); border-radius: 4px; height: 8px; overflow: hidden; }
+  .progress-inner { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+  .feature-list { padding: 6px 0; }
+  .feature-item { padding: 7px 14px; cursor: pointer; transition: background 0.12s; display: flex; flex-direction: column; gap: 3px; border-left: 3px solid transparent; }
+  .feature-item:hover { background: var(--bg3); }
+  .feature-item.active { background: var(--bg3); }
+  .feature-item .feat-top { display: flex; align-items: center; justify-content: space-between; }
+  .feature-item .feat-name { font-size: 12px; font-weight: 600; }
+  .feature-item .feat-pct { font-size: 11px; font-weight: 700; }
+  .feat-bar { height: 3px; border-radius: 2px; background: var(--bg3); overflow: hidden; margin-top: 2px; }
+  .feat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.4s; }
+  .feat-counts { font-size: 10px; color: var(--text-dim); }
+
+  .sidebar-section { padding: 8px 14px 4px; border-top: 1px solid var(--border); margin-top: 6px; }
+  .sidebar-section h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-dim); margin-bottom: 8px; }
+
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--text-dim); margin-bottom: 5px; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+  .filter-input { width: 100%; background: var(--bg3); border: 1px solid var(--border); color: var(--text); padding: 5px 8px; border-radius: 5px; font-size: 11px; outline: none; }
+  .filter-input:focus { border-color: var(--accent); }
+  .filter-input::placeholder { color: var(--text-dim); }
+
+  /* ── Center Graph Area ── */
+  .graph-area { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+  .graph-toolbar { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 7px 14px; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .graph-toolbar .tb-label { font-size: 11px; color: var(--text-dim); }
+  .zoom-controls { display: flex; gap: 4px; margin-left: auto; }
+  .zoom-btn { width: 26px; height: 26px; border-radius: 5px; border: 1px solid var(--border); background: var(--bg3); color: var(--text); cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .zoom-btn:hover { background: var(--border); }
+
+  #graph-container { flex: 1; overflow: hidden; position: relative; cursor: grab; user-select: none; }
+  #graph-container:active { cursor: grabbing; }
+  #graph-svg-wrap { position: absolute; transform-origin: 0 0; transition: none; }
+  #graph-svg-wrap svg { display: block; }
+
+  /* ── Loading/Error states ── */
+  .state-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text-dim); }
+  .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Node Detail Panel ── */
+  #detail-panel { background: var(--bg2); border-top: 1px solid var(--border); padding: 12px 16px; flex-shrink: 0; display: none; max-height: 200px; overflow-y: auto; }
+  #detail-panel.visible { display: block; }
+  .detail-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .detail-title { font-size: 14px; font-weight: 700; color: var(--text-bright); }
+  .detail-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .chip { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 10px; font-size: 10px; font-weight: 600; }
+  .chip-green { background: #0D3320; color: #27AE60; border: 1px solid #27AE60; }
+  .chip-red { background: #3D0A0A; color: #E74C3C; border: 1px solid #E74C3C; }
+  .chip-yellow { background: #3D2B00; color: #E8A838; border: 1px solid #E8A838; }
+  .chip-blue { background: #0A2040; color: #4A90D9; border: 1px solid #4A90D9; }
+  .detail-flows { font-size: 11px; color: var(--text-dim); margin-bottom: 8px; line-height: 1.7; }
+  .detail-flows code { background: var(--bg3); padding: 1px 5px; border-radius: 3px; color: var(--accent); font-family: monospace; font-size: 10px; }
+  .detail-actions { display: flex; gap: 8px; }
+
+
+  /* ── YAML Preview Modal ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; width: 640px; max-width: 95vw; max-height: 80vh; display: flex; flex-direction: column; }
+  .modal-header { padding: 14px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-header h3 { font-size: 14px; font-weight: 700; color: var(--text-bright); }
+  .modal-close { background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; padding: 0 4px; line-height: 1; }
+  .modal-body { flex: 1; overflow-y: auto; padding: 14px 16px; }
+  .modal-body pre { background: var(--bg); padding: 14px; border-radius: 8px; font-size: 12px; line-height: 1.5; color: #AADDFF; overflow-x: auto; border: 1px solid var(--border); white-space: pre-wrap; }
+  .modal-footer { padding: 12px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+  .gen-label { font-size: 10px; color: var(--text-dim); display: flex; align-items: center; gap: 4px; }
+
+  /* SVG node hover effects */
+  #graph-svg-wrap svg .node:hover polygon,
+  #graph-svg-wrap svg .node:hover ellipse,
+  #graph-svg-wrap svg .node:hover rect { stroke: var(--accent) !important; stroke-width: 2px !important; cursor: pointer; }
+  #graph-svg-wrap svg .node { cursor: pointer; }
+  #graph-svg-wrap svg .node.selected polygon,
+  #graph-svg-wrap svg .node.selected ellipse,
+  #graph-svg-wrap svg .node.selected rect { stroke: white !important; stroke-width: 2.5px !important; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <div class="title">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
+    UI State Mapper
+    <span class="sub">CVS Pharmacy App</span>
+  </div>
+  <div class="hdr-stats" id="hdr-stats">
+    <div class="hdr-stat"><span class="val" id="stat-flows">—</span><span class="lbl">Flows</span></div>
+    <div class="hdr-stat"><span class="val" id="stat-screens">—</span><span class="lbl">Screens</span></div>
+    <div class="hdr-stat"><span class="val" id="stat-covered">—</span><span class="lbl">Covered</span></div>
+    <div class="hdr-stat"><span class="val" id="stat-pct" style="color:#E8A838">—%</span><span class="lbl">Coverage</span></div>
+  </div>
+  <div class="hdr-actions">
+    <button class="btn btn-ghost" onclick="refreshGraph()" id="refresh-btn">⟳ Refresh</button>
+    <button class="btn btn-ghost" onclick="fitGraph()">⊙ Fit</button>
+    <button class="btn btn-primary" onclick="openGenerateModal(null)">+ New Test</button>
+  </div>
+</header>
+
+<!-- ── Main ── -->
+<div class="main">
+
+  <!-- Left Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header"><h3>Coverage</h3></div>
+    <div class="sidebar-body">
+      <div class="overall-bar">
+        <div class="label"><span>Overall</span><span id="overall-pct-lbl">…</span></div>
+        <div class="progress-outer"><div class="progress-inner" id="overall-bar" style="width:0%;background:var(--yellow)"></div></div>
+      </div>
+
+      <div class="feature-list" id="feature-list">
+        <div style="padding:20px 14px;color:var(--text-dim);font-size:11px">Loading…</div>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Filter</h4>
+        <input class="filter-input" id="filter-input" placeholder="Search screens…" oninput="filterGraph(this.value)"/>
+      </div>
+
+      <div class="sidebar-section">
+        <h4>Legend</h4>
+        <div class="legend-item"><div class="legend-dot" style="background:#6B1A1A;border:1px solid #CC3333"></div>No tests</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6B5500;border:1px solid #E8A838"></div>1–2 tests</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1A5C2A;border:1px solid #27AE60"></div>3–7 tests</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#0A3D1A;border:1px solid #00CC44"></div>8+ tests</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Center Graph -->
+  <div class="graph-area">
+    <div class="graph-toolbar">
+      <span class="tb-label" id="toolbar-label">Loading state graph…</span>
+      <div style="flex:1"></div>
+      <div class="zoom-controls">
+        <button class="zoom-btn" onclick="adjustZoom(1.25)" title="Zoom in">+</button>
+        <button class="zoom-btn" onclick="adjustZoom(0.8)" title="Zoom out">−</button>
+        <button class="zoom-btn" onclick="fitGraph()" title="Fit to view" style="font-size:11px;width:auto;padding:0 8px">Fit</button>
+      </div>
+    </div>
+
+    <div id="graph-container">
+      <div id="graph-svg-wrap"></div>
+      <div class="state-overlay" id="graph-overlay">
+        <div class="spinner"></div>
+        <span>Building state graph…</span>
+      </div>
+    </div>
+
+    <!-- Node Detail Panel -->
+    <div id="detail-panel">
+      <div class="detail-header">
+        <span class="detail-title" id="detail-title">—</span>
+        <button class="btn btn-sm btn-ghost" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="detail-meta" id="detail-meta"></div>
+      <div class="detail-flows" id="detail-flows"></div>
+      <div class="detail-actions">
+        <button class="btn btn-sm btn-green" id="gen-test-btn" onclick="openGenerateModal(currentNodeId)">⚡ Generate Test</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── YAML Preview Modal ── -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Generated Maestro Test</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="gen-label" id="gen-label"></div>
+      <pre id="modal-yaml"></pre>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost btn-sm" onclick="copyYaml()">📋 Copy</button>
+      <button class="btn btn-accent btn-sm" onclick="downloadYaml()">⬇ Download .yaml</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+let graphData = null;
+let vizInstance = null;
+let currentNodeId = null;
+let scale = 1, offsetX = 0, offsetY = 0;
+let isDragging = false, dragStartX = 0, dragStartY = 0, dragOffsetX = 0, dragOffsetY = 0;
+
+const container = document.getElementById('graph-container');
+const wrap = document.getElementById('graph-svg-wrap');
+const overlay = document.getElementById('graph-overlay');
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+(async () => {
+  vizInstance = await Viz.instance();
+  await loadGraph();
+})();
+
+// ─── Graph Loading ────────────────────────────────────────────────────────────
+async function loadGraph() {
+  try {
+    const r = await fetch('/api/graph');
+    graphData = await r.json();
+    renderGraph(graphData.dot);
+    updateSidebar(graphData);
+    updateHeaderStats(graphData);
+  } catch (e) {
+    overlay.innerHTML = `<span style="color:#E74C3C">Failed to load graph: ${e.message}</span>`;
+  }
+}
+
+async function refreshGraph() {
+  const btn = document.getElementById('refresh-btn');
+  btn.disabled = true; btn.textContent = '⟳ Refreshing…';
+  overlay.style.display = 'flex';
+  overlay.innerHTML = '<div class="spinner"></div><span>Refreshing…</span>';
+  wrap.innerHTML = '';
+  try {
+    await fetch('/api/refresh');
+    await loadGraph();
+  } finally {
+    btn.disabled = false; btn.textContent = '⟳ Refresh';
+  }
+}
+
+// ─── Graph Rendering ──────────────────────────────────────────────────────────
+function renderGraph(dot) {
+  if (!vizInstance || !dot) return;
+  try {
+    const svg = vizInstance.renderSVGElement(dot);
+    svg.setAttribute('id', 'main-svg');
+    svg.style.maxWidth = 'none';
+    svg.style.maxHeight = 'none';
+    wrap.innerHTML = '';
+    wrap.appendChild(svg);
+    overlay.style.display = 'none';
+
+    // Make nodes interactive
+    svg.querySelectorAll('.node').forEach(node => {
+      node.style.cursor = 'pointer';
+      node.addEventListener('click', e => {
+        e.stopPropagation();
+        const nodeId = node.querySelector('title')?.textContent?.trim();
+        handleNodeClick(nodeId, node);
+      });
+    });
+
+    fitGraph();
+
+    const label = `${graphData.totalNodes} screens · ${graphData.totalFlows} flows · ${graphData.overallPct}% covered`;
+    document.getElementById('toolbar-label').textContent = label;
+  } catch (e) {
+    overlay.style.display = 'flex';
+    overlay.innerHTML = `<span style="color:#E74C3C">Render error: ${e.message}</span>`;
+  }
+}
+
+// ─── Node Click ───────────────────────────────────────────────────────────────
+function handleNodeClick(nodeId, svgNode) {
+  if (!nodeId || !graphData) return;
+  const node = graphData.nodes.find(n => n.id === nodeId);
+  if (!node) return;
+
+  currentNodeId = nodeId;
+
+  // Highlight
+  document.querySelectorAll('.node.selected').forEach(n => n.classList.remove('selected'));
+  svgNode.classList.add('selected');
+
+  showDetail(node);
+}
+
+function showDetail(node) {
+  const panel = document.getElementById('detail-panel');
+  document.getElementById('detail-title').textContent = `${node.feature} / ${node.label}`;
+
+  const meta = document.getElementById('detail-meta');
+  const covChip = node.testCount === 0 ? 'chip-red' : node.testCount < 3 ? 'chip-yellow' : 'chip-green';
+  const covText = node.testCount === 0 ? '⚠ No Tests' : `✓ ${node.testCount} Test${node.testCount > 1 ? 's' : ''}`;
+  meta.innerHTML = `
+    <span class="chip ${covChip}">${covText}</span>
+    <span class="chip chip-blue">${node.feature}</span>
+    ${node.hasScreenObj ? '<span class="chip chip-green">Screen Object ✓</span>' : '<span class="chip chip-red">No Screen Object</span>'}
+  `;
+
+  const flowsEl = document.getElementById('detail-flows');
+  if (node.flows.length > 0) {
+    flowsEl.innerHTML = '<strong style="color:var(--text)">Existing flows:</strong><br>' +
+      node.flows.slice(0, 8).map(f => `<code>${f}</code>`).join(' ') +
+      (node.flows.length > 8 ? ` <em>+${node.flows.length - 8} more</em>` : '');
+  } else {
+    flowsEl.innerHTML = '<em style="color:var(--red-cov)">No test flows found — this is a coverage gap!</em>';
+  }
+
+  panel.classList.add('visible');
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('visible');
+  document.querySelectorAll('.node.selected').forEach(n => n.classList.remove('selected'));
+  currentNodeId = null;
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+function updateSidebar(data) {
+  const featureColors = {
+    Account:'#4A90D9', Home:'#E8A838', Pharmacy:'#9B59B6', Benefits:'#27AE60',
+    Shop:'#E74C3C', Health:'#16A085', MCCore:'#8E44AD', NGS:'#D35400',
+    Chatbot:'#2980B9', VM:'#1ABC9C', General:'#7F8C8D'
+  };
+
+  const list = document.getElementById('feature-list');
+  const pct = data.overallPct;
+  const barColor = pct < 30 ? 'var(--red-cov)' : pct < 60 ? 'var(--yellow)' : 'var(--green)';
+  document.getElementById('overall-bar').style.width = pct + '%';
+  document.getElementById('overall-bar').style.background = barColor;
+  document.getElementById('overall-pct-lbl').textContent = pct + '%';
+
+  list.innerHTML = Object.entries(data.featureStats).map(([feat, stat]) => {
+    const color = featureColors[feat] || '#7F8C8D';
+    const p = stat.pct;
+    const pc = p < 30 ? 'var(--red-cov)' : p < 70 ? 'var(--yellow)' : 'var(--green)';
+    return `<div class="feature-item" style="border-left-color:${color}" onclick="focusFeature('${feat}')">
+      <div class="feat-top">
+        <span class="feat-name" style="color:${color}">${feat}</span>
+        <span class="feat-pct" style="color:${pc}">${p}%</span>
+      </div>
+      <div class="feat-bar"><div class="feat-bar-fill" style="width:${p}%;background:${pc}"></div></div>
+      <div class="feat-counts">${stat.covered}/${stat.total} screens covered</div>
+    </div>`;
+  }).join('');
+}
+
+function updateHeaderStats(data) {
+  document.getElementById('stat-flows').textContent = data.totalFlows;
+  document.getElementById('stat-screens').textContent = data.totalNodes;
+  document.getElementById('stat-covered').textContent = data.totalCovered;
+  const pct = data.overallPct;
+  const pctEl = document.getElementById('stat-pct');
+  pctEl.textContent = pct + '%';
+  pctEl.style.color = pct < 30 ? '#E74C3C' : pct < 60 ? '#E8A838' : '#27AE60';
+}
+
+// ─── Pan & Zoom ───────────────────────────────────────────────────────────────
+function applyTransform() {
+  wrap.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+}
+
+function fitGraph() {
+  const svg = document.getElementById('main-svg');
+  if (!svg) return;
+  const cw = container.clientWidth, ch = container.clientHeight;
+  const sw = svg.viewBox.baseVal.width || svg.width.baseVal.value || cw;
+  const sh = svg.viewBox.baseVal.height || svg.height.baseVal.value || ch;
+  if (!sw || !sh) return;
+  scale = Math.min(cw / sw, ch / sh) * 0.92;
+  offsetX = (cw - sw * scale) / 2;
+  offsetY = (ch - sh * scale) / 2;
+  applyTransform();
+}
+
+function adjustZoom(factor) {
+  const cw = container.clientWidth / 2, ch = container.clientHeight / 2;
+  offsetX = cw - (cw - offsetX) * factor;
+  offsetY = ch - (ch - offsetY) * factor;
+  scale *= factor;
+  applyTransform();
+}
+
+container.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = container.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const factor = e.deltaY < 0 ? 1.12 : 0.89;
+  offsetX = mx - (mx - offsetX) * factor;
+  offsetY = my - (my - offsetY) * factor;
+  scale *= factor;
+  applyTransform();
+}, { passive: false });
+
+container.addEventListener('mousedown', e => {
+  if (e.target.closest('.node')) return;
+  isDragging = true;
+  dragStartX = e.clientX; dragStartY = e.clientY;
+  dragOffsetX = offsetX; dragOffsetY = offsetY;
+  container.style.cursor = 'grabbing';
+});
+
+window.addEventListener('mousemove', e => {
+  if (!isDragging) return;
+  offsetX = dragOffsetX + (e.clientX - dragStartX);
+  offsetY = dragOffsetY + (e.clientY - dragStartY);
+  applyTransform();
+});
+
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+  container.style.cursor = 'grab';
+});
+
+container.addEventListener('click', e => {
+  if (!e.target.closest('.node')) closeDetail();
+});
+
+// ─── Focus Feature ────────────────────────────────────────────────────────────
+function focusFeature(feat) {
+  document.querySelectorAll('.feature-item').forEach(el => el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  // Highlight feature cluster nodes
+  const svg = document.getElementById('main-svg');
+  if (!svg || !graphData) return;
+  svg.querySelectorAll('.node').forEach(node => {
+    const nid = node.querySelector('title')?.textContent?.trim();
+    const nd = graphData.nodes.find(n => n.id === nid);
+    if (nd) node.style.opacity = nd.feature === feat ? '1' : '0.3';
+  });
+  svg.querySelectorAll('.edge').forEach(e => e.style.opacity = '0.2');
+  setTimeout(() => {
+    svg.querySelectorAll('.node,.edge').forEach(e => e.style.opacity = '');
+    document.querySelectorAll('.feature-item').forEach(el => el.classList.remove('active'));
+  }, 2500);
+}
+
+function filterGraph(query) {
+  const svg = document.getElementById('main-svg');
+  if (!svg || !graphData) return;
+  if (!query) {
+    svg.querySelectorAll('.node,.edge').forEach(e => e.style.opacity = '');
+    return;
+  }
+  const q = query.toLowerCase();
+  svg.querySelectorAll('.node').forEach(node => {
+    const nid = node.querySelector('title')?.textContent?.trim();
+    const nd = graphData.nodes.find(n => n.id === nid);
+    const match = nd && (nd.label.toLowerCase().includes(q) || nd.feature.toLowerCase().includes(q));
+    node.style.opacity = match ? '1' : '0.15';
+  });
+  svg.querySelectorAll('.edge').forEach(e => e.style.opacity = '0.1');
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── Test Generation ──────────────────────────────────────────────────────────
+let generatedYaml = '';
+let generatedNodeInfo = null;
+
+async function openGenerateModal(nodeId) {
+  const modal = document.getElementById('modal-overlay');
+  const yamlEl = document.getElementById('modal-yaml');
+  const labelEl = document.getElementById('gen-label');
+  const titleEl = document.getElementById('modal-title');
+
+  if (!nodeId && !currentNodeId) {
+    const node = graphData?.nodes.find(n => n.testCount === 0);
+    nodeId = node?.id;
+  }
+  const nid = nodeId || currentNodeId;
+  if (!nid) {
+    alert('Click a node in the graph first, then click Generate Test.');
+    return;
+  }
+
+  const nodeInfo = graphData?.nodes.find(n => n.id === nid);
+  titleEl.textContent = nodeInfo ? `Generate Test: ${nodeInfo.feature}/${nodeInfo.label}` : 'Generate Test';
+  yamlEl.textContent = 'Generating with AI…';
+  labelEl.innerHTML = '';
+  modal.classList.add('open');
+
+  try {
+    const r = await fetch('/api/generate-test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nodeId: nid }),
+    });
+    const data = await r.json();
+    generatedYaml = data.yaml || '';
+    generatedNodeInfo = data.nodeInfo;
+    yamlEl.textContent = generatedYaml;
+    labelEl.innerHTML = data.source === 'ollama'
+      ? `<span style="color:var(--green)">✓ Generated by Ollama (${data.model})</span>`
+      : `<span style="color:var(--yellow)">⚠ Template-based — Ollama not available. Review & customize before running.</span>`;
+  } catch (e) {
+    yamlEl.textContent = `Error: ${e.message}`;
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function copyYaml() {
+  navigator.clipboard.writeText(generatedYaml).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = '📋 Copy', 1500);
+  });
+}
+
+function downloadYaml() {
+  const ni = generatedNodeInfo;
+  const filename = ni
+    ? `test_${ni.feature.toLowerCase()}_${ni.label.toLowerCase().replace(/[^a-z0-9]/g,'_')}.yaml`
+    : 'generated_test.yaml';
+  const blob = new Blob([generatedYaml], { type: 'text/yaml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+</script>
+</body>
+</html>

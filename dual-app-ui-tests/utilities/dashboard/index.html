@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Automation Dashboard — CVS Health</title>
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/builder.css">
+<link rel="stylesheet" href="styles/zephyr.css">
+<link rel="stylesheet" href="styles/generator.css">
+<link rel="stylesheet" href="styles/chat.css">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<header>
+  <span class="logo-badge">CVS Health</span>
+  <h1>Automation Dashboard</h1>
+  <span class="subtitle">CVS Health &middot; Health100 UI Test Automation</span>
+</header>
+
+<div class="global-tabs">
+  <div class="tab active" data-tab="setup"><span class="tab-icon">⚙️</span>Setup</div>
+  <div class="tab" data-tab="run"><span class="tab-icon">▶️</span>Run Tests</div>
+  <div class="tab" data-tab="recorder"><span class="tab-icon">🎥</span>Recorder</div>
+  <div class="tab" data-tab="testmap"><span class="tab-icon">🗺️</span>Test Map</div>
+  <div class="tab" data-tab="generator"><span class="tab-icon">🧪</span>Test Generator</div>
+  <div class="tab" data-tab="verify"><span class="tab-icon">✅</span>Verify</div>
+  <div class="tab" data-tab="utility"><span class="tab-icon">🔧</span>Utility</div>
+  <div class="tab" data-tab="testdata"><span class="tab-icon">📊</span>Test Data</div>
+  <div class="tab" data-tab="builder"><span class="tab-icon">📝</span>Script Builder</div>
+  <div class="tab" data-tab="zephyr"><span class="tab-icon">🔗</span>Zephyr</div>
+</div>
+
+<div class="layout">
+  <div class="layout-main">
+  <!-- ── Left panel ── -->
+  <div class="panel-left">
+
+    <!-- ══════════════════ SETUP TAB ══════════════════ -->
+    <div class="tab-panel active" id="tab-setup">
+
+      <p class="text-dim text-sm" style="padding:4px 0 2px">Pre-verification runs automatically. Buttons are disabled when a step is already complete.</p>
+
+      <!-- Diagnose banner (always optional) -->
+      <div class="setup-optional">
+        <div class="optional-body">
+          <div class="optional-title">
+            🩺 Diagnostics
+            <span class="badge-optional">NOT REQUIRED</span>
+          </div>
+          <div class="optional-desc">Run system diagnostics to detect and optionally auto-fix common setup issues.</div>
+          <div class="step-meta" style="margin-top:6px">scripts/setup/diagnose.sh</div>
+        </div>
+        <div class="optional-actions">
+          <button class="btn btn-ghost" onclick="runCmd('./scripts/setup/diagnose.sh ios', 'Diagnose iOS')">Diagnose</button>
+          <button class="btn btn-ghost" style="color:#e65100;border-color:rgba(230,81,0,0.3)" onclick="runCmd('./scripts/setup/diagnose.sh ios --fix', 'Auto-fix iOS')">Auto-Fix</button>
+        </div>
+      </div>
+
+      <div class="setup-steps">
+
+        <!-- Step 1: Install Maestro -->
+        <div class="setup-step" id="setup-maestro">
+          <div class="step-num" id="setup-maestro-num">1</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Install Maestro</div>
+              <div class="step-icon" id="setup-maestro-icon">⬜</div>
+            </div>
+            <div class="step-desc">Maestro CLI is required to run all UI tests.</div>
+            <div class="step-meta">brew install maestro</div>
+            <div class="step-version" id="setup-maestro-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-maestro-btn"
+              onclick="runSetupStep('setup-maestro', 'brew install maestro', 'Install Maestro')">Install</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Install Node Dependencies -->
+        <div class="setup-step" id="setup-nodedeps">
+          <div class="step-num" id="setup-nodedeps-num">2</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Install Node Dependencies</div>
+              <div class="step-icon" id="setup-nodedeps-icon">⬜</div>
+            </div>
+            <div class="step-desc">Installs npm packages required for reporting and utilities.</div>
+            <div class="step-meta">npm install</div>
+            <div class="step-version" id="setup-nodedeps-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-nodedeps-btn"
+              onclick="runSetupStep('setup-nodedeps', 'npm install', 'npm install')">Install</button>
+          </div>
+        </div>
+
+        <!-- Step 3: iOS Simulator Setup -->
+        <div class="setup-step" id="setup-ios-sim">
+          <div class="step-num" id="setup-ios-sim-num">3</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">iOS Simulator Setup <span class="badge badge-ios"><span class="icon-apple"><svg width="10" height="10" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span>iOS</span></div>
+              <div class="step-icon" id="setup-ios-sim-icon">⬜</div>
+            </div>
+            <div class="step-desc">Configures Xcode simulators for iOS testing. Requires Xcode to be installed.</div>
+            <div class="step-meta">bash scripts/setup/ios-setup.sh</div>
+            <div class="step-version" id="setup-ios-sim-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-ios-sim-btn"
+              onclick="runIOSSetup()">Setup</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Android SDK Setup -->
+        <div class="setup-step" id="setup-android-sdk">
+          <div class="step-num" id="setup-android-sdk-num">4</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Android SDK Setup <span class="badge badge-android"><span class="icon-android"><svg width="10" height="10" viewBox="0 0 576 512" fill="currentColor"><path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m273.7-144.48 47.94-83a10 10 0 1 0-17.27-10l-48.54 84.07a306.2 306.2 0 0 0-134.63 0l-48.54-84.07a10 10 0 1 0-17.27 10l47.94 83C175.07 198.44 120.25 277.93 120.25 368h335.5c0-90.07-54.82-169.56-126.6-210.55M120.25 368v116a36 36 0 0 0 72 0V368zm263.5 0v116a36 36 0 0 0 72 0V368zM84.25 256a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36zm407.5 0a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36z"/></svg></span>Android</span></div>
+              <div class="step-icon" id="setup-android-sdk-icon">⬜</div>
+            </div>
+            <div class="step-desc">Configures Android SDK paths and environment variables.</div>
+            <div class="step-meta">bash scripts/setup/android-setup.sh setup</div>
+            <div class="step-version" id="setup-android-sdk-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-android-sdk-btn"
+              onclick="runSetupStep('setup-android-sdk', 'bash scripts/setup/android-setup.sh setup', 'Android SDK Setup')">Setup</button>
+          </div>
+        </div>
+
+        <!-- Step 5: Maestro Wrapper (always optional) -->
+        <div class="setup-step" id="setup-wrapper">
+          <div class="step-num" style="background:rgba(33,150,243,0.15);color:#64b5f6">•</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Maestro Wrapper <span class="badge-optional">NOT REQUIRED</span></div>
+              <div class="step-icon" id="setup-wrapper-icon">⬜</div>
+            </div>
+            <div class="step-desc">Installs a transparent Maestro wrapper that enables automatic report generation for all test runs.</div>
+            <div class="step-meta">bash scripts/setup/setup-maestro-wrapper.sh</div>
+            <div class="step-version" id="setup-wrapper-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-ghost" id="setup-wrapper-btn"
+              onclick="runSetupStep('setup-wrapper', 'bash scripts/setup/setup-maestro-wrapper.sh', 'Maestro Wrapper Setup')">Setup</button>
+          </div>
+        </div>
+
+        <!-- Step 6: Build iOS -->
+        <div class="setup-step" id="setup-ios">
+          <div class="step-num" id="setup-ios-num">6</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Build iOS <span class="badge badge-ios"><span class="icon-apple"><svg width="10" height="10" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span>iOS</span></div>
+              <div class="step-icon" id="setup-ios-icon">⬜</div>
+            </div>
+            <div class="step-desc">Builds and installs the CVS Health app on the iOS simulator.</div>
+            <div class="step-meta">./scripts/build/build.sh ios repo</div>
+            <div class="step-version" id="setup-ios-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-ios-btn"
+              onclick="runSetupStep('setup-ios', './scripts/build/build.sh ios repo', 'Build iOS')">Build</button>
+          </div>
+        </div>
+
+        <!-- Step 7: Build Android -->
+        <div class="setup-step" id="setup-android">
+          <div class="step-num" id="setup-android-num">7</div>
+          <div class="step-body">
+            <div class="step-top">
+              <div class="step-title">Build Android <span class="badge badge-android"><span class="icon-android"><svg width="10" height="10" viewBox="0 0 576 512" fill="currentColor"><path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m273.7-144.48 47.94-83a10 10 0 1 0-17.27-10l-48.54 84.07a306.2 306.2 0 0 0-134.63 0l-48.54-84.07a10 10 0 1 0-17.27 10l47.94 83C175.07 198.44 120.25 277.93 120.25 368h335.5c0-90.07-54.82-169.56-126.6-210.55M120.25 368v116a36 36 0 0 0 72 0V368zm263.5 0v116a36 36 0 0 0 72 0V368zM84.25 256a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36zm407.5 0a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36z"/></svg></span>Android</span></div>
+              <div class="step-icon" id="setup-android-icon">⬜</div>
+            </div>
+            <div class="step-desc">Builds and installs the CVS Health app on the Android emulator.</div>
+            <div class="step-meta">./scripts/build/build.sh android repo</div>
+            <div class="step-version" id="setup-android-ver"></div>
+          </div>
+          <div class="step-action">
+            <button class="btn btn-primary" id="setup-android-btn"
+              onclick="runSetupStep('setup-android', './scripts/build/build.sh android repo', 'Build Android')">Build</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- END SETUP TAB -->
+
+    <!-- ══════════════════ RUN TESTS TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-run">
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Platform &amp; App</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">Platform</div>
+            <div class="radio-group">
+              <div class="radio-btn active" data-group="platform" data-val="ios"><span class="icon-apple"><svg width="14" height="14" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span> iOS</div>
+              <div class="radio-btn" data-group="platform" data-val="android"><span class="icon-android"><svg width="14" height="14" viewBox="0 0 576 512" fill="currentColor"><path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m273.7-144.48 47.94-83a10 10 0 1 0-17.27-10l-48.54 84.07a306.2 306.2 0 0 0-134.63 0l-48.54-84.07a10 10 0 1 0-17.27 10l47.94 83C175.07 198.44 120.25 277.93 120.25 368h335.5c0-90.07-54.82-169.56-126.6-210.55M120.25 368v116a36 36 0 0 0 72 0V368zm263.5 0v116a36 36 0 0 0 72 0V368zM84.25 256a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36zm407.5 0a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36z"/></svg></span> Android</div>
+              <div class="radio-btn" data-group="platform" data-val="both" title="Run the same target on iOS and Android in parallel (supports suite, flow, and custom modes)">⚡ Both</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Device</div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <select id="device-select" style="flex:1">
+                <option value="">— Select device —</option>
+              </select>
+              <button class="btn btn-ghost" style="padding:7px 10px;white-space:nowrap" onclick="refreshDeviceList()">🔄</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label">App</div>
+            <div class="radio-group">
+              <div class="radio-btn active" data-group="app" data-val="cvspharmacy">CVS Health</div>
+              <div class="radio-btn" data-group="app" data-val="health100">Health 100</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-label">Build Config</div>
+            <div class="radio-group">
+              <div class="radio-btn active" data-group="buildconfig" data-val="debug">Debug (QA)</div>
+              <div class="radio-btn" data-group="buildconfig" data-val="release">Release (Prod)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Test Target</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">Mode</div>
+            <div class="radio-group">
+              <div class="radio-btn active" data-group="testmode" data-val="suite">Suite</div>
+              <div class="radio-btn" data-group="testmode" data-val="flow">Flow</div>
+              <div class="radio-btn" data-group="testmode" data-val="custom">Custom path</div>
+            </div>
+          </div>
+
+          <div id="suite-picker" class="form-group">
+            <div class="form-label">Suite</div>
+            <div style="display:flex;gap:6px;align-items:center">
+              <select id="suite-select" style="flex:1">
+                <option value="">— Loading suites... —</option>
+              </select>
+              <button class="btn btn-ghost" style="padding:7px 10px;white-space:nowrap" onclick="refreshSuites()" title="Refresh suites">🔄</button>
+            </div>
+            <div class="checkbox-group" style="margin-top:8px">
+              <label class="checkbox-label" title="Post a summary to Slack (channel bound to SLACK_WEBHOOK_URL) when the suite finishes">
+                <input type="checkbox" id="suite-slack-notify" />
+                <span>Notify Slack on suite completion</span>
+              </label>
+            </div>
+            <div class="checkbox-group" style="margin-top:4px">
+              <label class="checkbox-label" title="After the suite finishes, create a Zephyr Scale test cycle and record a Pass/Fail execution for every test tagged with a Zephyr test case key (e.g. TLPCWHSAM-T639). Tests without a matching tag are skipped.">
+                <input type="checkbox" id="suite-zephyr-execution" />
+                <span>Add Zephyr Scale execution results</span>
+              </label>
+            </div>
+          </div>
+
+          <div id="flow-picker" style="display:none">
+            <div class="form-group">
+              <div class="form-label">Folder <span class="text-dim" style="font-weight:400;font-size:11px">.maestro/flows/*</span></div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <select id="flow-folder-select" onchange="loadFlowsInFolder()" style="flex:1">
+                  <option value="">— Select folder —</option>
+                </select>
+                <button class="btn btn-ghost" style="padding:7px 10px;white-space:nowrap" onclick="refreshFlows()" title="Refresh flow folders">🔄</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label">Flow <span class="text-dim" style="font-weight:400;font-size:11px">.maestro/flows/folder/**</span></div>
+              <select id="flow-select">
+                <option value="">— Select a folder first —</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="custom-picker" class="form-group" style="display:none">
+            <div class="form-label">Path (relative to project root)</div>
+            <input type="text" id="custom-path" placeholder=".maestro/flows/Account/test_authentication.yaml" />
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Options</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">Flags</div>
+            <div class="chip-group" id="flag-chips">
+              <div class="chip" data-flag="--pulse">🎨 Pulse</div>
+              <div class="chip" data-flag="--a11y">♿ A11y</div>
+              <div class="chip" data-flag="--skip-setup">⚡ Skip Setup</div>
+              <div class="chip" data-flag="--skip-preload">📦 Skip Preload</div>
+              <div class="chip" data-flag="--no-report">📄 No Report</div>
+              <div class="chip" data-flag="--no-browser">🚫 No Browser</div>
+              <div class="chip" data-flag="--no-ui-inspector" title="Disable background Android UI hierarchy capture (reduces CPU/adb load)">🧩 No UI Inspector</div>
+              <div class="chip" data-flag="--no-network-monitor" title="Disable background Android network/logcat capture (reduces CPU/adb load)">📡 No Network Monitor</div>
+              <div class="chip" data-flag="--minimal-monitoring" title="Disable both UI inspector and network monitor (use on resource-constrained hosts)">🪶 Minimal Monitoring</div>
+              <div class="chip" data-flag="--download-and-install-latest-firebase" data-android-only title="Skip the local Gradle build entirely — download and install the latest Firebase App Distribution release built from 'main' (Android only)">☁️ Firebase Latest (Android)</div>
+            </div>
+          </div>
+
+          <div class="form-group checkbox-container" data-context="single-test">
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="skip-validation" onchange="updatePreview()" />
+                <span>Skip path validation (for single test runs)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group checkbox-container" data-context="ios-only">
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="skip-prelaunch" onchange="updatePreview()" />
+                <span>Skip app pre-launch (iOS only)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parallel Shards Section -->
+      <div class="section" id="shard-section">
+        <div class="section-header"><span class="dot"></span>Parallel Shards</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">Shard Count <span style="font-size:11px;font-weight:400;color:var(--text-dim)">(# of devices to run in parallel)</span></div>
+            <div class="radio-group" id="shard-count-group">
+              <div class="radio-btn active" data-shard="1">1 (off)</div>
+              <div class="radio-btn" data-shard="2">2×</div>
+              <div class="radio-btn" data-shard="3">3×</div>
+              <div class="radio-btn" data-shard="4">4×</div>
+            </div>
+          </div>
+          <div id="shard-devices-section" style="display:none">
+            <div class="form-group">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div class="form-label" style="margin:0">Devices</div>
+                <span style="font-size:11px;color:var(--text-dim)">(check one per shard slot)</span>
+                <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;margin-left:auto" onclick="refreshShardDevices()">🔄</button>
+              </div>
+              <div id="shard-device-list" class="shard-device-list">
+                <div class="text-dim text-sm" style="text-align:center;padding:8px">Click 🔄 to load devices</div>
+              </div>
+              <div id="shard-device-warning" style="display:none;margin-top:6px;font-size:11px;color:var(--orange);padding:6px 8px;background:rgba(230,81,0,0.08);border-radius:var(--radius-sm)"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adhoc Test Options -->
+      <div class="section" id="adhoc-options" style="display:none">
+        <div class="section-header"><span class="dot"></span>Adhoc Monkey Test Options</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">Number of Actions</div>
+            <input type="number" id="num-actions" min="1" max="10000" value="10" onchange="updatePreview()" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:var(--radius-sm)" />
+          </div>
+
+          <div class="form-group">
+            <div class="form-label">Action Weights (Total: <span id="weight-total">100</span>%)</div>
+            
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <label style="font-size:12px;font-weight:500">Tap: <span id="tap-value">80</span>%</label>
+              </div>
+              <input type="range" id="tap-weight" min="0" max="100" value="80" onchange="updateWeights()" style="width:100%" />
+            </div>
+
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <label style="font-size:12px;font-weight:500">Swipe: <span id="swipe-value">15</span>%</label>
+              </div>
+              <input type="range" id="swipe-weight" min="0" max="100" value="15" onchange="updateWeights()" style="width:100%" />
+            </div>
+
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <label style="font-size:12px;font-weight:500">Back: <span id="back-value">5</span>%</label>
+              </div>
+              <input type="range" id="back-weight" min="0" max="100" value="5" onchange="updateWeights()" style="width:100%" />
+            </div>
+
+            <div style="padding:8px;background:var(--bg3);border-radius:var(--radius-sm);font-size:11px;color:var(--text-dim)">
+              ⚠️ Weights will auto-adjust to maintain 100% total
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Command Preview</div>
+        <div class="section-body">
+          <div id="cmd-preview" class="preview-box">—</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;padding:4px 0">
+        <button id="btn-run-test" class="btn btn-primary btn-lg" style="flex:1" onclick="runTest()">▶ Run Test</button>
+        <button id="btn-run-sharded" class="btn btn-primary btn-lg" style="flex:1;display:none" onclick="runSharded()">▶ Run Sharded</button>
+        <button class="btn btn-ghost" onclick="runCmd('open test-reports/test-report-latest.html', 'Open report')">📊 Open Report</button>
+      </div>
+
+      <!-- Shard Output Panel (shown when sharded run is active) -->
+      <div id="shard-output-panel" class="shard-panel" style="display:none">
+        <div class="shard-panel-header">
+          ⚡ Sharded Run
+          <span id="shard-run-summary" class="shard-panel-summary">Starting…</span>
+          <button id="btn-kill-sharded" class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="killAllShards()">■ Stop All</button>
+        </div>
+        <div id="shard-tab-bar" class="shard-tab-bar"></div>
+        <div id="shard-output-container"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Device Recovery</div>
+        <div class="section-body">
+          <p class="text-dim text-sm" style="margin-bottom:8px">Use this if you encounter device offline errors. Kills gRPC, Maestro, and restarts the emulator.</p>
+          <button class="btn btn-danger btn-lg" style="width:100%" onclick="refreshDevice()">🔄 Refresh Device & Emulator</button>
+        </div>
+      </div>
+
+      <!-- Process Monitoring Section -->
+      <div class="card">
+        <div class="section-header">
+          <span class="dot"></span>Process Monitoring
+          <span class="badge" id="process-count" style="background:var(--cvs-red);color:white;font-size:10px;">0</span>
+        </div>
+        <div class="section-body">
+          <p class="text-dim text-sm" style="margin-bottom:8px">Monitor and clean up stale processes from test runs.</p>
+          
+          <div class="process-controls" style="display:flex;gap:8px;margin-bottom:12px;">
+            <button class="btn btn-ghost" onclick="loadProcesses()">🔄 Refresh</button>
+            <button class="btn btn-ghost" style="color:var(--cvs-red);border-color:rgba(198,40,40,0.3)" onclick="cleanupAllProcesses()">🧹 Cleanup All</button>
+          </div>
+
+          <div id="process-list" style="max-height:200px;overflow-y:auto;">
+            <div class="text-dim text-sm" style="text-align:center;padding:20px;">Click Refresh to view processes</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Quick Suites</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Smoke — CVS Health</div>
+              <div class="cmd-code">bash scripts/testing/test.sh .maestro/apps/cvshealth/suites/smoke.yaml</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('bash scripts/testing/test.sh .maestro/apps/cvshealth/suites/smoke.yaml', 'Smoke — CVS Health')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Smoke — Health 100</div>
+              <div class="cmd-code">bash scripts/testing/test.sh .maestro/apps/health100/suites/smoke.yaml</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('bash scripts/testing/test.sh .maestro/apps/health100/suites/smoke.yaml', 'Smoke — Health 100')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Open Maestro Studio</div>
+              <div class="cmd-code">maestro studio</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('maestro studio', 'Maestro Studio')">Open</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END RUN TESTS TAB -->
+
+    <!-- ══════════════════ RECORDER TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-recorder">
+
+      <div class="recorder-card">
+        <div class="recorder-icon">🎬</div>
+        <div class="recorder-title">Maestro Flow Recorder</div>
+        <div class="recorder-desc">Zero-code test creation with recording, playback, and debugging. After starting, open the URL below.</div>
+        <div class="recorder-url"><a href="http://localhost:3000" target="_blank">http://localhost:3000</a></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary btn-lg" style="flex:1" onclick="runCmd('./scripts/recorder/start-recorder.sh', 'Start recorder')">▶ Start Recorder</button>
+          <button class="btn btn-danger" onclick="runCmd('./scripts/recorder/stop-recorder.sh', 'Stop recorder')">■ Stop</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Recorder Setup</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Install recorder</div>
+              <div class="cmd-code">./scripts/recorder/install-recorder.sh</div>
+            </div>
+            <button class="btn btn-primary" onclick="runCmd('./scripts/recorder/install-recorder.sh', 'Install recorder')">Install</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Restart recorder</div>
+              <div class="cmd-code">./scripts/recorder/restart-recorder.sh</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('./scripts/recorder/restart-recorder.sh', 'Restart recorder')">Restart</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Fix dependencies</div>
+              <div class="cmd-code">./scripts/recorder/fix-dependencies.sh</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('./scripts/recorder/fix-dependencies.sh', 'Fix recorder dependencies')">Fix</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Device Inspection</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Inspect iOS UI hierarchy</div>
+              <div class="cmd-code">node scripts/utils/ios-ui-inspector.js</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('node scripts/utils/ios-ui-inspector.js', 'iOS UI inspector')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Inspect Android UI hierarchy</div>
+              <div class="cmd-code">node scripts/utils/android-ui-inspector.js</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('node scripts/utils/android-ui-inspector.js', 'Android UI inspector')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Maestro Studio (interactive)</div>
+              <div class="cmd-code">maestro studio</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('maestro studio', 'Maestro Studio')">Open</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Reports</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Open latest test report</div>
+              <div class="cmd-code">open test-reports/test-report-latest.html</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('open test-reports/test-report-latest.html', 'Open test report')">Open</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Open accessibility report</div>
+              <div class="cmd-code">open test-reports/IOS_*/accessibility-report.html</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('open test-reports/IOS_*/accessibility-report.html', 'Open a11y report')">Open</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">Open Pulse design report</div>
+              <div class="cmd-code">open test-reports/IOS_*/pulse-report.html</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('open test-reports/IOS_*/pulse-report.html', 'Open Pulse report')">Open</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info">
+              <div class="cmd-label">List all reports</div>
+              <div class="cmd-code">ls -la test-reports/</div>
+            </div>
+            <button class="btn btn-ghost" onclick="runCmd('ls -la test-reports/', 'List reports')">List</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END RECORDER TAB -->
+
+    <!-- ══════════════════ TEST GENERATOR TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-generator">
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Excel Test Case Import</div>
+        <div class="section-body">
+          <p class="text-dim text-sm" style="margin-bottom:12px">Import Excel test cases and generate Maestro YAML files using AI. Supports .xlsx, .xls, and .csv files.</p>
+          
+          <div class="import-section">
+            <input type="file" id="excel-file-main" accept=".xlsx,.xls,.csv" style="display: none;">
+            <button class="btn btn-primary btn-lg" style="width:100%" onclick="document.getElementById('excel-file-main').click()">
+              📁 Choose Excel File
+            </button>
+            <div id="file-info-main" style="margin-top:8px;font-size:12px;color:var(--text-dim);text-align:center;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parsed Excel rows table -->
+      <div class="section" id="excel-parsed-section" style="display:none;">
+        <div class="section-header"><span class="dot"></span>Parsed Test Cases <span id="parsed-row-count" style="font-size:11px;color:var(--text-dim);margin-left:6px;"></span></div>
+        <div class="section-body">
+          <div id="parsed-rows-container" style="max-height:320px;overflow-y:auto;"></div>
+          <button class="batch-gen-btn" id="batch-generate-btn" onclick="batchGenerateAllTests()">
+            🚀 Generate Excel Tests
+          </button>
+          <div class="batch-progress" id="batch-progress" style="display:none;">
+            <span id="batch-progress-text">Generating 0 / 0...</span>
+            <div class="batch-progress-bar"><div class="batch-progress-bar-fill" id="batch-progress-fill"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="test-input-section-main" style="display:none;">
+        <div class="section-header"><span class="dot"></span>Test Case Details</div>
+        <div class="section-body">
+          <div class="test-form">
+            <div class="form-group">
+              <label>Test Case #:</label>
+              <input type="text" id="test-id-main" placeholder="HS-1.0.0" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;">
+            </div>
+            <div class="form-group">
+              <label>Functional Area:</label>
+              <input type="text" id="functional-area-main" placeholder="Search nav integration" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;">
+            </div>
+            <div class="form-group">
+              <label>Test Scenario:</label>
+              <input type="text" id="test-scenario-main" placeholder="Header components load - Account, notifications, cart, search - Guest" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;">
+            </div>
+            <div class="form-group">
+              <label>Notes:</label>
+              <textarea id="test-notes-main" placeholder="Check all user segments: guest, guest+ec, guest+ecplus" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;min-height:60px;resize:vertical;"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Test Steps:</label>
+              <textarea id="test-steps-main" placeholder="1. Continue through onboarding as a guest user&#10;2. Check header components - Sign in displayed, notifications/messages, cart, search bar, barcode scanner, voice search" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:4px;min-height:80px;resize:vertical;"></textarea>
+            </div>
+          </div>
+          
+          <div style="display:flex;gap:8px;margin-top:16px;align-items:center;">
+            <select id="generation-mode" style="padding:8px;border:1px solid var(--border);border-radius:4px;font-size:12px;background:var(--bg1);color:var(--text);min-width:120px;">
+              <option value="hybrid" selected>🔀 Hybrid</option>
+              <option value="template">📝 Template</option>
+              <option value="llm">🤖 Llama 3.2</option>
+            </select>
+            <button class="btn btn-primary" style="flex:1" id="generate-test-btn" onclick="generateMaestroTestMain()">
+              🚀 Generate Test
+            </button>
+            <button class="btn btn-ghost" onclick="clearTestFormMain()">
+              🗑️ Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Quick Examples</div>
+        <div class="section-body">
+          <div style="display:grid;gap:8px;">
+            <button class="btn btn-ghost" style="text-align:left;" onclick="loadExample('login')">
+              <div style="font-weight:600;">🔐 Login Flow Example</div>
+              <div style="font-size:11px;color:var(--text-dim);">User authentication and sign-in process</div>
+            </button>
+            <button class="btn btn-ghost" style="text-align:left;" onclick="loadExample('search')">
+              <div style="font-weight:600;">🔍 Search Functionality</div>
+              <div style="font-size:11px;color:var(--text-dim);">Product search and filtering</div>
+            </button>
+            <button class="btn btn-ghost" style="text-align:left;" onclick="loadExample('checkout')">
+              <div style="font-weight:600;">🛒 Checkout Process</div>
+              <div style="font-size:11px;color:var(--text-dim);">Shopping cart and payment flow</div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ══════════════════ VERIFY TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-verify">
+
+      <div style="display:flex;gap:8px;align-items:center;padding:4px 0">
+        <button class="btn btn-primary btn-lg" style="flex:1" onclick="runAllChecks()">🔍 Run All Checks</button>
+        <span id="verify-summary" class="text-dim text-sm"></span>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Core Tools</div>
+        <div class="section-body" id="checks-core">
+          <div class="check-row" id="chk-maestro" data-cmd="maestro --version" data-label="Maestro CLI"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Maestro CLI</div><div class="chk-cmd">maestro --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-node" data-cmd="node --version" data-label="Node.js"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Node.js (16+)</div><div class="chk-cmd">node --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-npm" data-cmd="npm --version" data-label="npm"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">npm</div><div class="chk-cmd">npm --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-git" data-cmd="git --version" data-label="Git"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Git</div><div class="chk-cmd">git --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-nodedeps" data-cmd="test -d node_modules &amp;&amp; echo ok" data-label="Node Dependencies"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Node Dependencies</div><div class="chk-cmd">node_modules/ directory exists</div></div><div class="chk-output"></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>iOS <span class="badge badge-ios"><span class="icon-apple"><svg width="10" height="10" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span>iOS</span></div>
+        <div class="section-body" id="checks-ios">
+          <div class="check-row" id="chk-xcode" data-cmd="xcode-select --print-path" data-label="Xcode CLI Tools"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Xcode CLI Tools</div><div class="chk-cmd">xcode-select --print-path</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-cocoapods" data-cmd="pod --version" data-label="CocoaPods"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">CocoaPods</div><div class="chk-cmd">pod --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-simavail" data-cmd="xcrun simctl list devices available 2>/dev/null | grep -c iPhone" data-label="iOS Simulators Available" data-count-ok="true"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">iOS Simulators Available</div><div class="chk-cmd">xcrun simctl list devices available</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-simbooted" data-cmd="xcrun simctl list devices 2>/dev/null | grep Booted" data-label="iOS Simulator Booted"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">iOS Simulator Booted</div><div class="chk-cmd">xcrun simctl list devices | grep Booted</div></div><div class="chk-output"></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>iOS App Install <span class="badge badge-ios"><span class="icon-apple"><svg width="10" height="10" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span>iOS</span></div>
+        <div class="section-body">
+          <div class="check-row" id="chk-cvs-ios" data-cmd="xcrun simctl listapps booted 2>/dev/null | grep cvspharmacy | head -1" data-label="CVS Health App (iOS)"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">CVS Health App (iOS)</div><div class="chk-cmd">com.cvsenterpriseiphone.cvspharmacy</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-h100-ios" data-cmd="xcrun simctl listapps booted 2>/dev/null | grep health100 | head -1" data-label="Health 100 App (iOS)"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Health 100 App (iOS)</div><div class="chk-cmd">com.cvsenterpriseiphone.health100</div></div><div class="chk-output"></div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Android <span class="badge badge-android"><span class="icon-android"><svg width="10" height="10" viewBox="0 0 576 512" fill="currentColor"><path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m273.7-144.48 47.94-83a10 10 0 1 0-17.27-10l-48.54 84.07a306.2 306.2 0 0 0-134.63 0l-48.54-84.07a10 10 0 1 0-17.27 10l47.94 83C175.07 198.44 120.25 277.93 120.25 368h335.5c0-90.07-54.82-169.56-126.6-210.55M120.25 368v116a36 36 0 0 0 72 0V368zm263.5 0v116a36 36 0 0 0 72 0V368zM84.25 256a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36zm407.5 0a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36z"/></svg></span>Android</span></div>
+        <div class="section-body" id="checks-android">
+          <div class="check-row" id="chk-android-home" data-cmd="test -n &quot;$ANDROID_HOME&quot; &amp;&amp; echo &quot;$ANDROID_HOME&quot;" data-label="Android SDK (ANDROID_HOME)"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Android SDK (ANDROID_HOME)</div><div class="chk-cmd">$ANDROID_HOME set &amp; directory exists</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-adb" data-cmd="adb --version" data-label="ADB"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">ADB (Android Debug Bridge)</div><div class="chk-cmd">adb --version</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-emulator" data-cmd="emulator -list-avds 2>/dev/null" data-label="Android Emulators"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">Android Emulators (AVDs)</div><div class="chk-cmd">emulator -list-avds</div></div><div class="chk-output"></div></div>
+          <div class="check-row" id="chk-cvs-android" data-cmd="adb shell pm list packages 2>/dev/null | grep cvs | head -1" data-label="CVS App (Android)"><div class="chk-icon">⬜</div><div class="chk-info"><div class="chk-label">CVS App (Android)</div><div class="chk-cmd">com.cvs.launchers.cvs</div></div><div class="chk-output"></div></div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END VERIFY TAB -->
+
+    <!-- ══════════════════ UTILITY TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-utility">
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Node.js</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Current Node version</div><div class="cmd-code">node --version</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('node --version', 'Node version')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Current npm version</div><div class="cmd-code">npm --version</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('npm --version', 'npm version')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List nvm versions</div><div class="cmd-code">nvm list</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('source ~/.nvm/nvm.sh 2>/dev/null; nvm list', 'nvm list')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">npm global packages</div><div class="cmd-code">npm list -g --depth=0</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('npm list -g --depth=0', 'npm global packages')">Run</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>iOS Simulator <span class="badge badge-ios"><span class="icon-apple"><svg width="10" height="10" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg></span>iOS</span></div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List all simulators</div><div class="cmd-code">xcrun simctl list devices</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('xcrun simctl list devices', 'List simulators')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List booted simulators</div><div class="cmd-code">xcrun simctl list devices | grep Booted</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('xcrun simctl list devices | grep Booted', 'Booted simulators')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List installed apps (booted)</div><div class="cmd-code">xcrun simctl listapps booted</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('xcrun simctl listapps booted', 'Installed apps (iOS)')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">CVS Health app info</div><div class="cmd-code">xcrun simctl listapps booted | grep -A5 cvspharmacy</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('xcrun simctl listapps booted | grep -A5 cvspharmacy', 'CVS Health app info')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">View CVS app logs (live)</div><div class="cmd-code">xcrun simctl spawn booted log stream --predicate 'process CONTAINS "CVS"'</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('xcrun simctl spawn booted log stream --predicate &quot;process CONTAINS \&quot;CVS\&quot;&quot;', 'CVS logs')">Stream</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Shutdown all simulators</div><div class="cmd-code">xcrun simctl shutdown all</div></div>
+            <button class="btn btn-danger" onclick="runCmd('xcrun simctl shutdown all', 'Shutdown all simulators')">Shutdown</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Android Emulator <span class="badge badge-android"><span class="icon-android"><svg width="10" height="10" viewBox="0 0 576 512" fill="currentColor"><path d="M420.55 301.93a24 24 0 1 1 24-24 24 24 0 0 1-24 24m-265.1 0a24 24 0 1 1 24-24 24 24 0 0 1-24 24m273.7-144.48 47.94-83a10 10 0 1 0-17.27-10l-48.54 84.07a306.2 306.2 0 0 0-134.63 0l-48.54-84.07a10 10 0 1 0-17.27 10l47.94 83C175.07 198.44 120.25 277.93 120.25 368h335.5c0-90.07-54.82-169.56-126.6-210.55M120.25 368v116a36 36 0 0 0 72 0V368zm263.5 0v116a36 36 0 0 0 72 0V368zM84.25 256a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36zm407.5 0a36 36 0 0 0-36 36v116a36 36 0 0 0 72 0V292a36 36 0 0 0-36-36z"/></svg></span>Android</span></div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List AVDs</div><div class="cmd-code">emulator -list-avds</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('emulator -list-avds', 'List AVDs')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List installed packages</div><div class="cmd-code">adb shell pm list packages | grep cvs</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('adb shell pm list packages | grep cvs', 'Android CVS packages')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">All installed packages</div><div class="cmd-code">adb shell pm list packages</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('adb shell pm list packages', 'All Android packages')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">ADB devices</div><div class="cmd-code">adb devices</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('adb devices', 'ADB devices')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Logcat (CVS)</div><div class="cmd-code">adb logcat | grep CVS</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('adb logcat | grep CVS', 'Android logcat')">Stream</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Restart ADB server</div><div class="cmd-code">adb kill-server &amp;&amp; adb start-server</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('adb kill-server && adb start-server', 'Restart ADB')">Restart</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>Maestro</div>
+        <div class="section-body">
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Maestro version</div><div class="cmd-code">maestro --version</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('maestro --version', 'Maestro version')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Maestro Studio (interactive)</div><div class="cmd-code">maestro studio</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('maestro studio', 'Maestro Studio')">Open</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Maestro help</div><div class="cmd-code">maestro --help</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('maestro --help', 'Maestro help')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Check credentials loaded</div><div class="cmd-code">BUILD_CONFIG=debug node scripts/setup/load-credentials.js</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('BUILD_CONFIG=debug node scripts/setup/load-credentials.js', 'Check credentials')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">List test reports</div><div class="cmd-code">ls -lt test-reports/</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('ls -lt test-reports/', 'List reports')">Run</button>
+          </div>
+          <div class="cmd-row">
+            <div class="cmd-info"><div class="cmd-label">Validate flow paths</div><div class="cmd-code">npm run validate:paths</div></div>
+            <button class="btn btn-ghost" onclick="runCmd('npm run validate:paths', 'Validate paths')">Run</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END UTILITY TAB -->
+
+    <!-- ══════════════════ TEST DATA TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-testdata">
+
+      <!-- Side panel: app selection + run button.
+           The report iframe lives in its own panel-right (#testdata-panel)
+           further below, wired up by the tab-switch handler in main JS. -->
+      <div class="section">
+        <div class="section-header"><span class="dot"></span>App Selection</div>
+        <div class="section-body">
+          <div class="form-group">
+            <div class="form-label">App</div>
+            <div class="radio-group">
+              <div class="radio-btn"        data-group="testdata-app" data-val="cvs"
+                   onclick="setTestDataApp('cvs')">CVS</div>
+              <div class="radio-btn"        data-group="testdata-app" data-val="h100"
+                   onclick="setTestDataApp('h100')">Health100</div>
+              <div class="radio-btn active" data-group="testdata-app" data-val="both"
+                   onclick="setTestDataApp('both')">Both</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg" style="width:100%;margin-top:8px"
+                  onclick="runTestData()">▶ Run Test Data</button>
+          <div class="text-dim text-sm" style="margin-top:10px;font-family:'SF Mono',monospace;word-break:break-all"
+               id="testdata-cmd-preview"></div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END TEST DATA TAB -->
+
+    <!-- ══════════════════ TEST MAP TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-testmap" style="padding: 0; height: 100%;">
+      <div id="testmap-error" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; padding: 40px; text-align: center; color: var(--text-dim);">
+        <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+        <div style="font-size: 16px; font-weight: 600; margin-bottom: 10px; color: var(--text);">UI State Mapper Not Running</div>
+        <div style="font-size: 13px; margin-bottom: 20px;">The UI State Mapper server is not running on port 3030.</div>
+        <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; max-width: 500px; margin: 0 auto; text-align: left;">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text);">To start the server:</div>
+          <code style="display: block; background: var(--term-bg); padding: 10px; border-radius: 5px; font-size: 11px; color: var(--term-text);">cd ui-state-mapper && node server.js</code>
+          <div style="font-size: 11px; margin-top: 12px; color: var(--text-dim);">Or run from project root:</div>
+          <code style="display: block; background: var(--term-bg); padding: 10px; border-radius: 5px; font-size: 11px; color: var(--term-text); margin-top: 4px;">node ui-state-mapper/server.js</code>
+        </div>
+        <button class="btn btn-primary" style="margin-top: 20px;" onclick="retryTestMap()">🔄 Retry Connection</button>
+      </div>
+      <iframe
+        id="testmap-iframe"
+        style="width: 100%; height: 100%; border: none; display: none;"
+        frameborder="0"
+      ></iframe>
+    </div>
+    <!-- END TEST MAP TAB -->
+
+    <!-- ══════════════════ SCRIPT BUILDER TAB ══════════════════ -->
+    <!-- This panel lives in panel-left and shows ONLY the file tree sidebar -->
+    <div class="tab-panel" id="tab-builder" style="padding:0; overflow:hidden; flex-direction:column;">
+      
+      <!-- Builder Type Tabs -->
+      <div class="builder-tabs" style="display:flex;background:var(--bg2);border-bottom:1px solid var(--border);">
+        <div class="builder-tab active" data-builder-type="flows" onclick="switchBuilderType('flows')">
+          <span style="font-size:11px;">📁 Flows</span>
+        </div>
+        <div class="builder-tab" data-builder-type="subflows" onclick="switchBuilderType('subflows')">
+          <span style="font-size:11px;">🔄 Subflows</span>
+        </div>
+      </div>
+
+      <!-- Flows Panel -->
+      <div class="builder-panel" id="builder-flows-panel" style="display:flex;flex-direction:column;flex:1;">
+        <div class="builder-sidebar-header">
+          <span>📁 .maestro/flows</span>
+          <div style="display:flex;gap:4px;">
+            <button class="btn" style="font-size:10px;padding:3px 8px;background:var(--bg3);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;" onclick="loadBuilderTree()" title="Refresh tree and recheck errors">↻</button>
+            <button class="btn btn-primary" style="font-size:10px;padding:3px 8px;" onclick="showNewFlowDialog()">+ New</button>
+          </div>
+        </div>
+        <div class="builder-tree" id="builder-tree" style="flex:1; overflow-y:auto; padding:6px 0;">
+          <div style="padding:12px;color:var(--text-muted);font-size:12px;">Loading...</div>
+        </div>
+      </div>
+
+      <!-- Subflows Panel -->
+      <div class="builder-panel" id="builder-subflows-panel" style="display:none;flex-direction:column;flex:1;">
+        <div class="builder-sidebar-header">
+          <span>🔄 .maestro/subflows</span>
+          <div style="display:flex;gap:4px;">
+            <button class="btn" style="font-size:10px;padding:3px 8px;background:var(--bg3);color:var(--text-muted);border:1px solid var(--border);border-radius:4px;cursor:pointer;" onclick="loadSubflowTree()" title="Refresh tree and recheck errors">↻</button>
+            <button class="btn btn-primary" style="font-size:10px;padding:3px 8px;" onclick="showNewSubflowDialog()">+ New</button>
+          </div>
+        </div>
+        <div class="builder-tree" id="subflow-tree" style="flex:1; overflow-y:auto; padding:6px 0;">
+          <div style="padding:12px;color:var(--text-muted);font-size:12px;">Loading...</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- END SCRIPT BUILDER TAB -->
+
+    <!-- ══════════════════ ZEPHYR TAB ══════════════════ -->
+    <div class="tab-panel" id="tab-zephyr">
+
+      <!-- ── Sidebar ── -->
+      <div class="zephyr-sidebar">
+
+        <!-- Config -->
+        <div class="zephyr-config">
+          <label>Project Key</label>
+          <input id="z-project" type="text" value="TLPCWHSAM" placeholder="e.g. TLPCWHSAM" />
+          <label>Access Token</label>
+          <input id="z-token" type="password" placeholder="Bearer token from Zephyr Scale" />
+          <button class="btn btn-primary" style="width:100%;font-size:12px;" onclick="zephyrConnect()">Connect</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="zephyr-section-title">Test Artifacts</div>
+
+        <div class="zephyr-nav-item active" data-z-view="testcases" onclick="zephyrSetView('testcases')">
+          <span class="nav-icon">📋</span>
+          Test Cases
+          <span class="nav-count" id="z-count-testcases">—</span>
+        </div>
+        <div class="zephyr-nav-item" data-z-view="testcycles" onclick="zephyrSetView('testcycles')">
+          <span class="nav-icon">🔄</span>
+          Test Cycles
+          <span class="nav-count" id="z-count-testcycles">—</span>
+        </div>
+        <div class="zephyr-nav-item" data-z-view="testplans" onclick="zephyrSetView('testplans')">
+          <span class="nav-icon">📅</span>
+          Test Plans
+          <span class="nav-count" id="z-count-testplans">—</span>
+        </div>
+        <div class="zephyr-nav-item" data-z-view="testexecutions" onclick="zephyrSetView('testexecutions')">
+          <span class="nav-icon">▶️</span>
+          Test Executions
+          <span class="nav-count" id="z-count-testexecutions">—</span>
+        </div>
+
+        <!-- Create actions -->
+        <div class="zephyr-section-title" style="margin-top:4px;">Create</div>
+        <button class="zephyr-create-btn" onclick="zephyrOpenCreateCycle()">＋ Test Cycle</button>
+        <button class="zephyr-create-btn" onclick="zephyrOpenCreatePlan()">＋ Test Plan</button>
+
+        <div class="zephyr-section-title" style="margin-top:8px;">Quick Filters</div>
+        <div style="padding:0 14px 12px; display:flex; flex-direction:column; gap:8px;">
+          <div>
+            <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Priority</div>
+            <select id="z-filter-priority" onchange="zephyrApplyFilters()" style="width:100%;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg3);color:var(--text);outline:none;">
+              <option value="">All Priorities</option>
+              <option value="high">High</option>
+              <option value="high|medium">Medium+</option>
+              <option value="high|medium|low">Low+</option>
+            </select>
+          </div>
+          <div>
+            <div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">Status</div>
+            <select id="z-filter-status" onchange="zephyrApplyFilters()" style="width:100%;font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg3);color:var(--text);outline:none;">
+              <option value="">All Statuses</option>
+              <option value="draft">Draft</option>
+              <option value="approved">Approved</option>
+              <option value="deprecated">Deprecated</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="zephyr-section-title" style="margin-top:auto; padding-top:12px;">Page Size</div>
+        <div style="padding:0 14px 8px;">
+          <select id="z-pagesize" onchange="zephyrLoad()" style="font-size:12px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg3);color:var(--text);width:100%;outline:none;">
+            <option value="20">20 per page</option>
+            <option value="50" selected>50 per page</option>
+            <option value="100">100 per page</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- ── Main content ── -->
+      <div class="zephyr-main" style="position:relative;">
+
+        <!-- Toolbar -->
+        <div class="zephyr-toolbar">
+          <h2 id="z-main-title">Zephyr Scale</h2>
+          <input class="zephyr-search" id="z-search" type="text" placeholder="Search loaded items…" oninput="zephyrFilterLocal()" />
+          <button class="btn" style="font-size:12px;padding:6px 12px;" onclick="zephyrLoad()" title="Reload">↻ Refresh</button>
+          <button class="btn btn-primary" style="font-size:12px;padding:6px 12px;" onclick="zephyrExpandAll()">Expand All</button>
+        </div>
+
+        <!-- Content area -->
+        <div class="zephyr-content" id="z-content">
+          <div class="zephyr-empty">
+            <div class="zephyr-empty-icon">🔗</div>
+            <h3>Connect to Zephyr Scale</h3>
+            <p>Enter your project key and access token, then click Connect to browse your test artifacts.</p>
+          </div>
+        </div>
+
+        <!-- Pagination bar -->
+        <div class="zephyr-pagination" id="z-pagination" style="display:none;">
+          <span class="pager-info" id="z-pager-info">—</span>
+          <button class="btn" style="font-size:11px;padding:4px 10px;" id="z-prev" onclick="zephyrPage(-1)" disabled>← Prev</button>
+          <span id="z-page-indicator" style="font-size:11px;font-weight:600;">1</span>
+          <button class="btn" style="font-size:11px;padding:4px 10px;" id="z-next" onclick="zephyrPage(1)">Next →</button>
+        </div>
+
+        <!-- Detail slide-in panel -->
+        <div class="zephyr-detail-panel" id="z-detail-panel">
+          <div class="zephyr-detail-header">
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:2px;" id="z-detail-key">—</div>
+              <div style="font-size:15px;font-weight:700;" id="z-detail-name">Detail</div>
+            </div>
+            <button class="btn" style="font-size:12px;padding:5px 10px;" onclick="zephyrCloseDetail()">✕ Close</button>
+          </div>
+          <div class="zephyr-detail-body" id="z-detail-body">
+            <div class="zephyr-loading"><div class="zephyr-spinner"></div><span>Loading…</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- END ZEPHYR TAB -->
+
+  <!-- ── Create Test Cycle Dialog ── -->
+  <div class="zephyr-create-overlay" id="zcd-cycle-overlay" style="display:none;" onclick="if(event.target===this)zephyrCloseCreateCycle()">
+    <div class="zephyr-create-dialog" style="width:520px;">
+      <div class="zephyr-create-dialog-header">
+        <span style="font-size:18px;">🔄</span>
+        <h3>Create Test Cycle</h3>
+        <button class="btn btn-ghost" style="font-size:12px;padding:4px 10px;" onclick="zephyrCloseCreateCycle()">✕</button>
+      </div>
+      <div class="zephyr-create-dialog-body">
+        <!-- Platform chips + per-platform names at top -->
+        <div class="zcd-field">
+          <label class="zcd-label">Platform &amp; Cycle Name <span class="zcd-required">*</span>
+            <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:9px;margin-left:6px;">one cycle created per platform</span>
+          </label>
+          <div class="zcd-platform-group" id="zcd-cycle-platforms" style="margin-bottom:8px;">
+            <div class="zcd-platform-chip selected" data-value="iOS" onclick="zcdTogglePlatform(this,'cycle')">📱 iOS</div>
+            <div class="zcd-platform-chip selected" data-value="Android" onclick="zcdTogglePlatform(this,'cycle')">🤖 Android</div>
+            <div class="zcd-platform-chip" data-value="Web" onclick="zcdTogglePlatform(this,'cycle')">🌐 Web</div>
+          </div>
+          <div id="zcd-cycle-platform-names" style="display:flex;flex-direction:column;gap:6px;">
+            <div class="zcd-platform-name-row" data-platform="iOS" style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">📱 iOS</span>
+              <input class="zcd-input" data-cycle-platform-name="iOS" type="text" placeholder="iOS cycle name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+            <div class="zcd-platform-name-row" data-platform="Android" style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">🤖 Android</span>
+              <input class="zcd-input" data-cycle-platform-name="Android" type="text" placeholder="Android cycle name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+            <div class="zcd-platform-name-row" data-platform="Web" style="display:none;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">🌐 Web</span>
+              <input class="zcd-input" data-cycle-platform-name="Web" type="text" placeholder="Web cycle name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+          </div>
+        </div>
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Build / Version</label>
+            <input id="zcd-cycle-build" class="zcd-input" type="text" placeholder="e.g. Release-1.1.2" oninput="zcdRebuildCycleName()" />
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Classification</label>
+            <select id="zcd-cycle-class" class="zcd-select" onchange="zcdRebuildCycleName()">
+              <option value="Regression">Regression</option>
+              <option value="Smoke">Smoke</option>
+              <option value="Functional">Functional</option>
+              <option value="Performance">Performance</option>
+            </select>
+          </div>
+        </div>
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">App</label>
+            <select id="zcd-cycle-app" class="zcd-select">
+              <option value="">— All —</option>
+              <option value="CVS Retail">CVS Retail</option>
+              <option value="Health100">Health100</option>
+              <option value="Health100 Web">Health100 Web</option>
+            </select>
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Module</label>
+            <select id="zcd-cycle-module" class="zcd-select" onchange="zcdRebuildCycleName()">
+              <option value="">— All —</option>
+              <option value="Homescreen">Homescreen</option>
+              <option value="OpenPlatform">OpenPlatform</option>
+              <option value="SearchNav">SearchNav</option>
+              <option value="Account">Account</option>
+              <option value="Benefits">Benefits</option>
+              <option value="HAIO">HAIO</option>
+              <option value="Pharmacy">Pharmacy</option>
+            </select>
+          </div>
+        </div>
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Priority</label>
+            <select id="zcd-cycle-priority" class="zcd-select">
+              <option value="">— All —</option>
+              <option value="High" selected>High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Status</label>
+            <select id="zcd-cycle-status" class="zcd-select">
+              <option value="Not Executed">Not Executed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Folder: 3 cascading dropdowns (Quarter → App → Release) -->
+        <div class="zcd-field">
+          <label class="zcd-label">Folder Path
+            <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:9px;margin-left:6px;">up to 3 levels</span>
+          </label>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <select id="zcd-cycle-folder-l1" class="zcd-select" onchange="zcdCycleFolderCascade(1)">
+              <option value="">— Quarter (Level 1) —</option>
+            </select>
+            <select id="zcd-cycle-folder-l2" class="zcd-select" onchange="zcdCycleFolderCascade(2)" disabled>
+              <option value="">— App / Team (Level 2) —</option>
+            </select>
+            <select id="zcd-cycle-folder-l3" class="zcd-select" onchange="zcdCycleFolderCascade(3)" disabled>
+              <option value="">— Release / Branch (Level 3) —</option>
+            </select>
+            <div class="zcd-folder-path" id="zcd-cycle-folder-display" style="display:none;"></div>
+          </div>
+        </div>
+
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Planned Start</label>
+            <input id="zcd-cycle-start" class="zcd-input" type="date" />
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Planned End</label>
+            <input id="zcd-cycle-end" class="zcd-input" type="date" />
+          </div>
+        </div>
+        <div class="zcd-field">
+          <label class="zcd-label">Description</label>
+          <textarea id="zcd-cycle-desc" class="zcd-textarea" placeholder="Optional description…"></textarea>
+        </div>
+
+        <!-- Test case preview -->
+        <div class="zcd-field">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <label class="zcd-label" style="margin:0;">Test Cases to Add</label>
+            <button class="btn" style="font-size:11px;padding:4px 9px;" onclick="zcdPreviewCycleTests()" id="zcd-cycle-preview-btn">↻ Fetch</button>
+            <span id="zcd-cycle-tc-count" style="font-size:11px;color:var(--text-muted);"></span>
+          </div>
+          <div id="zcd-cycle-tc-list" style="max-height:120px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg3);padding:6px 8px;font-size:11px;color:var(--text-dim);display:none;">
+            <em>Click Fetch to load matching test cases</em>
+          </div>
+        </div>
+
+        <div class="zcd-status-msg" id="zcd-cycle-status-msg"></div>
+      </div>
+      <div class="zephyr-create-dialog-footer">
+        <button class="btn btn-ghost" style="font-size:13px;" onclick="zephyrCloseCreateCycle()">Cancel</button>
+        <button class="btn btn-primary" style="font-size:13px;" id="zcd-cycle-submit" onclick="zcdSubmitCycle()">Create &amp; Add Tests</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Create Test Plan Dialog ── -->
+  <div class="zephyr-create-overlay" id="zcd-plan-overlay" style="display:none;" onclick="if(event.target===this)zephyrCloseCreatePlan()">
+    <div class="zephyr-create-dialog" style="width:520px;">
+      <div class="zephyr-create-dialog-header">
+        <span style="font-size:18px;">📅</span>
+        <h3>Create Test Plan</h3>
+        <button class="btn btn-ghost" style="font-size:12px;padding:4px 10px;" onclick="zephyrCloseCreatePlan()">✕</button>
+      </div>
+      <div class="zephyr-create-dialog-body">
+
+        <!-- Platform chips + per-platform names at top -->
+        <div class="zcd-field">
+          <label class="zcd-label">Platform &amp; Plan Name <span class="zcd-required">*</span>
+            <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:9px;margin-left:6px;">one plan created per platform</span>
+          </label>
+          <div class="zcd-platform-group" id="zcd-plan-platforms" style="margin-bottom:8px;">
+            <div class="zcd-platform-chip selected" data-value="iOS" onclick="zcdTogglePlatform(this,'plan')">📱 iOS</div>
+            <div class="zcd-platform-chip selected" data-value="Android" onclick="zcdTogglePlatform(this,'plan')">🤖 Android</div>
+            <div class="zcd-platform-chip" data-value="Web" onclick="zcdTogglePlatform(this,'plan')">🌐 Web</div>
+          </div>
+          <div id="zcd-plan-platform-names" style="display:flex;flex-direction:column;gap:6px;">
+            <div class="zcd-platform-name-row" data-platform="iOS" style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">📱 iOS</span>
+              <input class="zcd-input" data-plan-platform-name="iOS" type="text" placeholder="iOS plan name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+            <div class="zcd-platform-name-row" data-platform="Android" style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">🤖 Android</span>
+              <input class="zcd-input" data-plan-platform-name="Android" type="text" placeholder="Android plan name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+            <div class="zcd-platform-name-row" data-platform="Web" style="display:none;align-items:center;gap:8px;">
+              <span style="font-size:11px;width:60px;flex-shrink:0;color:var(--text-dim);">🌐 Web</span>
+              <input class="zcd-input" data-plan-platform-name="Web" type="text" placeholder="Web plan name (auto)" style="flex:1;font-size:12px;" oninput="this.dataset.userEdited='1'" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 1: Branch / Build + Build Number -->
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Branch / Version</label>
+            <input id="zcd-plan-branch" class="zcd-input" type="text" placeholder="e.g. Release-1.1.2 or main" oninput="zcdRebuildPlanName()" />
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Build Number</label>
+            <input id="zcd-plan-buildnum" class="zcd-input" type="text" placeholder="e.g. Build24" oninput="zcdRebuildPlanName()" />
+          </div>
+        </div>
+
+        <!-- Row 2: Iteration (auto-incremented) + Status -->
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Iteration
+              <span id="zcd-plan-iter-loading" style="font-size:9px;color:var(--text-muted);margin-left:4px;display:none;">fetching…</span>
+            </label>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <input id="zcd-plan-iter" class="zcd-input" type="text" placeholder="TI1" style="flex:1;" oninput="zcdRebuildPlanName()" />
+              <button class="btn" style="font-size:11px;padding:5px 9px;white-space:nowrap;" onclick="zcdFetchPlanIteration()" title="Auto-increment from Zephyr">↻ Auto</button>
+            </div>
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Status</label>
+            <select id="zcd-plan-status" class="zcd-select">
+              <option value="Not Executed">Not Executed</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Done">Done</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Folder: 3 cascading dropdowns (Quarter → App → Release) -->
+        <div class="zcd-field">
+          <label class="zcd-label">Folder Path
+            <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:9px;margin-left:6px;">up to 3 levels</span>
+          </label>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <select id="zcd-plan-folder-l1" class="zcd-select" onchange="zcdPlanFolderCascade(1)">
+              <option value="">— Quarter (Level 1) —</option>
+            </select>
+            <select id="zcd-plan-folder-l2" class="zcd-select" onchange="zcdPlanFolderCascade(2)" disabled>
+              <option value="">— App / Team (Level 2) —</option>
+            </select>
+            <select id="zcd-plan-folder-l3" class="zcd-select" onchange="zcdPlanFolderCascade(3)" disabled>
+              <option value="">— Release / Branch (Level 3) —</option>
+            </select>
+            <div class="zcd-folder-path" id="zcd-plan-folder-display" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- Date range -->
+        <div class="zcd-row">
+          <div class="zcd-field">
+            <label class="zcd-label">Planned Start</label>
+            <input id="zcd-plan-start" class="zcd-input" type="date" />
+          </div>
+          <div class="zcd-field">
+            <label class="zcd-label">Planned End</label>
+            <input id="zcd-plan-end" class="zcd-input" type="date" />
+          </div>
+        </div>
+
+        <div class="zcd-field">
+          <label class="zcd-label">Description</label>
+          <textarea id="zcd-plan-desc" class="zcd-textarea" placeholder="Optional description…"></textarea>
+        </div>
+        <div class="zcd-status-msg" id="zcd-plan-status-msg"></div>
+      </div>
+      <div class="zephyr-create-dialog-footer">
+        <button class="btn btn-ghost" style="font-size:13px;" onclick="zephyrCloseCreatePlan()">Cancel</button>
+        <button class="btn btn-primary" style="font-size:13px;" id="zcd-plan-submit" onclick="zcdSubmitPlan()">Create Plan</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <!-- END LEFT PANEL -->
+
+  <!-- New Flow Dialog -->
+  <div class="new-flow-overlay" id="new-flow-overlay" style="display:none;" onclick="if(event.target===this)closeNewFlowDialog()">
+    <div class="new-flow-dialog">
+      <h3>📄 New Script</h3>
+      <div class="form-group">
+        <div class="form-label">Directory (folder in .maestro/flows)</div>
+        <select id="new-flow-dir">
+          <option value="">— Loading... —</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">File name</div>
+        <input type="text" id="new-flow-name" placeholder="e.g. HS-1.0.0_smoke_test.yaml" />
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-ghost" onclick="closeNewFlowDialog()">Cancel</button>
+        <button class="btn btn-primary" onclick="createNewFlow()">Create</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- ── Right panel: report viewer ── -->
+    <div class="panel-right" id="report-panel">
+      <div class="report-header">
+        <span class="report-title">📊 Test Report</span>
+        <span class="report-status" id="report-status"></span>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="loadLatestReport()">🔄 Refresh</button>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="openReportExternal()">↗ Open</button>
+      </div>
+      <div id="report-placeholder">
+        <div style="font-size:52px">📋</div>
+        <div style="font-size:15px;font-weight:600;color:var(--text)">No Report Yet</div>
+        <div style="font-size:12px;text-align:center;line-height:1.6">Run a test to see live results here.<br>Reports auto-load when tests complete.</div>
+        <button class="btn btn-ghost" onclick="loadLatestReport()">Load Latest Report</button>
+      </div>
+      <iframe id="report-iframe" class="report-iframe" style="display:none" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <!-- ── Right panel: Test Generator output ── -->
+    <div class="panel-right" id="test-generator-panel" style="display:none; flex-direction:column;">
+      <!-- Single test output section (original) -->
+      <div class="section" id="test-generator-output-section" style="display:none;">
+        <div class="section-header">
+          <span class="dot"></span>Generated Maestro Test
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="regenerateTest()">🔄 Re-generate Test</button>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="copyGeneratedTest()">📋 Copy</button>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="downloadGeneratedTest()">💾 Download</button>
+          </div>
+        </div>
+        <!-- Tabs for Input/YAML -->
+        <div style="display:flex;gap:2px;padding:8px 12px 0 12px;border-bottom:1px solid var(--border);">
+          <div class="output-tab output-tab-active" data-tab="input" onclick="switchOutputTab(this, 'test-generator')">Input</div>
+          <div class="output-tab" data-tab="yaml" onclick="switchOutputTab(this, 'test-generator')">YAML</div>
+        </div>
+        <div class="section-body">
+          <!-- Input Tab Content -->
+          <div id="test-generator-input-tab" class="output-tab-content">
+            <pre id="test-generator-input-display" style="background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:6px;font-size:11px;font-family:monospace;line-height:1.4;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;"></pre>
+          </div>
+          <!-- YAML Tab Content -->
+          <div id="test-generator-yaml-tab" class="output-tab-content" style="display:none;">
+            <pre id="test-generator-output" style="background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:6px;font-size:11px;font-family:monospace;line-height:1.4;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch generated tests section -->
+      <div id="batch-tests-section" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
+        <div class="add-all-bar" id="add-all-bar">
+          <button class="btn-add-all" id="btn-add-all-tests" onclick="addAllBatchTests()">📥 Add All Tests</button>
+          <span class="add-all-status" id="add-all-status">0 tests generated</span>
+        </div>
+        <div id="batch-tests-list" style="flex:1; overflow-y:auto; padding:12px;"></div>
+      </div>
+    </div>
+
+    <!-- ── Right panel: Script Builder main content ── -->
+    <div class="panel-right" id="builder-panel" style="display:none; flex-direction:column;">
+      <!-- Generated Test Output Section -->
+      <div class="section" id="output-section-main" style="display:none;">
+        <div class="section-header">
+          <span class="dot"></span>Generated Maestro Test
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="regenerateTestMain()">🔄 Re-generate Test</button>
+            <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="copyGeneratedTestMain()">📋 Copy</button>
+            <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="saveGeneratedTestMain()">💾 Save</button>
+            <button class="btn btn-ghost" style="padding:4px 8px;font-size:11px;" onclick="downloadGeneratedTestMain()">⬇️ Download</button>
+          </div>
+        </div>
+        <!-- Tabs for Input/YAML -->
+        <div style="display:flex;gap:2px;padding:8px 12px 0 12px;border-bottom:1px solid var(--border);">
+          <div class="output-tab output-tab-active" data-tab="input" onclick="switchOutputTab(this, 'main')">Input</div>
+          <div class="output-tab" data-tab="yaml" onclick="switchOutputTab(this, 'main')">YAML</div>
+        </div>
+        <div class="section-body">
+          <!-- Input Tab Content -->
+          <div id="main-input-tab" class="output-tab-content">
+            <pre id="main-input-display" style="background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:6px;font-size:11px;font-family:monospace;line-height:1.4;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;"></pre>
+          </div>
+          <!-- YAML Tab Content -->
+          <div id="main-yaml-tab" class="output-tab-content" style="display:none;">
+            <pre id="generated-output-main" style="background:var(--bg2);border:1px solid var(--border);padding:12px;border-radius:6px;font-size:11px;font-family:monospace;line-height:1.4;max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;"></pre>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Toolbar -->
+      <div class="builder-toolbar">
+        <span class="builder-filename" id="builder-filename">No file selected</span>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;" onclick="checkScriptIssues()" id="btn-check-issues" disabled>🔍 Check Issues</button>
+        <button class="btn btn-primary" style="font-size:11px;padding:4px 10px;" onclick="saveFlow()" id="btn-save-flow" disabled>💾 Save</button>
+      </div>
+      <!-- Sub-tabs -->
+      <div class="builder-tabs">
+        <div class="builder-tab active" data-btab="yaml">YAML Editor</div>
+        <div class="builder-tab" data-btab="preview">Preview</div>
+        <div class="builder-tab" data-btab="map">Map View</div>
+      </div>
+      <!-- Issues panel -->
+      <div class="issues-panel" id="issues-panel" style="display:none;">
+        <div class="issues-header">
+          <span id="issues-summary">Script Issues</span>
+          <span style="cursor:pointer;color:var(--text-muted);font-size:14px;" onclick="document.getElementById('issues-panel').style.display='none'">✕</span>
+        </div>
+        <div id="issues-list"></div>
+      </div>
+      <!-- YAML Editor -->
+      <div class="builder-panel active" id="btab-yaml">
+        <div class="builder-empty" id="builder-empty-state">
+          <div class="builder-empty-icon">📄</div>
+          <div style="font-weight:600;color:var(--text);">Select a file to edit</div>
+          <div style="font-size:12px;text-align:center;line-height:1.5;">Choose a flow from the sidebar<br>or create a new script</div>
+        </div>
+        <div id="yaml-editor-wrapper" style="display:none; position:relative; flex:1; overflow:hidden; background:#1e1e1e;">
+          <pre id="yaml-highlight" aria-hidden="true" style="position:absolute; top:0; left:0; right:0; bottom:0; margin:0; padding:14px; font-family:'SF Mono','Fira Code','Cascadia Code',monospace; font-size:12px; line-height:1.7; pointer-events:none; white-space:pre-wrap; word-wrap:break-word; overflow:hidden; tab-size:2; z-index:1; color:#d4d4d4;"></pre>
+          <textarea id="yaml-editor" spellcheck="false" oninput="onEditorChange()" onscroll="syncScroll()" style="position:absolute; top:0; left:0; right:0; bottom:0; background:transparent; color:transparent; resize:none; border:none; outline:none; padding:14px; font-family:'SF Mono','Fira Code','Cascadia Code',monospace; font-size:12px; line-height:1.7; width:100%; height:100%; tab-size:2; caret-color:#d4d4d4; z-index:2;"></textarea>
+        </div>
+      </div>
+      <!-- Preview -->
+      <div class="builder-panel" id="btab-preview" style="flex-direction:column; background:#2a2a2a;">
+        <!-- Preview controls bar -->
+        <div class="preview-controls-bar">
+          <div class="preview-radio-group">
+            <label class="preview-radio-label"><input type="radio" name="builder-platform" value="ios" checked onchange="onPreviewConfigChange()"> iOS</label>
+            <label class="preview-radio-label"><input type="radio" name="builder-platform" value="android" onchange="onPreviewConfigChange()"> Android</label>
+          </div>
+          <div class="preview-controls-sep"></div>
+          <div class="preview-radio-group">
+            <label class="preview-radio-label"><input type="radio" name="builder-app" value="cvs" checked onchange="onPreviewConfigChange()"> CVS</label>
+            <label class="preview-radio-label"><input type="radio" name="builder-app" value="health100" onchange="onPreviewConfigChange()"> Health100</label>
+          </div>
+          <div style="margin-left:auto;font-size:10px;color:var(--text-muted);">appId: <span id="preview-appid" style="font-weight:600;color:var(--cvs-red);">com.cvsenterpriseiphone.cvspharmacy</span></div>
+        </div>
+        <div class="preview-container" id="flow-preview" style="background:#2a2a2a; color:#ffffff;">
+          <div class="builder-empty">
+            <div class="builder-empty-icon">👁</div>
+            <div style="font-weight:600;">No file loaded</div>
+            <div style="font-size:12px;">Select and open a YAML file to see the preview</div>
+          </div>
+        </div>
+      </div>
+      <!-- Map View -->
+      <div class="builder-panel" id="btab-map">
+        <div class="builder-empty">
+          <div class="builder-empty-icon">🗺️</div>
+          <div style="font-weight:600;color:var(--text);">Map View</div>
+          <div style="font-size:12px;">Coming soon — visual flow mapping</div>
+        </div>
+      </div>
+      </div>
+
+    <!-- ── Right panel: Test Data report viewer ── -->
+    <!-- Shown only when the Test Data tab is active; wired up in the
+         secondary tab-switch handler alongside #report-panel,
+         #test-generator-panel, and #builder-panel. -->
+    <div class="panel-right" id="testdata-panel" style="display:none; flex-direction:column;">
+      <div class="report-header">
+        <span class="report-title">📊 Test Data Report</span>
+        <span class="report-status text-dim text-sm" id="testdata-report-label">Loading…</span>
+        <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-left:auto"
+                onclick="refreshTestDataReport()" title="Reload latest report">🔄 Refresh</button>
+      </div>
+      <iframe id="testdata-report-frame" src="about:blank"
+              style="flex:1;width:100%;border:0;background:#fff;display:block"></iframe>
+    </div>
+  </div>
+
+  <!-- ── Bottom terminal drawer ── -->
+  <div class="term-drawer" id="term-drawer">
+    <div class="term-drawer-handle" onclick="toggleTermDrawer()">
+      <span class="term-drawer-icon" id="term-drawer-icon">▶</span>
+      <span class="term-drawer-label" id="term-title">Terminal</span>
+      <span class="term-status idle" id="term-status">Idle</span>
+      <button class="btn btn-danger" id="btn-kill" style="display:none;margin-left:6px" onclick="event.stopPropagation();killJob()">■ Kill</button>
+      <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;margin-left:4px" onclick="event.stopPropagation();clearTerm()">Clear</button>
+    </div>
+    <div class="term-drawer-body">
+      <div class="term-output" id="terminal"></div>
+    </div>
+  </div>
+</div>
+
+<script src="js/shared.js"></script>
+<script src="js/tabs.js"></script>
+<script src="js/report.js"></script>
+<script src="js/run.js"></script>
+<script src="js/setup.js"></script>
+<script src="js/verify.js"></script>
+<script src="js/testmap.js"></script>
+<script src="js/testdata.js"></script>
+<script src="js/builder.js"></script>
+<script src="clipboard-utils.js"></script>
+
+<!-- Chat Bot Overlay Button -->
+<button class="chat-bot-fab" id="chat-bot-fab" onclick="toggleChatPanel()" title="AI Assistant">
+  🤖
+  <span class="badge">AI</span>
+</button>
+
+<!-- Chat Side Panel Overlay -->
+<div class="chat-panel-overlay" id="chat-panel-overlay" onclick="closeChatPanel()"></div>
+
+<!-- Chat Side Panel -->
+<div class="chat-side-panel" id="chat-side-panel">
+  <div class="chat-panel-header">
+    <div class="chat-panel-title">
+      🤖 AI Assistant
+      <span class="badge" style="background: rgba(255,255,255,0.2); font-size: 10px;">Chat Bot</span>
+    </div>
+    <button class="chat-panel-close" onclick="closeChatPanel()">✕</button>
+  </div>
+  <div class="chat-panel-content">
+    <div class="chat-tabs">
+      <button class="chat-tab active" onclick="switchChatTab('chat')" id="chat-tab">Chat</button>
+      <button class="chat-tab" onclick="switchChatTab('generator')" id="generator-tab">Test Generator</button>
+    </div>
+    <div class="chat-tab-content" id="chat-content">
+      <iframe class="chat-panel-iframe" src="http://localhost:3004" id="chat-iframe"></iframe>
+    </div>
+    <div class="chat-tab-content" id="generator-content" style="display: none;">
+      <div class="test-generator">
+        <h3>🧪 Generate Maestro Tests</h3>
+        <p>Import Excel test cases and generate Maestro YAML files using AI</p>
+        
+        <div class="import-section">
+          <h4>Import Test Cases</h4>
+          <input type="file" id="excel-file" accept=".xlsx,.xls,.csv" style="display: none;">
+          <button class="import-btn" onclick="document.getElementById('excel-file').click()">
+            📁 Choose Excel File
+          </button>
+          <div id="file-info" style="margin-top: 10px; font-size: 12px; color: var(--text-dim);"></div>
+        </div>
+
+        <div class="test-input-section" id="test-input-section" style="display: none;">
+          <h4>Test Case Data</h4>
+          <div class="test-form">
+            <div class="form-group">
+              <label>Test Case #:</label>
+              <input type="text" id="test-id" placeholder="HS-1.0.0">
+            </div>
+            <div class="form-group">
+              <label>Functional Area:</label>
+              <input type="text" id="functional-area" placeholder="Search nav integration">
+            </div>
+            <div class="form-group">
+              <label>Test Scenario:</label>
+              <input type="text" id="test-scenario" placeholder="Header components load - Account, notifications, cart, search - Guest">
+            </div>
+            <div class="form-group">
+              <label>Notes:</label>
+              <textarea id="test-notes" placeholder="Check all user segments: guest, guest+ec, guest+ecplus"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Test Steps:</label>
+              <textarea id="test-steps" placeholder="1. Continue through onboarding as a guest user&#10;2. Check header components - Sign in displayed, notifications/messages, cart, search bar, barcode scanner, voice search" rows="4"></textarea>
+            </div>
+          </div>
+          
+          <div class="generation-controls">
+            <button class="generate-btn" onclick="generateMaestroTestMain()">
+              🚀 Generate Maestro Test
+            </button>
+            <button class="preview-btn" onclick="previewGeneratedTest()">
+              👁️ Preview
+            </button>
+          </div>
+        </div>
+
+        <!-- Side panel output section completely removed -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/generator.js"></script>
+
+<script src="js/zephyr.js"></script>
+
+</body>
+</html>
