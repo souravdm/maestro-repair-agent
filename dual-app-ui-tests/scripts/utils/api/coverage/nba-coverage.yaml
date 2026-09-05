@@ -1,0 +1,144 @@
+# NBA / Benefits Coverage Config
+#
+# Lists the ANBA/DNBA card IDs and benefit/profile flags we expect to see returned
+# by the Personalization Engine (and friends) somewhere across the full test-data
+# user pool for each app. Coverage is checked as a UNION across all users in a run
+# (not per-user), because NBA presence is dynamic (Rx status, expiration windows,
+# segment, etc.) and no single user is guaranteed to trigger every card.
+#
+# IDs are seeded from:
+#   - real nbaCardId / dnba.id values observed in artifacts/api/tests/test-data-report-*/test-data.json
+#   - anba_* / dnba_* keys referenced in .maestro/screens/Home/homescreenObjects.js
+#     and homescreenObjectsH100.js
+#
+# Update this file whenever a new card is added to AEM/homescreenObjects and you want
+# CI to flag if the test-data user pool never actually exercises it.
+
+cvs:
+  anbas:
+    - anba_counsel_chat
+    - anba_covid_imz_reminder
+    - anba_flu_covid_imz_reminder
+    - anba_flu_imz_reminder
+    - anba_fs_continue_shopping_list
+    - anba_fs_inprocess
+    - anba_loy_ecplusexpiring
+    - anba_loy_ecplusreward
+    - anba_loy_persdeal
+    - anba_loy_persdealexpiry
+    - anba_loy_rewardsexpiring
+    - anba_pharmacy_chat_ciq
+    - anba_rx_delayed
+    - anba_rx_notrefilled
+    - anba_rx_ready
+    - anba_rx_refill
+    - anba_rx_refill_renewal
+    - anba_rx_workingonit
+
+  dnbas:
+    - dnba_big_fall_wellness
+    - dnba_dsm_generic
+    - dnba_dsm_sponsored
+    - dnba_ec_start_earning_rewards
+    - dnba_epic_beauty
+    - dnba_fs_seasonal1
+    - dnba_fs_seasonal2
+    - dnba_fs_seasonal3
+    - dnba_hcd_seasonal1
+    - dnba_health_optimizer
+    - dnba_hs_celebrate
+    - dnba_hs_diabetes
+    - dnba_hs_halloween
+    - dnba_hs_headspace
+    - dnba_hs_seasonal1
+    - dnba_hs_seasonal_summer
+    - dnba_hs_xponential
+    - dnba_hsa_fsa_nba
+    - dnba_imz_seasonal_offer
+    - dnba_imz_seasonal_vaccine
+    - dnba_loy_ecplus
+    - dnba_loyalty_punchcards
+    - dnba_myactive_health
+    - dnba_oak_street_health
+    - dnba_photo_deals
+    - dnba_pn_ec_focus
+    - dnba_pn_generic
+    - dnba_pn_rx_focus
+    - dnba_punch_card
+    - dnba_rrx_cohorts1
+    - dnba_rrx_cohorts2
+    - dnba_rrx_cohorts3
+    - dnba_rx_inventory
+    - dnba_rx_tie
+    - dnba_valentine_nba
+    - dnba_xlob_consent_2
+
+  benefits:
+    - hasCaremarkPlan
+    - hasAetnaPlan
+
+  flags:
+    - hasExtraCare
+    - medEligible
+    - hasFrontStoreOrders
+    - loa1
+    - caremark
+    - aetna
+    - specialty
+    - rxc
+    - mrn
+    - oakStreet
+    - counsel
+
+h100:
+  anbas:
+    - anba_covid_imz_reminder
+    - anba_feedback_banner
+    - anba_flu_covid_imz_reminder
+    - anba_flu_imz_reminder
+    - anba_hs_upcomingimz
+    - anba_pharmacy_message_hub_ciq
+    - anba_phr_consent
+    - anba_rx_delayed
+    - anba_rx_notrefilled
+    - anba_rx_prescribercontacted
+    - anba_rx_ready
+    - anba_rx_refill
+    - anba_rx_refill_renewal
+    - anba_rx_refill_scheduled
+    - anba_rx_workingonit
+    - anba_rx_shipped
+    - anba_rx_delivered
+    - hs_claim_multi
+    - hs_authorization_multi
+    - hs_claim_processed
+    - hs_claim_denied
+    - hs_newclaim_received
+    - hs_authorization_approved
+    - hs_authorization_multi
+
+  dnbas:
+    - dnba_hcd_seasonal1
+    - dnba_hs_seasonal1
+    - dnba_oak_street_health
+    - dnba_rx_inventory
+    - hs_split_xponential_card_1
+    - hs_split_xponential_card_2
+    - hs_split_xponential_card_3
+    - hs_split_xponential_card_4
+
+  benefits:
+    - hasCaremarkPlan
+    - hasAetnaPlan
+
+  flags:
+    - hasHaio
+    - medEligible
+    - loa1
+    - caremark
+    - aetna
+    - specialty
+    - rxc
+    - mrn
+    - oakStreet
+    - counsel

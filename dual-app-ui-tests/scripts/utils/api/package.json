@@ -1,0 +1,30 @@
+{
+  "name": "cvs-api-tests",
+  "version": "1.0.0",
+  "description": "CVS API test suite with individual request modules",
+  "main": "runner.js",
+  "scripts": {
+    "test": "node runner.js",
+    "test:authenticated": "node runner.js --suite authenticated",
+    "test:pe": "node runner.js --suite pe",
+    "test:all": "node runner.js --suite all",
+    "test:users": "node runner.js --suite all --users",
+    "test:users:parallel": "node runner.js --suite all --users all --parallel",
+    "list:users": "node -e \"const {getUserKeys}=require('./lib/test-data-loader');console.log(getUserKeys().join('\\n'));\"",
+    "test:data-report": "node test-data-runner.js",
+    "test:data-report:parallel": "node test-data-runner.js --parallel",
+    "test:data-report:user": "node test-data-runner.js --users",
+    "test:data-report:cvs": "node test-data-runner.js --app cvs",
+    "test:data-report:h100": "node test-data-runner.js --app h100",
+    "test:data-report:h100:parallel": "node test-data-runner.js --app h100 --parallel",
+    "test:data-report:retry-failed": "node test-data-runner.js --failed-only --parallel",
+    "test:data-report:update": "node update-test-data-report.js",
+    "test:data-report:parse": "node parse-test-data-report.js"
+  },
+  "keywords": ["api", "testing", "cvs"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
