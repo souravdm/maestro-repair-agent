@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="Pixel_10" tests="1" failures="1" time="254.59" timestamp="2026-09-05T08:33:01">
+    <testcase id="H100 | Benefits | Claims | TC014 - Start Claim Ui Validation" name="H100 | Benefits | Claims | TC014 - Start Claim Ui Validation" classname="H100 | Benefits | Claims | TC014 - Start Claim Ui Validation" file=".maestro/flows/Benefits/Claims/H100_BEN_Claims_TC014_startClaimUiValidation.yaml" time="254.549" timestamp="2026-09-05T08:33:01" status="ERROR">
+      <failure>Assertion is false: "Start a claim" is visible</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
