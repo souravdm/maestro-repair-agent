@@ -1,0 +1,11 @@
+appId: ${APP_ID}
+name: Bu Module Displayed
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+---
+- scrollUntilVisible:
+    element:
+      text: ${BU_MODULE_HEADER}
+    speed: 20
+    timeout: 60000
+    centerElement: true

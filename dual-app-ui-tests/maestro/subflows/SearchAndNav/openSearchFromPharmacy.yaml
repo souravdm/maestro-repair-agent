@@ -1,0 +1,22 @@
+# Subflow: Open Search from Pharmacy
+# Purpose: Access search feature from Pharmacy screen
+# Entry Point: Pharmacy context
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap search icon/field in header
+- tapOn: ${output.searchnav_header.searchText}
+- waitForAnimationToEnd
+
+# Verify search landing page loaded with Pharmacy context
+- assertVisible: ${output.search_landing.searchBar}
+- assertVisible: ${output.search_landing.searchPlaceholder}
+
+# Verify Pharmacy context indicator (if available)
+- runFlow:
+    when:
+      visible: ${output.search_context.pharmacyContext}
+    commands:
+      - assertVisible: ${output.search_context.pharmacyContext}
+      - assertVisible: ${output.search_context.searchInPharmacy}

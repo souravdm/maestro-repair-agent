@@ -1,0 +1,9 @@
+# Subflow: Navigate to and view ExtraCare deals
+# Source: Migrated from XCUITest ExtraCareSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/ExtraCareScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Navigate via menu or home to ExtraCare
+- assertVisible: ${output.shop_extra_care.extraCareTitle}

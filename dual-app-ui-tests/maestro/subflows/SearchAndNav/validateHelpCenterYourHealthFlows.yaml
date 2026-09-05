@@ -1,0 +1,18 @@
+# Subflow: Your Health Signed In Flow
+# Purpose: Validate Your Health Flow on Help Center as Signed In User
+# Prerequisite: Must be on Help Center screen with link visible that navigates to Your Health screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Health/HealthScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd
+- assertVisible: ${output.health_health.healthTitle}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

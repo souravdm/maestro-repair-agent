@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+name: Click Dnba Card
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+---
+- waitForAnimationToEnd
+- assertVisible: 
+    text: ${output.homescreen_discover.discoverHeader}
+
+# DNBA_CARD_TITLE should be passed when calling runScript
+- repeat:
+    times: 10
+    while:
+      notVisible: "${DNBA_CARD_TITLE}"
+    commands:
+      - scroll
+      - waitForAnimationToEnd

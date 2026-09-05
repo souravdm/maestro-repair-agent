@@ -1,0 +1,22 @@
+# Subflow: Sort Search Results
+# Purpose: Change sort order of search results
+# Prerequisite: Must be on search results page
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap sort button
+- tapOn: ${output.search_results.sortBtn}
+- waitForAnimationToEnd
+
+# Verify sort modal opened
+- assertVisible: ${output.search_sort.sortModal}
+- assertVisible: ${output.search_sort.sortTitle}
+
+# Select sort option (example: price low to high)
+- tapOn: ${output.search_sort.priceAscSort}
+- waitForAnimationToEnd
+
+# Verify sort applied
+- assertVisible: ${output.search_results.sortApplied}
+- assertVisible: ${output.search_sort.sortLabel}

@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+name: Homescreen Loaded Successful H100
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- extendedWaitUntil:
+    visible:
+      text: ${output.homescreen_discover.discoverHeader}
+    timeout: 30000
+- assertNotVisible: ${output.homescreen_error.notConnectedText}

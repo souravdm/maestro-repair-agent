@@ -1,0 +1,13 @@
+appId: ${APP_ID}
+name: Activity Nba Loaded
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjectsH100.js
+---
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ${output.homescreen_activity.activityHeader}
+    timeout: 20000
+- assertVisible:
+    below:
+      text: ${output.homescreen_activity.activityHeader}
+      delay: 5000

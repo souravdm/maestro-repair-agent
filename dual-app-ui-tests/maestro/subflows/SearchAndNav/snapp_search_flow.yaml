@@ -1,0 +1,22 @@
+appId: ${APP_ID}
+---
+# SNAPP Search Flow - Reusable Search Actions
+# Migrated from SNAPPTests.swift helper methods
+# References: SNAPPScreen.js - snapp_search object
+
+- tapOn:
+    id: homeSearchField
+- inputText: ${itemSKU}
+- waitForAnimationToEnd
+
+- assertVisible:
+    text: ${itemSKUName}
+
+- tapOn:
+    id: searchTextField
+- eraseText
+- waitForAnimationToEnd
+
+- tapOn:
+    id: homeSearchBackButton
+- waitForAnimationToEnd

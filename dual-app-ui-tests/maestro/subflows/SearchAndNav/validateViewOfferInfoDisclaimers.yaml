@@ -1,0 +1,42 @@
+# Subflow: Validate View Offer Info and Disclaimers Link
+# Purpose: Open View Offer Info and Disclaimers Link and Validate its Elements
+# Prerequisite: Must have View Offer Info and Disclaimers Link visible on screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+- assertVisible: ${output.disclaimers_h100.viewOfferInfoDisclaimerLnk}
+- tapOn: ${output.disclaimers_h100.viewOfferInfoDisclaimerLnk}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_buttons.sheetGrabberBtn}
+- assertVisible: ${output.disclaimers_h100.importantInfoDiscLabel}
+- assertVisible: ${output.disclaimers_h100.restrictionsApplyLabel}
+- assertVisible: ${output.disclaimers_h100.cvsFluLnk}
+- assertTrue: ${maestro.visible(${output.disclaimers_h100.cashPayGLPLabel} || ${output.disclaimers_h100.forVirtualWeightLossLabel})
+- assertVisible: ${output.disclaimers_h100.weightLossDisclaimer}
+
+- tapOn: ${output.disclaimers_h100.cvsFluLnk}
+
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+- assertTrue: ${maestro.visible(${output.disclaimers_h100.fluShotLabel} || ${output.disclaimers_h100.scheduleFluShotLnk})
+- tapOn: 
+    id: "breadcrumb" 
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.disclaimers_h100.importantInfoDiscLabel}
+
+- swipe:
+    direction: DOWN
+    element: ${output.common_buttons.sheetGrabberBtn}
+
+- assertNotVisible: ${output.disclaimers_h100.importantInfoDiscLabel}

@@ -1,0 +1,18 @@
+# Subflow: Help Center Sign In Page Navigation
+# Purpose: Validate the flow to Sign In screen from Help Center and back
+# Prerequisite: Must have tapped button leading to Sign In screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/OnboardingScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_onboarding.niceToSeeYouMsg}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

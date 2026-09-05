@@ -1,0 +1,21 @@
+# Subflow: Validate Learn about AI in Health100 Disclaimer
+# Purpose: Open Learn about AI in Health100 Disclaimer and Validate its Elements
+# Prerequisite: Must have Learn about AI in Health100 link visible on screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+- assertVisible: ${output.disclaimers_h100.learnAboutAIH100Lnk}
+- tapOn: ${output.disclaimers_h100.learnAboutAIH100Lnk}
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_buttons.sheetGrabberBtn}
+- assertVisible: ${output.disclaimers_h100.health100AIInfoLabel}
+- assertVisible: ${output.disclaimers_h100.learnAboutAIDescription}
+
+- swipe:
+    direction: DOWN
+    element: ${output.common_buttons.sheetGrabberBtn}
+
+- assertNotVisible: ${output.disclaimers_h100.health100AIInfoLabel}

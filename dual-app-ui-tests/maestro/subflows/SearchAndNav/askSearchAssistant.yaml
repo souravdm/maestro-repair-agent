@@ -1,0 +1,31 @@
+# Subflow: Ask Search Assistant
+# Purpose: Send query to AI search assistant
+# Parameters: assistantQuery (passed via environment)
+# Prerequisite: Search assistant must be open
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap chat input field
+- tapOn: ${output.search_assistant.chatInput}
+- waitForAnimationToEnd
+
+# Enter question
+- inputText: "${ASSISTANT_QUERY}"
+
+# Send message
+- tapOn: ${output.search_assistant.sendBtn}
+- waitForAnimationToEnd
+
+# Wait for assistant response
+- runFlow:
+    when:
+      visible: ${output.search_assistant.loadingMessage}
+    commands:
+      - extendedWaitUntil:
+          visible: ${output.search_assistant.assistantMessage}
+          timeout: 10000
+
+# Verify response received
+- assertVisible: ${output.search_assistant.assistantMessage}
+- assertVisible: ${output.search_assistant.responseCard}

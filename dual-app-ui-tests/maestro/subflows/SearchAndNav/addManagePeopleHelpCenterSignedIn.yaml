@@ -1,0 +1,27 @@
+# Subflow: Add and Manage People Signed In Flow
+# Purpose: Validate Add and Manage People Flow on Help Center as Signed In User
+# Prerequisite: Must be on Help Center screen with Add and Manage People link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/ManagePeopleScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.removeButton}
+- scrollUntilVisible:
+    element:
+      text: ${output.snapp_navigation.addAndManagePeopleButton}
+    direction: DOWN
+    timeout: 20000 
+- assertVisible: ${output.snapp_navigation.addAndManagePeopleButton}
+- tapOn: ${output.snapp_navigation.addAndManagePeopleButton}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_managePeople.managePeopleLabel}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

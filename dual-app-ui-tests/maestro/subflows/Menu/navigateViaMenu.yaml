@@ -1,0 +1,41 @@
+# Subflow: Open menu and navigate
+# Source: Migrated from XCUITest MenuSteps
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Menu/MenuScreen.js
+- runScript: ../../screens/Common/CommonScreen.js
+
+# Android: wait for bottom-sheet handle then tap to open
+- runFlow:
+    when:
+      true: ${maestro.platform == 'android'}
+    commands:
+      - extendedWaitUntil:
+            visible: ${output.menu_screen.menuSheetHandle}
+            timeout: 10000
+      - tapOn:
+          text: ${output.menu_screen.menuSheetHandle}
+      - waitForAnimationToEnd
+
+# iOS: tap "Show Menu" header icon to open the sidebar panel.
+# Guard: skip entirely if menu is already open (menuOpenBtn = "Menu, heading" visible).
+# This makes the subflow idempotent — safe to call when menu is open or closed.
+# Confirmed via live inspector: "Show Menu" at [257,83][273,99] in 402x874pt.
+- runFlow:
+    when:
+      true: ${maestro.platform == 'ios'}
+    commands:
+      - runFlow:
+          when:
+            notVisible: ${output.menu_screen.menuOpenBtn}
+          commands:
+            - extendedWaitUntil:
+                  visible: "Show Menu"
+                  timeout: 10000
+            - tapOn:
+                text: "Show Menu"
+            - extendedWaitUntil:
+                  visible: ${output.menu_screen.menuOpenBtn}
+                  timeout: 8000
+
+- evalScript: ${maestro.timeoutMs = 10000}

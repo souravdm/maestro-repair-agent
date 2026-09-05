@@ -1,0 +1,150 @@
+appId: ${APP_ID}
+name: Guest User Cart Test
+tags:
+    - shop
+    - cart
+    - guest
+---
+# Subflow: launchApp
+# Launch app (without clearState to avoid reinstall issues)
+# Hardcoded app ID - same for all environments
+- launchApp:
+    appId: ${APP_ID}
+
+# Handle first-time app launch sequence
+# Based on XCUITest CommonSteps.waitForHomeTab() pattern
+
+# Wait for app to fully load
+- assertVisible: ".*"
+
+# Handle onboarding flow if present
+- runFlow:
+    when:
+      visible: ${account_onboarding.letsGetStartedBtn}
+    commands:
+      # Tap "Let's get started" button (first-time launch flow)
+      - tapOn:
+          text: ${account_onboarding.letsGetStartedBtn}
+
+      # Wait for "Nice to see you!" screen
+      - assertVisible: ${NICE_TO_SEE_YOU_MSG}
+
+      # Tap Continue button on "Nice to see you!" screen
+      - tapOn:
+          text: "Continue"
+
+# Handle notification permission prompt if present (system alert)
+- runFlow:
+    when:
+      visible: ${NOTIFICATIONS_PROMPT}
+    commands:
+      - tapOn:
+          text: ${DONT_ALLOW_BTN}
+
+# Handle in-app "Yes, enable notifications" prompt if present
+- runFlow:
+    when:
+      visible: ${ENABLE_NOTIFICATIONS_PROMPT}
+    commands:
+      - tapOn:
+          text: "Not now"
+
+# Handle location permission prompt if present (system alert)
+- runFlow:
+    when:
+      visible: ${LOCATION_PROMPT}
+    commands:
+      - tapOn:
+          text: ${DONT_ALLOW_BTN}
+
+# Handle Bluetooth permission prompt if present (system alert)
+- runFlow:
+    when:
+      visible: ${BLUETOOTH_PROMPT}
+    commands:
+      - tapOn:
+          text: "OK"
+
+# Handle any "Scan in Store" close button if present
+# XCUITest: scanInStoreCloseImage with label "close"
+- runFlow:
+    when:
+      visible:
+        id: "close"
+    commands:
+      - tapOn:
+          id: "close"
+
+# Handle tip popover close button if present
+- runFlow:
+    when:
+      visible:
+        id: "xmark.circle.fill"
+    commands:
+      - tapOn:
+          id: "xmark.circle.fill"
+
+- runFlow:
+    when:
+      visible: ${EXPLORE_MORE_MSG}
+    commands:
+      - runFlow:
+          when:
+            visible: "Close"
+          commands:
+            - tapOn:
+                text: "Close"
+                index: 0
+      - runFlow:
+          when:
+            visible:
+              id: "xmark.circle.fill"
+          commands:
+            - tapOn:
+                id: "xmark.circle.fill"
+
+# Handle feedback/survey close button if present
+- runFlow:
+    when:
+      visible: ${CLOSE_MESSAGE_BTN}
+    commands:
+      - tapOn:
+          text: "Close Message"
+
+# Wait for home screen to be fully loaded (bottom navigation visible)
+- assertVisible: ${HOME_TAB}
+
+
+# Ensure guest mode (logout if needed)
+# Subflow: logout
+# Sign Out subflow - matches XCUITest CommonSteps.verifyAndClickSignOutButton()
+# Reference: XCUITest scrolls to find Sign out button, taps it, waits for home screen
+
+# XCUITest: AccountTabView.signOutButton = identifier("Sign out") / label("Sign out")
+# Scroll down to find Sign out button
+- scrollUntilVisible:
+    element: "Sign out"
+    direction: DOWN
+    timeout: 8000
+
+# Tap Sign out
+- tapOn: "Sign out"
+
+# XCUITest: CommonSteps waits for spinner to disappear, then home screen
+- assertVisible: "Home|Sign in"
+
+
+# Subflow: searchAndAdd
+- tapOn: ${SEARCH_FIELD}
+- inputText: ${PRODUCT_NAME}
+- tapOn: ${PRODUCT_NAME} # Tap suggestion
+- assertVisible: ${PROD_NAME_LABEL}
+- tapOn: ${ADD_TO_CART_BTN}
+- assertVisible: ${ADDED_TO_CART_MSG}
+        ITEM_NAME: "Multivitamin" # Example item from fixture
+
+
+- tapOn: "Cart"
+- assertVisible: "Shopping Cart"
+- assertVisible: "Multivitamin"
+- assertVisible: "Checkout"

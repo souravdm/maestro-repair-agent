@@ -1,0 +1,24 @@
+# Subflow: Clear Recent Searches
+# Purpose: Remove all recent search history
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify recent searches section exists
+- assertVisible: ${output.search_landing.recentSearchesHeader}
+- assertVisible: ${output.search_landing.clearAllBtn}
+
+# Tap clear all button
+- tapOn: ${output.search_landing.clearAllBtn}
+- waitForAnimationToEnd
+
+# Handle confirmation dialog (if present)
+- runFlow:
+    when:
+      visible: "Clear all recent searches?"
+    commands:
+      - tapOn: "Clear"
+      - waitForAnimationToEnd
+
+# Verify recent searches are cleared
+- assertNotVisible: ${output.search_landing.recentSearchItem}

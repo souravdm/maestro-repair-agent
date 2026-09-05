@@ -1,0 +1,18 @@
+# Subflow: Validate Cart Button on Prescriptions Screen
+# Purpose: Validate Prescriptions Cart button by verifying the pop-up that appears after tapping it and then closing it
+# Prerequisite: Must have Prescriptions Cart button visible on screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Pharmacy/PharmacyScreen.js
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+- assertVisible: ${output.common_navigation.cartIcon}
+- tapOn: ${output.common_navigation.cartIcon}
+- waitForAnimationToEnd
+- assertVisible: "${output.pharmacy_prescriptions.noPrescriptionsAddedLabel}|${output.pharmacy_prescriptions.noPrescriptionAddedLabel}"
+- assertVisible: ${output.pharmacy_prescriptions.toContinueAddPresLabel}
+- tapOn: ${output.common_buttons.okBtn}
+- waitForAnimationToEnd
+
+- assertNotVisible: ${output.pharmacy_prescriptions.noPrescriptionsAddedLabel}

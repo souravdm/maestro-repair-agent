@@ -1,0 +1,33 @@
+# Subflow: Apply Search Filters
+# Purpose: Filter search results by category, price, location, etc.
+# Prerequisite: Must be on search results page
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap filter button
+- tapOn: ${output.search_results.filterBtn}
+- waitForAnimationToEnd
+
+# Verify filter modal opened
+- assertVisible: ${output.search_filters.filterModal}
+- assertVisible: ${output.search_filters.filterTitle}
+- assertVisible: ${output.search_filters.applyFiltersBtn}
+
+# Select filter options (example: category filter)
+- runFlow:
+    when:
+      visible: ${output.search_filters.categoryFilter}
+    commands:
+      - tapOn: ${output.search_filters.categoryFilter}
+      - waitForAnimationToEnd
+      - tapOn: ${output.search_filters.filterOption}
+      - waitForAnimationToEnd
+
+# Apply filters
+- tapOn: ${output.search_filters.applyFiltersBtn}
+- waitForAnimationToEnd
+
+# Verify filters applied
+- assertVisible: ${output.search_results.filterApplied}
+- assertVisible: ${output.search_filters.activeFilters}

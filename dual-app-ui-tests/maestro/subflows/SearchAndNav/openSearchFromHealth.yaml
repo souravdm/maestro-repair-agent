@@ -1,0 +1,29 @@
+# Subflow: Open Search from Health
+# Purpose: Access search feature from Health screen
+# Entry Point: Health context
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap search icon/field in header
+- tapOn: ${output.searchnav_header.searchText}
+- waitForAnimationToEnd
+
+# Verify search landing page loaded with Health context
+- assertVisible: ${output.search_landing.searchBar}
+- assertVisible: ${output.search_landing.searchPlaceholder}
+
+# Verify Health context indicator (if available)
+- runFlow:
+    when:
+      visible: ${output.search_context.healthContext}
+    commands:
+      - assertVisible: ${output.search_context.healthContext}
+      - assertVisible: ${output.search_context.searchInHealth}
+
+# Verify Health AI integration (if available)
+- runFlow:
+    when:
+      visible: ${output.search_health_ai.healthAiBtn}
+    commands:
+      - assertVisible: ${output.search_health_ai.healthAiBtn}

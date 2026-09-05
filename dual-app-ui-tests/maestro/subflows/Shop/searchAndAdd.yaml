@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+name: Searchandadd
+---
+- tapOn: ${SEARCH_FIELD}
+- inputText: ${PRODUCT_NAME}
+- tapOn: ${PRODUCT_NAME} # Tap suggestion
+- assertVisible: ${PROD_NAME_LABEL}
+- tapOn: ${ADD_TO_CART_BTN}
+- assertVisible: ${ADDED_TO_CART_MSG}

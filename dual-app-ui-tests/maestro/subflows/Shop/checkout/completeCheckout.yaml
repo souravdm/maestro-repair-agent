@@ -1,0 +1,13 @@
+# Subflow: Complete checkout flow
+# Source: Migrated from XCUITest CheckoutSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/CheckoutScreen.js
+- runScript: ../../../screens/Shop/ModernCartScreen.js
+
+# Tap checkout button from cart
+- tapOn: ${output.shop_modernCart.checkOutBtn}
+- waitForAnimationToEnd
+
+# Verify checkout page loaded
+- assertVisible: ${output.shop_checkout.checkoutTitle}

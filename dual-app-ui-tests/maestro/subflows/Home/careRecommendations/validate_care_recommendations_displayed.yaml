@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: Validate Care recommendations options display
+onFlowStart:
+  - runScript: ../../../screens/Home/homescreenObjectsH100.js
+---
+- scrollUntilVisible:
+    direction: down
+    element:
+      text: ${output.homescreen_careRecommendations.yourCareRecommendations}
+- assertVisible: ${output.homescreen_careRecommendations.yourCareRecommendations}
+
+- scrollUntilVisible:
+    direction: down
+    element:
+      text: ${output.homescreen_careRecommendations.getInPersonCareSubtext}
+- assertVisible: ${output.homescreen_careRecommendations.getInPersonCare}
+- assertVisible: ${output.homescreen_careRecommendations.getInPersonCareSubtext}
+- assertVisible: ${output.homescreen_careRecommendations.insuranceAccepted}
+- assertVisible: ${output.homescreen_careRecommendations.sameDay}
+
+- scrollUntilVisible:
+    direction: down
+    element:
+      text: ${output.homescreen_careRecommendations.connectOverVideo}
+- assertVisible: ${output.homescreen_careRecommendations.connectOverVideo}
+
+
+- scrollUntilVisible:
+    direction: down
+    element:
+      text: ${output.homescreen_careRecommendations.chatWithAPhysicianSubtext}
+- assertVisible: ${output.homescreen_careRecommendations.chatWithAPhysician}
+- assertVisible: ${output.homescreen_careRecommendations.chatWithAPhysicianSubtext}
+- assertVisible: ${output.homescreen_careRecommendations.tenDollarMonth}
+- assertVisible: ${output.homescreen_careRecommendations.responseWithinMinutes}

@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+name: Click Dnba Card
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+---
+- waitForAnimationToEnd
+- assertVisible: 
+    text: ${output.homescreen_discover.discoverHeader}
+- assertVisible: 
+    below: ${output.homescreen_discover.discoverHeader}
+    delay: 5000
+- scrollUntilVisible:
+    element:
+      below:
+        text: ${output.homescreen_discover.discoverHeader}
+    speed: 10
+    timeout: 40000
+    centerElement: true
+
+- scrollUntilVisible:
+    element:
+      text: "${DNBA_CARD_TITLE}"
+    direction: RIGHT
+    speed: 80
+    timeout: 40000
+- tapOn: "${DNBA_CARD_TITLE}"

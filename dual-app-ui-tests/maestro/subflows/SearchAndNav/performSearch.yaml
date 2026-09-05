@@ -1,0 +1,28 @@
+# Subflow: Perform Search
+# Purpose: Enter search query and execute search
+# Parameters: searchQuery (passed via environment or direct input)
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap search input field
+- tapOn: ${output.search_landing.searchInput}
+- waitForAnimationToEnd
+
+# Enter search query
+- inputText: "${SEARCH_QUERY}"
+
+# Wait for typeahead suggestions (optional)
+- runFlow:
+    when:
+      visible: ${output.search_typeahead.typeaheadContainer}
+    commands:
+      - assertVisible: ${output.search_typeahead.typeaheadResults}
+
+# Submit search (press enter or tap search button)
+- pressKey: Enter
+- waitForAnimationToEnd
+
+# Verify search results page loaded
+- assertVisible: ${output.search_results.resultsHeader}
+- assertVisible: ${output.search_results.searchQuery}

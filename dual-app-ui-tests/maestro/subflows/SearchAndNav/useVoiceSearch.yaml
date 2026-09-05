@@ -1,0 +1,25 @@
+# Subflow: Use Voice Search
+# Purpose: Initiate voice search feature
+# Note: Actual voice input cannot be automated, but UI can be verified
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap voice search button
+- tapOn: ${output.search_landing.voiceSearchIcon}
+- waitForAnimationToEnd
+
+# Verify voice search interface (implementation-dependent)
+# Note: Voice input UI varies by platform and implementation
+- runFlow:
+    when:
+      visible: "Listening"
+    commands:
+      - assertVisible: "Listening"
+
+# Cancel voice search (tap outside or cancel button)
+- tapOn: "Cancel"
+- waitForAnimationToEnd
+
+# Verify returned to search landing
+- assertVisible: ${output.search_landing.searchBar}

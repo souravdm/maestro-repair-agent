@@ -1,0 +1,26 @@
+# Subflow: Prescriptions Signed In Flow
+# Purpose: Validate Prescriptions Flow on Help Center as Signed In User
+# Prerequisite: Must be on Help Center screen with link visible that navigates to Prescriptions screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Pharmacy/PharmacyScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.notNowBtnVariant}
+    commands:
+      - tapOn: ${output.common_buttons.notNowBtnVariant}
+
+
+- assertVisible: ${output.pharmacy_screen.myPrescriptionsTitle}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+name: Validate Rewards Screen
+---
+- assertVisible: "Rewards"
+- assertVisible: "Current rewards"
+- assertVisible: "Unlock extra rewards"
+- assertVisible: "Scan in store"
+
+- scrollUntilVisible:
+      element:
+        text: "Spent"
+- scrollUntilVisible:
+      element:
+          text: "Remaining"
+
+# Navigation components
+- assertVisible: "Cart.*"
+
+- assertVisible: "Home"
+- assertVisible: "Savings"
+- assertVisible: "Shop"
+- assertVisible: "Photo"
+- assertVisible: "Weekly Ad"

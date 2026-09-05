@@ -1,0 +1,11 @@
+# Subflow: Open Explore More Menu
+# Purpose: Access swipe up Explore More menu from HomeScreen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+- assertVisible: ${output.menu_screen.menuSheetHandle}
+- tapOn: ${output.menu_screen.menuSheetHandle}
+
+- assertVisible: ${output.menu_screen.exploreMoreTitle}
+- assertVisible: ${output.menu_screen.closeMenuAltBtn}

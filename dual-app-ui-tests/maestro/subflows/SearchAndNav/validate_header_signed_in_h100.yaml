@@ -1,0 +1,11 @@
+appId: ${APP_ID}
+name: Validate Header Signed in
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ${output.searchnav_header.accountBtn}
+    timeout: 40000
+- assertVisible: ${output.searchnav_header.inboxBtn}
+- assertVisible: ${output.searchnav_header.health100Logo}

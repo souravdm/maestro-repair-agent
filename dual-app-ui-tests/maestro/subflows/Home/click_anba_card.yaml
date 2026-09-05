@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+name: Click Anba Card
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+---
+- runFlow: ./activity_nba_loaded.yaml
+- runFlow:
+    file: ../../subflows/common/swipeShelfUntilVisible.yaml
+    env:
+      SHELF_TITLE: ${output.homescreen_activity.activityHeader}
+      CARD_TEXT: ${ANBA_CARD}
+- tapOn: ${ANBA_CARD}

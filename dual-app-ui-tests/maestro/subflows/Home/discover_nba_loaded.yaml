@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+name: Discover Nba Loaded
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+---
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    direction: down
+    element:
+      text: ${output.homescreen_discover.discoverHeader}
+- assertVisible: 
+    below: ${output.homescreen_discover.discoverHeader}

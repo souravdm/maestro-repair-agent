@@ -1,0 +1,36 @@
+# Subflow: View Rewards / Go to Coupons & Rewards Signed In Flow
+# Purpose: Validate View Rewards Flow on Help Center as Signed In User
+# Prerequisite: Must be on Help Center screen with Rewards / Go to Coupons & Rewards link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/accountObjects.js
+- runScript: ../../screens/Account/LoyaltyScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.removeButton}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.viewRewardsButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.viewRewardsButton}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.goToCouponsRewardsButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.goToCouponsRewardsButton}
+
+- waitForAnimationToEnd
+- swipe:
+    direction: DOWN
+
+- assertVisible: ${output.account_loyalty.rewardsHeaderLabel}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

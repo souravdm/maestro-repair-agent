@@ -1,0 +1,18 @@
+# Subflow: Navigate to and view prescriptions
+# Source: Migrated from XCUITest PharmacyScreenSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Pharmacy/PharmacyDashboardScreen.js
+- runScript: ../../../screens/Pharmacy/MyPrescriptionsScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Navigate to Pharmacy tab
+- tapOn: ${output.common_navigation.pharmacyTab}
+- waitForAnimationToEnd
+
+# Navigate to prescriptions section
+- tapOn: ${output.pharmacy_pharmacy_dashboard.prescriptionsSection}
+- waitForAnimationToEnd
+
+# Verify prescriptions loaded
+- assertVisible: ${output.pharmacy_myPrescriptions.myPrescriptionsTitle}

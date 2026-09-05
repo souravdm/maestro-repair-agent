@@ -1,0 +1,39 @@
+# Subflow: Navigate to Master Agent
+# Purpose: Access master agent landing from search
+# Note: Master agent coordinates with sub-agents (Health, Benefits, Pharmacy, etc.)
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify master agent is accessible
+- runFlow:
+    when:
+      visible: ${output.search_master_agent.masterAgentTitle}
+    commands:
+      - assertVisible: ${output.search_master_agent.masterAgentTitle}
+
+# Verify context indicators
+- runFlow:
+    when:
+      visible: ${output.search_master_agent.masterAgentHome}
+    commands:
+      - assertVisible: ${output.search_master_agent.masterAgentHome}
+
+# Verify sub-agent options
+- runFlow:
+    when:
+      visible: ${output.search_master_agent.healthSubAgent}
+    commands:
+      - assertVisible: ${output.search_master_agent.healthSubAgent}
+
+- runFlow:
+    when:
+      visible: ${output.search_master_agent.benefitsSubAgent}
+    commands:
+      - assertVisible: ${output.search_master_agent.benefitsSubAgent}
+
+- runFlow:
+    when:
+      visible: ${output.search_master_agent.pharmacySubAgent}
+    commands:
+      - assertVisible: ${output.search_master_agent.pharmacySubAgent}

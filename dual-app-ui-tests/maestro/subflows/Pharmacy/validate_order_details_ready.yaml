@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+name: Validate order Details Ready
+onFlowStart:
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+- assertVisible: "${output.pharmacy_ordersDetails.header}"
+#- assertVisible: ${output.user.firstName}
+- assertVisible: "${output.pharmacy_ordersDetails.readyForPickup}"
+- assertVisible: "${output.pharmacy_ordersDetails.orderStatus}"
+- assertVisible: "${output.pharmacy_ordersDetails.orderNumber}"

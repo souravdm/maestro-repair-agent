@@ -1,0 +1,14 @@
+appId: ${APP_ID}
+name: Validate Header Guest
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- waitForAnimationToEnd
+- extendedWaitUntil:
+    visible: ${output.searchnav_header.signInBtn}
+    timeout: 40000
+- assertVisible: ${output.searchnav_header.inboxBtn}
+- assertVisible: ${output.searchnav_header.cartBtn}
+- assertVisible: ${output.searchnav_header.searchText}
+- assertVisible: ${output.searchnav_header.searchOrAskQuestionText}
+- assertVisible: ${output.searchnav_header.voiceSearchBtn}

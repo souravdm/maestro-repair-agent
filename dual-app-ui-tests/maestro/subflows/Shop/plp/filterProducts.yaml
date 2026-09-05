@@ -1,0 +1,17 @@
+# Subflow: Apply filters on product listing page
+# Source: Migrated from XCUITest PLPSteps filter methods
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/PLPScreen.js
+- runScript: ../../../screens/Shop/PLPFilterScreen.js
+
+# Open filters
+- tapOn: ${output.shop_plp.filterBtn}
+- waitForAnimationToEnd
+
+# Verify filter screen
+- assertVisible: ${output.shop_plpFilter.filtersNavBar}
+
+# Apply filters and view results
+- tapOn: ${output.shop_plpFilter.applyFiltersBtn}
+- waitForAnimationToEnd

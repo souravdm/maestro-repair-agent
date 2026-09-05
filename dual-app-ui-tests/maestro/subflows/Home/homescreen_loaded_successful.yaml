@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+name: Homescreen Loaded Successful
+onFlowStart:
+  - runScript: ../../screens/Home/homescreenObjects.js
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- waitForAnimationToEnd
+- runFlow: ./../SearchAndNav/bottom_nav_loaded.yaml
+- runFlow: ./discover_nba_loaded.yaml
+- assertNotVisible: ${output.homescreen_error.somethingWentWrong}

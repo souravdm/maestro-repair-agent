@@ -1,0 +1,29 @@
+# Subflow: Open Search from Benefits
+# Purpose: Access search feature from Benefits screen
+# Entry Point: Benefits context
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap search icon/field in header
+- tapOn: ${output.searchnav_header.searchText}
+- waitForAnimationToEnd
+
+# Verify search landing page loaded with Benefits context
+- assertVisible: ${output.search_landing.searchBar}
+- assertVisible: ${output.search_landing.searchPlaceholder}
+
+# Verify Benefits context indicator (if available)
+- runFlow:
+    when:
+      visible: ${output.search_context.benefitsContext}
+    commands:
+      - assertVisible: ${output.search_context.benefitsContext}
+
+# Verify Benefits card in search (if available)
+- runFlow:
+    when:
+      visible: ${output.search_benefits_card.benefitsCard}
+    commands:
+      - assertVisible: ${output.search_benefits_card.benefitsCard}
+      - assertVisible: ${output.search_benefits_card.benefitsCardTitle}

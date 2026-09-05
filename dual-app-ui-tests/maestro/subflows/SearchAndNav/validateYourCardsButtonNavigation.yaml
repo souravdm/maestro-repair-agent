@@ -1,0 +1,22 @@
+# Subflow: Validate Your Cards Button
+# Purpose: Validate Your Cards button by verifying the pop-up after tapping it and then closing it
+# Prerequisite: Must have Your Cards button visible on screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+- runScript: ../../screens/Home/homescreenObjects.js
+
+- assertVisible: ${output.homescreen_splitview.cards}
+- tapOn: ${output.homescreen_splitview.cards}
+- waitForAnimationToEnd
+- assertVisible: ${output.homescreen_splitview.yourCards}
+- assertVisible: ${output.common_buttons.sheetGrabberBtn}
+
+- swipe:
+    direction: DOWN
+    element: ${output.common_buttons.sheetGrabberBtn}
+
+- waitForAnimationToEnd
+
+- assertNotVisible: ${output.homescreen_splitview.yourCards}

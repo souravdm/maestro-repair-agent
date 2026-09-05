@@ -1,0 +1,25 @@
+# Subflow: CVS Health Terms of Use and Privacy Policy Flow
+# Purpose: Validate CVS Health Terms of Use and Privacy Policy Flow
+# Prerequisite: Must be on Help Center screen with link visible that navigates to Terms and Privacy Policy screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.termsOfUseButton}
+- tapOn: ${output.snapp_navigation.termsOfUseButton}
+
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeBtn}
+
+- assertVisible: ${output.snapp_navigation.termsOfUseLabel}
+- assertVisible: ${output.snapp_navigation.returnToCVSAppButton}
+- tapOn: ${output.snapp_navigation.returnToCVSAppButton}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.snapp_navigation.termsOfUseButton}

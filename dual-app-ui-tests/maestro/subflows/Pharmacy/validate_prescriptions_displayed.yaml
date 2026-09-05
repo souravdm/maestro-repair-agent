@@ -1,0 +1,4 @@
+appId: ${APP_ID}
+name: Validate Prescriptions Displayed
+---
+- assertVisible: "Prescriptions"

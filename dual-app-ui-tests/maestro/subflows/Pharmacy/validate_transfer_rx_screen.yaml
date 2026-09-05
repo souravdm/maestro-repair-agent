@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+name: Validate Transfer Rx Screen
+---
+- assertVisible: "Welcome to prescription transfers"
+- assertVisible: "Transfer your prescriptions in 3 steps from any pharmacy to your preferred CVS Pharmacy® location."
+- assertVisible: "Get started now"
+- assertVisible: "Choose a patient whose prescription you'd like to transfer to CVS."
+- assertVisible: "Continue"
+- assertVisible: "Cancel transfer"
+- assertVisible: "Back"

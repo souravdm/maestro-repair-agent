@@ -1,0 +1,41 @@
+# Subflow: Explore Health AI Topics
+# Purpose: Browse and interact with Health AI content in search
+# Entry Point: Search with Health context
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify Health AI button is visible
+- assertVisible: ${output.search_health_ai.healthAiBtn}
+
+# Tap Health AI button
+- tapOn: ${output.search_health_ai.healthAiBtn}
+- waitForAnimationToEnd
+
+# Verify Health AI card loaded
+- assertVisible: ${output.search_health_ai.healthAiCard}
+
+# Verify health topics are visible
+- runFlow:
+    when:
+      visible: ${output.search_health_ai.diabetesCare}
+    commands:
+      - assertVisible: ${output.search_health_ai.diabetesCare}
+
+- runFlow:
+    when:
+      visible: ${output.search_health_ai.healthyWeight}
+    commands:
+      - assertVisible: ${output.search_health_ai.healthyWeight}
+
+- runFlow:
+    when:
+      visible: ${output.search_health_ai.gutHealth}
+    commands:
+      - assertVisible: ${output.search_health_ai.gutHealth}
+
+# Verify check coverage button
+- assertVisible: ${output.search_health_ai.checkCoverageBtn}
+
+# Verify WellBridge attribution
+- assertVisible: ${output.search_health_ai.providedByWellBridge}

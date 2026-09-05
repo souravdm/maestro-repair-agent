@@ -1,0 +1,8 @@
+appId: ${APP_ID}
+name: Validate Dur Questions Display
+onFlowStart:
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+- assertVisible: "${output.pharmacy_durQuestions.pregnancyReview}"
+- assertVisible: "${output.pharmacy_durQuestions.pregnancyReview}"
+- assertVisible: "${output.pharmacy_durQuestions.pregnancyQuestion}"

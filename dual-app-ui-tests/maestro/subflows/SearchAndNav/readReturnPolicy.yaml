@@ -1,0 +1,22 @@
+# Subflow: Read Return Policy Flow
+# Purpose: Validate Read our return policy Flow on Help Center
+# Prerequisite: Must be on Help Center screen with Read our return policy link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.readOurReturnPolicyButton}
+- assertVisible: ${output.snapp_navigation.removeButton}
+
+- tapOn: ${output.snapp_navigation.readOurReturnPolicyButton}
+- extendedWaitUntil:
+    visible: ${output.snapp_navigation.returnPolicyLabel}
+    timeout: 5000
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

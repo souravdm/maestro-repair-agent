@@ -1,0 +1,22 @@
+# Subflow: Find a Store Flow
+# Purpose: Validate Find a Store Flow on Help Center
+# Prerequisite: Must be on Help Center screen with Find a Store link
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.findAStoreButton}
+- assertVisible: ${output.snapp_navigation.removeButton}
+- tapOn: ${output.snapp_navigation.findAStoreButton}
+
+- waitForAnimationToEnd
+
+- assertVisible: "Store locator"
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

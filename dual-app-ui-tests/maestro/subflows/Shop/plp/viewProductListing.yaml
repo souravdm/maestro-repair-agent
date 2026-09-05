@@ -1,0 +1,9 @@
+# Subflow: View product listing page
+# Source: Migrated from XCUITest PLPSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/PLPScreen.js
+
+# Verify PLP loaded
+- assertVisible: ${output.shop_plp.sortBtn}
+- assertVisible: ${output.shop_plp.filterBtn}

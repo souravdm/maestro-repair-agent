@@ -1,0 +1,8 @@
+appId: ${APP_ID}
+name: Validate Pharmacy Notifications
+---
+- assertVisible: "Pharmacy notification settings"
+- assertNotVisible: "Something went wrong.*"
+- assertVisible: "Text alerts"
+- assertVisible: "Automated calls"
+- assertVisible: "Pharmacy emails"

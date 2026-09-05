@@ -1,0 +1,18 @@
+appId: ${APP_ID}
+name: Validate Were Working on It
+onFlowStart:
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+- assertVisible: "${output.pharmacy_orders.ordersHeader}"
+- assertVisible: "${output.pharmacy_orders.wereWorkingOnIt}"
+
+- evalScript: ${output.rxs = output.user.rx.length}
+- evalScript: ${output.counter = 0}
+- repeat:
+    while: 
+      true: ${output.counter < output.rxs && output.user.rx[output.counter].status === 'Preparing'}
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: ".*${output.user.rx[output.counter].name}.*"
+      - evalScript: ${output.counter = output.counter + 1}

@@ -1,0 +1,22 @@
+# Subflow: View Orders Guest Flow
+# Purpose: Validate View Orders Flow on Help Center as Guest User
+# Prerequisite: Must be on Help Center screen with View Orders link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/OnboardingScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.viewOrdersButton}
+- assertVisible: ${output.snapp_navigation.removeButton}
+
+- tapOn: ${output.snapp_navigation.viewOrdersButton}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_onboarding.niceToSeeYouMsg}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

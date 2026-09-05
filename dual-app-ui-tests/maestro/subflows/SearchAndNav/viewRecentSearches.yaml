@@ -1,0 +1,17 @@
+# Subflow: View Recent Searches
+# Purpose: Display and interact with recent search history
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify recent searches section is visible
+- assertVisible: ${output.search_landing.recentSearchesHeader}
+- assertVisible: ${output.search_landing.clearAllBtn}
+
+# Verify recent search items (if any exist)
+- runFlow:
+    when:
+      visible: ${output.search_landing.recentSearchItem}
+    commands:
+      - assertVisible: ${output.search_landing.recentSearchItem}
+      - assertVisible: ${output.search_landing.recentSearchClock}

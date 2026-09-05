@@ -1,0 +1,14 @@
+# Subflow: Search for a product
+# Source: Migrated from XCUITest SearchSteps
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/SearchScreen.js
+
+# Tap search field
+- tapOn: ${output.superapp_search.searchField}
+- waitForAnimationToEnd
+
+# Enter search query (caller should set SEARCH_QUERY env var)
+- inputText: ${SEARCH_QUERY}
+- pressKey: enter
+- waitForAnimationToEnd

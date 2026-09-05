@@ -1,0 +1,33 @@
+# Subflow: View Orders Signed In Flow
+# Purpose: Validate View Orders Flow on Help Center as Signed In User
+# Prerequisite: Must be on Help Center screen with View Orders link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/accountObjects.js
+- runScript: ../../screens/Account/PurchasesScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.removeButton}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.viewOrdersButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.viewOrdersButton}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.viewPurchaseHistButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.viewPurchaseHistButton}
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_purchases.purchasesNavBar}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

@@ -1,0 +1,12 @@
+# Subflow: Open Side Menu
+# Purpose: Open Side Menu by swiping from the lefthand side of the screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+- swipe:
+    start: 0%, 50%
+    end: 90%, 50%
+- waitForAnimationToEnd
+
+- assertVisible: ${output.menu_screen.menuTitle}

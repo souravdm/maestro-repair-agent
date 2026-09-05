@@ -1,0 +1,17 @@
+# Subflow: Validate Messages Button
+# Purpose: Validate Messages button by verifying the navigation by tapping it and going back to the original screen
+# Prerequisite: Must have Messages button visible on screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+- runScript: ../../screens/Menu/MenuScreen.js
+
+- assertVisible: ${output.common_buttons.messagesBtn}
+- tapOn: ${output.common_buttons.messagesBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.menu_notifications.inboxLabel} 
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_buttons.messagesBtn}

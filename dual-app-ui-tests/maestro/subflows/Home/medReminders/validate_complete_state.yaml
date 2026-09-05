@@ -1,0 +1,8 @@
+appId: ${APP_ID}
+name: Validate Med reminders open state
+onFlowStart:
+  - runScript: ../../../screens/Home/homescreenObjects.js
+---
+- assertVisible: ${output.homescreen_medreminders.yourAllSet}
+- assertVisible: ${output.homescreen_medreminders.reviewedAllReminders}
+- assertVisible: ${output.homescreen_medreminders.viewEarlierReminders}

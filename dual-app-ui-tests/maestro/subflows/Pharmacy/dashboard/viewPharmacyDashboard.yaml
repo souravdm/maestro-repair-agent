@@ -1,0 +1,13 @@
+# Subflow: Navigate to and verify pharmacy dashboard
+# Source: Migrated from XCUITest PharmacyScreenSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Pharmacy/PharmacyDashboardScreen.js
+- runScript: ../../../screens/Common/CommonScreen.js
+
+# Navigate to Pharmacy tab
+- tapOn: ${output.common_navigation.pharmacyTab}
+- waitForAnimationToEnd
+
+# Verify pharmacy dashboard loaded
+- assertVisible: ${output.pharmacy_pharmacy_dashboard.pharmacyDashboardTitle}

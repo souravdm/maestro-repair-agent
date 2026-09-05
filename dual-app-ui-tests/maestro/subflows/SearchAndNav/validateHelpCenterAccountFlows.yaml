@@ -1,0 +1,19 @@
+# Subflow: Help Center Account Page Navigation
+# Purpose: Validate the flow to Account screen from Help Center and back
+# Prerequisite: Must have tapped button leading to Account screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_dashboard.accountTab}
+- assertVisible: ${output.account_dashboard.accountDetailsHeader}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

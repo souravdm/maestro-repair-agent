@@ -1,0 +1,19 @@
+appId: ${APP_ID}
+name: Validate Available for Refill
+onFlowStart:
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+  - runScript: ../../screens/Common/CommonScreen.js
+---
+- runFlow:
+    when:
+      visible: ${output.common_buttons.closeMessageBtn}
+    commands:
+      - tapOn: ${output.common_buttons.closeMessageBtn}
+- assertVisible: "${output.pharmacy_prescriptions.header}"
+- scrollUntilVisible:
+    element:
+      text: "${output.pharmacy_prescriptions.refill}"
+    speed: 60
+
+      
+

@@ -1,0 +1,7 @@
+appId: ${APP_ID}
+name: Validate Rx Anba Card
+---
+- assertVisible: "Available for refill"
+- assertVisible: ".* prescription.*"
+- assertVisible: "Review and refill your Rx"
+- tapOn: "Review and refill your Rx"

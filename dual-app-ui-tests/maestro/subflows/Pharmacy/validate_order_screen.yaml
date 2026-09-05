@@ -1,0 +1,6 @@
+appId: ${APP_ID}
+name: Validate order Screen
+onFlowStart:
+  - runScript: ../../screens/Pharmacy/PharmacyScreen.js
+---
+- assertVisible: "${output.pharmacy_orders.ordersHeader}"

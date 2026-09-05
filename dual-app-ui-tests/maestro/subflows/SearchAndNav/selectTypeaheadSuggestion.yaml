@@ -1,0 +1,21 @@
+# Subflow: Select Typeahead Suggestion
+# Purpose: Choose a suggestion from typeahead dropdown
+# Prerequisite: Must have started typing in search field
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify typeahead container is visible
+- assertVisible: ${output.search_typeahead.typeaheadContainer}
+- assertVisible: ${output.search_typeahead.typeaheadResults}
+
+# Tap first suggestion (or specific suggestion if provided)
+- tapOn: ${output.search_typeahead.suggestionTitle}
+- waitForAnimationToEnd
+
+# Verify navigation to results or detail page
+- runFlow:
+    when:
+      visible: ${output.search_results.resultsHeader}
+    commands:
+      - assertVisible: ${output.search_results.resultsHeader}

@@ -1,0 +1,5 @@
+appId: ${APP_ID}
+name: Validate order Details
+---
+- assertVisible: "Order Details"
+- assertVisible: "Order #.*"

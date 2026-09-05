@@ -1,0 +1,9 @@
+# Subflow: Verify home screen elements
+# Source: Migrated from XCUITest HomeTabSteps
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Home/homescreenObjects.js
+- runScript: ../../screens/Home/homescreenObjects.js
+
+# Verify home screen sections are visible
+- assertVisible: ${output.superapp_home.homeTitle}

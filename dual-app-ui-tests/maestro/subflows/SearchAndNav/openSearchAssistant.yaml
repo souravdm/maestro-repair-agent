@@ -1,0 +1,28 @@
+# Subflow: Open Search Assistant (AI Search)
+# Purpose: Access AI-powered search assistant
+# Entry Point: Search landing or results page
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Tap search assistant icon/button
+- runFlow:
+    when:
+      visible: ${output.search_assistant.assistantIcon}
+    commands:
+      - tapOn: ${output.search_assistant.assistantIcon}
+      - waitForAnimationToEnd
+
+# Verify search assistant opened
+- assertVisible: ${output.search_assistant.assistantTitle}
+- assertVisible: ${output.search_assistant.chatContainer}
+- assertVisible: ${output.search_assistant.chatInput}
+- assertVisible: ${output.search_assistant.chatPlaceholder}
+
+# Verify suggested questions (if available)
+- runFlow:
+    when:
+      visible: ${output.search_assistant.suggestedQuestions}
+    commands:
+      - assertVisible: ${output.search_assistant.suggestedQuestions}
+      - assertVisible: ${output.search_assistant.questionChip}

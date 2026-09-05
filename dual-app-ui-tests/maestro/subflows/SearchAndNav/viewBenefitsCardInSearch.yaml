@@ -1,0 +1,36 @@
+# Subflow: View Benefits Card in Search
+# Purpose: Display and interact with CMK benefits card in search
+# Prerequisite: Must be signed in with Benefits access
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/searchNavObjects.js
+
+# Verify benefits card is visible in search
+- assertVisible: ${output.search_benefits_card.benefitsCard}
+- assertVisible: ${output.search_benefits_card.benefitsCardTitle}
+
+# Verify card content
+- runFlow:
+    when:
+      visible: ${output.search_benefits_card.memberIdLabel}
+    commands:
+      - assertVisible: ${output.search_benefits_card.memberIdLabel}
+      - assertVisible: ${output.search_benefits_card.memberIdValue}
+
+# Verify entity logos
+- runFlow:
+    when:
+      visible: ${output.search_benefits_card.caremarkLogo}
+    commands:
+      - assertVisible: ${output.search_benefits_card.caremarkLogo}
+
+- runFlow:
+    when:
+      visible: ${output.search_benefits_card.aetnaLogo}
+    commands:
+      - assertVisible: ${output.search_benefits_card.aetnaLogo}
+
+# Verify quick action buttons
+- assertVisible: ${output.search_benefits_card.viewBenefitsBtn}
+- assertVisible: ${output.search_benefits_card.viewClaimsBtn}
+- assertVisible: ${output.search_benefits_card.drugPricingBtn}

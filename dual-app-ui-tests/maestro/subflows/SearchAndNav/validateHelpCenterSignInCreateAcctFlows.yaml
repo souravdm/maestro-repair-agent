@@ -1,0 +1,23 @@
+# Subflow: Help Center Sign In or Create an Account Page Navigation
+# Purpose: Validate the flow to Sign In or Create an Account screen from Help Center and back
+# Prerequisite: Must have tapped button leading to Sign In or Create an Account screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/OnboardingScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd
+- assertVisible: ${output.account_onboarding.signInOrCreateTitle}
+- assertVisible: ${output.account_onboarding.firstCheckExtraCareLabel}
+- assertVisible: ${output.account_onboarding.mobileOrEmailLabel}
+- assertVisible: ${output.account_onboarding.faceIdToggle}
+- assertVisible: ${output.account_onboarding.keepMeSignedInToggle}
+- assertVisible: ${output.account_onboarding.continueBtn}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

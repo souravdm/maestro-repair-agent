@@ -1,0 +1,19 @@
+# Subflow: Help Center Profile Page Navigation
+# Purpose: Validate the flow to Profile screen from Help Center and back
+# Prerequisite: Must have tapped button leading to Profile screen
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Account/ProfileScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- waitForAnimationToEnd:
+    timeout: 60000
+- assertVisible: ${output.account_profile.profileNavTitle}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}

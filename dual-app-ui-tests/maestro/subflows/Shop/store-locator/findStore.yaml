@@ -1,0 +1,14 @@
+# Subflow: Search and find a store
+# Source: Migrated from XCUITest StoreLocatorSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/StoreLocatorScreen.js
+
+# Verify store locator loaded
+- assertVisible: ${output.shop_store_locator.storeLocatorTitle}
+
+# Search for a location
+- tapOn: ${output.shop_store_locator.searchField}
+- inputText: "10001"
+- tapOn: ${output.shop_store_locator.searchBtn}
+- waitForAnimationToEnd

@@ -1,0 +1,17 @@
+# Subflow: Change feature flag
+
+
+appId: ${APP_ID}
+---
+
+- longPressOn: "Health 100 Logo"
+- waitForAnimationToEnd
+- tapOn: "Show feature flags"
+- tapOn: "Search"
+- inputText: "external-provider"
+- waitForAnimationToEnd
+#- tapOn: "flagSwitchTag"
+- tapOn: "Change Flag Value"
+- tapOn: "false"
+- pressKey: Back
+- pressKey: Back

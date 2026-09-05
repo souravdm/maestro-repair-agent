@@ -1,0 +1,18 @@
+appId: com.cvs.launchers.cvs
+name: Bottom Nav Loaded
+onFlowStart:
+  - runScript: ../../screens/SearchAndNav/searchNavObjects.js
+---
+- runFlow:
+    when:
+      visible: 'Close'
+    commands:
+      - tapOn: 'Close'
+- runFlow:
+    when:
+      visible: 'Maybe later'
+    commands:
+      - tapOn: 'Maybe later'
+- extendedWaitUntil:
+    visible: ${output.searchnav_bottom.homeBtn}
+    timeout: 30000

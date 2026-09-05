@@ -1,0 +1,22 @@
+# Subflow: Open Search from Home
+# Purpose: Access search feature from Home screen
+# Entry Point: Home context
+appId: ${APP_ID}
+---
+- runScript: ../../screens/SearchAndNav/SearchScreen.js
+
+- runFlow:
+    when:
+      visible: ${output.superapp_search.searchOrAskQuestionField}
+    commands:
+      - tapOn: ${output.superapp_search.searchOrAskQuestionField}
+- runFlow:
+    when:
+      visible: ${output.superapp_search.searchBtn}
+    commands:
+      - tapOn: ${output.superapp_search.searchBtn}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.superapp_search.searchOrAskQuestionField}
+

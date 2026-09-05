@@ -1,0 +1,17 @@
+# Subflow: Set a store as myCVS store
+# Source: Migrated from XCUITest StoreLocatorSteps
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Shop/StoreLocatorScreen.js
+
+# Tap set as myCVS on a store
+- tapOn: "Set as myCVS.*"
+- waitForAnimationToEnd
+
+# Confirm set store alert
+- runFlow:
+    when:
+      visible: "Set myCVS Store"
+    commands:
+      - tapOn: "Set Store"
+      - waitForAnimationToEnd

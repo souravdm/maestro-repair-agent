@@ -1,0 +1,24 @@
+# Subflow: Schedule a Visit Flow
+# Purpose: Validate Schedule a Visit Flow on Help Center as Guest User
+# Prerequisite: Must be on Help Center screen with Schedule a Visit link visible
+appId: ${APP_ID}
+---
+- runScript: ../../screens/Common/CommonScreen.js
+- runScript: ../../screens/Health/MinuteClinicSchedulingScreen.js
+- runScript: ../../screens/SearchAndNav/SNAPPScreen.js
+
+- assertVisible: ${output.snapp_navigation.removeButton}
+- assertVisible: ${output.snapp_navigation.scheduleAVisitButton}
+- tapOn: ${output.snapp_navigation.scheduleAVisitButton}
+
+- waitForAnimationToEnd
+
+- assertVisible: ${output.health_scheduling.findCareLabel}
+- assertVisible: ${output.health_scheduling.findTheCareYouNeed}
+- tapOn: ${output.common_buttons.backBtn}
+
+- runFlow:
+    when:
+      visible: ${output.snapp_navigation.removeButton}
+    commands:
+      - tapOn: ${output.snapp_navigation.removeButton}
