@@ -231,6 +231,11 @@ env:
 
 
 # Prescription Rx number
+- scrollUntilVisible:
+    element: ${output.benefits_claims_common.prescriptionRxNumberLabel}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: true
 - tapOn: ${output.benefits_claims_common.prescriptionRxNumberLabel}
 - inputText: ${PRESCRIPTION_RX_NUMBER}
 - tapOn: ${output.claims_confirmation.doneBtn}

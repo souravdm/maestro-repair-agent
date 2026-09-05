@@ -29,7 +29,11 @@ output.account_otp = {
     confirmCodeBtn: "Confirm.*",
     confirmText: "Just need to confirm it's you.",
     justNeedToVerify: "We'll email a code to.*|We'll send.*code to.*|Just need to verify|Just need to confirm",
-    chooseHowOTP: "Choose how to get your one-time code.",
+    // Verified 2026-09 against a live Health100 build: the screen reads
+    // "Choose how to get your code." — no "one-time" — so the old string never
+    // matched and select_default_otp_method.yaml's visibility gate silently
+    // no-op'd instead of picking a delivery method.
+    chooseHowOTP: "Choose how to get your code.",
     emailOrTextCodeTo: "Email a code to.*|Text a code to.*|Send code",
     sendCodeBtn: "Send code",
 }

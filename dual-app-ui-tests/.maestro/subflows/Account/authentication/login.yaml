@@ -1,0 +1,87 @@
+appId: ${APP_ID}
+name: Login
+onFlowStart:
+  - runScript: ../../../screens/Account/accountObjects.js
+  - runScript: ../../../screens/Account/LoginScreen.js
+  - runScript: ../../../screens/Account/OnboardingScreen.js
+---
+# Reconstructed 2026-09: this file was referenced by every login-dependent
+# flow/subflow in the suite (H100_ACCT_TC010_loginAndLogout.yaml,
+# H100_MENU_TC018_loginClaims.yaml, NavigateToBenefitsScreen.yaml, ...) but was
+# missing from the checkout, so none of them could run past the app's home
+# screen. Requires `output.user` to already be populated by
+# config/credentials-loader.js in the caller's onFlowStart, same as every
+# other subflow in this suite that reads ${output.user.*}.
+
+- runFlow:
+    when:
+      visible: ${output.account_login.signInBtn}
+    commands:
+      - tapOn: ${output.account_login.signInBtn}
+      - waitForAnimationToEnd
+
+# Health100's own account chooser, distinct from the CVS-partner SSO chooser
+# in account_health100_onboarding — confirmed live: tapping "Sign In" on the
+# Health100 home screen goes straight to "Continue with mobile number or
+# email" / "Continue with our Partners" / "Continue with Google", not the
+# Terms-and-conditions-first CVS partner chain that
+# complete_signin_with_cvs_h100.yaml assumes.
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.continueNumEmailH100Button}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.continueNumEmailH100Button}
+      - waitForAnimationToEnd
+
+- tapOn:
+    text: ${output.account_login.emailField}
+- inputText: ${output.user.email}
+- hideKeyboard
+- tapOn: ${output.account_login.continueBtn}
+- waitForAnimationToEnd
+
+# Some accounts land on a password screen instead of OTP.
+- runFlow:
+    when:
+      visible: ${output.account_login.passwordField}
+    commands:
+      - tapOn:
+          text: ${output.account_login.passwordField}
+      - inputText: ${output.user.password}
+      - hideKeyboard
+      - tapOn: ${output.account_login.signInSubmit}
+      - waitForAnimationToEnd
+
+# OTP path — same shape as complete_signin_with_cvs_h100.yaml, reusing the
+# existing, already-verified otp/ subflows rather than re-deriving them here.
+- runFlow:
+    when:
+      visible: ${output.account_otp.justNeedToVerify}
+    commands:
+      - runFlow: ../otp/select_default_otp_method.yaml
+      - runFlow: ../otp/enter_and_confirm_code.yaml
+
+# DOB step-up verification, when the account requires it.
+- runFlow:
+    when:
+      visible: ${output.account_login.dobTitle}
+    commands:
+      - runFlow: ../otp/enter_dob_and_continue.yaml
+
+- runFlow:
+    when:
+      visible: ${output.account_otp.okBtn}
+    commands:
+      - tapOn: ${output.account_otp.okBtn}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.simplifyContinueBtn}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.simplifyContinueBtn}
+- runFlow:
+    when:
+      visible: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+    commands:
+      - tapOn: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+
+- waitForAnimationToEnd

@@ -80,6 +80,7 @@ env:
 
 # Enter Days supply
 
+- scroll
 - tapOn: ${output.claims_step3_medication.daysSupplyLabel}
 - inputText: ${DAYS_SUPPLY}
 - runFlow:
