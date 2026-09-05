@@ -1,0 +1,45 @@
+# Subflow: Navigate to Benefits Landing - Caremark Only (Consented)
+# Plan Type: CMK plan only with consent
+# Features: Full Pharmacy benefits access
+# Tabs: 1 (Pharmacy only)
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/MemberIDScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Verify Benefits landing page loaded
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+- assertVisible: ${output.benefits_landing.planSummariesTitle}
+
+# Verify Medical and Dental tabs are NOT visible
+- assertNotVisible: ${output.benefits_landing.medicalTab}
+- assertNotVisible: ${output.benefits_landing.dentalTab}
+- scrollUntilVisible:
+    element:
+      text: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+- assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+# Verify Pharmacy-specific features
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+    commands:
+      - assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.drugPricingBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.drugPricingBtn}
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.claimsCard}
+    commands:
+      - assertVisible: ${output.benefits_landing.claimsCard}
+
+- assertVisible: ${output.benefits_landing.priorAuthTitle}
+- scrollUntilVisible:
+    element:
+      text: ${output.benefits_landing.searchPharmacyCard}
+- assertVisible: ${output.benefits_landing.searchPharmacyCard}

@@ -1,0 +1,85 @@
+appId: ${APP_ID}
+name: Filter Claims
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+env:
+  TIME_FRAME: "Last 6 months"
+  CLAIM_TYPE: "Prescription"
+  CLAIM_STATUS: "Processed"
+---
+# Open All filters modal
+- tapOn: ${output.benefits_claims_landing.allFiltersBtn}
+- waitForAnimationToEnd
+
+# Verify filter modal opened
+- assertVisible: ${output.benefits_claims_landing.filtersTitle}
+
+# Select time frame filter
+- runFlow:
+    when:
+      true: ${TIME_FRAME == "Last 3 months"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.last3Months}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${TIME_FRAME == "Last 6 months"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.last6Months}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${TIME_FRAME == "Last 9 months"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.last9Months}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${TIME_FRAME == "Last 12 months"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.last12Months}
+      - waitForAnimationToEnd
+
+# Select claim type
+- runFlow:
+    when:
+      true: ${CLAIM_TYPE == "Prescription"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.prescriptionType}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${CLAIM_TYPE == "Medical"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.medicalType}
+      - waitForAnimationToEnd
+
+# Select claim status
+- runFlow:
+    when:
+      true: ${CLAIM_STATUS == "Processed"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.processedStatus}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${CLAIM_STATUS == "Denied"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.deniedStatus}
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${CLAIM_STATUS == "Pending"}
+    commands:
+      - tapOn: ${output.benefits_claims_landing.pendingStatus}
+      - waitForAnimationToEnd
+
+# Apply filters
+- tapOn: ${output.benefits_claims_landing.viewResultsBtn}
+- waitForAnimationToEnd

@@ -1,0 +1,87 @@
+# Benefits Tab Complete Flow
+# Comprehensive E2E flow to explore all Benefits dashboard sections
+
+appId: ${APP_ID}
+name: Benefits Tab Complete Flow
+tags:
+  - benefits
+  - dashboard
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: CHAZR
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits tab
+- runFlow:
+    file: ./navigateToBenefitsTab.yaml
+
+# Verify Benefits Landing Screen Header
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+
+# Verify Plan Summaries Section
+- assertVisible: ${output.benefits_landing.planSummariesTitle}
+- assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+- assertVisible: ${output.benefits_landing.copayAndCoinsuranceCardContentDes}
+
+
+# Test Plan Type Tabs - Pharmacy
+- assertVisible: ${output.benefits_landing.pharmacyTab}
+- tapOn: ${output.benefits_landing.pharmacyTab}
+- assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+# Switch to Medical tab
+- tapOn: ${output.benefits_landing.medicalTab}
+- assertVisible: ${output.benefits_landing.medicalSpendingBtnContentDes}
+# Verify Benefits & Plan Documents
+- assertVisible: ${output.benefits_landing.benefitsAndPlanDocsBtnContentDes}
+
+# Switch to Dental tab (if available)
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.dentalTab}
+    commands:
+      - tapOn: ${output.benefits_landing.dentalTab}
+      # Verify Benefits & Plan Documents
+      - assertVisible: ${output.benefits_landing.dentalBenefitsPlanDocBtnContentDes}
+
+
+# Scroll to see Action Cards section
+- scrollUntilVisible:
+    element: ${output.benefits_landing.priorAuthTitle}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: false
+
+# Verify Action Cards
+- assertVisible: ${output.benefits_landing.priorAuthTitle}
+- assertVisible: ${output.benefits_landing.priorAuthDescription}
+- assertVisible: ${output.benefits_landing.ytdSpendingCard}
+- assertVisible: ${output.benefits_landing.mailServicePharmacy}
+
+# Test Member ID navigation (Android)
+- swipe:
+    direction: UP
+- swipe:
+    direction: UP
+- tapOn: ${output.benefits_landing.learnAboutAI}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_landing.learnAboutAIH100}
+- pressKey: Back
+- waitForAnimationToEnd
+
+# Verify return to Benefits dashboard
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

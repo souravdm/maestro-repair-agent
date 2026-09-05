@@ -1,0 +1,74 @@
+# Test: Insurance Card Upload
+# Validates insurance card management functionality
+
+appId: ${APP_ID}
+name: "H100 | Account | TC022 - Update Insurance Information"
+tags:
+  - account
+  - insurance
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Insurance
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/InsuranceScreen.js
+- scroll
+- tapOn: ${output.account_insurance.insuranceOption}
+- waitForAnimationToEnd
+
+# Verify insurance screen elements
+- assertVisible: ${output.account_insurance.addInsuranceCardTitle}
+
+# Test: Add Front Image (if add option available)
+- runFlow:
+    when:
+      visible: ${output.account_insurance.addFrontImageBtn}
+    commands:
+      - tapOn: ${output.account_insurance.addFrontImageBtn}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_insurance.choosePhotoOptions}
+      - tapOn: ${output.account_insurance.chooseFromLibraryBtn}
+      - waitForAnimationToEnd
+
+# Test: Add Back Image (if add option available)
+- runFlow:
+    when:
+      visible: ${output.account_insurance.addBackImageBtn}
+    commands:
+      - tapOn: ${output.account_insurance.addBackImageBtn}
+      - waitForAnimationToEnd
+      - tapOn: ${output.account_insurance.chooseFromLibraryBtn}
+      - waitForAnimationToEnd
+
+# Save insurance card (if save button available)
+- runFlow:
+    when:
+      visible: ${output.account_insurance.saveOrSubmitBtn}
+    commands:
+      - tapOn: ${output.account_insurance.saveOrSubmitBtn}
+      - waitForAnimationToEnd
+
+# Navigate back
+- tapOn: "Back|Account"
+- waitForAnimationToEnd

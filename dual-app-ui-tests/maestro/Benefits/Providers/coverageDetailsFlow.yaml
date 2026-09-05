@@ -1,0 +1,84 @@
+# Coverage Details Flow
+# Complete flow to view insurance coverage details for a provider
+
+appId: ${APP_ID}
+name: Coverage Details Flow
+tags:
+  - benefits
+  - providers
+  - coverage
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search for a provider
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify results and tap on a provider
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- tapOn: ${output['benefits_providers_common'].providerName}
+
+# Verify Provider Details Screen
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+
+# Navigate to Insurance tab
+- assertVisible: ${output.benefits_provider_details.insuranceTab}
+- tapOn: ${output.benefits_provider_details.insuranceTab}
+
+# Verify coverage information
+- assertVisible: ${output.benefits_provider_details.otherPlansLabel}
+- assertVisible: ${output.benefits_provider_details.coverageDetailsLabel}
+
+# Verify Network Status
+- assertVisible: ${output['benefits_providers_common'].inNetworkBadge}
+
+# Verify Cost Estimates
+- scroll
+- assertVisible: ${output.benefits_provider_details.estimatedCostsLabel}
+- assertVisible: ${output.benefits_provider_details.deductibleAppliesLabel}
+- assertVisible: ${output.benefits_provider_details.coinsuranceLabel}
+
+# Verify Important Information
+- scroll
+- assertVisible: ${output.benefits_provider_details.disclaimerLabel}
+
+# Test Actions
+- assertVisible: ${output.benefits_provider_details.verifyBenefitsBtn}
+- assertVisible: ${output.benefits_provider_details.contactInsuranceBtn}
+
+# Navigate Back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.resultsCount}
+
+# Navigate back to Providers
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

@@ -1,0 +1,83 @@
+# Member ID Complete Flow
+# Comprehensive E2E flow for all Member ID card scenarios
+# Tests viewing, sharing, and multi-member selection
+
+appId: ${APP_ID}
+name: Member ID Complete Flow
+tags:
+  - benefits
+  - member-id
+  - e2e
+  - complete
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/MemberIDScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# Navigate to Member ID
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.memberIdBtn}
+    commands:
+      - tapOn: ${output.benefits_landing.memberIdBtn}
+      - assertVisible: ${output.benefits_landing.memberIdsTitle}
+
+# Verify all Member ID card elements
+- assertVisible: ${output.benefits_memberid_member_id_card.memberIdLabel}
+- assertVisible: ${output.benefits_memberid_member_id_card.memberName}
+- assertVisible: ${output.benefits_memberid_member_id_card.shareBtn}
+
+# Test share functionality
+- tapOn: ${output.benefits_memberid_member_id_card.shareBtn}
+- assertVisible: "Share|Copy|Save|Messages|Mail"
+
+# Cancel share sheet
+- tapOn:
+    text: "Cancel"
+    optional: true
+
+# Test member filter (if multiple members)
+- runFlow:
+    when:
+      visible: ${output.benefits_memberid_member_selection.filterMemberBtn}
+    commands:
+      - tapOn: ${output.benefits_memberid_member_selection.filterMemberBtn}
+      - assertVisible: ${output.benefits_memberid_member_selection.memberLabel}
+      - tapOn: ${output.benefits_memberid_member_id_card.backBtn}
+
+# Verify card details are still visible
+- assertVisible: ${output.benefits_memberid_member_id_card.memberIdLabel}
+
+# Test scroll capability
+- scroll
+- scroll:
+    direction: UP
+
+# Navigate back to Benefits dashboard
+- tapOn: ${output.benefits_memberid_member_id_card.backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+
+# Verify Member ID button is still accessible
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.memberIdBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.memberIdBtn}

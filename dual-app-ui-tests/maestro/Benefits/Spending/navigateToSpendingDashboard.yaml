@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+name: Navigatetospendingdashboard
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+- tapOn: ${output.common_navigation.spendingBottomNavBtn}
+- assertVisible: ${output.benefits_spending_common.spendingDashboardTitle}
+- assertVisible: ${output.benefits_spending_common.totalSpendingLabel}

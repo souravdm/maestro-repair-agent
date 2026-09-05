@@ -1,0 +1,108 @@
+# Test: Terms and Privacy Policy
+# Validates all terms and privacy policy navigation links
+
+appId: ${APP_ID}
+name: "H100 | Account | TC024 - View Terms And Privacy Policy"
+tags:
+  - account
+  - terms
+  - privacy
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Terms & Privacy
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/AccountTermsScreen.js
+- scroll
+- tapOn: ${output.account_terms.termsAndPrivacyLink}
+- waitForAnimationToEnd
+
+# Test Terms of Use Navigation
+- tapOn: ${output.account_terms.termsOfUseLink}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.termsOfUseLink}
+- assertVisible:
+    text: ".*terms.*"
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Test Privacy Policy Navigation
+- tapOn: ${output.account_terms.privacyPolicyLink}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.privacyPolicyLink}
+- assertVisible:
+    text: ".*privacy.*"
+- tapOn: ${output.common_buttons.backBtn}
+- waitForAnimationToEnd
+
+# Test CVS Pharmacy Notices Navigation
+- runFlow:
+    when:
+      visible: ${output.account_terms.cvsPharmacyNoticesLink}
+    commands:
+      - tapOn: ${output.account_terms.cvsPharmacyNoticesLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_terms.cvsPharmacyNoticesLink}
+      - tapOn: ${output.common_buttons.backBtn}
+      - waitForAnimationToEnd
+
+# Test MinuteClinic Notices Navigation
+- runFlow:
+    when:
+      visible: ${output.account_terms.minuteClinicNoticesLink}
+    commands:
+      - tapOn: ${output.account_terms.minuteClinicNoticesLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_terms.minuteClinicNoticesLink}
+      - tapOn: ${output.common_buttons.backBtn}
+      - waitForAnimationToEnd
+
+# Test WA Consumer Health Privacy Policy Navigation
+- runFlow:
+    when:
+      visible: ${output.account_terms.waConsumerHealthPrivacyLink}
+    commands:
+      - tapOn: ${output.account_terms.waConsumerHealthPrivacyLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_terms.waConsumerHealthPrivacyLink}
+      - tapOn: ${output.common_buttons.backBtn}
+      - waitForAnimationToEnd
+
+# Test Do Not Sell My Personal Information Navigation
+- runFlow:
+    when:
+      visible: ${output.account_terms.doNotSellLink}
+    commands:
+      - tapOn: ${output.account_terms.doNotSellLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_terms.doNotSellLink}
+      - tapOn: ${output.common_buttons.backBtn}
+      - waitForAnimationToEnd
+
+# Test Delete My Account Navigation
+- tapOn: ${output.account_terms.deleteMyCvsAccountLink}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_terms.deleteAccountTitle}
+- tapOn: ${output.common_buttons.cancelBtn}
+- waitForAnimationToEnd

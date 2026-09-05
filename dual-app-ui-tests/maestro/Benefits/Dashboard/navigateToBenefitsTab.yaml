@@ -1,0 +1,13 @@
+# Navigate to Benefits Tab
+# Reusable subflow to tap Benefits bottom nav and verify landing screen
+
+appId: ${APP_ID}
+name: NavigateToBenefitsTab
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+---
+# Tap Benefits bottom tab
+- tapOn: ${output.benefits_landing.benefitsTab}
+
+# Wait for Benefits landing screen
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

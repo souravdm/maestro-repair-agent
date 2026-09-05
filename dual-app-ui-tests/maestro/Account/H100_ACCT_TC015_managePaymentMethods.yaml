@@ -1,0 +1,36 @@
+# Test: Manage Payment Methods
+# Validates payment methods page navigation
+# Source: Migrated from XCUITest PaymentsTests
+
+appId: ${APP_ID}
+name: "H100 | Account | TC015 - Manage Payment Methods"
+tags:
+  - account
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+- runFlow:
+    file: ../../subflows/Account/dashboard/paymentMethods.yaml

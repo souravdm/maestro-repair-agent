@@ -1,0 +1,23 @@
+# Subflow: Navigate to Benefits Landing - Aetna Only
+# Plan Type: Aetna plan only (no Caremark)
+# Features: Medical and Dental benefits only
+# Tabs: 2 (Medical, Dental) - NO Pharmacy tab
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/SpendingScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Navigate to YTD
+- scrollUntilVisible:
+    element:
+      text: ${output.benefits_landing.ytdSpendingCard}
+    speed: 15
+- tapOn: ${output.benefits_landing.ytdSpendingCard}
+- waitForAnimationToEnd
+- assertVisible: ${output.common_navigation.year2026}
+- assertVisible: ${output.common_navigation.year2025}
+- assertVisible: ${output.benefits_home.prescriptionSummary}
+- assertVisible: ${output.benefits_spending_common.totalIncludesCoverage}
+- assertVisible: ${output.benefits_pharmacy_spending.viewPrescriptionClaims}
+- assertVisible: ${output.benefits_spending_common.downloadPrescriptionExpensesPattern}

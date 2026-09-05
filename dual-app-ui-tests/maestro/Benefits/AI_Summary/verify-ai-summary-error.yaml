@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+---
+# Subflow: Verify AI Summary Error State
+# Validates error message and retry functionality
+#
+# Feature: TLOP-4002 - Benefits AI Summary
+
+# Wait for error state to appear
+- waitForAnimationToEnd
+
+# Verify error message is visible
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: "ai_summary_error"
+- assertVisible: ${output.ai_summary}
+
+# Verify retry button is visible
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: "ai_summary_retry_button"
+- assertVisible: ${output.ai_summary}
+
+# Take screenshot of error state
+- takeScreenshot: AI_Summary_Error_State

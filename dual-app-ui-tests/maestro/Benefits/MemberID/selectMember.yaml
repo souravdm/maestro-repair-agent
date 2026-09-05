@@ -1,0 +1,24 @@
+# Select Member
+# Subflow to filter and select a family member
+
+appId: ${APP_ID}
+name: Selectmember
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/MemberIDScreen.js
+env:
+  MEMBER_NAME: ${MEMBER_NAME:-"Benjamin Desomma"}
+---
+# Open member filter
+- assertVisible: ${output.benefits_landing.filterMemberBtn}
+- tapOn: ${output.benefits_landing.memberLabel}
+
+- assertVisible: ${output.benefits_memberid_member_selection.membersTitle}
+- assertVisible: ${output.benefits_memberid_member_selection.applyBtn}
+
+# Select member
+- tapOn: ${MEMBER_NAME}
+- assertVisible: "rounded_check"
+
+# Apply selection
+- tapOn: ${output.benefits_memberid_member_selection.applyBtn}

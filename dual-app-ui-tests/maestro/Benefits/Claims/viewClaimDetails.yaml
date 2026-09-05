@@ -1,0 +1,9 @@
+appId: ${APP_ID}
+name: Viewclaimdetails
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# ORPHAN-CLEANUP: - tapOn: ${output.benefits_claims_landing.claimCard}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_claims_landing.claimDetailsTitle}
+- assertVisible: ${output.benefits_claims_landing.processedStatus}

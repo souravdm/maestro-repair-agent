@@ -1,0 +1,69 @@
+# Provider Search Flow
+# Complete flow to search for healthcare providers
+# Based on Figma: Open Platform — Benefits Integration > Provider Search
+
+appId: ${APP_ID}
+name: Provider Search Flow
+tags:
+  - benefits
+  - providers
+  - search
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# Navigate to Providers tab
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Verify Providers Landing Screen
+- assertVisible: ${output.benefits_providers.searchField}
+
+# Verify Provider Type Quick Actions
+- assertVisible: ${output.benefits_providers.doctorsBtn}
+- assertVisible: ${output.benefits_providers.hospitalsBtn}
+- assertVisible: ${output.benefits_providers.urgentCareBtn}
+- assertVisible: ${output.benefits_providers.specialistsBtn}
+
+# Search for Providers
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+
+# Execute search
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify search results
+- assertVisible: ${output.benefits_providers.resultsCount}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+
+# Verify provider card details
+- assertVisible: ${output['benefits_providers_common'].providerAddress}
+- assertVisible: ${output.benefits_providers.providerDistance}
+
+# Navigate back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

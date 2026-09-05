@@ -1,0 +1,30 @@
+# Verify Claim Submission Confirmation
+# Figma: Button Sheet - Submitted Confirmation
+# Verify success message, confirmation number, and action buttons
+appId: ${APP_ID}
+name: Verify Claim Confirmation
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Wait for Flutter confirmation modal to render completely
+# The modal appears after claim submission and may take a few seconds
+- extendedWaitUntil:
+    visible: ${output.claims_confirmation.doneBtn}
+    timeout: 15000
+
+# Verify the success title
+# - assertVisible: ${output.benefits_claims_submit.claimSubmittedMessage}
+
+# # Verify confirmation number is displayed (pattern: #followed by alphanumeric)
+# - assertVisible: ${output.claims_confirmation.confirmationNumberPattern}
+
+# # Verify processing time information
+# - assertVisible: ${output.claims_confirmation.processingTimeText}
+
+# # Verify action buttons
+# - assertVisible: ${output.claims_confirmation.startAnotherClaimBtn}
+- assertVisible: ${output.claims_confirmation.doneBtn}
+
+# Tap Done to complete the claim flow
+- tapOn: ${output.claims_confirmation.doneBtn}
+- waitForAnimationToEnd

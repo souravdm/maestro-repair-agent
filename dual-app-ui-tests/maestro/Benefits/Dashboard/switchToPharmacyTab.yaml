@@ -1,0 +1,21 @@
+# Subflow: Switch to Pharmacy Tab
+# Purpose: Navigate to Pharmacy tab in Benefits landing page
+# Prerequisite: Must be on Benefits landing page with Pharmacy tab visible
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Tap Pharmacy tab
+- tapOn: ${output.benefits_landing.pharmacyTab}
+- waitForAnimationToEnd
+
+# Verify Pharmacy tab is selected
+- assertVisible: ${output.benefits_landing.pharmacyTab}
+
+# Verify Pharmacy-specific content
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.pharmacySpendingBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.pharmacySpendingBtn}

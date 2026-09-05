@@ -1,0 +1,39 @@
+# Prior Authorizations Flow
+# Complete flow to view prior authorizations
+
+appId: ${APP_ID}
+name: Prior Authorizations Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# View Prior Authorizations
+- runFlow:
+    file: ./viewPriorAuthorizations.yaml
+
+# Verify Prior Auth Screen
+- assertVisible: ${output.benefits_prior_auth.pageTitle}
+- assertVisible: ${output.benefits_prior_auth.seeStatusDetailsLink}
+
+# Navigate back
+- tapOn: ${output['benefits_prior_auth_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

@@ -1,0 +1,75 @@
+# Test: Valid Login and Logout
+# Validates authentication flow and session persistence
+# Handles notification prompts and overlays during login
+
+appId: ${APP_ID}
+name: "H100 | Account | TC010 - Login And Logout"
+tags:
+  - account
+  - authentication
+  - smoke
+  - critical
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Account/LoginScreen.js
+  - runScript: ../../screens/Common/SystemPermissionsScreen.js
+  - runScript: ../../screens/Account/OnboardingScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+
+---
+# Step 1: Run login flow with notification handling
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Step 2: Handle any post-login overlays before verification
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Step 7: Navigate between tabs to verify session persistence
+- tapOn: ${output.common_navigation.homeTab}
+- assertVisible: ${output.common_navigation.homeTab}
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Step 9: Navigate to pharmacy tab
+- tapOn: ${output.common_navigation.pharmacyTab}
+- assertVisible: ${output.common_navigation.pharmacyLabel}|${output.common_buttons.notNowBtnVariant}
+- tapOn: ${output.common_navigation.homeTab}
+
+# Step 11: Navigate to shop tab
+- runFlow:
+    when:
+      visible: ${output.common_navigation.shopTab}
+    commands:
+      - tapOn: ${output.common_navigation.shopTab}
+      - tapOn: ${output.common_buttons.closeBtn}
+      - assertVisible: ${output.common_navigation.shopLabel}
+      - tapOn: ${output.common_navigation.homeTab}
+
+# Step 13: Navigate to health tab
+- tapOn: ${output.common_navigation.healthTab}
+- assertVisible: ${output.common_navigation.healthLabel}
+- tapOn: ${output.common_navigation.homeTab}
+
+# Step 15: Navigate to account tab
+- runFlow:
+    when:
+      visible: "${output.common_navigation.accountBtn}"
+    commands:
+      - tapOn: "${output.common_navigation.accountBtn}"
+      - waitForAnimationToEnd
+
+# Step 17: Verify account screen loaded
+- assertVisible: "Account|Hi,|Profile"
+
+# Step 18: Sign out - tap sign out button
+- runFlow:
+    file: ../../subflows/Account/authentication/logout.yaml

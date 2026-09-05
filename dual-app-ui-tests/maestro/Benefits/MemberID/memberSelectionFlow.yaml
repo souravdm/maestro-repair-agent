@@ -1,0 +1,63 @@
+# Member Selection Flow
+# Complete flow to filter and select family members
+
+appId: ${APP_ID}
+name: Member Selection Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/MemberIDScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# Verify Member Filter Button
+- assertVisible: ${output.benefits_memberid_member_selection.filterMemberBtn}
+- assertVisible: ${output.benefits_memberid_member_selection.memberLabel}
+
+# Open Member Selection
+- tapOn: ${output.benefits_memberid_member_selection.memberLabel}
+
+- assertVisible: ${output.benefits_memberid_member_selection.membersTitle}
+- assertVisible: ${output.benefits_memberid_member_selection.applyBtn}
+- assertVisible: ${output.benefits_memberid_member_selection.primaryUserName}
+
+# Select Primary Member
+- tapOn: ${output.benefits_memberid_member_selection.primaryUserBtn}
+- assertVisible: ${output.benefits_memberid_member_selection.selectedLabel}
+
+# Apply Selection
+- tapOn: ${output.benefits_memberid_member_selection.applyBtn}
+
+# Verify Benefits Updated for Selected Member
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+- assertVisible: ${output.benefits_landing.planSummariesTitle}
+
+# Open Member Selection Again
+- tapOn: ${output.benefits_memberid_member_selection.memberLabel}
+
+# Select Dependent
+- tapOn: ${output.benefits_memberid_member_selection.dependentUserBtn}
+- assertVisible: ${output.benefits_memberid_member_selection.selectedLabel}
+
+# Apply Selection
+- tapOn: ${output.benefits_memberid_member_selection.applyBtn}
+
+# Verify Benefits Updated
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+- assertVisible: ${output.benefits_landing.planSummariesTitle}

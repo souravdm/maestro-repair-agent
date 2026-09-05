@@ -1,0 +1,29 @@
+# Basic flow to enter Benefits module from any file login
+appId: ${APP_ID}
+env:
+  USER_NAME: ${USER_NAME}
+
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ${USER_NAME}
+---
+# Load screens and credentials in the body to ensure they run as a subflow
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Benefits tab
+- runFlow:
+    file: ../../../subflows/Benefits/Dashboard/navigateToBenefitsTab.yaml

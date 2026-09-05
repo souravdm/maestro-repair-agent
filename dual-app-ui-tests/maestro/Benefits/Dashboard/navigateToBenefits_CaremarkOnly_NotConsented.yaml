@@ -1,0 +1,21 @@
+# Subflow: Navigate to Benefits Landing - Caremark Only (Not Consented)
+# Plan Type: CMK plan only without consent
+# Features: Consent required to access Pharmacy benefits
+# Tabs: 1 (Pharmacy only)
+# Consent: Required for all CVS Caremark benefits
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Navigate to Benefits tab
+- tapOn: ${output.common_navigation.benefitsTab}
+- waitForAnimationToEnd
+
+# Verify Benefits landing page loaded
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+- assertNotVisible: ${output.benefits_landing.medicalTab}
+- assertNotVisible: ${output.benefits_landing.dentalTab}
+- assertVisible: ${output.benefits_landing.viewCaremarkBenefitsPrompt}
+- assertVisible: ${output.benefits_landing.consentSecondaryText}
+- assertVisible: ${output.benefits_landing.cardsFAB}

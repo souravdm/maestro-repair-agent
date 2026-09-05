@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+---
+# Subflow: Verify AI Summary Loaded Successfully
+# Validates that AI summary content appears after tapping the button
+#
+# Required env vars:
+#   EXPECTED_INSIGHT_TYPE: "deductible" | "cost_sharing" | "spending" | "claims"
+#
+# Feature: TLOP-4002 - Benefits AI Summary
+
+# Wait for loading to complete (skeleton loader should disappear)
+- waitForAnimationToEnd
+
+# Verify AI summary container is visible
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: "ai_summary_container"
+- assertVisible: ${output.ai_summary}
+
+# Verify AI summary content text is visible
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: "ai_summary_content"
+- assertVisible: ${output.ai_summary}
+
+# Verify specific insight type based on context
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: ${EXPECTED_INSIGHT_TYPE}_insight
+- assertVisible: ${output.ai_summary}
+
+# Take screenshot of AI summary
+- takeScreenshot: AI_Summary_${EXPECTED_INSIGHT_TYPE}_Loaded

@@ -1,0 +1,39 @@
+# Benefits & Plan Documents Flow
+# Complete flow to view plan documents and service usage
+
+appId: ${APP_ID}
+name: Benefits Plan Documents Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PlanDocumentsScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# View Benefits & Plan Documents
+- runFlow:
+    file: ./viewBenefitsPlanDocuments.yaml
+
+# Verify plan documents sections are visible
+- assertVisible: ${output['benefits_plandocs'].usageSummary}
+- assertVisible: ${output['benefits_plandocs'].planDocuments}
+
+# Navigate back
+- tapOn: ${output.benefits_plan_documents.backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

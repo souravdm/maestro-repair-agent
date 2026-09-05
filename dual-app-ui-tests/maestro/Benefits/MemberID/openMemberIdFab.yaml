@@ -1,0 +1,15 @@
+# Subflow: Open Member ID from FAB
+# Purpose: Tap the Member ID Floating Action Button to view member ID card
+# Prerequisite: Must be on Benefits landing page
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+- runScript: ../../../screens/Benefits/MemberIDScreen.js
+
+# Tap Cards FAB at bottom of screen
+- tapOn: ${output.benefits_landing.cardsFAB}
+- waitForAnimationToEnd
+
+# Verify Member ID screen loaded
+- assertVisible: ${output.benefits_id_cards.welcomeLabel}

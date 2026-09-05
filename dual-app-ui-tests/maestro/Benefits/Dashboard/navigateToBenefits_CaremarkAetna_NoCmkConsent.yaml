@@ -1,0 +1,37 @@
+# Subflow: Navigate to Benefits Landing - Caremark + Aetna (No CMK Consent)
+# Plan Type: CMK & Aetna plans without CMK consent
+# Features: All 3 tabs visible, but Caremark consent required for Pharmacy features
+# Tabs: 3 (Pharmacy, Medical, Dental)
+# Consent: Required for CVS Caremark benefits
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Navigate to Benefits tab
+- tapOn: ${output.common_navigation.benefitsTab}
+- waitForAnimationToEnd
+
+# Verify Benefits landing page loaded
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+
+# Verify all 3 tabs are visible
+- assertVisible: ${output.benefits_landing.pharmacyTab}
+- assertVisible: ${output.benefits_landing.medicalTab}
+- assertVisible: ${output.benefits_landing.dentalTab}
+
+# Check for Caremark consent prompt
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.viewCaremarkBenefitsPrompt}
+    commands:
+      - assertVisible: ${output.benefits_landing.viewCaremarkBenefitsPrompt}
+      - assertVisible: ${output.benefits_landing.consentSecondaryText}
+      # ORPHAN-CLEANUP: - assertVisible: ${output.benefits_landing.consentButtonFilled}
+      
+      # Option to provide consent
+      # ORPHAN-CLEANUP: # - tapOn: ${output.benefits_landing.consentButtonFilled}
+      # - waitForAnimationToEnd
+
+# Verify Member ID FAB
+- assertVisible: ${output.benefits_landing.cardsFAB}

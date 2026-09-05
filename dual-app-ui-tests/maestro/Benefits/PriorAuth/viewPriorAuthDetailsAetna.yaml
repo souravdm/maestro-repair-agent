@@ -1,0 +1,11 @@
+appId: ${APP_ID}
+name: ViewpriorauthdetailsAetna
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+---
+- tapOn: "(?i).*(Aetna|CVS Caremark).*"
+
+- assertVisible: ${output.benefits_prior_auth.priorAuthorizationTitle}
+- assertVisible: ${output.benefits_prior_auth_details.details}
+- assertVisible: ${output.benefits_prior_auth_details.submittedLabel}

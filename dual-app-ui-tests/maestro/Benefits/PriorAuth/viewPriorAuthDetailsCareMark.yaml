@@ -1,0 +1,27 @@
+appId: ${APP_ID}
+name: ViewpriorauthdetailsCareMark
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+---
+- tapOn: ${output.benefits_prior_auth.viewDetailsLink}
+
+- assertVisible: ${output.benefits_prior_auth.priorAuthorizationTitle}
+- assertVisible: ${output.benefits_prior_auth_details.details}
+- assertVisible: ${output.benefits_prior_auth_details.detailsStatement}
+- assertVisible: ${output.benefits_prior_auth.submittedStatus}
+- assertVisible: ${output.benefits_prior_auth.caseNumberLabel}
+- assertVisible: ${output.benefits_prior_auth.prescriberLabel}
+---
+
+- swipe:
+   direction: UP
+- assertVisible: ${output.benefits_prior_auth.learnHowPriorAuthWorksBtn}
+
+- tapOn: ${output.benefits_prior_auth.learnHowPriorAuthWorksBtn}
+---
+#Click on how prior authorization works
+- assertVisible: ${output.benefits_prior_auth.howDoesPriorAuthWorkTitle}
+- tapOn: ${output.common_buttons.backBtn}
+- tapOn: ${output.common_buttons.backBtn}
+- tapOn: ${output.common_buttons.backBtn}

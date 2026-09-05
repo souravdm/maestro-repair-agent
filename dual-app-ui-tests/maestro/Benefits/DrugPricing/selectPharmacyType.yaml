@@ -1,0 +1,21 @@
+appId: ${APP_ID}
+---
+# Select pharmacy type tab (Mail order, Retail, Pickup, Specialty mail order)
+# Environment variables:
+#   PHARMACY_TYPE - Type of pharmacy to select: "Mail order", "Retail", "Pickup", "Specialty mail order"
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+
+# Verify pharmacy list appears
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.pharmacyName}
+    commands:
+      - assertVisible: ${output.drug_price_comparison.pharmacyName}
+
+# Verify price is displayed
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.priceAmount}
+    commands:
+      - assertVisible: ${output.drug_price_comparison.priceAmount}

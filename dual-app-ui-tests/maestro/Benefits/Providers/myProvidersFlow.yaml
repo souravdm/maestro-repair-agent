@@ -1,0 +1,79 @@
+# My Providers Flow
+# Complete flow to view saved and recent providers
+
+appId: ${APP_ID}
+name: My Providers Flow
+tags:
+  - benefits
+  - providers
+  - saved
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search and save a provider first
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify results and tap on a provider
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- tapOn: ${output['benefits_providers_common'].providerName}
+
+# Save the provider
+- assertVisible: ${output.benefits_provider_details.favoriteBtn}
+- tapOn: ${output.benefits_provider_details.favoriteBtn}
+
+# Navigate back to Providers
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- tapOn: ${output['benefits_providers_common'].backBtn}
+
+# View My Providers
+- assertVisible: ${output.benefits_provider_details.myProvidersTitle}
+- tapOn: ${output.benefits_provider_details.myProvidersTitle}
+
+# Verify My Providers Screen
+- assertVisible: ${output.benefits_provider_details.myProvidersTitle}
+- assertVisible: ${output.benefits_provider_details.savedTab}
+- assertVisible: ${output.benefits_provider_details.recentTab}
+
+# Test Saved Tab
+- tapOn: ${output.benefits_provider_details.savedTab}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+- assertVisible: ${output['benefits_providers_common'].inNetworkBadge}
+
+# Test Recent Tab
+- tapOn: ${output.benefits_provider_details.recentTab}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+
+# Navigate back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

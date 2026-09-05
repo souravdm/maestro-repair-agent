@@ -1,0 +1,13 @@
+appId: ${APP_ID}
+---
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+- assertVisible: ${output.benefits_drug_pricing.filterBtn}
+
+
+- tapOn: ${output.benefits_drug_pricing_common.languageFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.english}
+- waitForAnimationToEnd
+- tapOn: ${output.benefits_drug_pricing_common.english}
+- tapOn: ${output.benefits_drug_pricing_common.viewResultsBtn}
+

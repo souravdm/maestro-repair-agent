@@ -1,0 +1,95 @@
+# Book Appointment Flow
+# Complete flow to book an appointment with a provider
+
+appId: ${APP_ID}
+name: Book Appointment Flow
+tags:
+  - benefits
+  - providers
+  - appointment
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search for a provider
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify results and tap on a provider
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- tapOn: ${output['benefits_providers_common'].providerName}
+
+# Verify Provider Details Screen
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output.benefits_provider_details.bookAppointmentBtn}
+
+# Start Booking Appointment
+- tapOn: ${output.benefits_provider_details.bookAppointmentBtn}
+
+# Verify Book Appointment Screen
+- assertVisible: ${output.benefits_provider_details.appointmentTypeLabel}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+
+# Select Appointment Type
+- assertVisible: ${output.benefits_provider_details.telehealthLabel}
+- tapOn: ${output.benefits_provider_details.videoVisitOption}
+
+# Select Visit Reason
+- assertVisible: ${output.benefits_provider_details.visitReasonLabel}
+- assertVisible: ${output.benefits_provider_details.followUpReason}
+- tapOn: ${output.benefits_provider_details.followUpReason}
+
+# Select Date
+- assertVisible: ${output.benefits_provider_details.selectDateLabel}
+- assertVisible: ${output.benefits_provider_details.nextAvailableOption}
+- tapOn: ${output.benefits_provider_details.nextAvailableOption}
+
+# Select Time
+- assertVisible: ${output.benefits_provider_details.timeSlotLabel}
+- assertVisible: ${output.benefits_provider_details.afternoonOption}
+- tapOn: ${output.benefits_provider_details.afternoonOption}
+
+# Verify Insurance Information
+- scroll
+- assertVisible: ${output.benefits_provider_details.useBenefitsInfoLabel}
+- assertVisible: ${output.benefits_provider_details.insurancePlanLabel}
+
+# Confirm Appointment
+- scroll
+- assertVisible: ${output.benefits_provider_details.confirmAppointmentTitle}
+- assertVisible: ${output.benefits_provider_details.requestAppointmentBtn}
+- tapOn: ${output.benefits_provider_details.requestAppointmentBtn}
+
+# Verify Confirmation
+- assertVisible: "Appointment confirmed|Request submitted"
+
+# Complete
+- tapOn: ${output['benefits_providers_common'].closeBtn}

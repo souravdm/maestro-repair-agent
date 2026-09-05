@@ -1,0 +1,77 @@
+# Provider Filters Flow
+# Complete flow to apply filters to provider search
+# Based on Figma: Open Platform — Benefits Integration > Provider Search
+
+appId: ${APP_ID}
+name: Provider Filters Flow
+tags:
+  - benefits
+  - providers
+  - filters
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Doctor"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search for providers
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify search results
+- assertVisible: ${output.benefits_providers.resultsCount}
+
+# Open Filters
+- tapOn: ${output.benefits_providers.filterBtn}
+
+# Test Specialty Filter
+- assertVisible: ${output.benefits_providers.specialtyFilter}
+- tapOn: ${output.benefits_providers.specialtyFilter}
+
+# Test Distance Filter
+- scroll
+- assertVisible: ${output.benefits_providers.distanceFilter}
+- tapOn: ${output.benefits_providers.distanceFilter}
+- tapOn: ${output.benefits_provider_details.within5MilesOption}
+
+# Test Accepting New Patients Filter
+- scroll
+- assertVisible: ${output.benefits_providers.acceptingNewPatientsFilter}
+- tapOn: ${output.benefits_providers.acceptingNewPatientsFilter}
+
+# Apply Filters
+- tapOn: "Apply"
+
+# Verify Filtered Results
+- assertVisible: ${output.benefits_providers.resultsCount}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].acceptingNewPatients}
+
+# Navigate back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

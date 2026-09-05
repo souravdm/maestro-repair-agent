@@ -1,0 +1,76 @@
+# Test: Create Account Error Messages
+# Validates error handling on Create Account screen
+
+appId: ${APP_ID}
+name: "H100 | Account | TC018 - Registration Error Handling"
+tags:
+  - account
+  - create_account
+  - validation
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Account/RegisterScreen.js
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+# Navigate to Sign In screen
+- tapOn: ${output.common_navigation.accountBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_login.signInBtn}
+
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.createAccountBtn}
+
+# Test empty email error
+- tapOn: ${output.account_register.continueBtn}
+- assertVisible: ${output.account_register.emailRequiredError}
+
+# Test invalid email error
+- inputText: "invalid@email"
+- tapOn: ${output.account_register.continueBtn}
+- assertVisible: ${output.account_register.emailInvalidError}
+
+# Test invalid email format
+- eraseText
+- inputText: "invalid.email.com"
+- tapOn: ${output.account_register.continueBtn}
+- assertVisible: ${output.account_register.emailInvalidError}
+
+# Enter valid email to proceed to form
+- eraseText
+- inputText: "test@example.com"
+- tapOn: ${output.account_register.continueBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_register.createAccountHeader}
+
+# Test empty form submission
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.firstNameRequiredError}
+- assertVisible: ${output.account_register.lastNameRequiredError}
+- assertVisible: ${output.account_register.passwordRequiredError}
+
+# Test password requirements
+- tapOn:
+    text: "Password.*"
+- inputText: "TESTPASSWORD"
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.passwordLowercaseError}
+
+- eraseText
+- inputText: "testpassword"
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.passwordUppercaseError}
+
+- eraseText
+- inputText: "TestPassword1"
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.passwordSpecialCharError}
+
+- eraseText
+- inputText: "TestPassword!"
+- tapOn: ${output.account_register.createAccountBtn}
+- assertVisible: ${output.account_register.passwordNumberError}

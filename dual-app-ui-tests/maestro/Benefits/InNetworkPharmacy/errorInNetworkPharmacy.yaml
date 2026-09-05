@@ -1,0 +1,47 @@
+# Search In-Network Pharmacy
+# Subflow to search for in-network pharmacies
+
+appId: ${APP_ID}
+name: Searchinnetworkpharmacy
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  SEARCH_ADDRESS1: "malayinkeezhu"
+  SEARCH_ADDRESS2: "1234567"
+  SEARCH_ADDRESS3: "!@#$%^&^"
+---
+- swipe:
+    direction: down
+
+# Navigate to In-Network Pharmacy Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- assertVisible: ${output.benefits_drug_pricing.searchInNetworkPharmaciesLabel}
+- assertVisible: ${output.benefits_drug_pricing.currentLocationOption}
+
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+
+# Enter address
+- assertVisible: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS1}
+
+# Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.locationNotFound}
+- tapOn: ${output.benefits_drug_pricing.clear}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS2}
+
+# Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.locationNotFound}
+- tapOn: ${output.benefits_drug_pricing.clear}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS3}
+
+# Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.locationNotFound}
+

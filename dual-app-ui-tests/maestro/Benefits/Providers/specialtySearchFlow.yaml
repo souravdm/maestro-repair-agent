@@ -1,0 +1,73 @@
+# Specialty Search Flow
+# Complete flow to search for specialists
+# Based on Figma: Open Platform — Benefits Integration > Provider Search
+
+appId: ${APP_ID}
+name: Specialty Search Flow
+tags:
+  - benefits
+  - providers
+  - specialty
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Verify Quick Action Specialties
+- assertVisible: ${output.benefits_providers.specialistsBtn}
+- assertVisible: ${output.benefits_providers.doctorsBtn}
+- assertVisible: ${output.benefits_providers.urgentCareBtn}
+- assertVisible: ${output.benefits_providers.hospitalsBtn}
+
+# Tap Find Specialist
+- tapOn: ${output.benefits_providers.specialistsBtn}
+
+# Verify Specialty Options
+- assertVisible: ${output.benefits_provider_details.primaryCarePhysicianSpecialty}
+- assertVisible: ${output.benefits_provider_details.dermatologySpecialty}
+- assertVisible: ${output.benefits_provider_details.psychiatrySpecialty}
+
+# Select a specialty
+- tapOn: ${output.benefits_provider_details.dermatologySpecialty}
+
+# Execute Search
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify search results
+- assertVisible: ${output.benefits_providers.resultsCount}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+
+# View First Provider
+- tapOn: ${output['benefits_providers_common'].providerName}
+
+# Verify Provider Details
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+- assertVisible: ${output['benefits_providers_common'].inNetworkBadge}
+
+# Navigate back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

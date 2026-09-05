@@ -1,0 +1,82 @@
+# Test: Edit Profile Information
+# Validates profile editing functionality (name, DOB, email)
+
+appId: ${APP_ID}
+name: "H100 | Account | TC007 - Edit Profile Information"
+tags:
+  - account
+  - profile
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Profile
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/ProfileScreen.js
+- tapOn: ${output.account_dashboard.profileButton}
+- waitForAnimationToEnd
+
+# Verify profile elements
+- assertVisible: ${output.account_profile.editProfileBtn}
+
+# Edit Name
+- tapOn: ${output.account_profile.nameOption}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_profile.editNameTitle}
+- tapOn:
+    text: ${output.account_profile.firstNameField}
+- eraseText
+- inputText: "TestFirstName"
+- tapOn: ${output.account_profile.saveChangesBtn}
+- waitForAnimationToEnd
+
+# Verify success
+- runFlow:
+    when:
+      visible: ${output.account_profile.updatedOrSavedMsg}
+    commands:
+      - tapOn: ${output.account_profile.closeOrOkBtn}
+
+# Edit DOB (toggle visibility)
+- runFlow:
+    when:
+      visible: ${output.account_profile.dateOfBirthOption}
+    commands:
+      - tapOn: ${output.account_profile.dateOfBirthOption}
+      - waitForAnimationToEnd
+      - tapOn: ${output.account_profile.saveChangesBtn}
+      - waitForAnimationToEnd
+
+# Navigate to Email Edit
+- runFlow:
+    when:
+      visible: ${output.account_profile.emailOption}
+    commands:
+      - tapOn: ${output.account_profile.emailOption}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_profile.changeEmailTitle}
+      - tapOn: ${output.account_profile.cancelBtn}
+      - waitForAnimationToEnd
+
+# Return to account dashboard
+- tapOn: "Back|Account"

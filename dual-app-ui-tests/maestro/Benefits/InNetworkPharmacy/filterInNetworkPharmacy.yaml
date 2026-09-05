@@ -1,0 +1,23 @@
+appId: ${APP_ID}
+---
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+- assertVisible: ${output.benefits_drug_pricing.filterBtn}
+
+- tapOn: ${output.benefits_drug_pricing_common.servicesFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.servicesFilter}
+- assertVisible: ${output.drug_price_comparison.retail90DaySupply}
+- tapOn: ${output.drug_price_comparison.retail90DaySupply}
+- tapOn: ${output.benefits_drug_pricing_common.resetBtn}
+
+- tapOn: ${output.benefits_drug_pricing_common.servicesFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.servicesFilter}
+- assertVisible: ${output.drug_price_comparison.retail90DaySupply}
+- waitForAnimationToEnd
+- tapOn: ${output.drug_price_comparison.retail90DaySupply}
+- tapOn: ${output.benefits_drug_pricing_common.viewResultsBtn}
+
+- tapOn: ${output.benefits_drug_pricing_common.pharmacyTypeFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.independent}
+- tapOn: ${output.benefits_drug_pricing_common.independent}
+- tapOn: ${output.benefits_drug_pricing_common.viewResultsBtn}

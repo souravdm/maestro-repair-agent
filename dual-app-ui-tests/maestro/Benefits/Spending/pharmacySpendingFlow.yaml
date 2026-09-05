@@ -1,0 +1,47 @@
+# Pharmacy Spending Flow
+# Complete flow to view pharmacy spending details
+
+appId: ${APP_ID}
+name: Pharmacy Spending Flow
+tags:
+  - benefits
+  - spending
+  - pharmacy
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# View Pharmacy Spending
+- runFlow:
+    file: ./viewPharmacySpending.yaml
+
+# Verify In-Network section
+- assertVisible: ${output.benefits_spending_common.inNetworkLabel}
+- assertVisible: ${output.benefits_spending_common.deductibleLabel}
+- assertVisible: ${output.benefits_spending_common.outOfPocketMaxLabel}
+- assertVisible: ${output['benefits_spending_subscreen_common'].spentLabel}
+- assertVisible: ${output['benefits_spending_subscreen_common'].remainingLabel}
+
+# Navigate back
+- tapOn: ${output['benefits_spending_subscreen_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

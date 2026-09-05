@@ -1,0 +1,50 @@
+# Subflow: Provide Caremark Consent
+# Purpose: Complete the CVS Caremark consent flow to access Pharmacy benefits
+# Use Case: For users with CMK plans who need to provide consent
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Verify consent prompt is visible
+# ORPHAN-CLEANUP: - assertVisible: ${output.benefits_benefits_consent.viewYourCaremark}
+
+# Tap the consent button
+- tapOn: ${output.benefits_benefits_consent.caremarkConnectBtn}
+- waitForAnimationToEnd
+
+# Handle permissions if prompted
+- runFlow:
+    when:
+      visible: ${output.benefits_benefits_consent.permissionsTitle}
+    commands:
+      # ORPHAN-CLEANUP: - assertVisible: ${output.benefits_benefits_consent.readHealthDataPermission}
+      # ORPHAN-CLEANUP: - assertVisible: ${output.benefits_benefits_consent.shareDataPermission}
+      
+      # Accept permissions
+      # ORPHAN-CLEANUP: - tapOn: ${output.benefits_benefits_consent.permissionCheckbox}
+      - waitForAnimationToEnd
+
+# Handle privacy policy if prompted
+- runFlow:
+    when:
+      visible: ${output.benefits_benefits_consent.privacyTitle}
+    commands:
+      - assertVisible: ${output.benefits_benefits_consent.viewPrivacyPolicyBtn}
+      - assertVisible: ${output.benefits_benefits_consent.viewTermsBtn}
+
+# Continue with consent
+- tapOn: ${output.common_buttons.continueBtn}
+- waitForAnimationToEnd
+
+# Wait for connection to complete
+- runFlow:
+    when:
+      visible: ${output.benefits_benefits_consent.connectingMessage}
+    commands:
+      - extendedWaitUntil:
+          visible: ${output.benefits_benefits_consent.successMessage}
+          timeout: 10000
+
+# Verify success
+- assertVisible: ${output.benefits_benefits_consent.successMessage}

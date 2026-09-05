@@ -1,0 +1,52 @@
+# Test: Manage People
+# Validates adding and managing family members
+
+appId: ${APP_ID}
+name: "H100 | Account | TC013 - Manage Family Members"
+tags:
+  - account
+  - manage_people
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Add and Manage People
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/ManagePeopleScreen.js
+- scroll
+- tapOn: ${output.account_dashboard.managePeopleButton}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_managePeople.managePeopleNavBar}
+- assertVisible: ${output.account_managePeople.addPersonLink}
+
+# Select a test user (if available)
+- runFlow:
+    when:
+      visible: ".*Test User.*|.*Family Member.*"
+    commands:
+      - tapOn:
+          text: ".*Test User.*|.*Family Member.*"
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_managePeople.managePrescriptionsLink}
+      - tapOn: "Back|Account"
+      - waitForAnimationToEnd

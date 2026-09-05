@@ -1,0 +1,26 @@
+appId: ${APP_ID}
+name: Navigatetodrugpricing
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+  - runScript: ../../../screens/SearchAndNav/searchNavObjects.js
+---
+- tapOn: ${output.benefits_landing.drugPricingBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_landing.drugPricingBtn}
+- assertVisible: ${output.benefits_drug_pricing.searchFieldHeader}
+- runFlow:
+    when:
+      true: ${MEMBER == "true"}
+    commands:
+      - assertVisible: ${output.benefits_drug_pricing.member}
+
+- assertVisible: ${output.benefits_search_pharmacy.addressField}
+- assertVisible: ${output.benefits_drug_pricing.currentLocationOption}
+- assertVisible: ${output.benefits_spending_common.compareMedicationPricesTitle}
+# Verify Member ID FAB
+- assertVisible: ${output.benefits_landing.cardsFAB}
+- assertVisible: ${output.searchnav_header.inboxBtn}
+#- assertVisible: ${output.searchnav_header.aiHealth}

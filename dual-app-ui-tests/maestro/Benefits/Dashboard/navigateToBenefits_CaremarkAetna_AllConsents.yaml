@@ -1,0 +1,56 @@
+# Subflow: Navigate to Benefits Landing - Caremark + Aetna (All Consents)
+# Plan Type: CMK & Aetna plans with all consents
+# Features: Full access to Pharmacy, Medical, and Dental tabs
+# Tabs: 3 (Pharmacy, Medical, Dental)
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Navigate to Benefits tab
+- tapOn: ${output['benefits_dashboard_common'].benefitsTitle}
+- waitForAnimationToEnd
+
+# Verify Benefits landing page loaded
+# - assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+- assertVisible: ${output.benefits_landing.planSummariesTitle}
+
+# Verify all 3 tabs are visible (Caremark + Aetna)
+- assertVisible: ${output.benefits_landing.pharmacyTab}
+- assertVisible: ${output.benefits_landing.medicalTab}
+- assertVisible: ${output.benefits_landing.dentalTab}
+# Verify plan summary card
+
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - scrollUntilVisible:
+          element: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+      - assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - scrollUntilVisible:
+          element: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+      - extendedWaitUntil:
+          visible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+          timeout: 10000
+
+      - assertVisible: ${output.benefits_landing.pharmacySpendingBtnContentDes}
+
+# Verify entity logos (both Caremark and Aetna)
+- runFlow:
+    when:
+      visible: ${output['benefits_dashboard_common'].cvsCaremarkLogo}
+    commands:
+      - assertVisible: ${output['benefits_dashboard_common'].cvsCaremarkLogo}
+
+- runFlow:
+    when:
+      visible: ${output['benefits_dashboard_common'].aetnaLogo}
+    commands:
+      - assertVisible: ${output['benefits_dashboard_common'].aetnaLogo}

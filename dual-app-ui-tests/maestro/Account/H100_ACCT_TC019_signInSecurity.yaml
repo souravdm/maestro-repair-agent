@@ -1,0 +1,39 @@
+# Test: Sign In & Security
+# Validates sign in and security settings page
+# Source: Migrated from XCUITest AccountDashboardTabTests
+
+appId: ${APP_ID}
+name: "H100 | Account | TC019 - Sign In Security"
+tags:
+  - account
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/SignInSecurityScreen.js
+- tapOn: ${output.account_dashboard.signInSecurityBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_signInSecurity.signInSecurityTitle}

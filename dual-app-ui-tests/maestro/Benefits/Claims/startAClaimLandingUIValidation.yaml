@@ -1,0 +1,62 @@
+# Start Claim Flow
+# Subflow: What You'll Need screen after tapping "Start a claim"
+# Figma: Modal - What you'll need
+appId: ${APP_ID}
+name: Start Claim Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../../screens/Common/CommonScreen.js
+---
+# Tap Start a Claim button on Claims landing
+- tapOn: ${output.benefits_claims_landing.startClaimBtn}
+- waitForAnimationToEnd
+
+# Wait for What You'll Need modal to fully load
+# Flutter/OCR can struggle with the apostrophe in "What you'll need",
+# so we wait on the CTA button text instead (same screen, no special chars)
+- extendedWaitUntil:
+    visible: ${output.claims_what_you_need.addClaimDetailsBtn}
+    timeout: 30000
+
+# Verify key items are listed
+#- assertVisible: ${output.claims_what_you_need.whatYouNeedTitle}
+- assertVisible: ${output.claims_what_you_need.prescriptionReceipt}
+- assertVisible: ${output.claims_what_you_need.pharmacyPhoneNumber}
+- assertVisible: ${output.claims_what_you_need.addPrescriptionImage}
+#- assertVisible: ${output.claims_what_you_need.prescriberNameAndAddress}
+- assertVisible: ${output.claims_what_you_need.receiptInfoTitle}
+#- assertVisible: ${output.claims_what_you_need.receiptInfoText}
+- assertVisible: ${output.benefits_claims_common.backBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_claims_common.cancelBtn}
+
+- tapOn: ${output.benefits_claims_common.backBtn}
+- waitForAnimationToEnd
+# Claims Landing can take longer to re-render after this Back navigation than
+# waitForAnimationToEnd accounts for — wait on the actual target instead of a
+# fixed animation window, same pattern as the "What you'll need" modal wait above.
+- extendedWaitUntil:
+    visible: ${output.benefits_claims_landing.startClaimBtn}
+    timeout: 20000
+# Tap Start a Claim button on Claims landing
+- tapOn: ${output.benefits_claims_landing.startClaimBtn}
+- waitForAnimationToEnd
+
+- assertVisible: ${output.common_buttons.cancelBtn}
+- tapOn: ${output.common_buttons.cancelBtn}
+# Validate confirmation dialog for cancellation
+- assertVisible: ${output.common_buttons.yesBtn}
+- assertVisible: ${output.benefits_claims_scan_receipt.cancelConfirmationTitle}
+- assertVisible: ${output.benefits_claims_scan_receipt.cancelConfirmationStatement}
+- assertVisible: ${output.common_buttons.noBtn}
+- tapOn: ${output.common_buttons.noBtn}
+- waitForAnimationToEnd
+- tapOn: ${output.common_buttons.cancelBtn}
+- tapOn: ${output.common_buttons.yesBtn}
+- waitForAnimationToEnd
+
+# Tap Start a Claim button on Claims landing
+- tapOn: ${output.benefits_claims_landing.startClaimBtn}
+- waitForAnimationToEnd
+
+

@@ -1,0 +1,87 @@
+# Upload Prescription Receipt (Step 2)
+# Figma: Upload Receipt section
+# Upload receipt via Files/Camera/Photos, verify file display
+appId: ${APP_ID}
+name: Upload Prescription Receipt
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Verify Step 2 header
+- assertVisible: ${output.claims_step2_receipt.stepIndicator}
+- assertVisible: ${output.claims_step2_receipt.screenTitle}
+
+# Verify upload instruction text
+- assertVisible: ${output.claims_step2_receipt.uploadInstructionText}
+
+# Verify upload button is present
+- assertVisible: ${output['benefits_claims_common'].uploadReceiptBtn}
+
+# Tap Upload receipt button
+- tapOn: ${output['benefits_claims_common'].uploadReceiptBtn}
+- waitForAnimationToEnd
+
+# Verify upload source options (Files/Camera/Photos action sheet — appears on both platforms)
+- runFlow:
+    when:
+      visible: ${output.claims_step2_receipt.photosOption}
+    commands:
+      - assertVisible: ${output.claims_step2_receipt.filesOption}
+      - assertVisible: ${output.claims_step2_receipt.cameraOption}
+      - assertVisible: ${output.claims_step2_receipt.photosOption}
+      # iOS simulators have no camera hardware — tapping Camera there triggers a
+      # blocking "Camera access needed" dialog, so use Photos instead.
+      - runFlow:
+          when:
+            platform: "ios"
+          commands:
+            - tapOn: ${output.claims_step2_receipt.photosOption}
+            # The native photo picker is a separate out-of-process sheet whose slide-up
+            # + grid-population animation is slower than waitForAnimationToEnd accounts
+            # for — wait for its own "Collections" tab label before tapping a photo.
+            - extendedWaitUntil:
+                visible: ${output.claims_step2_receipt.photosPickerCollectionsTab}
+                timeout: 8000
+            # Pick the first photo from the simulator's seeded photo library
+            - tapOn:
+                point: "15%, 20%"
+            - waitForAnimationToEnd
+      # Android emulators have a working virtual camera — keep the original Camera path.
+      - runFlow:
+          when:
+            platform: "android"
+          commands:
+            - tapOn: ${output.claims_step2_receipt.cameraOption}
+            - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      platform: "android"
+    commands:
+      - tapOn:
+          # 3. Tap the system camera shutter button ( IDs may vary slightly by device )
+          id: "com.android.camera2:id/shutter_button" # Standard AOSP Camera ID
+      - tapOn:
+          # 4. Confirm the photo (e.g., tap the checkmark/done button)
+          id: "com.android.camera2:id/done_button"
+
+
+# Tap Save to proceed
+- waitForAnimationToEnd
+- tapOn: ${output.benefits_claims_common.saveBtn}
+- waitForAnimationToEnd
+
+# Handle upload error dialog — "Document failed to upload" modal appears
+# intermittently when the receipt image fails to attach. One tap isn't always
+# enough — loop until the dialog is actually gone (or give up after 3 tries)
+# so the NEXT subflow doesn't inherit a leftover dialog and fail on an
+# unrelated assertion. Same pattern as uploadExplanationOfBenefits.yaml.
+- retry:
+    maxRetries: 3
+    commands:
+      - runFlow:
+          when:
+            visible: ${output.claims_step2_receipt.documentFailedToUpload}
+          commands:
+            - tapOn: ${output.claims_step2_receipt.reUploadBtn}
+            - waitForAnimationToEnd
+      - assertNotVisible: ${output.claims_step2_receipt.documentFailedToUpload}

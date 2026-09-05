@@ -1,0 +1,17 @@
+# View Medical Spending
+# Subflow to navigate to medical spending details
+
+appId: ${APP_ID}
+name: Viewmedicalspending
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+# Switch to Medical tab
+- tapOn: ${output.benefits_landing.medicalTab}
+- assertVisible: ${output.benefits_landing.medicalSpendingBtn}
+
+- tapOn: ${output.benefits_landing.medicalSpendingBtn}
+
+- assertVisible: ${output.benefits_medical_spending.pageTitle}
+- assertVisible: ${output.benefits_medical_spending.yourMedicalSpending}

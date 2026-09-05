@@ -1,0 +1,27 @@
+# Subflow: Switch to Dental Tab
+# Purpose: Navigate to Dental tab in Benefits landing page
+# Prerequisite: Must be on Benefits landing page with Dental tab visible
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Scroll back to top so the tab bar is in view before tapping
+- scrollUntilVisible:
+    element:
+      text: ${output.benefits_landing.dentalTab}
+    direction: UP
+
+# Tap Dental tab
+- tapOn: ${output.benefits_landing.dentalTab}
+- waitForAnimationToEnd
+
+# Verify Dental tab is selected
+- assertVisible: ${output.benefits_landing.dentalTab}
+
+# Verify Dental-specific content
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.dentalSpendingBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.dentalSpendingBtn}

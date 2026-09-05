@@ -1,0 +1,39 @@
+# Search In-Network Pharmacy
+# Subflow to search for in-network pharmacies
+
+appId: ${APP_ID}
+name: Searchinnetworkpharmacy
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  SEARCH_ADDRESS: "1 Cvs Dr, Woonsocket, RI 02895"
+  SEARCH_ADDRESS_FULL: "1 Cvs Dr"
+---
+- swipe:
+    direction: down
+
+# Navigate to In-Network Pharmacy Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- assertVisible: ${output.benefits_drug_pricing.searchInNetworkPharmaciesLabel}
+- assertVisible: ${output.benefits_drug_pricing.currentLocationOption}
+
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+
+# Enter address
+- assertVisible: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS_FULL}
+
+# Search
+- waitForAnimationToEnd
+- tapOn: ${SEARCH_ADDRESS}
+- tapOn: ${output.benefits_drug_pricing.searchBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.showingPharmaciesMsg}
+- assertVisible: ${output.benefits_drug_pricing.filterBtn}
+- assertVisible: ${output.benefits_drug_pricing_common.pharmacyTypeFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.languageFilter}
+- assertVisible: ${output.benefits_drug_pricing_common.servicesFilter}
+- tapOn: ${output.benefits_drug_pricing.searchBtn}

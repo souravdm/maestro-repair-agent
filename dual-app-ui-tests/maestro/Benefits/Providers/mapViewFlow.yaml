@@ -1,0 +1,75 @@
+# Map View Flow
+# Complete flow to view providers on map
+# Based on Figma: Open Platform — Benefits Integration > Provider Search
+
+appId: ${APP_ID}
+name: Map View Flow
+tags:
+  - benefits
+  - providers
+  - map
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search for providers
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify search results
+- assertVisible: ${output.benefits_providers.resultsCount}
+
+# Switch to Map View
+- assertVisible: ${output.benefits_provider_details.zoomInBtn}
+- tapOn: ${output.benefits_provider_details.zoomInBtn}
+
+# Verify Map Controls
+- assertVisible: ${output.benefits_provider_details.zoomInBtn}
+- assertVisible: ${output.benefits_provider_details.zoomOutBtn}
+- assertVisible: ${output.benefits_provider_details.myLocationBtn}
+
+# Verify Provider Markers on map
+- assertVisible: ${output.benefits_provider_details.providerMarkerBtn}
+
+# Tap on Provider Marker
+- tapOn: ${output.benefits_provider_details.providerMarkerBtn}
+
+# Verify Provider Card in bottom sheet
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+- assertVisible: ${output.benefits_provider_details.getDirectionsBtn}
+- assertVisible: ${output.benefits_provider_details.callOfficeBtn}
+
+# Tap Redo Search
+- tapOn: ${output.benefits_provider_details.redoSearchBtn}
+
+# Navigate back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.providersTitle}

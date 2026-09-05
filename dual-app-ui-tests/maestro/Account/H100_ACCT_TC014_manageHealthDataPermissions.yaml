@@ -1,0 +1,74 @@
+# Test: Health Data Access
+# Validates health data access and connected apps management
+
+appId: ${APP_ID}
+name: "H100 | Account | TC014 - Manage Health Data Permissions"
+tags:
+  - account
+  - health_data
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Health Data Access
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/HealthAccessScreen.js
+- scroll
+- tapOn: ${output.account_dashboard.healthDataAccessButton}
+- waitForAnimationToEnd
+
+# Verify screen elements
+- assertVisible: ${output.account_healthAccess.healthDataAccessTitle}
+
+# Verify connected apps section
+- runFlow:
+    when:
+      visible: ${output.account_healthAccess.connectedAppsHeader}
+    commands:
+      - assertVisible: ${output.account_healthAccess.connectedAppsHeader}
+      - assertVisible:
+          text: ${output.account_healthAccess.manageAppsMsg}
+
+# Test enabling/disabling app connections (if toggles exist)
+- runFlow:
+    when:
+      visible:
+        id: "app_toggle_1"
+    commands:
+      - tapOn:
+          id: "app_toggle_1"
+      - runFlow:
+          when:
+            visible: ${output.account_healthAccess.allowBtn}
+          commands:
+            - tapOn: ${output.account_healthAccess.allowBtn}
+      - tapOn:
+          id: "app_toggle_1"
+      - runFlow:
+          when:
+            visible: ${output.account_healthAccess.disconnectBtn}
+          commands:
+            - tapOn: ${output.account_healthAccess.disconnectBtn}
+
+- tapOn: "Back|Account"
+- waitForAnimationToEnd

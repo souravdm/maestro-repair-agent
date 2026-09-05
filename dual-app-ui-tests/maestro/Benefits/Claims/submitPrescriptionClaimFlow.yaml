@@ -1,0 +1,77 @@
+# Submit Prescription Claim Flow (Complete E2E)
+# Figma: Open Platform — Benefits Integration > Reimbursement Request/Submit Claim (Prescriptions)
+# Full flow: What You'll Need → Claim Details → Receipt → Medication → Prescriber/Pharmacy → Review → Confirmation
+appId: ${APP_ID}
+name: Submit Prescription Claim Flow
+tags:
+  - benefits
+  - claims
+  - prescription
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../../screens/Common/CommonScreen.js
+env:
+  CLAIM_REASON: "Traveling (within US)"
+---
+# Step 1: What You'll Need → Add claim details
+- runFlow:
+    file: ./startClaimFlow.yaml
+
+# Step 2: Claim Details (with reason selection)
+- runFlow:
+    file: ./enterClaimDetails.yaml
+    env:
+      CLAIM_REASON: ${CLAIM_REASON}
+      IS_COMPOUND_DRUG: ${IS_COMPOUND_DRUG}
+      HAS_ADDITIONAL_INSURANCE: ${HAS_ADDITIONAL_INSURANCE}
+# TODO once the flow is corrected in app choose insurance type first and then upload
+# Step 3: Prescription Receipt Upload
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG == "true"}
+    commands:
+      - runFlow:
+          when:
+            true: ${HAS_ADDITIONAL_INSURANCE == "true"}
+          commands:
+             - runFlow:
+                  file: ./uploadExplanationOfBenefits.yaml
+             - tapOn: ${output.claims_step1_details.insuranceTypeSelectAnOption}
+             - tapOn: ${output.claims_step1_details.insuranceTypeSecondary}
+             - waitForAnimationToEnd
+
+- waitForAnimationToEnd
+- tapOn: ${output.claims_step1_details.addMedicationBtn}
+- runFlow:
+    file: ./uploadReceipt.yaml
+
+
+# Step 4: Medication Details
+# Route to compound drug variant when IS_COMPOUND_DRUG is true
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG == "true"}
+    file: ./enterCompoundDrugMedicationDetails.yaml
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG != "true"}
+    file: ./enterMedicationDetails.yaml
+
+# Step 5: Prescriber and Pharmacy Details
+- runFlow:
+    file: ./enterPrescriberPharmacyDetails.yaml
+
+# Step 6: Review and Submit
+# Pass IS_COMPOUND_DRUG so the review subflow scrolls past the additional
+# Ingredient 1 & 2 sections rendered for compound drug claims.
+- runFlow:
+    file: ./reviewAndSubmitClaim.yaml
+    env:
+      IS_COMPOUND_DRUG: ${IS_COMPOUND_DRUG}
+
+# Step 7: Verify Confirmation (claim number, Start another claim, Done)
+- runFlow:
+    file: ./verifyConfirmation.yaml
+- takeScreenshot: submit_Prescription

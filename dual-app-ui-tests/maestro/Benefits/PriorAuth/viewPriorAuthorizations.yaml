@@ -1,0 +1,27 @@
+# View Prior Authorizations
+# Subflow to navigate to prior authorizations screen
+
+appId: ${APP_ID}
+name: Viewpriorauthorizations
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PriorAuthScreen.js
+---
+- swipe:
+          direction: DOWN
+
+# Look for Prior Authorizations section in "Coming Soon" area
+# ORPHAN-CLEANUP: - assertVisible: ${output.benefits_landing.viewPriorAuth}
+# ORPHAN-CLEANUP: - tapOn: ${output.benefits_landing.viewPriorAuth}
+
+
+#- assertVisible: ${output.benefits_prior_auth.pageTitle}
+#- waitForAnimationToEnd
+#- assertVisible: ${output.benefits_prior_auth.learnHowPriorAuthWorksBtn}
+#- tapOn: ${output.benefits_prior_auth.learnHowPriorAuthWorksBtn}
+#- assertVisible: ${output.benefits_prior_auth.howDoesPriorAuthWorkTitle}
+#- tapOn: ${output.common_buttons.backBtn}
+
+- assertVisible: ${output.benefits_prior_auth.pageTitle}
+- waitForAnimationToEnd
+# - assertVisible: "Learn how prior authorization works"

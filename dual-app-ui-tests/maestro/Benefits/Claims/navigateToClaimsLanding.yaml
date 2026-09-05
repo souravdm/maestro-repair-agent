@@ -1,0 +1,12 @@
+appId: ${APP_ID}
+name: Navigate to Claims Landing
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Common/CommonScreen.js
+---
+# Navigate to Claims from Benefits
+- tapOn: ${output.common_navigation.claimsTab}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_claims_landing.claimsTitle}
+- takeScreenshot: Claims_Landing_Screen

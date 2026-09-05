@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+env:
+  DOSAGE: "20mg"
+  QUANTITY: "30"
+---
+# Select dosage and quantity for drug pricing search
+# Environment variables:
+#   DOSAGE - Drug dosage to select (e.g., "20mg", "10mg", "100mcg")
+#   QUANTITY - Quantity to select (e.g., "30", "60", "90")
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+
+# Select dosage if selector is visible
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.dosageSelector}
+    commands:
+      - tapOn: ${output.drug_price_comparison.dosageSelector}
+      - waitForAnimationToEnd
+      - tapOn: ${DOSAGE}
+      - waitForAnimationToEnd
+
+# Select quantity
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.quantitySelector}
+    commands:
+      - tapOn: ${output.drug_price_comparison.quantitySelector}
+      - waitForAnimationToEnd
+      - tapOn: ${QUANTITY}
+      - waitForAnimationToEnd
+
+# Verify selections are applied
+- assertVisible: ${DOSAGE}
+- assertVisible: ${QUANTITY}

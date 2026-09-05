@@ -1,0 +1,93 @@
+# Provider Details Flow
+# Complete flow to view provider details and information
+# Based on Figma: Open Platform — Benefits Integration > Provider Search
+
+appId: ${APP_ID}
+name: Provider Details Flow
+tags:
+  - benefits
+  - providers
+  - details
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+env:
+  SEARCH_QUERY: "Primary Care"
+  LOCATION: "02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Providers
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+- tapOn: ${output.benefits_landing.providersTab}
+- assertVisible: ${output.benefits_providers.providersTitle}
+
+# Search for a provider
+- tapOn: ${output.benefits_providers.searchField}
+- inputText: ${SEARCH_QUERY}
+- tapOn: ${output.benefits_providers.searchBtn}
+
+# Verify results and tap on a provider
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- tapOn: ${output['benefits_providers_common'].providerName}
+
+# Verify Provider Details Screen
+- assertVisible: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output['benefits_providers_common'].providerName}
+- assertVisible: ${output['benefits_providers_common'].providerSpecialty}
+
+# Verify Network Status
+- assertVisible: ${output['benefits_providers_common'].inNetworkBadge}
+
+# Verify Quick Actions
+- assertVisible: ${output.benefits_provider_details.bookAppointmentBtn}
+- assertVisible: ${output.benefits_provider_details.callOfficeBtn}
+- assertVisible: ${output.benefits_provider_details.getDirectionsBtn}
+
+# Verify Tabs
+- assertVisible: ${output.benefits_provider_details.overviewTab}
+- assertVisible: ${output.benefits_provider_details.locationsTab}
+- assertVisible: ${output.benefits_provider_details.reviewsTab}
+- assertVisible: ${output.benefits_provider_details.insuranceTab}
+
+# Test Overview Tab
+- tapOn: ${output.benefits_provider_details.overviewTab}
+- assertVisible: ${output.benefits_provider_details.boardCertificationsLabel}
+- assertVisible: ${output.benefits_provider_details.yearsExperienceLabel}
+- assertVisible: ${output['benefits_providers_common'].acceptingNewPatients}
+
+# Test Locations Tab
+- tapOn: ${output.benefits_provider_details.locationsTab}
+- assertVisible: ${output.benefits_provider_details.primaryLocationLabel}
+- assertVisible: ${output['benefits_providers_common'].providerPhone}
+- assertVisible: ${output['benefits_providers_common'].providerAddress}
+
+# Test Reviews Tab
+- tapOn: ${output.benefits_provider_details.reviewsTab}
+- assertVisible: ${output.benefits_provider_details.mostHelpfulOption}
+- assertVisible: ${output.benefits_provider_details.mostRecentOption}
+
+# Test Insurance Tab
+- tapOn: ${output.benefits_provider_details.insuranceTab}
+- assertVisible: ${output.benefits_provider_details.otherPlansLabel}
+- assertVisible: ${output.benefits_provider_details.coverageDetailsLabel}
+
+# Navigate Back
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output.benefits_providers.resultsCount}

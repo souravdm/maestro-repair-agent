@@ -1,0 +1,31 @@
+# Search In-Network Pharmacy
+# Subflow to search for in-network pharmacies
+
+appId: ${APP_ID}
+name: Searchinnetworkpharmacy
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  SEARCH_ADDRESS: "9426 pace"
+  SEARCH_ADDRESS_FULL1: "9426 PACE AVE, LOS ANGELES, CA 90002"
+  SEARCH_ADDRESS_FULL2: "9426 PACES FERRY DR, TAMPA, FL 33615"
+---
+- swipe:
+    direction: down
+
+# Navigate to In-Network Pharmacy Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- assertVisible: ${output.benefits_drug_pricing.searchInNetworkPharmaciesLabel}
+- assertVisible: ${output.benefits_drug_pricing.currentLocationOption}
+
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+
+# Enter address
+- assertVisible: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS}
+- assertVisible: ${SEARCH_ADDRESS_FULL1}
+- assertVisible: ${SEARCH_ADDRESS_FULL2}
+

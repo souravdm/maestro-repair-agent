@@ -1,0 +1,59 @@
+# Medical & Dental Spending Flow
+# Complete flow to view medical and dental spending
+
+appId: ${APP_ID}
+name: Medical Dental Spending Flow
+tags:
+  - benefits
+  - spending
+  - medical
+  - dental
+  - e2e
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# View Medical Spending
+- runFlow:
+    file: ./viewMedicalSpending.yaml
+
+# Verify Medical Spending Details
+- assertVisible: ${output.benefits_spending_common.inNetworkLabel}
+- assertVisible: ${output.benefits_spending_common.deductibleLabel}
+- assertVisible: ${output.benefits_spending_common.outOfPocketMaxLabel}
+
+# Navigate back
+- tapOn: ${output['benefits_spending_subscreen_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}
+
+# View Dental Spending
+- runFlow:
+    file: ./viewDentalSpending.yaml
+
+# Verify Dental Spending Details
+- assertVisible: ${output.benefits_spending_common.inNetworkLabel}
+- assertVisible: ${output.benefits_spending_common.annualBenefitMaxLabel}
+- assertVisible: ${output.benefits_spending_common.deductibleLabel}
+
+# Navigate back
+- tapOn: ${output['benefits_spending_subscreen_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

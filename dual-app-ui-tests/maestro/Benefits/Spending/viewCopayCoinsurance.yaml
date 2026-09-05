@@ -1,0 +1,15 @@
+# View Copay & Coinsurance
+# Subflow to view prescription drug pricing tiers
+
+appId: ${APP_ID}
+name: Viewcopaycoinsurance
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+- tapOn: ${output.benefits_landing.copayCoinsuranceBtn}
+
+- assertVisible: ${output.benefits_spending_common.knowYourCostsLabel}
+- assertVisible: ${output.benefits_spending_common.pricingUnderPlanLabel}
+- assertVisible: ${output.benefits_spending_common.mailLabel}
+- assertVisible: ${output.benefits_spending_common.retailLabel}

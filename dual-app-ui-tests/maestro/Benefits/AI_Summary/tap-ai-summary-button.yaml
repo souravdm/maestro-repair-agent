@@ -1,0 +1,17 @@
+appId: ${APP_ID}
+---
+# Subflow: Tap AI Summary Button
+# Taps the "Explain my spending" or "Explain my claim" button
+# 
+# Required env vars:
+#   ELEMENT_TYPE: "plan_summary_ai_button" or "claims_ai_button"
+#
+# Feature: TLOP-4002 - Benefits AI Summary
+
+- runScript:
+    file: ../../../screens/Benefits/AISummaryScreen.js
+    env:
+      ELEMENT_TYPE: ${ELEMENT_TYPE}
+
+- tapOn: ${output.ai_summary}
+- waitForAnimationToEnd

@@ -1,0 +1,10 @@
+appId: ${APP_ID}
+name: Navigatetoplandocuments
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PlanDocumentsScreen.js
+---
+- tapOn: ${output.benefits_landing.dentalTab}
+- tapOn: ${output.benefits_plandocs.benefitsPlanDocsTitle}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_plandocs_landing.planDocsTitle}

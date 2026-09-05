@@ -1,0 +1,12 @@
+# View Benefits & Plan Documents
+# Subflow to navigate to plan documents
+
+appId: ${APP_ID}
+name: Viewbenefitsplandocuments
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/PlanDocumentsScreen.js
+---
+- tapOn: ${output.benefits_plandocs.planDocuments}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_plan_documents.pageTitle}

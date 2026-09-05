@@ -1,0 +1,42 @@
+# Test: Health Data Access
+# Validates health data access settings page
+# Source: Migrated from XCUITest HealthAccessTests
+
+appId: ${APP_ID}
+name: "H100 | Account | TC009 - Health Access"
+tags:
+  - account
+  - regression
+  - migrated-xcuitest
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+    env:
+      loginData: "LOA2"
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Health Data Access
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- tapOn: ${output.account_dashboard.healthDataAccessButton}
+- waitForAnimationToEnd
+
+# Verify health access page
+- runScript: ../../screens/Account/HealthAccessScreen.js
+- assertVisible: ${output.account_healthAccess.healthDataAccessTitle}

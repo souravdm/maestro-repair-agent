@@ -1,0 +1,12 @@
+#Go to prior authorizations
+appId: ${APP_ID}
+---
+- scrollUntilVisible:
+        element: ${output.benefits_prior_auth.pageTitle}
+        direction: DOWN
+        centerElement: true
+- tapOn:
+    text: ${output.benefits_prior_auth.pageTitle}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_prior_auth.pageTitle}
+- takeScreenshot: Prior_Auth_Landing

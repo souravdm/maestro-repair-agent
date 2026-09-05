@@ -1,0 +1,90 @@
+appId: ${APP_ID}
+env:
+  VALIDATE_ADDRESS: true
+  VALIDATE_PHONE: true
+  TAP_PRICING_DETAILS: false
+---
+# Validate pharmacy card information
+# Environment variables:
+#   VALIDATE_ADDRESS - Whether to validate pharmacy address (default: true)
+#   VALIDATE_PHONE - Whether to validate pharmacy phone number (default: true)
+#   TAP_PRICING_DETAILS - Whether to tap "Pricing details" link (default: false)
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+- runScript: ../../../screens/Benefits/SpendingScreen.js
+- runScript: ../../../screens/Pharmacy/NewPharmacyDashboardScreen.js
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.pharmacy_details.mailOrder}
+    commands:
+       - assertVisible: ${output.pharmacy_details.mailOrder}
+- runFlow:
+    when:
+      visible: ${output.benefits_drug_details.retailSection}
+    commands:
+        - assertVisible: ${output.benefits_drug_details.retailSection}
+
+# Select Pickup
+- runFlow:
+    when:
+        true: ${SWIPE_LEFT}
+    commands:
+      - swipe:
+          direction: LEFT
+      - waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.pickupTab}
+    commands:
+        - assertVisible: ${output.drug_price_comparison.pickupTab}
+        - tapOn: ${output.drug_price_comparison.pickupTab}
+
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.mail}
+    commands:
+        - assertVisible: ${output.drug_price_comparison.mail}
+        - tapOn: ${output.drug_price_comparison.mail}
+        - tapOn: ${output.benefits_spending_common.viewPharmacyDetails}
+        - assertVisible: ${output.pharmacy_details.pharmacyDetails}
+        - assertVisible: ${output.pharmacy_newDashboard.cvsCaremarkMailServiceTitle}
+        - assertVisible: ${output.benefits_drug_pricing_common.servicesFilter}
+        - assertVisible: ${output.pharmacy_details.additionalInfo}
+        - pressKey: back
+
+
+# Validate pharmacy name
+- assertVisible: ${output.pharmacy_details.pharmacyName}
+
+# Validate pharmacy address (optional)
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.pharmacyFullAddress}
+    commands:
+      - assertVisible: ${output.drug_price_comparison.pharmacyFullAddress}
+
+# Validate pharmacy phone (optional)
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.pharmacyPhone}
+    commands:
+      - assertVisible: ${output.drug_price_comparison.pharmacyPhone}
+
+# Validate price is displayed
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.priceAmount}
+    commands:
+      - assertVisible: ${output.drug_price_comparison.priceAmount}
+
+# Tap pricing details link if requested
+- runFlow:
+    when:
+      true: ${TAP_PRICING_DETAILS}
+    commands:
+      - tapOn: ${output.drug_price_comparison.pricingDetailsLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.pharmacy_details.pricingDetailsTitle}

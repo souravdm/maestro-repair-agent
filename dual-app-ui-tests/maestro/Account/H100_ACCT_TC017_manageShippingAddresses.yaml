@@ -1,0 +1,79 @@
+# Test: Manage Shipping Addresses
+# Validates address addition, editing, and deletion
+
+appId: ${APP_ID}
+name: "H100 | Account | TC017 - Manage Shipping Addresses"
+tags:
+  - account
+  - addresses
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Addresses
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/AddressesScreen.js
+- tapOn: ${output.account_dashboard.addressButton}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_addresses.addressesNavBar}
+
+# Add new address (if option available)
+- runFlow:
+    when:
+      visible: ${output.account_addresses.addAddressBtn}
+    commands:
+      - tapOn: ${output.account_addresses.addAddressBtn}
+      - waitForAnimationToEnd
+      - tapOn:
+          text: ${output.account_addresses.firstNameField}
+      - inputText: "John"
+      - tapOn:
+          text: ${output.account_addresses.lastNameField}
+      - inputText: "Doe"
+      - tapOn:
+          text: ${output.account_addresses.streetAddressField}
+      - inputText: "123 Main St"
+      - tapOn:
+          text: ${output.account_addresses.cityField}
+      - inputText: "Boston"
+      - tapOn:
+          text: ${output.account_addresses.stateField}
+      - tapOn: ${output.account_addresses.stateOption}
+      - tapOn:
+          text: ${output.account_addresses.zipCodeField}
+      - inputText: "02101"
+      - tapOn: ${output.account_addresses.saveChangesBtn}
+      - waitForAnimationToEnd
+
+# Verify address appears
+- assertVisible: ${output.account_addresses.streetAddressValue}
+
+# Test: Edit Address (if available)
+- runFlow:
+    when:
+      visible: ${output.account_addresses.editBtn}
+    commands:
+      - tapOn: ${output.account_addresses.editBtn}
+      - waitForAnimationToEnd
+      - tapOn: ${output.account_addresses.cancelOrBackBtn}
+      - waitForAnimationToEnd

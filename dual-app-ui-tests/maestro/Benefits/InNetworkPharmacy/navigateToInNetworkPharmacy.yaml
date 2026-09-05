@@ -1,0 +1,11 @@
+#Go to in network pharmacy
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+- scrollUntilVisible:
+    element: ${output.benefits_landing.searchPharmacyCard}
+    direction: DOWN
+- tapOn: ${output.benefits_landing.searchPharmacyCard}
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- takeScreenshot: In network pharmacy

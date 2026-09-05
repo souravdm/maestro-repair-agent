@@ -1,0 +1,29 @@
+# View Pharmacy Spending
+# Subflow to navigate to pharmacy spending details
+# Supports both CVS Health and H100 Beta themes
+
+appId: ${APP_ID}
+name: Viewpharmacyspending
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+- tapOn: ${output.benefits_landing.pharmacySpendingBtn}
+
+# Assert appropriate title based on theme
+- runFlow:
+    when:
+      visible: ${output.benefits/spending_pharmacy_spending.yourPharmacySpendingH100}
+    commands:
+      - assertVisible: ${output.benefits/spending_pharmacy_spending.yourPharmacySpendingH100}
+
+- runFlow:
+    when:
+      visible: ${output.benefits/spending_pharmacy_spending.pharmacySpendingTitle}
+    commands:
+      - assertVisible: ${output.benefits/spending_pharmacy_spending.pharmacySpendingTitle}
+
+# Common assertions (both themes)
+- assertVisible: ${output.benefits_spending_common.inNetworkLabel}
+- assertVisible: ${output.benefits_spending_common.deductibleLabel}
+- assertVisible: ${output.benefits_spending_common.outOfPocketMaxLabel}

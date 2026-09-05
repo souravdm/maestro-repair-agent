@@ -1,0 +1,283 @@
+# Enter Compound Drug Medication Details (Step 3 — Compound Drug variant)
+# Figma: Modal - Medication details (Compound Drug path)
+#
+# Shown when user selected "This medication is a compound drug" on Step 1.
+# Screen order (per Figma/screenshots):
+#   Drug name (plain text)
+#   Drug form (dropdown)
+#   Compound ingredients
+#     Ingredient 1: NDC  →  Quantity  →  Ingredient cost
+#     Ingredient 2: NDC  →  Quantity  →  Ingredient cost   (pre-loaded, no "Add" tap needed)
+#   Add another ingredient (button — leave untouched)
+#   Prescription Rx number
+#   Date filled
+#   Quantity  (prescription-level)
+#   Days supply
+#   Total paid
+#   Add prescriber details  (enabled once all fields are filled)
+#
+# Environment Variables (all have usable defaults for standalone runs):
+#   DRUG_NAME             Drug name free text
+#   DRUG_FORM             One of: Tablet | Capsule | Solution | Cream | Ointment | Injection | Suspension | Drops
+#   INGREDIENT_1_NDC      NDC code for ingredient 1
+#   INGREDIENT_1_QUANTITY Quantity for ingredient 1
+#   INGREDIENT_1_COST     Ingredient cost (no $ prefix, e.g. "45.00")
+#   INGREDIENT_2_NDC      NDC code for ingredient 2
+#   INGREDIENT_2_QUANTITY Quantity for ingredient 2
+#   INGREDIENT_2_COST     Ingredient cost for ingredient 2
+#   PRESCRIPTION_RX_NUMBER
+#   DATE_FILLED           Computed by calculateDateFilled.js
+#   QUANTITY              Prescription quantity
+#   DAYS_SUPPLY
+#   TOTAL_PAID            Total paid (no $ prefix)
+appId: ${APP_ID}
+name: Enter Compound Drug Medication Details
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../../../scripts/utils/screen-management/calculateDateFilled.js
+env:
+  DRUG_NAME: "Pain Relief Cream"
+  DRUG_FORM: "Cream"
+  INGREDIENT_1_NDC: "12345678901"
+  INGREDIENT_1_QUANTITY: "10"
+  INGREDIENT_1_COST: "50.00"
+  INGREDIENT_2_NDC: "98765432109"
+  INGREDIENT_2_QUANTITY: "20"
+  INGREDIENT_2_COST: "75.50"
+  PRESCRIPTION_RX_NUMBER: "546412346543156"
+  DATE_FILLED: ""
+  QUANTITY: "30"
+  DAYS_SUPPLY: "30"
+  TOTAL_PAID: "125.50"
+---
+# Verify Step 3 header
+- assertVisible: ${output.claims_step3_medication.stepIndicator}
+- assertVisible: ${output.claims_step3_medication.screenTitle}
+- assertVisible: ${output.claims_step3_medication.allFieldsRequiredUnlessOptional}
+
+# ── Drug name ──────────────────────────────────────────────────────────────
+# Compound path uses a plain free-text field, not the search-based drug picker
+- assertVisible: ${output.claims_step3_medication.drugNameLabel}
+- tapOn: ${output.claims_step3_medication.drugNameLabel}
+- inputText: ${DRUG_NAME}
+# pressKey: Back navigates the app's screen stack backward on iOS instead of
+# dismissing the keyboard (confirmed elsewhere in this codebase) — without
+# dismissing first, the Drug form dropdown below opens hidden behind the
+# keyboard and never actually expands. Tap the keyboard's own Done key instead.
+- runFlow:
+    when:
+      platform: "ios"
+    commands:
+      - tapOn: ${output.common_buttons.keyboardDoneKey}
+# Android: no explicit keyboard-dismiss here. hideKeyboard sends a system
+# back-key press when the keyboard has already auto-closed itself after
+# typing (confirmed live: this silently navigated back a full screen, from
+# Step 3 to Step 2, losing the Drug name value). The Drug form tap below
+# works fine without it (confirmed live) — the keyboard is already gone by
+# this point.
+
+# ── Drug form dropdown ─────────────────────────────────────────────────────
+# Wait for the field itself rather than assuming it's ready immediately
+# after the keyboard closes.
+- extendedWaitUntil:
+    visible: ${output.claims_step3_medication.drugFormSelectAnOption}
+    timeout: 15000
+- tapOn: ${output.claims_step3_medication.drugFormSelectAnOption}
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Tablet"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormTablet}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Capsule"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormCapsule}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Cream"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormCream}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Ointment"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormOintment}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Solution"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormSolution}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Injection"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormInjection}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Suspension"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormSuspension}
+- runFlow:
+    when:
+      true: ${DRUG_FORM == "Drops"}
+    commands:
+      - tapOn: ${output.claims_step3_medication.drugFormDrops}
+- waitForAnimationToEnd
+
+# ── Ingredient 1 ───────────────────────────────────────────────────────────
+# Both ingredients are pre-rendered; no "Add another ingredient" tap needed.
+- assertVisible: ${output.claims_step3_medication.compoundIngredientsTitle}
+- assertVisible: ${output.claims_step3_medication.ingredient1Title}
+
+# NDC — index 0 = Ingredient 1 field
+# On Android, the drug name field's keyboard doesn't always fully dismiss
+# (confirmed live: field stays focused after hideKeyboard), shrinking the
+# visible viewport and pushing this field out of the rendered tree — scroll
+# it into view first (no-op on iOS/when already visible, same idiom used
+# for Ingredient 2's fields below).
+- scrollUntilVisible:
+    element:
+      text: ${output.claims_step3_medication.ingredientNDCLabel}
+      index: 0
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: ${output.claims_step3_medication.ingredientNDCLabel}
+    index: 0
+- inputText: ${INGREDIENT_1_NDC}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# Quantity — index 0 = Ingredient 1 quantity. The selector matches ".*Quantity.*",
+# which also matches Ingredient 2's (and the prescription-level) Quantity field —
+# without an explicit index this tapped index 0 both times, corrupting Ingredient
+# 1's value instead of filling Ingredient 2 (confirmed live: field showed "1020").
+- tapOn:
+    text: ${output.claims_step3_medication.quantityLabel1}
+    index: 0
+- inputText: ${INGREDIENT_1_QUANTITY}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# Ingredient cost — index 0 = Ingredient 1 cost
+- tapOn:
+    text: ${output.benefits_claims_common.ingredientCostLabel}
+    index: 0
+- inputText: ${INGREDIENT_1_COST}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# ── Ingredient 2 ───────────────────────────────────────────────────────────
+# Ingredient 2 is pre-rendered above "Add another ingredient" (confirmed
+# live) — scroll straight to its own NDC field in one motion. Scrolling to
+# addAnotherIngredientBtn first (below this field) overshoots past
+# Ingredient 2 and unmounts it before the tap, which is why the keyboard's
+# Done key never rendered (confirmed live: doneBtn tap timed out).
+# Fill order within Ingredient 2 is Quantity, Cost, then NDC last — NOT
+# top-to-bottom. Filling NDC first (its on-screen order) left it scrolled
+# away by the time Quantity and Cost were entered afterward, and the app
+# silently drops a field's typed value once it scrolls far enough out of
+# view (confirmed live: NDC came back blank on submit even though the tap
+# and input both logged success). Quantity and Cost never showed this loss
+# because nothing scrolled past them afterward within this block — so NDC
+# is now filled last, right before we leave Ingredient 2, for the same
+# protection.
+
+# Quantity — quantityLabel1 (".*Quantity.*") is ambiguous here: it also
+# matches the prescription-level Quantity field lower on this same screen,
+# and tapping it corrupted that field by appending text (confirmed live:
+# "30" + "20" typed = "3020"). Use the exact "Ingredient 2 Quantity" label
+# instead, which only this field has.
+- scrollUntilVisible:
+    element: ${output.claims_step3_medication.quantityLabel2}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn: ${output.claims_step3_medication.quantityLabel2}
+- inputText: ${INGREDIENT_2_QUANTITY}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# Ingredient cost — ingredientCostLabel is ambiguous: Ingredient 1's cost
+# field stays in the tree here (confirmed live: unlike NDC, it does NOT get
+# unmounted), so the shared regex landed on Ingredient 1's field and
+# appended text to it ("50.00" + "75.50" typed became "50.007550"). Use the
+# exact, unique label for Ingredient 2's field only.
+- scrollUntilVisible:
+    element: ${output.benefits_claims_common.ingredientCostLabel2}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn: ${output.benefits_claims_common.ingredientCostLabel2}
+- inputText: ${INGREDIENT_2_COST}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# NDC — filled last (see note above). ingredientNDCLabel (".*NDC.*") is
+# ambiguous: Ingredient 1's NDC field does NOT get unmounted here (confirmed
+# live via the actual tapped element in the log: text="12345678901",
+# hint="Ingredient 1 NDC" — the exact same false assumption that broke
+# Quantity and Cost). Use the exact, unique label for Ingredient 2's field.
+- scrollUntilVisible:
+    element: ${output.claims_step3_medication.ingredientNDCLabel2}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn: ${output.claims_step3_medication.ingredientNDCLabel2}
+- inputText: ${INGREDIENT_2_NDC}
+- tapOn: ${output.claims_confirmation.doneBtn}
+- assertVisible: ${INGREDIENT_2_NDC}
+
+# ── Prescription-level fields (below the ingredients section) ──────────────
+
+
+# Prescription Rx number
+- tapOn: ${output.benefits_claims_common.prescriptionRxNumberLabel}
+- inputText: ${PRESCRIPTION_RX_NUMBER}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# Date filled — calendar picker opens on tap. Day cells DO have accessibility
+# labels (e.g. "Today, Thursday, September 3, 2026" on iOS, "3, Thursday,
+# September 3, 2026, Today" on Android) — output.calendarDayTextPattern
+# (calculateDateFilled.js) matches either. The confirm button is "OK" on
+# Android but "Done" on iOS, hence dateFilledConfirmBtn matching both.
+- tapOn: ${output.claims_step3_medication.dateFilledSelect}
+- waitForAnimationToEnd
+- tapOn: ${output.calendarDayTextPattern}
+- tapOn: ${output.claims_step3_medication.dateFilledConfirmBtn}
+
+# Quantity (prescription-level) — index 2: after Ingredient 1 (0) and Ingredient 2 (1)
+- scroll
+- tapOn: ${output.benefits_claims_common.quantityLabel}
+- inputText: ${QUANTITY}
+- tapOn: ${output.claims_confirmation.doneBtn}
+
+# Days supply
+- tapOn: ${output.claims_step3_medication.daysSupplyLabel}
+- inputText: ${DAYS_SUPPLY}
+- tapOn: ${output.claims_confirmation.doneBtn}
+- scroll
+# Total paid
+- runFlow:
+    when:
+      visible: ${output.claims_step3_medication.totalPaidLabel}
+    commands:
+      - tapOn: ${output.claims_step3_medication.totalPaidLabel}
+      - inputText: ${TOTAL_PAID}
+      # pressKey: Back navigates the screen stack backward on iOS instead of
+      # dismissing the keyboard — tap the numeric keypad's Done key instead.
+      - runFlow:
+          when:
+            platform: "ios"
+          commands:
+            - tapOn: ${output.common_buttons.doneBtn}
+      - runFlow:
+          when:
+            platform: "android"
+          commands:
+            - hideKeyboard
+      - waitForAnimationToEnd
+      - takeScreenshot: Form_Filled_up
+- scroll
+# ── Proceed ────────────────────────────────────────────────────────────────
+- tapOn: ${output.claims_step3_medication.addPrescriberDetailsBtn}
+- waitForAnimationToEnd

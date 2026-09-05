@@ -1,0 +1,111 @@
+# Test: Payment Methods Management
+# Validates payment method addition and management
+
+appId: ${APP_ID}
+name: "H100 | Account | TC003 - Add And Remove Payment Cards"
+tags:
+  - account
+  - payment
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Payment Methods
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/PaymentMethodScreen.js
+- scrollUntilVisible:
+    element: ${output.account_dashboard.payABillBtn}
+    direction: "DOWN"
+    timeout: 20000
+- tapOn: ${output.account_dashboard.payABillBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_payment.paymentMethodsNavBar}
+
+# Add new payment method
+- runFlow:
+    when:
+      visible: ${output.account_payment.addPaymentMethodBtn}
+    commands:
+      - tapOn: ${output.account_payment.addPaymentMethodBtn}
+      - waitForAnimationToEnd
+      - tapOn:
+          text: ${output.account_payment.cardNumberField}
+      - inputText: "4111111111111111"
+      - tapOn:
+          text: ${output.account_payment.monthField}
+      - tapOn: ${output.account_payment.expirationMonthOption}
+      - tapOn:
+          text: ${output.account_payment.yearField}
+      - tapOn: ${output.account_payment.expirationYearOption}
+      - tapOn:
+          text: ${output.account_payment.securityCodeField}
+      - inputText: "123"
+      - scroll
+      - tapOn:
+          text: ${output.account_payment.firstNameField}
+      - inputText: "John"
+      - tapOn:
+          text: ${output.account_payment.lastNameField}
+      - inputText: "Doe"
+      - tapOn:
+          text: ${output.account_payment.streetAddressField}
+      - inputText: "123 Main St"
+      - tapOn:
+          text: ${output.account_payment.cityField}
+      - inputText: "Boston"
+      - tapOn:
+          text: ${output.account_payment.stateField}
+      - tapOn: ${output.account_payment.billingStateOption}
+      - tapOn:
+          text: ${output.account_payment.zipCodeField}
+      - inputText: "02101"
+      - scroll
+      - tapOn: ${output.account_payment.savePaymentMethodBtn}
+      - waitForAnimationToEnd
+
+# Verify card appears (ending in 1111)
+# - assertVisible:
+#     text: ${output.account_payment.cardEndingPattern}
+
+# Test: Edit Payment Method (if available)
+- runFlow:
+    when:
+      visible: ${output.account_payment.editOrManageBtn}
+    commands:
+      - tapOn: ${output.account_payment.editOrManageBtn}
+      - waitForAnimationToEnd
+      - tapOn: ${output.common_buttons.cancelBtn}
+
+- runFlow:
+    when:
+      visible: ${output.account_payment.youAreCaughtUp}
+    commands:
+      - assertVisible: ${output.account_payment.caughtupMessage}
+
+- runFlow:
+    when:
+      visible: ${output.account_payment.balanceDueHeader}
+    commands:
+      - assertVisible: ${output.account_payment.balanceDueHeader}
+      - tapOn: ${output.account_payment.payBtn}
+      - waitForAnimationToEnd

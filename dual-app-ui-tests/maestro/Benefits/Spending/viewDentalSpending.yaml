@@ -1,0 +1,16 @@
+# View Dental Spending
+# Subflow to navigate to dental spending details
+
+appId: ${APP_ID}
+name: Viewdentalspending
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+# Switch to Dental tab
+- tapOn: ${output.benefits_landing.dentalTab}
+- assertVisible: ${output.benefits_landing.dentalSpendingBtn}
+
+- tapOn: ${output.benefits_landing.dentalSpendingBtn}
+
+- assertVisible: ${output.benefits_dental_spending.pageTitle}

@@ -1,0 +1,58 @@
+# Test: Communication Preferences
+# Validates communication preferences and notification settings
+
+appId: ${APP_ID}
+name: "H100 | Account | TC023 - Update Notification Settings"
+tags:
+  - account
+  - communication
+  - preferences
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Communication Preferences
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/CommunicationPrefsScreen.js
+- scroll
+- tapOn: ${output.account_communicationPrefs.communicationPrefsLink}
+- waitForAnimationToEnd
+- assertVisible: ${output.account_communicationPrefs.communicationPrefsNavBar}
+
+# Verify Communication Preferences elements
+- assertVisible: ${output.account_communicationPrefs.emailLabel}
+- assertVisible: ${output.account_communicationPrefs.textMessagesLabel}
+- assertVisible: ${output.account_communicationPrefs.pushNotificationsLabel}
+
+# Verify Pharmacy Alerts link (for RxTied users)
+- runFlow:
+    when:
+      visible: ${output.account_communicationPrefs.pharmacyAlertsLink}
+    commands:
+      - tapOn: ${output.account_communicationPrefs.pharmacyAlertsLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_communicationPrefs.pharmacyAlertsTitle}
+      - assertVisible: ${output.account_communicationPrefs.prescriptionReadyLabel}
+      - assertVisible: ${output.account_communicationPrefs.prescriptionShippedLabel}
+      - tapOn: ${output.account_communicationPrefs.backBtn}
+      - waitForAnimationToEnd

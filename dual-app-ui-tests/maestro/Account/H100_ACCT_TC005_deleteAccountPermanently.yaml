@@ -1,0 +1,64 @@
+# Test: Delete Account Permanently
+# Validates account deletion functionality and confirmation dialogs
+
+appId: ${APP_ID}
+name: "H100 | Account | TC005 - Delete Account Permanently"
+tags:
+  - account
+  - delete_account
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account dashboard
+- runFlow:
+    file: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Navigate to Terms & Privacy
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- runScript: ../../screens/Account/AccountTermsScreen.js
+- scroll
+- tapOn: ${output.account_terms.termsAndPrivacyLink}
+- waitForAnimationToEnd
+
+- tapOn: ${output.account_terms.deleteMyCvsAccountLink}
+- assertVisible: ${output.account_terms.deleteAccountTitle}
+
+# Verify delete account page elements
+- assertVisible: ${output.account_terms.deleteAccountTitle}
+- assertVisible:
+    text: ".*permanently delete.*"
+- assertVisible: ${output.account_terms.deleteAccountModal}
+- assertVisible: ${output.common_buttons.cancelBtn}
+
+# Test Cancel button navigation
+- tapOn: ${output.common_buttons.cancelBtn}
+- assertVisible: ${output.account_terms.termsAndPrivacyLink}
+
+# Navigate back to Delete Account
+- tapOn: ${output.account_terms.deleteMyCvsAccountLink}
+
+# Test Delete Account button (should show confirmation)
+- tapOn: ${output.account_terms.deleteAccountTitle}
+- assertVisible: ${output.account_terms.areYouSureTitle}
+- assertVisible: ${output.account_terms.yesDeleteBtn}
+- assertVisible: ${output.common_buttons.cancelBtn}
+
+# Cancel the deletion (don't actually delete)
+- tapOn: ${output.common_buttons.cancelBtn}

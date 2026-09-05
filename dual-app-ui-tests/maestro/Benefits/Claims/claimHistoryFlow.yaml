@@ -1,0 +1,31 @@
+# Claim History Flow
+# View and interact with claim history
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/ClaimsScreen.js
+
+# Verify Claims screen is displayed
+- assertVisible: ${output.benefits_claims_landing.claimsTitle}
+
+# Navigate to Claim History
+- tapOn: ${output.claims_what_you_need.viewClaimHistoryLink}
+- assertVisible: ${output.claims_what_you_need.claimsHistoryTitle}
+
+# Test Filters
+- tapOn: ${output['benefits_claims_common'].filterBtn}
+- assertVisible: ${output.benefits_claims_landing.dateRangeLabel}
+- assertVisible: ${output.benefits_claims_landing.claimTypeLabel}
+- assertVisible: ${output.benefits_claims_landing.statusLabel}
+
+# Apply Filter (Medical Claims)
+# ORPHAN-CLEANUP: - tapOn: ${output.benefits_claims_landing.medicalClaims}
+- tapOn: ${output.benefits_claims_landing.applyBtn}
+- assertVisible: ".*Claim.*|.*Claims.*"
+
+# Test Sort
+- tapOn: ${output['benefits_claims_common'].sortBtn}
+- tapOn: ${output.benefits_claims_landing.newestFirstSort}
+
+# Navigate back
+- tapOn: ${output.common_buttons.backBtn}

@@ -1,0 +1,39 @@
+# Copay & Coinsurance Flow
+# Complete flow to view prescription drug pricing tiers
+
+appId: ${APP_ID}
+name: Copay Coinsurance Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/SpendingScreen.js
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# View Copay & Coinsurance
+- runFlow:
+    file: ./viewCopayCoinsurance.yaml
+
+# Verify Mail Service section
+- assertVisible: ${output.benefits_spending_common.mailLabel}
+- assertVisible: ${output.benefits_spending_common.retailLabel}
+
+# Navigate back
+- tapOn: ${output['benefits_spending_subscreen_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

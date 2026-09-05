@@ -1,0 +1,88 @@
+# Test: Account Dashboard Overview
+# Validates all sections on the account dashboard are visible and navigable
+
+appId: ${APP_ID}
+name: "H100 | Account | TC002 - Dashboard Overview"
+tags:
+  - account
+  - dashboard
+  - regression
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Common/SystemPermissionsScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/launchAndSetup.yaml
+
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Navigate to Account tab
+- tapOn: ${output.common_navigation.accountBtn}
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+# Verify Profile Section
+- runScript: ../../screens/Account/AccountDashboardScreen.js
+- assertVisible: ${output.account_dashboard.profileBtn}
+- tapOn: ${output.account_dashboard.profileBtn}
+- waitForAnimationToEnd
+
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+
+- runScript: ../../screens/Account/ProfileScreen.js
+- assertVisible: ${output.account_profile.editProfileBtn}
+- tapOn:
+    text: "Back|Account"
+- waitForAnimationToEnd
+
+# Verify Sign In & Security Section
+- assertVisible: ${output.account_dashboard.signInSecurityBtn}
+- tapOn: ${output.account_dashboard.signInSecurityBtn}
+- waitForAnimationToEnd
+
+- runScript: ../../screens/Account/SignInSecurityScreen.js
+- assertVisible: ${output.account_signInSecurity.signInSecurityTitle}
+- tapOn:
+    text: "Back|Account"
+- waitForAnimationToEnd
+
+# Verify Addresses Section
+- assertVisible: ${output.account_dashboard.addressesBtn}
+- tapOn: ${output.account_dashboard.addressesBtn}
+- waitForAnimationToEnd
+
+- runScript: ../../screens/Account/AddressesScreen.js
+- assertVisible: ${output.account_addresses.addressesNavBar}
+- tapOn:
+    text: "Back|Account"
+- waitForAnimationToEnd
+
+# Scroll to see more sections
+- scroll
+
+# Verify Terms & Privacy Section
+- runScript: ../../screens/Account/AccountTermsScreen.js
+- runFlow:
+    when:
+      visible: ${output.account_terms.termsAndPrivacyLink}
+    commands:
+      - tapOn: ${output.account_terms.termsAndPrivacyLink}
+      - waitForAnimationToEnd
+      - assertVisible: ${output.account_terms.termsAndPrivacyNavBar}
+      - tapOn:
+          text: "Back|Account"
+      - waitForAnimationToEnd

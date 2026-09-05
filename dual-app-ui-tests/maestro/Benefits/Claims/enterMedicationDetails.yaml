@@ -1,0 +1,141 @@
+# Enter Medication Details (Step 3)
+# Figma: Modal - Medication details
+# Fields: drug name/NDC, Rx number (optional), date filled, quantity, days supply, total paid
+appId: ${APP_ID}
+name: Enter Medication Details
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+  - runScript: ../../../../scripts/utils/screen-management/calculateDateFilled.js
+env:
+  MEDICATION_NAME: "Atorvastatin"
+  MEDICATION_FULL_NAME: "Atorvastatin calcium Tab 40mg"
+  PRESCRIPTION_RX_NUMBER: "546412346543156"
+  DATE_FILLED: ""
+  QUANTITY: "90"
+  DAYS_SUPPLY: "30"
+  TOTAL_PAID: "48.45"
+---
+# Verify Step 3 header
+- assertVisible: ${output.claims_step3_medication.stepIndicator}
+- assertVisible: ${output.claims_step3_medication.screenTitle}
+
+# Verify instruction text
+- assertVisible: ${output.claims_step3_medication.allFieldsRequiredUnlessOptional}
+
+# Enter drug name or NDC number (tap the field label directly, no separate Search element)
+- tapOn: ${output.claims_step3_medication.enterDrugNameOrNDC}
+- waitForAnimationToEnd
+- inputText: ${MEDICATION_NAME}
+- waitForAnimationToEnd
+# Select first matching result from drug search dropdown
+- extendedWaitUntil:
+    visible:
+      text: ${MEDICATION_FULL_NAME}
+    timeout: 10000
+- tapOn: ${MEDICATION_FULL_NAME}
+- waitForAnimationToEnd
+# Dismiss keyboard by tapping screen title
+- tapOn: ${output.claims_step3_medication.screenTitle}
+
+# Enter Prescription Rx number
+- tapOn: ${output.claims_step3_medication.prescriptionInputLabel}
+- inputText: ${PRESCRIPTION_RX_NUMBER}
+- waitForAnimationToEnd
+
+# Enter Date filled — calendar picker opens on tap.
+# Day cells have no accessibility labels; tap by calculated grid coordinates.
+# output.calendarDayPoint is set by calculateDateFilled.js (e.g. "39%,36%" for May 12).
+- waitForAnimationToEnd
+# iOS only: the Rx number keyboard occludes/collapses the Date filled row so the
+# tap below misses it unless the keyboard is dismissed first. Android does not
+# need this — the calendar opens correctly there with the keyboard still up.
+- runFlow:
+    when:
+      platform: "ios"
+    commands:
+      - hideKeyboard
+- tapOn: ${output.claims_step3_medication.dateFilledSelect}
+- waitForAnimationToEnd
+- tapOn: ${output.calendarDayTextPattern}
+- tapOn: ${output.claims_step3_medication.dateFilledConfirmBtn}
+- waitForAnimationToEnd
+# Enter Quantity
+- scroll
+- tapOn: ${output['benefits_claims_common'].quantityLabel}
+- inputText: ${QUANTITY}
+# iOS's numeric keypad here has no swipe-to-dismiss affordance, so hideKeyboard
+# fails with "Couldn't hide the keyboard" — tap the accessory bar's Done button
+# instead. Android's hideKeyboard works fine on this field, so leave it as-is.
+- runFlow:
+    when:
+      platform: "ios"
+    commands:
+      - tapOn: ${output.common_buttons.doneBtn}
+- runFlow:
+    when:
+      platform: "android"
+    commands:
+      - hideKeyboard
+- waitForAnimationToEnd
+
+# Enter Days supply
+
+- tapOn: ${output.claims_step3_medication.daysSupplyLabel}
+- inputText: ${DAYS_SUPPLY}
+- runFlow:
+    when:
+      platform: "ios"
+    commands:
+      - tapOn: ${output.common_buttons.doneBtn}
+- runFlow:
+    when:
+      platform: "android"
+    commands:
+      - hideKeyboard
+- waitForAnimationToEnd
+
+
+# Handle Country field (shown for Traveling outside US reason)
+- scroll
+- runFlow:
+    when:
+      visible: ${output.claims_step3_medication.countryLabel}
+    commands:
+      - tapOn: ${output.claims_step3_medication.countryField}
+      - inputText: "Canada"
+      - runFlow:
+          when:
+            platform: "ios"
+          commands:
+            - tapOn: ${output.common_buttons.doneBtn}
+      - runFlow:
+          when:
+            platform: "android"
+          commands:
+            - hideKeyboard
+      - waitForAnimationToEnd
+
+# Enter Total paid (may need scroll to be visible)
+- scroll
+- runFlow:
+    when:
+      visible: ${output.claims_step3_medication.totalPaidLabel}
+    commands:
+      - tapOn: ${output.claims_step3_medication.totalPaidLabel}
+      - inputText: ${TOTAL_PAID}
+      - runFlow:
+          when:
+            platform: "ios"
+          commands:
+            - tapOn: ${output.common_buttons.doneBtn}
+      - runFlow:
+          when:
+            platform: "android"
+          commands:
+            - hideKeyboard
+      - waitForAnimationToEnd
+
+# Tap Add prescriber details to proceed
+- tapOn: ${output.claims_step3_medication.addPrescriberDetailsBtn}
+- waitForAnimationToEnd
+- takeScreenshot: enterMedication

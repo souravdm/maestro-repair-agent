@@ -1,0 +1,78 @@
+appId: ${APP_ID}
+name: "H100 | Account | TC001 - Dashboard Navigation"
+tags:
+  - account
+  - smoke
+onFlowStart:
+  - runScript: ../../screens/Common/CommonScreen.js
+  - runScript: ../../screens/Account/AccountDashboardScreen.js
+  - runScript:
+      file: ../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# Flow: Verify account dashboard navigation and all sections
+# Source: Migrated from XCUITest AccountDashboardTabTests
+- runFlow: ../../subflows/Common/launchAndSetup.yaml
+- runFlow:
+    file: ../../subflows/Account/authentication/login.yaml
+
+# Step 2: Handle any post-login overlays before verification
+- runFlow:
+    file: ../../subflows/Common/dismissOverlays.yaml
+    
+- runFlow: ../../subflows/Account/dashboard/navigateToAccountDashboard.yaml
+
+# Verify user profile header
+- assertVisible:
+    text: ${output.account_dashboard.profileInitialsPattern}
+
+# Verify Account Details section
+- assertVisible: ${output.account_dashboard.accountDetailsHeader}
+- assertVisible: ${output.account_dashboard.profileBtn}
+- assertVisible: ${output.account_dashboard.signInSecurityBtn}
+- assertVisible: ${output.account_dashboard.addressesBtn}
+
+# Verify Manage Connections section
+- assertVisible: ${output.account_dashboard.manageConnectionsHeader}
+- assertVisible: ${output.account_dashboard.connectionsAndPermitBtn}
+
+# Scroll to Payments & Insurance section
+- scrollUntilVisible:
+    element: ${output.account_dashboard.paymentsInsuranceHeader}
+    speed: 40
+    visibilityPercentage: 50
+    centerElement: true
+- assertVisible: ${output.account_dashboard.insuranceBtn}
+- assertVisible: ${output.account_dashboard.payABillBtn}
+
+# Scroll to Communication Preferences section
+- scrollUntilVisible:
+    element: ${output.account_dashboard.communicationPreferencesHeader}
+    speed: 40
+    visibilityPercentage: 100
+- assertVisible: ${output.account_dashboard.textsBtn}
+- assertVisible: ${output.account_dashboard.emailsBtn}
+- assertVisible: ${output.account_dashboard.notificationsBtn}
+
+# Scroll to Help section
+- scrollUntilVisible:
+    element: ${output.account_dashboard.helpCenterBtn}
+    speed: 40
+    visibilityPercentage: 100
+    centerElement: false
+- assertVisible: ${output.account_dashboard.helpHeader}
+- assertVisible: ${output.account_dashboard.termsPrivacyBtn}
+- assertVisible: ${output.account_dashboard.helpCenterBtn}
+- assertVisible: ${output.account_dashboard.deleteAccountBtn}
+
+# Scroll to Sign Out
+- scrollUntilVisible:
+    element: ${output.account_dashboard.signOutBtn}
+    speed: 40
+    visibilityPercentage: 100
+- assertVisible: ${output.account_dashboard.signOutBtn}
+
+- runFlow: 
+    file: ../../subflows/Account/authentication/logout.yaml

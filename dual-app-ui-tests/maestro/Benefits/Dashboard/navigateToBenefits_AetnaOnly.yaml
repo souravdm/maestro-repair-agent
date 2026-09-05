@@ -1,0 +1,38 @@
+# Subflow: Navigate to Benefits Landing - Aetna Only
+# Plan Type: Aetna plan only (no Caremark)
+# Features: Medical and Dental benefits only
+# Tabs: 2 (Medical, Dental) - NO Pharmacy tab
+appId: ${APP_ID}
+---
+- runScript: ../../../screens/Common/CommonScreen.js
+- runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+
+# Navigate to Benefits tab
+- tapOn: ${output.common_navigation.benefitsTab}
+- waitForAnimationToEnd
+
+# Verify only Medical and Dental tabs are visible (Aetna only)
+- assertVisible: ${output.benefits_landing.medicalTab}
+- assertVisible: ${output.benefits_landing.dentalTab}
+- assertNotVisible: ${output.benefits_landing.pharmacyTab}
+
+# Verify Medical-specific features
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.medicalSpendingBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.medicalSpendingBtn}
+
+# Verify Dental-specific features
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.dentalSpendingBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.dentalSpendingBtn}
+
+# Verify Prior Authorizations (Medical/Dental)
+- runFlow:
+    when:
+      visible: ${output.benefits_landing.priorAuthBtn}
+    commands:
+      - assertVisible: ${output.benefits_landing.priorAuthBtn}

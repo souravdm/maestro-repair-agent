@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: SearchDrugPricing
+onFlowStart:
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  ADDRESS: "02895"
+  FULL_ADDRESS: "10 4TH AVE, WOONSOCKET, RI 02895"
+---
+- tapOn: ${output.benefits_drug_pricing.searchField}
+- inputText: ${MEDICATION_NAME}
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${NDC == "false"} # Evaluates false condition
+    commands:
+      - tapOn: ${MEDICATION_QTY}
+
+- runFlow:
+    when:
+      true: ${NDC == "true"} # Evaluates true condition
+    commands:
+      - pressKey: Enter
+
+- scrollUntilVisible:
+          element: ${output.benefits_drug_pricing.disclaimerLink}
+          speed: 40
+          visibilityPercentage: 100
+          centerElement: false
+- assertVisible: ${output.benefits_drug_pricing.disclaimerLink}
+- tapOn: ${output.benefits_drug_pricing.searchDrugBtn}
+
+

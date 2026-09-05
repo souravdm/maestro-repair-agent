@@ -1,0 +1,31 @@
+# Search In-Network Pharmacy
+# Subflow to search for in-network pharmacies
+
+appId: ${APP_ID}
+name: Searchinnetworkpharmacy
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  SEARCH_ADDRESS: "1601 17th st nw, was"
+  SEARCH_ADDRESS_FULL: "1601 17TH ST NW, WASHINGTON, DC 20009"
+---
+- swipe:
+    direction: down
+
+# Navigate to In-Network Pharmacy Search
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.findPharmacyLabel}
+- assertVisible: ${output.benefits_drug_pricing.searchInNetworkPharmaciesLabel}
+- assertVisible: ${output.benefits_drug_pricing.currentLocationOption}
+
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+
+# Enter address
+- assertVisible: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- tapOn: ${output.benefits_drug_pricing.enterAnAddressContentDes}
+- inputText: ${SEARCH_ADDRESS}
+- tapOn: ${SEARCH_ADDRESS_FULL}
+- tapOn: ${output.benefits_drug_pricing.searchBtn}
+- waitForAnimationToEnd
+- assertVisible: ${output.benefits_drug_pricing.specialtyPharmacy}

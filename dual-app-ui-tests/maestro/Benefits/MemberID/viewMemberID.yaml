@@ -1,0 +1,9 @@
+# View Member ID
+# Subflow to view and verify member ID card
+
+appId: ${APP_ID}
+name: Viewmemberid
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+---
+- assertVisible: ${output.benefits_landing.shareBtn}

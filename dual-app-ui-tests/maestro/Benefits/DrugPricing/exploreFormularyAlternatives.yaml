@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+env:
+  EXPECTED_FA_COUNT: 0
+---
+# Explore formulary alternatives section
+# Environment variables:
+#   EXPECTED_FA_COUNT - Expected number of formulary alternatives (0 = not visible/applicable)
+
+- runScript: ../../../screens/Benefits/DrugPricingScreen.js
+
+# Check if formulary alternatives button exists
+- runFlow:
+    when:
+      visible: ${output.drug_price_comparison.exploreCoveredAlternatives}
+    commands:
+      # Tap explore alternatives button
+      - tapOn: ${output.drug_price_comparison.exploreCoveredAlternatives}
+      - waitForAnimationToEnd
+
+      # Verify alternatives screen appears
+      - assertVisible: ${output.formulary_alternatives.alternativesTitle}
+
+      # Validate alternative drugs are listed
+      - assertVisible: ${output['benefits_drug_pricing_common'].drugName}
+
+      # Verify pricing information for alternatives
+      - assertVisible: ${output.formulary_alternatives.drugPrice}
+
+      # Check for savings information
+      - runFlow:
+          when:
+            visible: ${output.formulary_alternatives.savings}
+          commands:
+            - assertVisible: ${output.formulary_alternatives.savings}
+
+      # Go back to main drug pricing screen
+      - tapOn: ${output['benefits_drug_pricing_common'].close}
+      - waitForAnimationToEnd
+
+# If no formulary alternatives expected, verify button is not present
+- runFlow:
+    when:
+      true: ${EXPECTED_FA_COUNT == 0}
+    commands:
+      - assertNotVisible: ${output.drug_price_comparison.exploreCoveredAlternatives}

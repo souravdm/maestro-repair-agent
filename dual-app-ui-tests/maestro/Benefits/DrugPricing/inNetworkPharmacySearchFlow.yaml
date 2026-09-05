@@ -1,0 +1,69 @@
+# In-Network Pharmacy Search Flow
+# Complete flow to search for in-network pharmacies
+
+appId: ${APP_ID}
+name: In-Network Pharmacy Search Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/BenefitsDashboardScreen.js
+  - runScript: ../../../screens/Benefits/ProvidersScreen.js
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+env:
+  SEARCH_ADDRESS: "1 CVS Drive, Woonsocket, RI 02895"
+---
+# Launch and login
+- runFlow:
+    file: ../../Common/launchAndSetup.yaml
+
+- runScript:
+    file: ../../../config/credentials-loader.js
+    env:
+      loginData: LOA2
+
+- runFlow:
+    file: ../../Account/authentication/login.yaml
+
+- runFlow:
+    file: ../../Common/dismissOverlays.yaml
+
+# Navigate to Benefits
+- runFlow:
+    file: ../Dashboard/navigateToBenefitsTab.yaml
+
+# Search for In-Network Pharmacy
+- runFlow:
+    file: ./searchInNetworkPharmacy.yaml
+    env:
+      SEARCH_ADDRESS: ${SEARCH_ADDRESS}
+
+# Verify Search Results
+- assertVisible: ${output.benefits_search_pharmacy.resultsCount}
+- assertVisible: ${output.benefits_search_pharmacy.pharmacyName}
+
+# Apply Filters - Services
+- tapOn: ${output.benefits_search_pharmacy.servicesFilter}
+- assertVisible: ${output.benefits_search_pharmacy.servicesLabel}
+
+# Select a filter and go back
+- tapOn: ${output.benefits_search_pharmacy.driveThru}
+- tapOn: ${output['benefits_providers_common'].backBtn}
+
+# Apply Filters - Pharmacy Type
+- tapOn: ${output.benefits_search_pharmacy.pharmacyTypeFilter}
+- assertVisible: ${output.benefits_search_pharmacy.pharmacyTypeLabel}
+- tapOn: ${output.benefits_search_pharmacy.retailTab}
+- tapOn: ${output['benefits_providers_common'].backBtn}
+
+# Verify Pharmacy Details (tap on a pharmacy)
+- tapOn: ${output.benefits_search_pharmacy.pharmacyName}
+
+# Verify pharmacy detail elements
+- assertVisible: ${output.benefits_search_pharmacy.pharmacyAddress}
+- assertVisible: ${output['benefits_providers_common'].directionsBtn}
+- assertVisible: ${output['benefits_providers_common'].callBtn}
+
+# Navigate back to search results
+- tapOn: ${output['benefits_providers_common'].backBtn}
+
+# Navigate back to Benefits
+- tapOn: ${output['benefits_providers_common'].backBtn}
+- assertVisible: ${output['benefits_dashboard_common'].benefitsTitle}

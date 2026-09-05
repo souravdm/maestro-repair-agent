@@ -1,0 +1,20 @@
+appId: ${APP_ID}
+name: SearchDrugPricing
+onFlowStart:
+  - runScript: ../../../screens/Benefits/DrugPricingScreen.js
+---
+- tapOn: ${output.benefits_drug_pricing.editDrugDetails}
+- waitForAnimationToEnd
+- tapOn: ${MEDICATION_QTY}
+
+- assertVisible: ${output.benefits_drug_pricing.strength}
+- assertVisible: ${output.benefits_drug_pricing.mg30}
+- tapOn: ${output.benefits_drug_pricing.mg30}
+- tapOn: ${output.benefits_drug_pricing.update}
+- assertVisible: ${output.benefits_drug_pricing.strength}
+- assertVisible: ${output.benefits_drug_pricing.form}
+- assertVisible: ${output.benefits_drug_pricing.tablet}
+- assertVisible: ${output.benefits_drug_pricing.mg30}
+- assertVisible: ${output.benefits_drug_pricing.updatePricing}
+- assertVisible: ${output.drug_price_comparison.editButton} ${MEDICATION_NAME}
+
