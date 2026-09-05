@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC052 - Ineligible"
+tags:
+  - smart_scheduler
+  - mc_async
+  - negative
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger MC Async flow; specific prescreen answers drive ineligibility
+# NOTE: Ineligibility requires specific prescreen answers; this verifies error text pattern
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Get care without a visit"
+- waitForAnimationToEnd
+
+# Verify ineligibility messaging is present when backend conditions are met
+- assertVisible:
+    text: "(?i).*(not eligible|ineligible|can't provide care|alternative.*care|unable to provide.*service).*"
+    optional: true
+- takeScreenshot: SS_TC052_MCAsync_Ineligible

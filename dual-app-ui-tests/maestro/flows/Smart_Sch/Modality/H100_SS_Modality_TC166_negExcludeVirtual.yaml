@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC166 - Neg Exclude Virtual"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Explicit exclusion of virtual — should show in-person and/or chat only
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I don't want a virtual visit"
+- waitForAnimationToEnd
+
+# Non-virtual options must appear
+- assertVisible: "(?i).*(in-person|clinic|near you|chat|async|MinuteClinic.*location).*"
+
+# Virtual options must be excluded
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit|online.*visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC166_Modality_Neg_Exclude_Virtual

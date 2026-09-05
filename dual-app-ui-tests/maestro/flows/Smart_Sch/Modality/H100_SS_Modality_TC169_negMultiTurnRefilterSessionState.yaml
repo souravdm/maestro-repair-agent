@@ -1,0 +1,71 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC169 - Neg Multi Turn Refilter Session State"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - multi_turn
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: All options presented
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me MinuteClinic options for a cold"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(MinuteClinic|virtual|in-person|telehealth).*"
+
+# Step 2: Apply virtual-only filter — session must update state correctly
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me virtual only"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit).*"
+
+- assertNotVisible:
+    text: "(?i).*(in-person|walk-in|clinic.*location).*"
+    optional: true
+
+# Step 3: Switch filter back to in-person — virtual must clear
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Now show in-person only"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(clinic|in-person|near you|MinuteClinic.*location).*"
+
+# Virtual results must be fully cleared after in-person filter applied
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC169_Modality_Neg_Multi_Turn_Session_State

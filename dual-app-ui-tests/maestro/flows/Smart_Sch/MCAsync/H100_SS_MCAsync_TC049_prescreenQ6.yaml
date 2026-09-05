@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC049 - Prescreen Q6"
+tags:
+  - smart_scheduler
+  - mc_async
+  - prescreen
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger MC Async acne flow to reach pregnancy screening question
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Async acne consultation"
+- waitForAnimationToEnd
+
+# Verify sixth prescreen question on pregnancy/breastfeeding status
+- assertVisible: "(?i).*(pregnant.*trying to get pregnant.*breastfeeding|pregnancy.*screening|Are you pregnant|currently pregnant|breastfeeding).*"
+- takeScreenshot: SS_TC049_MCAsync_PrescreenQ6_Pregnancy

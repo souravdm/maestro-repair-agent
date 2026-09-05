@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC182 - E2e Spanish Input Nlp Robustness"
+tags:
+  - smart_scheduler
+  - e2e
+  - modality_filter
+  - nlp
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Spanish input — NLP must still route to virtual scheduling
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Necesito una cita virtual"
+- waitForAnimationToEnd
+
+# NLP must handle Spanish input and route to virtual scheduling
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit|cita|appointment).*"
+
+- takeScreenshot: SS_TC182_E2E_Spanish_Input_NLP

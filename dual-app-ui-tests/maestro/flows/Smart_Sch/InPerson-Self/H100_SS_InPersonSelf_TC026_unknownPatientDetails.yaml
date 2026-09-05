@@ -1,0 +1,51 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC026 - Unknown Patient Details"
+tags:
+  - smart_scheduler
+  - inperson
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Request scheduling for a new patient - system should collect required details
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit for a new patient"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(Who|needs|care).*"
+- assertVisible: "(?i).*(Someone else).*"
+- tapOn: "(?i).*(Someone else).*"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(name|first|last).*"
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Johny test"
+- waitForAnimationToEnd
+- takeScreenshot: SS_TC026_Name_query
+
+- assertVisible: "(?i).*(date|birth|YYYY-MM-DD).*"
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "1991-01-01"
+- waitForAnimationToEnd
+- takeScreenshot: SS_TC026_dob_query
+
+- assertVisible: "(?i).*(gender|Male|Female).*"
+- tapOn: "(?i).*(Male).*"
+- waitForAnimationToEnd
+- takeScreenshot: SS_TC026_gender_query
+
+- takeScreenshot: SS_TC026_Patient_Details_Prompt

@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Browser Agent | TC078 - Oak Street Age Eligibility"
+tags:
+  - smart_scheduler
+  - browser_agent
+  - age_eligibility
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to book Oak Street Health for an under-65 patient to trigger age eligibility gate
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule an appointment with Oak Street Health for my 40-year-old"
+- waitForAnimationToEnd
+
+# Verify Oak Street Health 65+ eligibility message is shown
+- assertVisible: "(?i).*(Oak Street Health serves patients 65|65 and older|search for a different provider|only.*65.*older|must be.*65|age.*requirement).*"
+- takeScreenshot: SS_TC078_OakStreet_AgeEligibility

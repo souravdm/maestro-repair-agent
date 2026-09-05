@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC175 - E2e Self Vaccination Virtual Redirects"
+tags:
+  - smart_scheduler
+  - e2e
+  - self_reference
+  - modality_filter
+  - vaccine
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Virtual request for vaccine — must redirect to in-person since vaccines are in-person only
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual appointment for my vaccination"
+- waitForAnimationToEnd
+
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+# Vaccination redirect to in-person must be shown
+- assertVisible: "(?i).*(in-person|vaccine.*clinic|vaccination.*require.*in-person|not.*virtual|clinic.*for.*vaccine).*"
+
+- takeScreenshot: SS_TC175_E2E_Vaccination_Virtual_Redirect

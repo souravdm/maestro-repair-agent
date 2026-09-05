@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC028 - Caregivee Not On File"
+tags:
+  - smart_scheduler
+  - caregivee
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request scheduling for a patient who is not in the account
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule for someone not in my account"
+- waitForAnimationToEnd
+
+# System should prompt to collect the patient's name
+- assertVisible: "(?i).*(patient.s name|first.*last.*name|What is the patient.s name|patient.*first name|name of the patient).*"
+
+- takeScreenshot: SS_TC028_Caregivee_Not_On_File_Name_Prompt

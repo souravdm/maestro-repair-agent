@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC173 - E2e Self Inperson Time Preference"
+tags:
+  - smart_scheduler
+  - e2e
+  - self_reference
+  - modality_filter
+  - inperson
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Self + in-person + time — all three constraints retained
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want an in-person flu shot for me tomorrow afternoon"
+- waitForAnimationToEnd
+
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+- assertVisible: "(?i).*(clinic|in-person|near you|MinuteClinic.*location|tomorrow|afternoon|flu shot).*"
+
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC173_E2E_Self_InPerson_Time_Preference

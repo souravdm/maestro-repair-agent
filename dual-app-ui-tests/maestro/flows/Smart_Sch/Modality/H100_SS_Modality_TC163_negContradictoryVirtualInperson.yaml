@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC163 - Neg Contradictory Virtual Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Contradictory modality keywords — system must request clarification
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual in-person visit"
+- waitForAnimationToEnd
+
+# Contradictory modalities must trigger clarification prompt
+- assertVisible: "(?i).*(clarify|which.*modality|virtual.*or.*in-person|online.*or.*clinic|How.*would.*like|prefer.*virtual.*in-person).*"
+
+- takeScreenshot: SS_TC163_Modality_Neg_Contradictory_Clarification

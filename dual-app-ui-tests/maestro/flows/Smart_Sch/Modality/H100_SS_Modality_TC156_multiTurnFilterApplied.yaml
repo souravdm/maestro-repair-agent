@@ -1,0 +1,59 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC156 - Multi Turn Filter Applied"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - multi_turn
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: General request — all modalities shown
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to see a doctor for my sore throat"
+- waitForAnimationToEnd
+
+# All modalities shown for general request
+- assertVisible: "(?i).*(virtual|in-person|MinuteClinic|video|telehealth).*"
+
+# Step 2: Apply virtual filter — re-render with virtual only
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I only want to see virtual options"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit).*"
+
+# In-person options must be filtered out after virtual restriction
+- assertNotVisible:
+    text: "(?i).*(in-person|walk-in|clinic.*location|physical.*location).*"
+    optional: true
+
+- takeScreenshot: SS_TC156_Modality_Multi_Turn_Virtual_Filter

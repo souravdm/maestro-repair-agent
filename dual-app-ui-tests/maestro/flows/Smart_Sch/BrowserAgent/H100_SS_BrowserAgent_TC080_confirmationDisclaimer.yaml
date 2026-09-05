@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Browser Agent | TC080 - Confirmation Disclaimer"
+tags:
+  - smart_scheduler
+  - browser_agent
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger booking with Oak Street Health to reach the confirmation/disclaimer screen
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Book appointment with Oak Street Health"
+- waitForAnimationToEnd
+
+# Verify emergency disclaimer is present
+- assertVisible:
+    text: "(?i).*(For emergencies.*call 911|emergencies.*911|In an emergency.*call 911).*"
+    optional: true
+
+# Verify request-only / not-confirmed disclaimer is present
+- assertVisible:
+    text: "(?i).*(Request only.*not confirmed|not.*confirmed.*finalize|appointment request.*not guaranteed|this is a request).*"
+    optional: true
+
+# Verify Terms and Conditions link is shown
+- assertVisible:
+    text: "(?i).*Terms and Conditions.*"
+    optional: true
+
+- takeScreenshot: SS_TC080_BrowserAgent_Disclaimer

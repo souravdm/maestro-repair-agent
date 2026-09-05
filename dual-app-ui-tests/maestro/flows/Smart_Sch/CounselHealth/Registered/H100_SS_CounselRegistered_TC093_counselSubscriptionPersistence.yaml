@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Registered | TC093 - Counsel Subscription Persistence"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - registered
+  - post_mvp
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Post-MVP: Subscription status should persist across sessions without re-signup
+# Check subscription status in a fresh chat session
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Check my Counsel Health subscription status"
+- waitForAnimationToEnd
+
+# Verify subscription status is returned and recognizable
+- assertVisible: "(?i).*(subscription|subscribed|physician.*chat|Counsel.*active).*"
+
+- takeScreenshot: SS_TC093_Subscription_Persistence

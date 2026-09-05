@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC043 - Patient Selection"
+tags:
+  - smart_scheduler
+  - mc_async
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger MC Async flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Get care without a visit"
+- waitForAnimationToEnd
+
+# Verify $29 cost display before patient selection
+- assertVisible: "(?i).*\\$29.*"
+- waitForAnimationToEnd
+
+# Tap continue/proceed to advance to patient selection
+- tapOn:
+    text: "(?i).*(Continue|Get started|Proceed|Next).*"
+    optional: true
+- waitForAnimationToEnd
+
+# Verify patient selection screen is shown
+- assertVisible: "(?i).*(select a patient|Hi.*select a patient|Who is this visit for|Who is this for).*"
+- takeScreenshot: SS_TC043_MCAsync_PatientSelection

@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Lab | TC055 - Late Addition Check"
+tags:
+  - smart_scheduler
+  - lab
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request same-day lab appointment to test late-addition availability logic
+# Late-addition lab visits have specific availability logic; verify routing works
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need lab work done today, last minute"
+- waitForAnimationToEnd
+
+# Verify a lab scheduling response with availability information is shown
+- assertVisible: "(?i).*(lab|schedule.*lab|lab.*appointment|Quest|blood test).*"
+- waitForAnimationToEnd
+
+# Verify same-day or next-available availability message
+- assertVisible:
+    text: "(?i).*(same.?day|today|next available|earliest.*available|available.*today).*"
+    optional: true
+- takeScreenshot: SS_TC055_Lab_LateAddition_Availability

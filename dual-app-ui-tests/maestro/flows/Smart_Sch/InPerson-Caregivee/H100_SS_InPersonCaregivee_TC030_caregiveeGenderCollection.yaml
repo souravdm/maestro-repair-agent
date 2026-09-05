@@ -1,0 +1,58 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC030 - Caregivee Gender Collection"
+tags:
+  - smart_scheduler
+  - caregivee
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request scheduling for a new patient with name to advance to gender step
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit for a new patient named Test User"
+- waitForAnimationToEnd
+
+# System should prompt for the patient's gender
+- assertVisible: "(?i).*(gender|male.*female|What is the patient.s gender|sex.*patient|biological.*sex).*"
+
+# Submit an invalid gender value to trigger the error message (optional)
+- runFlow:
+    when:
+      visible: "(?i).*(gender|male.*female|patient.s gender).*"
+    commands:
+      - runFlow:
+          file: ../../../subflows/HAIO/interactions/send-message.yaml
+          env:
+            MESSAGE: "unknown"
+      - waitForAnimationToEnd
+
+# Error for invalid gender input is optional (shown when non-male/female text entered)
+- assertVisible: "(?i).*(Choose male or female|select.*male.*female|invalid.*gender|choose a valid option).*"
+  optional: true
+
+- takeScreenshot: SS_TC030_Caregivee_Gender_Collection

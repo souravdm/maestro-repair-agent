@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Lab | TC056 - Not Available For Patient"
+tags:
+  - smart_scheduler
+  - lab
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request a lab service that is not available for this patient type (e.g. pediatric)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a pediatric lab test for me"
+- waitForAnimationToEnd
+
+# Verify unavailability error message for ineligible lab service
+- assertVisible:
+    text: "(?i).*(not available.*patient|no services.*patient|choose someone else|different patient|not eligible).*"
+    optional: true
+- takeScreenshot: SS_TC056_Lab_NotAvailable_Patient

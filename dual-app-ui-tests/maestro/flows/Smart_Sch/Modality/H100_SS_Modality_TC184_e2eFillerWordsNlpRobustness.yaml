@@ -1,0 +1,50 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC184 - E2e Filler Words Nlp Robustness"
+tags:
+  - smart_scheduler
+  - e2e
+  - modality_filter
+  - nlp
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Filler words and hedging language — NLP must extract core intent
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Um, I think I need, uh, a virtual visit for my cold, for me"
+- waitForAnimationToEnd
+
+# Self-reference 'for me' must be preserved despite filler words
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+# 'Virtual' keyword must be extracted from filler-filled message
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit).*"
+
+- takeScreenshot: SS_TC184_E2E_Filler_Words_NLP

@@ -1,0 +1,46 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC178 - E2e Two Patients Different Modalities"
+tags:
+  - smart_scheduler
+  - e2e
+  - caregivee
+  - modality_filter
+  - multi_turn
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Two patients, different modalities — system must handle disambiguation
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "My wife and I both need appointments — she wants virtual, I want in-person"
+- waitForAnimationToEnd
+
+# System must manage multiple intents — ask which patient/appointment to handle first
+- assertVisible: "(?i).*(select a patient|Who.*first|which appointment|two.*appointment|multiple|let.*start.*one|who.*first).*"
+
+- takeScreenshot: SS_TC178_E2E_Two_Patients_Different_Modalities

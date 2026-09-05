@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Lab | TC054 - Happy Path"
+tags:
+  - smart_scheduler
+  - lab
+  - positive
+  - smoke
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger lab scheduling flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to schedule a blood test at Quest Labs"
+- waitForAnimationToEnd
+
+# Verify lab scheduling response
+- assertVisible: "(?i).*(lab|Quest|blood.*test|schedule.*lab|Quest.*Diagnostics).*"
+- waitForAnimationToEnd
+
+# Select clinic location
+- runFlow: ../../../subflows/Smart_Sch/clinic/select-clinic.yaml
+
+# Select appointment date
+- runFlow: ../../../subflows/Smart_Sch/clinic/select-date.yaml
+
+# Select available time slot
+- runFlow: ../../../subflows/Smart_Sch/clinic/select-time-slot.yaml
+
+# Confirm and submit appointment
+- runFlow: ../../../subflows/Smart_Sch/clinic/confirm-appointment.yaml
+- waitForAnimationToEnd
+
+# Verify appointment is confirmed/submitted
+- assertVisible: "(?i).*(submitted|confirmed|scheduled|appointment.*request).*"
+- takeScreenshot: SS_TC054_Lab_HappyPath_Confirmed

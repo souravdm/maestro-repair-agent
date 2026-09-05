@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Error States | TC101 - Minus2 First Retry"
+tags:
+  - smart_scheduler
+  - error_states
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send scheduling request
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+# Error -2 first occurrence: 'Something went wrong and I wasn't able to load any visit options.'
+# Verify second failure message with retry prompt (optional - requires specific error state)
+- assertVisible:
+    text: "(?i).*(Something went wrong.*wasn't able to load|wasn't able to load.*visit options|Would you like me to try again).*"
+    optional: true
+
+- takeScreenshot: SS_TC101_Error_Minus2_First

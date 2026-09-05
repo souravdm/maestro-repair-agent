@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Browser Agent | TC081 - Patient Details"
+tags:
+  - smart_scheduler
+  - browser_agent
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger Browser Agent specialist booking flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Book an appointment with a specialist"
+- waitForAnimationToEnd
+
+# Verify patient details confirmation step is surfaced (optional - requires browser agent to reach confirmation)
+- assertVisible:
+    text: "(?i).*(Confirm the patient details|patient.*details|Scheduling for.*patient).*"
+    optional: true
+- waitForAnimationToEnd
+
+# Verify continue/proceed CTA is present (optional - may not render without live backend)
+- assertVisible:
+    text: "(?i).*(Continue|Proceed with.*appointment).*"
+    optional: true
+
+- takeScreenshot: SS_TC081_Patient_Details

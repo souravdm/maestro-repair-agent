@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC168 - Neg Virtual Flu Shot Redirects Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Flu/vaccination = in-person only — system must redirect gracefully
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual flu shot"
+- waitForAnimationToEnd
+
+# System must redirect flu shot to in-person — vaccination cannot be virtual
+- assertVisible: "(?i).*(in-person|vaccination.*require.*in-person|vaccine.*clinic|in person.*required|flu shot.*clinic|not.*virtual).*"
+
+# System must NOT offer a virtual flu shot
+- assertNotVisible:
+    text: "(?i).*(virtual.*flu shot|telehealth.*vaccine).*"
+    optional: true
+
+- takeScreenshot: SS_TC168_Modality_Neg_Virtual_Flu_Shot_InPerson

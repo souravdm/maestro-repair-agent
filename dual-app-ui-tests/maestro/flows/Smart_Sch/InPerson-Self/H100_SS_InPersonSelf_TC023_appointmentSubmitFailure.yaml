@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC023 - Appointment Submit Failure"
+tags:
+  - smart_scheduler
+  - inperson
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+# NOTE: Submit failure requires a backend error (network issue, server error, slot taken).
+# This test verifies the error and retry message selectors are correctly defined.
+# The condition cannot be reliably forced via automation without backend injection.
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Attempt a scheduling flow; if backend fails, retry prompt should appear
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+# Proceed through the booking flow as far as possible
+- runFlow: ../../../subflows/Smart_Sch/clinic/select-clinic.yaml
+- waitForAnimationToEnd
+
+# Verify submit failure / retry message pattern (optional - depends on backend error)
+- assertVisible: "(?i).*(couldn.t be submitted.*try again|request couldn.t be submitted|Want to try again|booking.*failed|submit.*error|try again later).*"
+
+- takeScreenshot: SS_TC023_Submit_Failure_Retry

@@ -1,0 +1,52 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC027 - Caregivee Happy Path"
+tags:
+  - smart_scheduler
+  - caregivee
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ELIZABETH_MILLER has family members registered - used to test caregivee patient selection
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request scheduling for a child - triggers patient selection flow
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a MinuteClinic visit for my child"
+- waitForAnimationToEnd
+
+# Verify patient selection prompt is shown
+- assertVisible: "(?i).*(select a patient|Who is this.*for|which patient|choose.*patient|for who|whom.*schedule).*"
+
+# Select a caregivee patient from the list
+- runFlow: ../../../subflows/Smart_Sch/patient/select-patient-caregivee.yaml
+- waitForAnimationToEnd
+
+# Verify booking flow continues after patient selection
+- assertVisible: "(?i).*(clinic|schedule|appointment|visit|provider|MinuteClinic).*"
+
+- takeScreenshot: SS_TC027_Caregivee_Happy_Path_Patient_Selected

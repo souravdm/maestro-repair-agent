@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC165 - Neg Unsupported Phone Modality"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Phone is not a supported modality — system must explain and offer alternatives
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a phone appointment"
+- waitForAnimationToEnd
+
+# System must explain phone is not supported and offer valid alternatives
+- assertVisible: "(?i).*(not available|phone.*not.*option|available options|virtual|video|in-person|chat|instead).*"
+
+- takeScreenshot: SS_TC165_Modality_Neg_Unsupported_Phone

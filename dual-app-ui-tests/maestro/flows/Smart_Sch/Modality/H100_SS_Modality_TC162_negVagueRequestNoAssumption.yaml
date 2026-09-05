@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC162 - Neg Vague Request No Assumption"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Vague urgency — no modality implied, show all options or ask preference
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a quick appointment"
+- waitForAnimationToEnd
+
+# System should present all scheduling options without assuming modality
+- assertVisible: "(?i).*(virtual|in-person|MinuteClinic|clinic|schedule|appointment|option).*"
+
+- takeScreenshot: SS_TC162_Modality_Neg_Vague_No_Assumption

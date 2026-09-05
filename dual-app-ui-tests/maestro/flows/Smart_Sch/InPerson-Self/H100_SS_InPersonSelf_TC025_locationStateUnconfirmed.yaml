@@ -1,0 +1,37 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC025 - Location State Unconfirmed"
+tags:
+  - smart_scheduler
+  - inperson
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Submit a fictitious location that cannot be geocoded
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I am looking to book an appointment for myself for my pink eye issue. In-person mode. Near bla bla town in unknown state. ZIP: 12345"
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "(?i).*(match|more|than|one).*"
+    commands:
+      - assertVisible: "(?i).*(Pink Eye Treatment).*"
+      - tapOn: "(?i).*(Pink Eye Treatment).*"
+      - waitForAnimationToEnd
+
+
+# System must ask user to re-enter location with a valid city/state
+- assertVisible: "(?i).*(couldn.t confirm.*location|Enter the city and state again|enter.*location|couldn.t find.*location|not a valid.*location).*"
+
+- takeScreenshot: SS_TC025_Location_Unconfirmed_Error

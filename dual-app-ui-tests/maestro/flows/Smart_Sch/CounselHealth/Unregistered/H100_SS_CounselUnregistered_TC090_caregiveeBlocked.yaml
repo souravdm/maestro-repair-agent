@@ -1,0 +1,39 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC090 - Caregivee Blocked"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - negative
+  - out_of_scope
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript: ../../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to sign up a caregivee/dependent for Counsel Health
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Sign up my child for Counsel Health"
+- waitForAnimationToEnd
+
+# Out of scope for MVP: Counsel Health caregivee proxy scheduling not supported
+# Verify the response blocks this use case or informs user it's unavailable
+- assertVisible:
+    text: "(?i).*(caregivee.*not supported|not available.*caregivee|not.*supported.*proxy).*"
+    optional: true
+
+- takeScreenshot: SS_TC090_Caregivee_Blocked

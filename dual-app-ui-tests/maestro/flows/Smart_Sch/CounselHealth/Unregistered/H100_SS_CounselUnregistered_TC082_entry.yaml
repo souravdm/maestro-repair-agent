@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC082 - Entry"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - unregistered
+  - positive
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger Counsel Health unregistered entry flow
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to chat with a physician through Counsel Health"
+- waitForAnimationToEnd
+
+# Verify response surfaces eligibility/subscription/physician info for unregistered user
+- assertVisible: "(?i).*(eligible|subscription.*physician|Counsel.*Health|connect.*physician).*"
+
+- takeScreenshot: SS_TC082_Counsel_Entry

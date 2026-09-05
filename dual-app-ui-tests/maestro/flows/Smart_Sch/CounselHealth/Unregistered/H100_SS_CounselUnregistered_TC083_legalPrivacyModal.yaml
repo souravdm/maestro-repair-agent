@@ -1,0 +1,40 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC083 - Legal Privacy Modal"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - legal
+  - positive
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger Counsel Health flow
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want to use Counsel Health"
+- waitForAnimationToEnd
+
+# Handle the legal/privacy modal that appears before WebView
+- runFlow: ../../../../subflows/Smart_Sch/counsel/handle-legal-modal.yaml
+
+# Verify legal/privacy content is visible (optional - modal may render differently by environment)
+- assertVisible:
+    text: "(?i).*(HIPAA|SOC2|encrypted.*secure|Counsel is a medical group).*"
+    optional: true
+
+- takeScreenshot: SS_TC083_Legal_Modal

@@ -1,0 +1,58 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC177 - E2e Multi Turn Context Retention"
+tags:
+  - smart_scheduler
+  - e2e
+  - modality_filter
+  - multi_turn
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: Book a flu shot — no modality specified
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a flu shot"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(flu shot|vaccine|clinic|schedule|I can help|How can I help).*"
+
+# Step 2: Apply virtual filter — flu shot RFV context must be retained
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Make it virtual"
+- waitForAnimationToEnd
+
+# Both virtual filter AND flu shot context must be retained
+- assertVisible: "(?i).*(virtual|telehealth|video|flu shot|vaccine).*"
+
+# NOTE: Flu shots may redirect — if they do, that is TC175 behavior. This TC verifies context retention.
+- assertNotVisible:
+    text: "(?i).*(in-person.*only|vaccination.*require.*in-person).*"
+    optional: true
+
+- takeScreenshot: SS_TC177_E2E_Multi_Turn_Context_Retention

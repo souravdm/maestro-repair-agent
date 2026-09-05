@@ -1,0 +1,49 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC148 - Inperson Keyword Filters Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Explicit 'in-person' keyword — must filter to in-person only
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need an in-person appointment for a physical"
+- waitForAnimationToEnd
+
+# In-person clinic options must be shown
+- assertVisible: "(?i).*(clinic|in-person|near you|MinuteClinic.*location|clinic.*near).*"
+
+# Virtual options must NOT appear after in-person filter
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit|online.*visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC148_Modality_InPerson_Keyword_Filter

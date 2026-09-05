@@ -1,0 +1,77 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC015 - Happy Path"
+tags:
+  - smart_scheduler
+  - inperson
+  - positive
+  - smoke
+---
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Step 1: Send a clear in-person scheduling intent
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need to schedule a doctor appointment"
+- waitForAnimationToEnd
+
+# Step 1: Send a clear in-person scheduling intent
+- runFlow:
+    when:
+      visible: "(?i).*(Who|needs|care).*"
+    commands:
+    - runFlow:
+        file: ../../../subflows/HAIO/interactions/send-message.yaml
+        env:
+          MESSAGE: "Myself"
+    - waitForAnimationToEnd
+
+- assertVisible: "(?i).*(reason for your visit|symptoms|conditions|common health services).*"
+
+- runFlow:
+    when:
+      visible: "(?i).*(reason for your visit|symptoms|conditions|common health services).*"
+    commands:
+      - runFlow:
+          file: ../../../subflows/HAIO/interactions/send-message.yaml
+          env:
+            MESSAGE: "I have a sore throat"
+      - waitForAnimationToEnd
+
+
+# Step 2: AI may present service options — v1.6.0 may skip this step entirely
+- runFlow:
+    when:
+      visible: "(?i).*(more than one|best|fits|pick).*"
+      optional: true
+    commands:
+      - tapOn: "(?i).*(Sore Throat|Strep|Throat|MinuteClinic|Treatment|Clinic).*"
+      - waitForAnimationToEnd
+
+# Step 3: Select location
+- assertVisible: "(?i).*(location|availability|from|providers|Where|where|from).*"
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "30022"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(how|connect|Which|which|prefer).*"
+- assertVisible: "(?i).*(In person).*"
+- tapOn: "(?i).*(In person).*"
+- waitForAnimationToEnd
+
+# Step 3: Select a clinic with date and time
+- assertVisible: "(?i).*(Availability).*"
+- assertVisible: "(?i).*(In-person).*"
+- tapOn: "(?i).*(In-person).*"
+- waitForAnimationToEnd
+
+# Step 6: Confirm the appointment
+- runFlow: ../../../subflows/Smart_Sch/clinic/confirm-appointment.yaml
+
+
+- takeScreenshot: SS_TC015_Happy_Path_Confirmation

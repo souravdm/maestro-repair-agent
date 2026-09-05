@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC053 - Caregivee Blocked"
+tags:
+  - smart_scheduler
+  - mc_async
+  - negative
+  - out_of_scope
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Out of scope for MVP: MC Async caregivee scheduling is not supported
+# Attempt to schedule MC Async care for a caregivee/dependent
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Get care without a visit for my child"
+- waitForAnimationToEnd
+
+# Verify that caregivee/proxy scheduling is blocked with an appropriate message
+- assertVisible:
+    text: "(?i).*(not available.*caregivee|caregivee.*not supported|not.*available.*proxy|proxy.*not supported).*"
+    optional: true
+- takeScreenshot: SS_TC053_MCAsync_Caregivee_Blocked

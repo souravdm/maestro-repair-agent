@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC047 - Prescreen Q4"
+tags:
+  - smart_scheduler
+  - mc_async
+  - prescreen
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger MC Async acne flow to reach prior treatments question
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Async acne visit"
+- waitForAnimationToEnd
+
+# Verify fourth prescreen question about prior treatments
+- assertVisible: "(?i).*(tried any of the following.*treatments|acne treatments|prior.*treatment|treatments.*tried).*"
+- takeScreenshot: SS_TC047_MCAsync_PrescreenQ4_PriorTreatments

@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Lab | TC059 - Reason No Match"
+tags:
+  - smart_scheduler
+  - lab
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ClinicSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Search for a nonsensical lab service that will not match any available service
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule an extremely rare lab test that doesn't exist"
+- waitForAnimationToEnd
+
+# Verify no-match error messaging is displayed
+- assertVisible: "(?i).*(No services matched|try a different description|couldn't find.*service|no matching.*service|not able to find).*"
+- takeScreenshot: SS_TC059_Lab_ReasonSearch_NoMatch

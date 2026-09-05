@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC084 - Webview Import Info"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - webview
+  - positive
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger Counsel Health sign-up flow
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Sign up for Counsel Health"
+- waitForAnimationToEnd
+
+# Handle legal modal before WebView
+- runFlow: ../../../../subflows/Smart_Sch/counsel/handle-legal-modal.yaml
+
+# Verify 'Import my information' option is present in the WebView
+- assertVisible: "Import my information"
+- tapOn: "Import my information"
+- waitForAnimationToEnd
+
+# Verify account creation flow begins (optional - depends on backend state)
+- assertVisible:
+    text: "(?i).*(Create an account|account.*created|creating account).*"
+    optional: true
+
+- takeScreenshot: SS_TC084_Import_Info

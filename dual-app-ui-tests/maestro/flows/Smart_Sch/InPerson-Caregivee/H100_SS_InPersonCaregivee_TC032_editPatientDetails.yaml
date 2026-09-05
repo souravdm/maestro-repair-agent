@@ -1,0 +1,57 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC032 - Edit Patient Details"
+tags:
+  - smart_scheduler
+  - caregivee
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/PatientSelectionScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: ELIZABETH_MILLER
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+# ELIZABETH_MILLER has family members to allow caregivee patient selection
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Navigate to scheduling for a caregivee patient
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+# Select a caregivee patient
+- runFlow: ../../../subflows/Smart_Sch/patient/select-patient-caregivee.yaml
+- waitForAnimationToEnd
+
+# Proceed to confirmation screen and tap Edit
+- runFlow: ../../../subflows/Smart_Sch/clinic/select-clinic.yaml
+- waitForAnimationToEnd
+
+# Tap Edit on the confirmation/summary screen to modify patient details
+- tapOn: ${output.smart_scheduler.editPatientButton}
+- waitForAnimationToEnd
+
+# Verify the edit patient details prompt appears
+- assertVisible: "(?i).*(current patient details|Which one to update|edit.*patient|what.*change|modify.*patient).*"
+
+- takeScreenshot: SS_TC032_Edit_Patient_Details_Prompt

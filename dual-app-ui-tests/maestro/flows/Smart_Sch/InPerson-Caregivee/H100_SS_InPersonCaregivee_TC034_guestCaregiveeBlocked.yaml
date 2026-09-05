@@ -1,0 +1,38 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC034 - Guest Caregivee Blocked"
+tags:
+  - smart_scheduler
+  - caregivee
+  - negative
+  - out_of_scope
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+# NOTE: No credentials loaded - this is a guest (unauthenticated) test
+# Out of scope for MVP: Guest scheduling not supported
+---
+# Out of scope for MVP: Guest caregivee scheduling is not a supported scenario.
+# This test documents that unauthenticated users cannot reach caregivee scheduling.
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+
+# Launch as guest - no login step
+- runFlow: ../../../subflows/Common/appLaunchGuest.yaml
+- waitForAnimationToEnd
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+# Attempt to navigate to Haio as a guest user
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Guest must see sign-in prompt; caregivee scheduling not accessible without auth
+- assertVisible: "(?i).*(Sign in|sign in|Get started|Log in|Create account).*"
+
+- takeScreenshot: SS_TC034_Guest_Caregivee_Blocked

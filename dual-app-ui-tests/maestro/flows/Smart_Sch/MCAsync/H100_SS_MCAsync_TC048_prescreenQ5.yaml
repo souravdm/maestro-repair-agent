@@ -1,0 +1,34 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | MinuteClinic Async | TC048 - Prescreen Q5"
+tags:
+  - smart_scheduler
+  - mc_async
+  - prescreen
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/MCAsyncScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Trigger MC Async acne flow to reach medications/conditions question
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Get acne care without a visit"
+- waitForAnimationToEnd
+
+# Verify fifth prescreen question about current medications and conditions
+- assertVisible: "(?i).*(experiencing or taking any of the following|medications.*taking|taking.*medications|currently taking).*"
+- takeScreenshot: SS_TC048_MCAsync_PrescreenQ5_Medications

@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC157 - Virtual With Time Constraint"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Virtual + time preference — both constraints should be retained
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a virtual visit tomorrow morning"
+- waitForAnimationToEnd
+
+# Virtual and time constraints must be preserved
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|tomorrow|morning|available.*tomorrow).*"
+
+- takeScreenshot: SS_TC157_Modality_Virtual_Time_Constraint

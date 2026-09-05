@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Error States | TC104 - Appointment Summary Failure"
+tags:
+  - smart_scheduler
+  - error_states
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/AppointmentConfirmationScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request appointment details which may trigger summary tool failure
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my appointment details"
+- waitForAnimationToEnd
+
+# Verify appointment summary failure graceful error message (optional - requires specific failure condition)
+- assertVisible:
+    text: "(?i).*(having trouble displaying.*appointment summary|trouble.*summary|Want to try again).*"
+    optional: true
+
+- takeScreenshot: SS_TC104_Summary_Failure

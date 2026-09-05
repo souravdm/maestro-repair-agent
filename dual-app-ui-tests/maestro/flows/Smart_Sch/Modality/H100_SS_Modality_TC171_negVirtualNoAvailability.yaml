@@ -1,0 +1,44 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC171 - Neg Virtual No Availability"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Restrictive virtual + time constraint — system must handle no-availability gracefully
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need virtual ONLY for tomorrow morning"
+- waitForAnimationToEnd
+
+# System must show virtual results or graceful 'no availability' message — must not crash
+- assertVisible: "(?i).*(virtual|telehealth|video|no.*availability|not.*available|try.*different.*time|check.*another|no.*slots).*"
+
+- takeScreenshot: SS_TC171_Modality_Neg_Virtual_No_Availability

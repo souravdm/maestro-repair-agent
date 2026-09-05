@@ -1,0 +1,39 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC017 - No Clinics Found"
+tags:
+  - smart_scheduler
+  - inperson
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+# Use a non-existent ZIP code to trigger the no-clinics-found state
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Find a MinuteClinic for my pink eye issue for in-person mode near ZIP 86435"
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "(?i).*(match|more|than|one).*"
+    commands:
+      - assertVisible: "(?i).*(Pink Eye Treatment).*"
+      - tapOn: "(?i).*(Pink Eye Treatment).*"
+      - waitForAnimationToEnd
+
+# System should surface a no-results message
+- assertVisible: "(?i).*(not finding|updating your preferences).*"
+
+# Verify quick reply chips for recovery options are shown
+- assertVisible: "(?i).*(Try a different zip code).*"
+
+- takeScreenshot: SS_TC017_No_Clinics_Found

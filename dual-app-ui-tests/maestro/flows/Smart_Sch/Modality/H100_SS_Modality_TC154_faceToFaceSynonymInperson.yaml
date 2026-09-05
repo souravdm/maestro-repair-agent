@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC154 - Face To Face Synonym Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# 'Face-to-face' is a synonym for in-person care
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a face-to-face appointment"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(clinic|in-person|near you|MinuteClinic.*location).*"
+
+# Virtual options must not appear for face-to-face request
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC154_Modality_Face_To_Face_InPerson

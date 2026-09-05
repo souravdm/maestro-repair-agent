@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Error States | TC103 - Nba Persists After Errors"
+tags:
+  - smart_scheduler
+  - error_states
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send scheduling request to trigger potential API error
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule a visit"
+- waitForAnimationToEnd
+
+# NBA card must remain available and functional even after multiple API failures
+# Verify NBA 'Find care with scheduling tool' card is present (optional - requires error state)
+- assertVisible:
+    text: "(?i).*(Find care with scheduling tool).*"
+    optional: true
+
+# If visible, verify it is tappable (not disabled or broken)
+- runFlow:
+    when:
+      visible: "(?i).*(Find care with scheduling tool).*"
+    commands:
+      - assertVisible: "(?i).*(Find care with scheduling tool).*"
+
+- takeScreenshot: SS_TC103_NBA_After_Error

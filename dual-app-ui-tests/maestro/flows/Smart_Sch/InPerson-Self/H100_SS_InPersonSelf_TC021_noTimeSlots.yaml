@@ -1,0 +1,36 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC021 - No Time Slots"
+tags:
+  - smart_scheduler
+  - inperson
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+# NOTE: Requires specific clinic + date combination where no time slots remain.
+# This test verifies the error text pattern is correctly detectable; the no-slots
+# condition cannot be reliably forced via automation without backend control.
+- runFlow:
+    file: ../../../subflows/HAIO/navigation/navigate-to-haio_login_flow.yaml
+    env:
+      USER_NAME: LOA2
+
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a MinuteClinic appointment for a flu evaluation. In-person mode near ZIP 75093 at next Sunday 07:00 PM."
+- waitForAnimationToEnd
+
+# Step 2: Select the best option
+- assertVisible: "(?i).*(more than one|More than one|best|fits|pick|Pick).*"
+- assertVisible: "(?i).*(Flu-like Symptoms Evaluation).*"
+- tapOn: "(?i).*(Flu-like Symptoms Evaluation).*"
+- waitForAnimationToEnd
+
+# No-time-slots message is optional (depends on live clinic + date state)
+- assertVisible: "(?i).*(No time slots|not finding|updating|preferences).*"
+
+- takeScreenshot: SS_TC021_No_Time_Slots

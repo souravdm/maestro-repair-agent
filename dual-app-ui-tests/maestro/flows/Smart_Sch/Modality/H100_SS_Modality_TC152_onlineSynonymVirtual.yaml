@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC152 - Online Synonym Virtual"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# 'Online' is a synonym for virtual — should route to virtual options
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I'd like an online appointment for a cold"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit|MinuteClinic.*video).*"
+
+# In-person options must not appear for 'online' request
+- assertNotVisible:
+    text: "(?i).*(in-person|walk-in|clinic.*location).*"
+    optional: true
+
+- takeScreenshot: SS_TC152_Modality_Online_Synonym_Virtual

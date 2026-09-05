@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC158 - Remote Synonym Virtual"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# 'Remote' is a synonym for virtual consultation
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a remote consultation for my cold"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit|remote|MinuteClinic.*video).*"
+
+- takeScreenshot: SS_TC158_Modality_Remote_Synonym

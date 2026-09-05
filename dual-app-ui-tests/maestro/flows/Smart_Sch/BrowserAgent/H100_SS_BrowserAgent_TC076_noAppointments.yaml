@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Browser Agent | TC076 - No Appointments"
+tags:
+  - smart_scheduler
+  - browser_agent
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Request scheduling with a provider that has no availability slots
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule with Mount Sinai"
+- waitForAnimationToEnd
+
+# Verify no-availability messaging and fallback guidance
+- assertVisible:
+    text: "(?i).*(No appointments.*available.*provider|check availability.*website|no.*appointments.*right now|no available slots|fully booked).*"
+    optional: true
+- takeScreenshot: SS_TC076_BrowserAgent_NoAppointments

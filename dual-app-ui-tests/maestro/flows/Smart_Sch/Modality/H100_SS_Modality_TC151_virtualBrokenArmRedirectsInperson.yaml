@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC151 - Virtual Broken Arm Redirects Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+  - edge_case
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Broken arm is not treatable virtually — system must redirect to in-person
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual appointment for a broken arm"
+- waitForAnimationToEnd
+
+# System must inform user that this visit requires in-person care
+- assertVisible: "(?i).*(in-person|clinic.*required|cannot.*virtually|broken.*arm.*require|recommend.*in-person|this.*visit.*requires).*"
+
+- takeScreenshot: SS_TC151_Modality_Virtual_Broken_Arm_Redirects

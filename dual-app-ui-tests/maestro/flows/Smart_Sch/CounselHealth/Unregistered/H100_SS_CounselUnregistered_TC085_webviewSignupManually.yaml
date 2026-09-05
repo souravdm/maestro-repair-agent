@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC085 - Webview Signup Manually"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - webview
+  - positive
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to trigger Counsel Health registration
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Register with Counsel Health"
+- waitForAnimationToEnd
+
+# Handle legal modal before WebView
+- runFlow: ../../../../subflows/Smart_Sch/counsel/handle-legal-modal.yaml
+
+# Verify manual sign-up option is present in the WebView
+- assertVisible: "(?i).*(Sign-up manually|Sign up manually).*"
+- tapOn: "(?i).*(Sign-up manually|Sign up manually).*"
+- waitForAnimationToEnd
+
+# Verify manual entry form appears (optional - depends on WebView state)
+- assertVisible:
+    text: "(?i).*(Enter your information|Create an account).*"
+    optional: true
+
+- takeScreenshot: SS_TC085_Signup_Manually

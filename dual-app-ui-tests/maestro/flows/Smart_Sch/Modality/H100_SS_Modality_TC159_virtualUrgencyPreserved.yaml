@@ -1,0 +1,47 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC159 - Virtual Urgency Preserved"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Virtual + urgency — both must influence the results (soonest virtual)
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a virtual visit ASAP for a UTI"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|ASAP|as soon as possible|earliest|soonest|today).*"
+
+- assertNotVisible:
+    text: "(?i).*(in-person|clinic.*location|walk-in).*"
+    optional: true
+
+- takeScreenshot: SS_TC159_Modality_Virtual_Urgency

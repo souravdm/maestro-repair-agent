@@ -1,0 +1,48 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC181 - E2e Urgent Sameday Virtual"
+tags:
+  - smart_scheduler
+  - e2e
+  - modality_filter
+  - virtual
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# E2E: Urgency + same-day + virtual — all constraints must be applied
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I feel really sick, I need a virtual visit today as soon as possible"
+- waitForAnimationToEnd
+
+- assertNotVisible:
+    text: "(?i).*(select a patient|Who is this.*for|which patient).*"
+    optional: true
+
+# System must surface soonest available virtual provider
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|today|soonest|ASAP|earliest|on-demand).*"
+
+- takeScreenshot: SS_TC181_E2E_Urgent_SameDay_Virtual

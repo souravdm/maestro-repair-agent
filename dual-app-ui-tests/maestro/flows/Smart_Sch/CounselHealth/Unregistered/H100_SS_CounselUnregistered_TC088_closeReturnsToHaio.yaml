@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Counsel Health - Unregistered | TC088 - Close Returns To Haio"
+tags:
+  - smart_scheduler
+  - counsel_health
+  - navigation
+  - positive
+onFlowStart:
+  - runScript: ../../../../screens/Common/CommonScreen.js
+  - runScript: ../../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../../screens/Smart_Sch/CounselHealthScreen.js
+  - runScript:
+      file: ../../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send message to open Counsel Health WebView
+- runFlow:
+    file: ../../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Open Counsel Health"
+- waitForAnimationToEnd
+
+# Handle legal modal to reach the WebView
+- runFlow: ../../../../subflows/Smart_Sch/counsel/handle-legal-modal.yaml
+
+# Figma design note: 'Close returns to Haio at the end of the thread'
+# Close the WebView by tapping Close/Done/Back
+- tapOn: "(?i).*(Close|Done|Back).*"
+- waitForAnimationToEnd
+
+# Verify user is returned to Haio chat context (optional - depends on dismiss behavior)
+- assertVisible:
+    text: "(?i).*(Haio|Ask anything|chat input|message.*input).*"
+    optional: true
+
+- takeScreenshot: SS_TC088_Close_Returns

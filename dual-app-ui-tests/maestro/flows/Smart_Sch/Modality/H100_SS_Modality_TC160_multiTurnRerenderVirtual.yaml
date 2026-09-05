@@ -1,0 +1,57 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC160 - Multi Turn Rerender Virtual"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - multi_turn
+  - positive
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: No modality — all options presented
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me my appointment options"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|in-person|MinuteClinic|telehealth).*"
+
+# Step 2: Explicit virtual-only filter — results must re-render
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Show me virtual options only"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit).*"
+
+- assertNotVisible:
+    text: "(?i).*(in-person|walk-in|clinic.*location).*"
+    optional: true
+
+- takeScreenshot: SS_TC160_Modality_Multi_Turn_Show_Virtual_Only

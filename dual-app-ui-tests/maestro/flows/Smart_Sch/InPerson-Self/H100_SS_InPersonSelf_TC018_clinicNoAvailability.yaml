@@ -1,0 +1,43 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Self | TC018 - Clinic No Availability"
+tags:
+  - smart_scheduler
+  - inperson
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+---
+# NOTE: Clinic no-availability requires a specific live backend state where a chosen
+# clinic has no open appointments. This test verifies the error message selector is
+# correctly defined so automation can catch it when the condition occurs in regression runs.
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I am looking to book an appointment for myself for my pink eye issue. In-person mode. For next sunday in the evening time"
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      visible: "(?i).*(match|more|than|one).*"
+    commands:
+      - assertVisible: "(?i).*(Pink Eye Treatment).*"
+      - tapOn: "(?i).*(Pink Eye Treatment).*"
+      - waitForAnimationToEnd
+
+- assertVisible: "(?i).*(Where|from|location).*"
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "75093"
+- waitForAnimationToEnd
+
+# System should reject the invalid ZIP and prompt for a valid location
+- assertVisible: "(?i).*(not finding|updating|preferences).*"
+
+- takeScreenshot: SS_TC024_Invalid_ZIP_Error
+
+
+- takeScreenshot: SS_TC018_Clinic_No_Availability

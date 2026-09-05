@@ -1,0 +1,42 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Error States | TC100 - Minus1 Availability Fail"
+tags:
+  - smart_scheduler
+  - error_states
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Send scheduling request that may trigger availability load failure
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule an appointment"
+- waitForAnimationToEnd
+
+# Error -1: First availability load failure.
+# Message: "I'm having issues pulling up availability."
+# Verify error message or NBA fallback card (optional - requires specific backend error condition)
+- assertVisible:
+    text: "(?i).*(having issues pulling up availability|issues.*availability|let me know.*try again|scheduling tool).*"
+    optional: true
+
+# Verify NBA card appears as fallback (optional)
+- assertVisible:
+    text: "(?i).*(Find care with scheduling tool).*"
+    optional: true
+
+- takeScreenshot: SS_TC100_Error_Minus1

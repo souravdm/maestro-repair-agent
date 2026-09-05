@@ -1,0 +1,63 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC164 - Neg Multi Turn Switch Virtual To Inperson"
+tags:
+  - smart_scheduler
+  - modality_filter
+  - nlp
+  - multi_turn
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Step 1: Virtual filter applied
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I want a virtual visit for my cold"
+- waitForAnimationToEnd
+
+- assertVisible: "(?i).*(virtual|telehealth|video.*visit|online.*visit).*"
+
+- assertNotVisible:
+    text: "(?i).*(in-person|walk-in|clinic.*location).*"
+    optional: true
+
+# Step 2: Modality switch — virtual filter must clear, in-person filter applied
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Actually, I want in-person instead of virtual"
+- waitForAnimationToEnd
+
+# In-person options must appear after switch
+- assertVisible: "(?i).*(clinic|in-person|near you|MinuteClinic.*location|walk-in).*"
+
+# Virtual options must be cleared after switch to in-person
+- assertNotVisible:
+    text: "(?i).*(virtual|telehealth|video visit).*"
+    optional: true
+
+- takeScreenshot: SS_TC164_Modality_Neg_Switch_Virtual_To_InPerson

@@ -1,0 +1,45 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Modality | TC176 - E2e Multi Intent Virtual And Inperson"
+tags:
+  - smart_scheduler
+  - e2e
+  - self_reference
+  - modality_filter
+  - multi_intent
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Two intents with different modalities — system must handle both
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "I need a virtual visit for my cough and an in-person flu shot"
+- waitForAnimationToEnd
+
+# System must acknowledge both intents
+- assertVisible: "(?i).*(virtual|telehealth|in-person|clinic|two.*appointment|multiple|both).*"
+
+- takeScreenshot: SS_TC176_E2E_Multi_Intent_Virtual_InPerson

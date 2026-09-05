@@ -1,0 +1,35 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | Browser Agent | TC075 - Booking Error"
+tags:
+  - smart_scheduler
+  - browser_agent
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript: ../../../screens/Smart_Sch/ProviderSearchScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+
+# Attempt to book through Oak Street Health; error path requires backend booking failure
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Book through Oak Street Health"
+- waitForAnimationToEnd
+
+# Verify error message with retry option or direct booking URL fallback
+- assertVisible:
+    text: "(?i).*(problem scheduling.*appointment.*try again|ran into a problem.*try again|schedule directly.*booking_url|having trouble.*book|couldn't complete.*booking).*"
+    optional: true
+- takeScreenshot: SS_TC075_BrowserAgent_BookingError

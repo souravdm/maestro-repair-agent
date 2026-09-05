@@ -1,0 +1,53 @@
+appId: ${APP_ID}
+name: "H100 | Smart Scheduler | In-Person Caregivee | TC029 - Caregivee Dob Invalid Format"
+tags:
+  - smart_scheduler
+  - caregivee
+  - negative
+onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
+  - runScript: ../../../screens/HAIO/HealthAIHomeScreen.js
+  - runScript: ../../../screens/HAIO/ChatScreen.js
+  - runScript: ../../../screens/Smart_Sch/SmartSchedulerScreen.js
+  - runScript:
+      file: ../../../config/credentials-loader.js
+      env:
+        loginData: LOA2
+        BUILD_CONFIG: ${BUILD_CONFIG}
+---
+- waitForAnimationToEnd
+- runFlow: ../../../subflows/Common/launchAndSetup.yaml
+- runFlow: ../../../subflows/Account/authentication/login.yaml
+
+# Handle optional permission overlay
+- runFlow:
+    when:
+      visible: "Allow Notifications"
+    commands:
+      - tapOn: "Allow"
+      - waitForAnimationToEnd
+
+- runFlow: ../../../subflows/HAIO/navigation/navigate-to-haio.yaml
+- waitForAnimationToEnd
+
+# Request scheduling for a new patient to trigger DOB collection
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "Schedule for a new patient"
+- waitForAnimationToEnd
+
+# Confirm DOB prompt is shown before submitting an invalid format
+- assertVisible: "(?i).*(date of birth|What is the patient.s.*birth|DOB|MMDDYYYY|birth.*date).*"
+
+# Submit an invalid DOB format
+- runFlow:
+    file: ../../../subflows/HAIO/interactions/send-message.yaml
+    env:
+      MESSAGE: "January first nineteen ninety"
+- waitForAnimationToEnd
+
+# System should reject the format and show the correct format prompt
+- assertVisible: "(?i).*(couldn.t process.*date|Try the format.*March.*1990|invalid.*date|format.*MM.*DD.*YYYY|try again.*date).*"
+
+- takeScreenshot: SS_TC029_Caregivee_DOB_Invalid_Format
