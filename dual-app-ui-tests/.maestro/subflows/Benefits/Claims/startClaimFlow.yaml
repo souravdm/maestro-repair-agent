@@ -1,0 +1,18 @@
+appId: ${APP_ID}
+name: Start Claim Flow
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Reconstructed 2026-09: referenced by submitPrescriptionClaimFlow.yaml's
+# "Step 1: What You'll Need → Add claim details" but missing from the checkout.
+# Starts a claim from the Claims landing page and continues into the
+# "What you'll need" interstitial.
+- assertVisible: ${output.benefits_claims_landing.startClaimBtn}
+- tapOn: ${output.benefits_claims_landing.startClaimBtn}
+# The accessibility tree can come back empty for a moment right after this
+# transition — wait for the real title instead of asserting immediately.
+- extendedWaitUntil:
+    visible: ${output.claims_what_you_need.whatYouNeedTitle}
+    timeout: 10000
+- tapOn: ${output.claims_what_you_need.addClaimDetailsBtn}
+- waitForAnimationToEnd

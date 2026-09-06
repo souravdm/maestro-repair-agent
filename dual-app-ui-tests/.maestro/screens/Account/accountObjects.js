@@ -29,11 +29,15 @@ output.account_otp = {
     confirmCodeBtn: "Confirm.*",
     confirmText: "Just need to confirm it's you.",
     justNeedToVerify: "We'll email a code to.*|We'll send.*code to.*|Just need to verify|Just need to confirm",
-    // Verified 2026-09 against a live Health100 build: the screen reads
-    // "Choose how to get your code." — no "one-time" — so the old string never
-    // matched and select_default_otp_method.yaml's visibility gate silently
-    // no-op'd instead of picking a delivery method.
-    chooseHowOTP: "Choose how to get your code.",
+    // Verified live against a real Android Health100 build (2026-09): the screen
+    // reads "Choose how to get your code." — no "one-time" — so the Android copy
+    // never matched and select_default_otp_method.yaml's visibility gate silently
+    // no-op'd instead of picking a delivery method. Not verified on iOS — no iOS
+    // device was available to check, and this file already branches other
+    // strings by platform (dobField, enterDobText below), so the original
+    // "...one-time code." text is kept for iOS rather than assumed wrong.
+    // If iOS turns out to say "code." too, drop the ternary.
+    chooseHowOTP: __isIOS ? "Choose how to get your one-time code." : "Choose how to get your code.",
     emailOrTextCodeTo: "Email a code to.*|Text a code to.*|Send code",
     sendCodeBtn: "Send code",
 }

@@ -1,0 +1,31 @@
+appId: ${APP_ID}
+name: Review and Submit Claim
+env:
+  IS_COMPOUND_DRUG: ""
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Reconstructed 2026-09: referenced by submitPrescriptionClaimFlow.yaml's
+# "Step 6: Review and Submit" but missing from the checkout.
+- assertVisible: ${output.benefits_claims_review_claim.reviewTitle}
+
+# Compound-drug claims render extra Ingredient 1 & 2 sections, pushing the
+# consent checkbox and Submit button further down — matches the comment in
+# submitPrescriptionClaimFlow.yaml on why this env var is threaded through.
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG == "true"}
+    commands:
+      - scrollUntilVisible:
+          element: ${output.benefits_claims_review_claim.consentCheckbox}
+          direction: DOWN
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG != "true"}
+    commands:
+      - scroll
+
+- tapOn: ${output.benefits_claims_review_claim.consentCheckbox}
+- scroll
+- tapOn: ${output.benefits_claims_review_claim.submitClaimBtn}
+- waitForAnimationToEnd

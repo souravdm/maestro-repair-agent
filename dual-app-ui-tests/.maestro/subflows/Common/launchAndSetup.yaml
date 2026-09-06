@@ -55,10 +55,18 @@ tags:
 #   Health100 returning user (v1):   "Welcome to Health100™"
 #   Health100 returning user (v2):   "Sign in or create an account"
 #   Android (after pm clear):        Shows onboarding (Terms & conditions)
+#   Already-authenticated session:   lands straight on Home (bottom nav visible)
 # The downstream runFlow(when: termsTitle) and runFlow(when: healthInPocketMsg) gates
 # handle their specific paths; all others pass through to login.yaml directly.
+#
+# Reproduced live 2026-09: with a session already signed in (clearState not set,
+# or a prior flow in the same run left the app logged in), none of the original
+# 8 patterns ever appear — the app goes straight to the authenticated Home tab —
+# and this wait ran its full 60s and hard-failed every time. Adding
+# common_navigation.homeTab lets an already-authenticated launch pass through
+# immediately instead of guaranteed-timing-out.
 - extendedWaitUntil:
-    visible: ${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|Find care
+    visible: ${output.common_messages.healthInPocketMsg}|${output.account_health100_onboarding.termsTitle}|${output.account_health100_onboarding.welcomeTitle}|${output.account_health100_onboarding.welcomeToHealth100Title}|${output.account_health100_onboarding.signInOrCreateTitle}|${output.common_buttons.signInBtn}|${output.general_updateManager.notNowBtn}|${output.common_navigation.homeTab}|Find care
     timeout: 60000
 
 # Dismiss "Update Available" if it matched the wait condition or appeared during the wait

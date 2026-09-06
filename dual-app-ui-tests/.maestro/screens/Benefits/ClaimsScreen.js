@@ -118,7 +118,10 @@ output.benefits_claims_landing = {
 // ============================================
 output.claims_what_you_need = {
     // ===== MODAL HEADER =====
-    whatYouNeedTitle: "What you'll need",
+    // Verified live 2026-09: the real accessibility label has a trailing space
+    // ("What you'll need ") — Maestro's text matcher is full-string, so the
+    // space-less version here never matched.
+    whatYouNeedTitle: "What you'll need ",
 
     // ===== INSTRUCTION TEXT =====
     instructionText: "Have these items handy to finish your claim:",

@@ -1,10 +1,15 @@
 appId: ${APP_ID}
 name: Login
 onFlowStart:
+  - runScript: ../../../screens/Common/CommonScreen.js
   - runScript: ../../../screens/Account/accountObjects.js
   - runScript: ../../../screens/Account/LoginScreen.js
-  - runScript: ../../../screens/Account/OnboardingScreen.js
 ---
+# LoginScreen.js and OnboardingScreen.js both assign output.account_health100_onboarding
+# as a full object literal (not a merge), with disjoint keys — Terms/Edu/GetStarted
+# content in OnboardingScreen.js, the sign-in chooser (continueNumEmailH100Button etc.)
+# in LoginScreen.js. Loading both here, in either order, silently drops one half.
+# This flow only needs the sign-in chooser, so only LoginScreen.js is loaded.
 # Reconstructed 2026-09: this file was referenced by every login-dependent
 # flow/subflow in the suite (H100_ACCT_TC010_loginAndLogout.yaml,
 # H100_MENU_TC018_loginClaims.yaml, NavigateToBenefitsScreen.yaml, ...) but was
@@ -13,75 +18,98 @@ onFlowStart:
 # config/credentials-loader.js in the caller's onFlowStart, same as every
 # other subflow in this suite that reads ${output.user.*}.
 
+# A prior flow in the same run (or a warm session from a previous test) may
+# already be signed in — launchAndSetup.yaml's gate now passes an already-
+# authenticated Home landing straight through, so this must not blindly try
+# to sign in again on top of it.
 - runFlow:
     when:
-      visible: ${output.account_login.signInBtn}
+      notVisible: ${output.common_navigation.homeTab}
     commands:
-      - tapOn: ${output.account_login.signInBtn}
-      - waitForAnimationToEnd
+      - runFlow:
+          when:
+            visible: ${output.account_login.signInBtn}
+          commands:
+            - tapOn: ${output.account_login.signInBtn}
+            - waitForAnimationToEnd
 
-# Health100's own account chooser, distinct from the CVS-partner SSO chooser
-# in account_health100_onboarding — confirmed live: tapping "Sign In" on the
-# Health100 home screen goes straight to "Continue with mobile number or
-# email" / "Continue with our Partners" / "Continue with Google", not the
-# Terms-and-conditions-first CVS partner chain that
-# complete_signin_with_cvs_h100.yaml assumes.
-- runFlow:
-    when:
-      visible: ${output.account_health100_onboarding.continueNumEmailH100Button}
-    commands:
-      - tapOn: ${output.account_health100_onboarding.continueNumEmailH100Button}
-      - waitForAnimationToEnd
+      # Health100's own account chooser, distinct from the CVS-partner SSO chooser
+      # in account_health100_onboarding — confirmed live: tapping "Sign In" on the
+      # Health100 home screen goes straight to "Continue with mobile number or
+      # email" / "Continue with our Partners" / "Continue with Google", not the
+      # Terms-and-conditions-first CVS partner chain that
+      # complete_signin_with_cvs_h100.yaml assumes.
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.continueNumEmailH100Button}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.continueNumEmailH100Button}
+            - waitForAnimationToEnd
 
-- tapOn:
-    text: ${output.account_login.emailField}
-- inputText: ${output.user.email}
-- hideKeyboard
-- tapOn: ${output.account_login.continueBtn}
-- waitForAnimationToEnd
-
-# Some accounts land on a password screen instead of OTP.
-- runFlow:
-    when:
-      visible: ${output.account_login.passwordField}
-    commands:
+      # emailFieldIndex exists because iOS renders a second element matching this
+      # same text (LoginScreen.js: index 1 on iOS, 0 on Android) — omitting it
+      # would tap the wrong element on iOS specifically.
       - tapOn:
-          text: ${output.account_login.passwordField}
-      - inputText: ${output.user.password}
+          text: ${output.account_login.emailField}
+          index: ${output.account_login.emailFieldIndex}
+      - inputText: ${output.user.email}
       - hideKeyboard
-      - tapOn: ${output.account_login.signInSubmit}
+      - tapOn: ${output.account_login.continueBtn}
       - waitForAnimationToEnd
 
-# OTP path — same shape as complete_signin_with_cvs_h100.yaml, reusing the
-# existing, already-verified otp/ subflows rather than re-deriving them here.
-- runFlow:
-    when:
-      visible: ${output.account_otp.justNeedToVerify}
-    commands:
-      - runFlow: ../otp/select_default_otp_method.yaml
-      - runFlow: ../otp/enter_and_confirm_code.yaml
+      # Some accounts land on a password screen instead of OTP.
+      - runFlow:
+          when:
+            visible: ${output.account_login.passwordField}
+          commands:
+            - tapOn:
+                text: ${output.account_login.passwordField}
+            - inputText: ${output.user.password}
+            - hideKeyboard
+            - tapOn: ${output.account_login.signInSubmit}
+            - waitForAnimationToEnd
 
-# DOB step-up verification, when the account requires it.
-- runFlow:
-    when:
-      visible: ${output.account_login.dobTitle}
-    commands:
-      - runFlow: ../otp/enter_dob_and_continue.yaml
+      # OTP path — same shape as complete_signin_with_cvs_h100.yaml, reusing the
+      # existing, already-verified otp/ subflows rather than re-deriving them here.
+      - runFlow:
+          when:
+            visible: ${output.account_otp.justNeedToVerify}
+          commands:
+            - runFlow: ../otp/select_default_otp_method.yaml
+            - runFlow: ../otp/enter_and_confirm_code.yaml
 
-- runFlow:
-    when:
-      visible: ${output.account_otp.okBtn}
-    commands:
-      - tapOn: ${output.account_otp.okBtn}
-- runFlow:
-    when:
-      visible: ${output.account_health100_onboarding.simplifyContinueBtn}
-    commands:
-      - tapOn: ${output.account_health100_onboarding.simplifyContinueBtn}
-- runFlow:
-    when:
-      visible: ${output.account_health100_onboarding.pushNotifNotNowBtn}
-    commands:
-      - tapOn: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+      # DOB step-up verification, when the account requires it. Two different
+      # subflows exist for this — enter_dob_and_continue.yaml and the iOS-specific
+      # enter_dob_and_continue_IOS.yaml (different selectors, and iOS additionally
+      # handles a native "Allow Paste" dialog) — matching the platform branch
+      # complete_signin_with_cvs_h100.yaml used for the same step.
+      - runFlow:
+          when:
+            visible: ${output.account_login.dobTitle}
+            platform: "android"
+          commands:
+            - runFlow: ../otp/enter_dob_and_continue.yaml
+      - runFlow:
+          when:
+            visible: ${output.account_otp.enterDobText}
+            platform: "ios"
+          commands:
+            - runFlow: ../otp/enter_dob_and_continue_IOS.yaml
 
-- waitForAnimationToEnd
+      - runFlow:
+          when:
+            visible: ${output.account_otp.okBtn}
+          commands:
+            - tapOn: ${output.account_otp.okBtn}
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.simplifyContinueBtn}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.simplifyContinueBtn}
+      - runFlow:
+          when:
+            visible: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+          commands:
+            - tapOn: ${output.account_health100_onboarding.pushNotifNotNowBtn}
+
+      - waitForAnimationToEnd

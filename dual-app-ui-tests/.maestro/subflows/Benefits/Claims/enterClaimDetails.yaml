@@ -1,0 +1,30 @@
+appId: ${APP_ID}
+name: Enter Claim Details
+env:
+  CLAIM_REASON: "Traveling (within US)"
+  IS_COMPOUND_DRUG: ""
+  HAS_ADDITIONAL_INSURANCE: ""
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Reconstructed 2026-09: referenced by submitPrescriptionClaimFlow.yaml's
+# "Step 2: Claim Details (with reason selection)" but missing from the checkout.
+- assertVisible: ${output.claims_step1_details.reasonForSubmittingLabel}
+- tapOn: ${output.claims_step1_details.selectAnOption}
+- tapOn: ${CLAIM_REASON}
+- waitForAnimationToEnd
+
+- runFlow:
+    when:
+      true: ${IS_COMPOUND_DRUG == "true"}
+    commands:
+      - tapOn: ${output.claims_step1_details.compoundDrugCheckbox}
+
+- runFlow:
+    when:
+      true: ${HAS_ADDITIONAL_INSURANCE == "true"}
+    commands:
+      - tapOn: ${output.claims_step1_details.additionalInsuranceCheckbox}
+
+- tapOn: ${output.claims_step1_details.addMedicationBtn}
+- waitForAnimationToEnd

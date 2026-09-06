@@ -1,0 +1,33 @@
+appId: ${APP_ID}
+name: Enter Prescriber and Pharmacy Details
+env:
+  PRESCRIBER_ZIP: "10001"
+  PHARMACY_PHONE: "2125551234"
+onFlowStart:
+  - runScript: ../../../screens/Benefits/ClaimsScreen.js
+---
+# Reconstructed 2026-09: referenced by submitPrescriptionClaimFlow.yaml's
+# "Step 5: Prescriber and Pharmacy Details" but missing from the checkout.
+# First pass built from screens/Benefits/ClaimsScreen.js's
+# claims_step4_prescriber_pharmacy object; not yet live-verified against the
+# address-search interaction — expect to correct this against the real device.
+- assertVisible: ${output.claims_step4_prescriber_pharmacy.screenTitle}
+- tapOn: ${output.claims_step4_prescriber_pharmacy.prescriberAddressSearchPlaceholder}
+- runFlow:
+    when:
+      visible: ${output.claims_step4_prescriber_pharmacy.searchByZipInstead}
+    commands:
+      - tapOn: ${output.claims_step4_prescriber_pharmacy.searchByZipInstead}
+- inputText: ${PRESCRIBER_ZIP}
+- waitForAnimationToEnd
+- tapOn:
+    text: ${output.claims_step4_prescriber_pharmacy.prescriberAddressResultsPattern}
+    index: 0
+- waitForAnimationToEnd
+
+- tapOn: ${output.claims_step4_prescriber_pharmacy.pharmacyPhoneNumberLabel}
+- inputText: ${PHARMACY_PHONE}
+- hideKeyboard
+
+- tapOn: ${output.claims_step4_prescriber_pharmacy.reviewClaimBtn}
+- waitForAnimationToEnd
